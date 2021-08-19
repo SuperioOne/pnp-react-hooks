@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "ES2020",
+        "target": "es2020",
+        "jsx": "preserve",
+        "strictFunctionTypes": true,
+        "sourceMap": true,
+        "incremental": true,
+        "declarationMap": true
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
+}
