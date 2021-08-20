@@ -9,6 +9,8 @@ const fubar: Fuubar = {
 };
 
 console.log(fubar);
+console.log(fubar);
+console.log(fubar);
 
 const result = test();
 
