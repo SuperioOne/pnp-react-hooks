@@ -1,15 +1,20 @@
 {
     "compilerOptions": {
-        "module": "ES2020",
+        "alwaysStrict": true,
+        "module": "ESNext",
         "target": "es2020",
         "jsx": "preserve",
         "strictFunctionTypes": true,
-        "sourceMap": true,
-        "incremental": true,
-        "declarationMap": true
+        "declaration": true,
+        "moduleResolution": "Node",
+        "outDir": "dist"
     },
+    "include": [
+        "src/**/*"
+    ],
     "exclude": [
         "node_modules",
-        "**/node_modules/*"
+        "**/node_modules/*",
+        "dist/**/*"
     ]
 }
