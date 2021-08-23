@@ -1,9 +1,6 @@
-export interface ListByIdQuery
-{
-    listId: string;
-}
+import { Guid } from "../utils/Guid";
 
-export interface ListByTitleQuery
+export interface ListQuery
 {
-    listTitle: string;
+    list: string | Guid;
 }

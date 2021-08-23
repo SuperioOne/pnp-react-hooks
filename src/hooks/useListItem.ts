@@ -1,20 +1,18 @@
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
-import type { ListByIdQuery, ListByTitleQuery } from "../types/ListQuery";
+import type { ListQuery } from "../types/ListQuery";
 import type { ODataQueryable } from "../types/ODataQueryable";
 import type { SPQuery } from "../types/SPQuery";
-import { AreEqual } from "../helpers/arrayEquality";
-import { insertODataQuery } from "../helpers/insertODataQuery";
-import { resolveList } from "../helpers/resolveList";
-import { resolveWeb } from "../helpers/resolveWeb";
+import { AreEqual } from "../utils/arrayEquality";
+import { insertODataQuery } from "../utils/insertODataQuery";
+import { resolveList } from "../utils/resolveList";
+import { resolveWeb } from "../utils/resolveWeb";
 import { useEffect, useState } from "react";
 
-export interface ListIdItemQuery extends ODataQueryable, ListByIdQuery, SPQuery { }
-export interface ListTitleItemQuery extends ODataQueryable, ListByTitleQuery, SPQuery { }
+export interface ListItemQuery extends ListQuery, ODataQueryable, SPQuery { }
 
-type ListItemQuery = ListIdItemQuery | ListTitleItemQuery;
-
+// TODO : Error propagation
 export function useListItem<T>(itemId: number, query: ListItemQuery): undefined | T
 {
     const [itemData, setItemData] = useState<T>(undefined);
@@ -53,9 +51,12 @@ export function useListItem<T>(itemId: number, query: ListItemQuery): undefined 
 }
 
 /**
- * Deep equality check
+ * Deep equality check for list item query
  */
-const _areEqual = (left: ListItemQuery, right: ListItemQuery) => left === right
-    || (left !== undefined
-        && AreEqual(left.select, right.select)
-        && AreEqual(left.expand, right.expand));
+const _areEqual = (left: ListItemQuery, right: ListItemQuery) =>
+    left !== undefined
+    && right !== undefined
+    && right.list === left.list
+    && right.web === left.web
+    && AreEqual(left.select, right.select)
+    && AreEqual(left.expand, right.expand);
