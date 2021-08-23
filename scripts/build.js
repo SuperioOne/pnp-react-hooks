@@ -20,7 +20,13 @@ async function build()
             visualizer(),
         ],
         input: "src/index.ts",
-        external: ["react"]
+        external: [
+            "react",
+            "@pnp/sp/items",
+            "@pnp/sp/lists",
+            "@pnp/sp/webs",
+            "@pnp/sp"
+        ]
     });
 
     await bundle.generate(outputOptions);
