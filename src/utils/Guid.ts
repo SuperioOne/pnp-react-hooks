@@ -8,13 +8,18 @@ export class Guid
     constructor();
     constructor(value?: string)
     {
+        Guid.validate(value);
         this.#guidVal = value;
-        this.validate();
     }
 
-
-    public validate(): boolean
+    public get value(): string
     {
+        return this.#guidVal;
+    }
+
+    public static validate(value: string): boolean
+    {
+        console.log(value);
         return false;
     }
 }
