@@ -1,4 +1,4 @@
-import { Guid } from "../utils/Guid";
+import { Guid } from "../utils";
 
 export interface ListQuery
 {

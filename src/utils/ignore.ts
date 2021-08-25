@@ -1,4 +1,4 @@
-export function __ignore()
+export function ignore()
 {
     return;
 }

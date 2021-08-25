@@ -1,5 +1,5 @@
 import type { IWeb } from "@pnp/sp/webs";
-import type { SPQuery } from "../types/SPQuery";
+import type { SPQuery } from "../types";
 import { Web } from "@pnp/sp/webs";
 import { sp } from "@pnp/sp";
 

@@ -1,17 +1,9 @@
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
-import type { ListQuery } from "../types/ListQuery";
-import type { ODataQueryable } from "../types/ODataQueryable";
-import type { RequestAction } from "../types/RequestAction";
-import type { SPQuery } from "../types/SPQuery";
-import { compareArray } from "../utils/deepComparisons/compareArray";
-import { __ignore } from "../utils/ignore";
-import { insertODataQuery } from "../utils/insertODataQuery";
-import { resolveList } from "../utils/resolveList";
-import { resolveWeb } from "../utils/resolveWeb";
+import type { ListQuery, ODataQueryable, SPQuery, RequestAction, ErrorAction } from "../types";
+import { resolveWeb, resolveList, insertODataQuery, __ignore, deepCompareQuery } from "../utils";
 import { useCallback, useEffect, useState } from "react";
-import { ErrorAction } from "../types/ErrorAction";
 
 export interface ListItemQuery extends ListQuery, ODataQueryable, SPQuery { }
 
@@ -63,7 +55,7 @@ export function useListItem<T>(itemId: number, query: ListItemQuery, exception: 
 
     useEffect(() =>
     {
-        if (!_areEqual(cachedQuery, query))
+        if (!deepCompareQuery(cachedQuery, query))
         {
             loadAction()
                 .then(__ignore);
@@ -74,14 +66,3 @@ export function useListItem<T>(itemId: number, query: ListItemQuery, exception: 
 
     return [itemData, loadAction];
 }
-
-/**
- * Deep equality check for list item query
- */
-const _areEqual = (left: ListItemQuery, right: ListItemQuery) =>
-    left !== undefined
-    && right !== undefined
-    && right.list === left.list
-    && right.web === left.web
-    && compareArray(left.select, right.select)
-    && compareArray(left.expand, right.expand);

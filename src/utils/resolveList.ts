@@ -1,5 +1,5 @@
+import type { ListQuery } from "../types";
 import type { IWeb } from "@pnp/sp/webs/types";
-import type { ListQuery } from "../types/ListQuery";
 
 export function resolveList(web: IWeb, query: ListQuery)
 {
