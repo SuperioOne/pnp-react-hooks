@@ -2,10 +2,10 @@
  * Deep comparisons between two arrays.
  * @returns true if contents are equal, otherwise false.
  * @example
- * areEqual([1,2,3,4,5], [5,4,2,1,3]) // true
- * areEqual([1,2,3,4,5], [5,4,2,"1",3]) // false
+ * compareArray([1,2,3,4,5], [5,4,2,1,3]) // true
+ * compareArray([1,2,3,4,5], [5,4,2,"1",3]) // false
  */
-export function compareArray(left?: Array<unknown>, right?: Array<unknown>): boolean
+export function compareArray(left?: readonly unknown[], right?: readonly unknown[]): boolean
 {
     // same reference
     if (left === right)

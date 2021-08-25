@@ -1,5 +1,5 @@
 import type { SPQuery, ODataQueryableCollection, ODataQueryable, ListQuery } from "../../types";
-import { Compare } from "./compareFunction";
+import { compare } from "./compareT";
 import { compareListQuery } from "./compareListQuery";
 import { compareODataQueryable } from "./compareODataQueryable";
 import { compareODataQueryableCollection } from "./compareODataQueryableCollection";
@@ -12,9 +12,9 @@ export default function deepCompareQuery<T extends Record<string, unknown>>(left
         || (
             left !== undefined
             && right !== undefined
-            && Compare<ListQuery>(left, right, compareListQuery, isListQuery)
-            && Compare<SPQuery>(left, right, compareSPQuery, isSPQuery)
-            && Compare<ODataQueryableCollection>(left, right, compareODataQueryableCollection, isODataQueryableCollection)
-            && Compare<ODataQueryable>(left, right, compareODataQueryable, isODataQueryable)
+            && compare<ListQuery>(left, right, compareListQuery, isListQuery)
+            && compare<SPQuery>(left, right, compareSPQuery, isSPQuery)
+            && compare<ODataQueryableCollection>(left, right, compareODataQueryableCollection, isODataQueryableCollection)
+            && compare<ODataQueryable>(left, right, compareODataQueryable, isODataQueryable)
         );
 }
