@@ -1,13 +1,13 @@
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
-import type { ListQuery, ODataQueryable, SPQuery, RequestAction, ErrorAction } from "../types";
-import { resolveWeb, resolveList, insertODataQuery, __ignore, deepCompareQuery } from "../utils";
-import { useCallback, useEffect, useState } from "react";
+import type { ErrorAction, ListQuery, ODataQueryable, RequestAction, SPQuery } from "../types";
+import { __ignore, deepCompareQuery, insertODataQuery, resolveList, resolveWeb } from "../utils";
+import { useState, useEffect, useCallback } from "react";
 
-export interface ListItemQuery extends ListQuery, ODataQueryable, SPQuery { }
+export interface ListItemQuery extends SPQuery, ODataQueryable, ListQuery { }
 
-export function useListItem<T>(itemId: number, query: ListItemQuery, exception: boolean | ErrorAction = false): [undefined | T | null, RequestAction]
+export function useListItem<T>(itemId: number, query: ListItemQuery, exception: boolean | ErrorAction = console.error): [T, RequestAction]
 {
     const [itemData, setItemData] = useState<T>(undefined);
     const [cachedQuery, setQuery] = useState<ListItemQuery>(query);
@@ -37,7 +37,9 @@ export function useListItem<T>(itemId: number, query: ListItemQuery, exception: 
             {
                 if (typeof exception === "function")
                 {
+                    setItemData(null);
                     exception(err);
+                    return false;
                 }
                 else
                 {
@@ -47,7 +49,6 @@ export function useListItem<T>(itemId: number, query: ListItemQuery, exception: 
             else
             {
                 setItemData(null);
-                console.error(err);
                 return false;
             }
         }

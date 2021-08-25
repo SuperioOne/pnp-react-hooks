@@ -1,6 +1,6 @@
 import { Guid } from "../utils";
 
-export interface ListQuery
+export interface ListQuery extends Record<string, unknown>
 {
     list: string | Guid;
 }

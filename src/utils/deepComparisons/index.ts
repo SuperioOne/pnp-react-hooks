@@ -1,12 +1,12 @@
-import type { ListQuery, ODataQueryable, ODataQueryableCollection, SPQuery } from "../../types";
+import type { SPQuery, ODataQueryableCollection, ODataQueryable, ListQuery } from "../../types";
 import { Compare } from "./compareFunction";
 import { compareListQuery } from "./compareListQuery";
 import { compareODataQueryable } from "./compareODataQueryable";
 import { compareODataQueryableCollection } from "./compareODataQueryableCollection";
 import { compareSPQuery } from "./compareSPQuery";
-import { isListQuery, isODataQueryable, isODataQueryableCollection, isSPQuery } from "../../types/typeGuards";
+import { isSPQuery, isODataQueryableCollection, isODataQueryable, isListQuery } from "../../types/typeGuards";
 
-export default function deepCompareQuery(left: unknown, right: unknown)
+export default function deepCompareQuery<T extends Record<string, unknown>>(left: T, right: T)
 {
     return left === right
         || (

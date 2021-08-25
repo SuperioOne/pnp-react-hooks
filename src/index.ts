@@ -1,3 +1,1 @@
-import { useListItem as t } from "./hooks/useListItem";
-
-export const useListItem = t;
+export { useListItem } from "./hooks/useListItem";

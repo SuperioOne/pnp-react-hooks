@@ -1,10 +1,10 @@
-export interface ODataQueryable
+export interface ODataQueryable extends Record<string, unknown>
 {
     expand?: Array<string>;
     select?: Array<string>;
 }
 
-export interface ODataQueryableCollection
+export interface ODataQueryableCollection extends Record<string, unknown>
 {
     top?: number;
     orderBy?: string;
