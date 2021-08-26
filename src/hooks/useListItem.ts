@@ -11,7 +11,7 @@ export interface ListItemQuery extends SPQuery, ODataQueryable, ListQuery { }
 export function useListItem<T>(
     itemId: number,
     query: ListItemQuery,
-    exception: boolean | ErrorAction = console.error): [Nullable<T>, RequestAction]
+    exception?: ErrorAction): [Nullable<T>, RequestAction]
 {
     const [itemData, setItemData] = useState<Nullable<T>>(undefined);
 

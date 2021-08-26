@@ -6,7 +6,7 @@ import { useRef } from "react";
 export default function useQueryEffect<T extends Record<string, unknown>>(
     action: RequestAction,
     query?: T,
-    exceptionPolicy?: boolean | ErrorAction,
+    exceptionPolicy?: ErrorAction,
     deps?: React.DependencyList)
 {
     const cachedQuery = useRef<T | undefined>(undefined);
@@ -20,18 +20,16 @@ export default function useQueryEffect<T extends Record<string, unknown>>(
                 .then(__ignore)
                 .catch(err => 
                 {
-                    if (exceptionPolicy)
+                    if (typeof exceptionPolicy === "function")
                     {
-                        if (typeof exceptionPolicy === "function")
-                        {
-                            exceptionPolicy(err);
-                            return false;
-                        }
-                        else
-                        {
-                            throw err;
-                        }
+                        exceptionPolicy(err);
                     }
+                    else if (!exceptionPolicy)
+                    {
+                        throw err;
+                    }
+
+                    return false;
                 });
         }
 

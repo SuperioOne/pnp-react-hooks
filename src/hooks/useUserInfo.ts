@@ -11,7 +11,7 @@ export interface UserQuery extends SPQuery, ODataQueryable { }
 export function useUserInfo(
     userIdentifier: number | string,
     query?: UserQuery,
-    exception: boolean | ErrorAction = console.error): [Nullable<ISiteUserInfo>, RequestAction]
+    exception?: ErrorAction): [Nullable<ISiteUserInfo>, RequestAction]
 {
     const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo>>(undefined);
 
