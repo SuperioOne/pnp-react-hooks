@@ -1,4 +1,4 @@
-import type { SPQuery } from "../../types";
+import { SPQuery } from "../../types";
 
 export function compareSPQuery(left?: SPQuery, right?: SPQuery)
 {

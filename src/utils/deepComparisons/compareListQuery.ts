@@ -1,4 +1,4 @@
-import type { ListQuery } from "../../types";
+import { ListQuery } from "../../types";
 
 export function compareListQuery(left?: ListQuery, right?: ListQuery)
 {
@@ -6,7 +6,10 @@ export function compareListQuery(left?: ListQuery, right?: ListQuery)
     {
         return true;
     }
-
+    else if (left === undefined || right === undefined)
+    {
+        return false;
+    }
     else
     {
         if (typeof left.list === "object" && typeof left.list === "object")

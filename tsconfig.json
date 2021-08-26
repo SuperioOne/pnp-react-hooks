@@ -2,12 +2,13 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "module": "ESNext",
-        "target": "es2020",
+        "target": "ES6",
         "jsx": "preserve",
         "strictFunctionTypes": true,
         "declaration": true,
         "moduleResolution": "Node",
-        "outDir": "dist"
+        "outDir": "dist",
+        "strictNullChecks": true
     },
     "include": [
         "src/**/*"

@@ -1,4 +1,4 @@
-import type { ODataQueryable } from "../../types";
+import { ODataQueryable } from "../../types";
 import { compareArray } from "../compareArray";
 
 export function compareODataQueryable(left?: ODataQueryable, right?: ODataQueryable)

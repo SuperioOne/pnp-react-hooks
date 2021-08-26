@@ -1,15 +1,16 @@
-import type { ErrorAction, RequestAction } from "../../types";
+import { ErrorAction, RequestAction } from "../../types";
 import { __ignore, compareTuples, deepCompareQuery } from "../../utils";
 import { useEffect } from "react";
 import { useRef } from "react";
 
 export default function useQueryEffect<T extends Record<string, unknown>>(
     action: RequestAction,
-    query: T, exceptionPolicy: boolean | ErrorAction,
+    query?: T,
+    exceptionPolicy?: boolean | ErrorAction,
     deps?: React.DependencyList)
 {
-    const cachedQuery = useRef<T>(query);
-    const dependencies = useRef<React.DependencyList>(deps);
+    const cachedQuery = useRef<T | undefined>(undefined);
+    const dependencies = useRef<React.DependencyList | undefined>(undefined);
 
     useEffect(() =>
     {

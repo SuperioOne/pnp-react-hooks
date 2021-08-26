@@ -25,6 +25,7 @@ async function build()
             "@pnp/sp/items",
             "@pnp/sp/lists",
             "@pnp/sp/webs",
+            "@pnp/sp/site-users",
             "@pnp/sp"
         ]
     });

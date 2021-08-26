@@ -1,7 +1,7 @@
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
-import type { ErrorAction, ListQuery, ODataQueryable, RequestAction, SPQuery } from "../types";
+import { ErrorAction, ListQuery, Nullable, ODataQueryable, RequestAction, SPQuery } from "../types";
 import useQueryEffect from "./internal/useQuery";
 import { insertODataQuery, resolveList, resolveWeb } from "../utils";
 import { useState, useCallback } from "react";
@@ -11,9 +11,9 @@ export interface ListItemQuery extends SPQuery, ODataQueryable, ListQuery { }
 export function useListItem<T>(
     itemId: number,
     query: ListItemQuery,
-    exception: boolean | ErrorAction = console.error): [T, RequestAction]
+    exception: boolean | ErrorAction = console.error): [Nullable<T>, RequestAction]
 {
-    const [itemData, setItemData] = useState<T>(undefined);
+    const [itemData, setItemData] = useState<Nullable<T>>(undefined);
 
     const loadAction: RequestAction = useCallback(async () =>
     {
@@ -31,6 +31,10 @@ export function useListItem<T>(
 
                 setItemData(data);
                 return true;
+            }
+            else
+            {
+                return false;
             }
         }
         catch (err)

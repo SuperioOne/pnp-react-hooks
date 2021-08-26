@@ -8,7 +8,7 @@ export function isListQuery(obj: unknown): obj is ListQuery
     return obj !== undefined
         && (
             typeof (obj as ListQuery).list === "string"
-            || ((obj as ListQuery).list as Guid).value !== undefined
+            || ((obj as ListQuery)?.list as Guid)?.value !== undefined
         );
 }
 

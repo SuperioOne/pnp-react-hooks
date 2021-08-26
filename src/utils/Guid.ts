@@ -1,6 +1,6 @@
 export class Guid
 {
-    readonly #guidVal: string;
+    private readonly guidVal: string;
 
     /**
      *
@@ -8,13 +8,16 @@ export class Guid
     constructor();
     constructor(value?: string)
     {
-        Guid.validate(value);
-        this.#guidVal = value;
+        if (value)
+        {
+            Guid.validate(value);
+            this.guidVal = value;
+        }
     }
 
     public get value(): string
     {
-        return this.#guidVal;
+        return this.guidVal;
     }
 
     public static validate(value: string): boolean

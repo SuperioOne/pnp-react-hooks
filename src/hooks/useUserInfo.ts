@@ -1,8 +1,8 @@
 import "@pnp/sp/site-users";
 import "@pnp/sp/webs";
-import type { ErrorAction, ODataQueryable, RequestAction, SPQuery } from "../types";
-import type { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import useQueryEffect from "./internal/useQuery";
+import { ErrorAction, Nullable, ODataQueryable, RequestAction, SPQuery } from "../types";
+import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { insertODataQuery, resolveWeb } from "../utils";
 import { useState, useCallback } from "react";
 
@@ -10,10 +10,10 @@ export interface UserQuery extends SPQuery, ODataQueryable { }
 
 export function useUserInfo(
     userIdentifier: number | string,
-    query: UserQuery,
-    exception: boolean | ErrorAction = console.error): [ISiteUserInfo, RequestAction]
+    query?: UserQuery,
+    exception: boolean | ErrorAction = console.error): [Nullable<ISiteUserInfo>, RequestAction]
 {
-    const [siteUser, setSiteUser] = useState<ISiteUserInfo>(undefined);
+    const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo>>(undefined);
 
     const loadAction: RequestAction = useCallback(async () =>
     {
@@ -30,9 +30,13 @@ export function useUserInfo(
                     : web.siteUsers.getByEmail(userIdentifier);
 
                 const data = await insertODataQuery(userQuery, query).get();
-
                 setSiteUser(data);
+
                 return true;
+            }
+            else
+            {
+                return false;
             }
         }
         catch (err)
