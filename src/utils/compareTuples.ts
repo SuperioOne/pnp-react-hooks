@@ -10,25 +10,27 @@
  */
 export function compareTuples(left?: readonly unknown[], right?: readonly unknown[]): boolean
 {
-    const leftLength = left?.length ?? 0;
-    const rightLength = right?.length ?? 0;
-
-    // same reference
     if (left === right)
     {
         return true;
     }
-    // both are empty 
-    else if (leftLength === rightLength)
-    {
-        return true;
-    }
-    else if (left === undefined || right === undefined || leftLength !== rightLength)
+
+    if (left === undefined || right === undefined || left.length !== right.length)
     {
         return false;
     }
     else
     {
-        return left.every((value, index) => value === right[index]);
+        for (let index = 0; index < left.length; index++)
+        {
+            if (Object.is(left[index], right[index]))
+            {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

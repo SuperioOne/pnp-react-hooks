@@ -1,4 +1,6 @@
+const commonjs = require('@rollup/plugin-commonjs');
 const del = require('rollup-plugin-delete');
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const rollup = require('rollup');
 const typescript = require('@rollup/plugin-typescript');
 const { visualizer } = require('rollup-plugin-visualizer');
@@ -17,9 +19,12 @@ async function build()
         plugins: [
             del({ targets: 'dist/*' }),
             typescript(),
+            commonjs(),
+            nodeResolve(),
             visualizer(),
         ],
         input: "src/index.ts",
+
         external: [
             "react",
             "@pnp/sp/items",

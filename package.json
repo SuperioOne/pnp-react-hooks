@@ -20,18 +20,22 @@
     "react": ">=16.9.0 <18.0.0"
   },
   "devDependencies": {
-    "typescript": "^4.3.5",
-    "tslib": "^2.3.1",
-    "rollup-plugin-visualizer": "^5.5.2",
-    "rollup-plugin-delete": "^2.0.0",
-    "rollup": "^2.56.2",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint": "^7.32.0",
-    "@typescript-eslint/parser": "^4.29.2",
-    "@typescript-eslint/eslint-plugin": "^4.29.2",
-    "@types/react": "^17.0.19",
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-typescript": "^8.2.5",
-    "@rollup/plugin-node-resolve": "^13.0.4"
+    "@types/react": "^17.0.19",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "rollup": "^2.56.2",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-visualizer": "^5.5.2",
+    "tslib": "^2.3.1",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "rxjs": "^7.3.0"
   }
 }

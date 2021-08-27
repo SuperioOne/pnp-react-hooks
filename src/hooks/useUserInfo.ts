@@ -1,3 +1,4 @@
+import "../extensions/IFetchOptions.extension";
 import "@pnp/sp/site-users";
 import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
@@ -28,6 +29,7 @@ export function useUserInfo(
                 const userQuery = typeof userIdentifier === "number"
                     ? web.siteUsers.getById(userIdentifier)
                     : web.siteUsers.getByEmail(userIdentifier);
+
 
                 const data = await insertODataQuery(userQuery, query).get();
                 setSiteUser(data);
