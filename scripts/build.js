@@ -1,3 +1,5 @@
+const PROCESS_START = performance.now();
+
 const commonjs = require('@rollup/plugin-commonjs');
 const del = require('rollup-plugin-delete');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
@@ -12,7 +14,8 @@ const outputOptions = {
     preserveModulesRoot: "src"
 };
 
-async function build()
+
+async function buildProject()
 {
     // create a bundle
     const bundle = await rollup.rollup({
@@ -24,7 +27,6 @@ async function build()
             visualizer(),
         ],
         input: "src/index.ts",
-
         external: [
             "react",
             "@pnp/sp/items",
@@ -42,4 +44,18 @@ async function build()
     await bundle.close();
 }
 
-build();
+buildProject()
+    .then(() =>
+    {
+        const PROCESS_TIME = performance.now() - PROCESS_START;
+
+        console.log(`Build Time: ${PROCESS_TIME}ms`);
+        console.log("Build Successfully Completed.");
+
+        process.exit(0);
+    })
+    .catch((err) =>
+    {
+        console.error(err);
+        process.exit(-1);
+    })
