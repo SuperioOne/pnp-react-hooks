@@ -1,9 +1,10 @@
-import "../extensions/IFetchOptions.extension";
 import "@pnp/sp/site-users";
 import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
-import { ErrorAction, Nullable, ODataQueryable, RequestAction, SPQuery } from "../types";
+import { IFetchOptions } from "@pnp/common";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
+import { Nullable, ODataQueryable, PnpHookOptions, SPQuery } from "../types";
+import { ParameterError } from "../errors/ParameterError";
 import { insertODataQuery, resolveWeb } from "../utils";
 import { useState, useCallback } from "react";
 
@@ -12,43 +13,33 @@ export interface UserQuery extends SPQuery, ODataQueryable { }
 export function useUserInfo(
     userIdentifier: number | string,
     query?: UserQuery,
-    exception?: ErrorAction): [Nullable<ISiteUserInfo>, RequestAction]
+    options?: PnpHookOptions,
+    deps?: React.DependencyList): Nullable<ISiteUserInfo>
 {
     const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo>>(undefined);
 
-    const loadAction: RequestAction = useCallback(async () =>
+    const loadAction = useCallback((fetchOptions?: IFetchOptions) =>
     {
-        try
+        if (userIdentifier)
         {
-            if (userIdentifier)
-            {
-                setSiteUser(undefined);
+            const web = resolveWeb(query);
 
-                const web = resolveWeb(query);
+            const userQuery = typeof userIdentifier === "number"
+                ? web.siteUsers.getById(userIdentifier)
+                : web.siteUsers.getByEmail(userIdentifier);
 
-                const userQuery = typeof userIdentifier === "number"
-                    ? web.siteUsers.getById(userIdentifier)
-                    : web.siteUsers.getByEmail(userIdentifier);
-
-
-                const data = await insertODataQuery(userQuery, query).get();
-                setSiteUser(data);
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return insertODataQuery(userQuery, query)
+                .get(fetchOptions);
         }
-        catch (err)
+        else
         {
-            setSiteUser(null);
-            throw err;
+            throw new ParameterError("useUserInfo: userIdentifier value is not valid.", userIdentifier);
         }
     }, [userIdentifier, query]);
 
-    useQueryEffect(loadAction, query, exception, [userIdentifier]);
+    const mergedDeps = deps ? [userIdentifier, ...deps] : [userIdentifier];
 
-    return [siteUser, loadAction];
+    useQueryEffect(loadAction, setSiteUser, query, options, mergedDeps);
+
+    return siteUser;
 }

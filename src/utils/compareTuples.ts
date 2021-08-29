@@ -1,7 +1,8 @@
+import { ParameterError } from "../errors/ParameterError";
+
 /**
- * Deep comparisons between two **sorted** arrays or known tuples.
+ * Deep comparisons between two **sorted** arrays or tuples.
  * @returns true if contents are equal, otherwise false.
- * @remarks use **compareArray()** instead of this version, if you don't have info about source arrays.
  * @example
  *
  * compareTuples([1,2,3,4,5], [5,4,2,1,3]) // false
@@ -15,11 +16,12 @@ export function compareTuples(left?: readonly unknown[], right?: readonly unknow
         return true;
     }
 
-    if (left === undefined || right === undefined || left.length !== right.length)
+    if (left === undefined || right === undefined)
     {
         return false;
     }
-    else
+
+    if (left.length === right.length)
     {
         for (let index = 0; index < left.length; index++)
         {
@@ -33,4 +35,6 @@ export function compareTuples(left?: readonly unknown[], right?: readonly unknow
 
         return true;
     }
+
+    throw new ParameterError("Tuple lenghts are not same.", left, right);
 }

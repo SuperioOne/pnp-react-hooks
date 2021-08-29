@@ -7,30 +7,30 @@
  */
 export function compareArray(left?: readonly unknown[], right?: readonly unknown[]): boolean
 {
-    const leftLength = left?.length ?? 0;
-    const rightLength = right?.length ?? 0;
-
-    // same reference
     if (left === right)
     {
         return true;
     }
-    // both are empty 
-    else if (leftLength === rightLength)
-    {
-        return true;
-    }
-    // different length or one of them are undefined
-    else if (left === undefined || right === undefined || leftLength !== rightLength)
+
+    if (left === undefined || right === undefined || left.length !== right.length)
     {
         return false;
     }
-    // sorts and checks element by element
     else
     {
         const sortedLeft = left.slice().sort();
         const sortedRight = right.slice().sort();
 
-        return sortedLeft.every((value, index) => value === sortedRight[index]);
+        for (let index = 0; index < sortedLeft.length; index++)
+        {
+            if (Object.is(sortedLeft[index], sortedRight[index]))
+            {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

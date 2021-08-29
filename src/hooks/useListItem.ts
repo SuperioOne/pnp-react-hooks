@@ -1,8 +1,10 @@
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
-import { ErrorAction, ListQuery, Nullable, ODataQueryable, RequestAction, SPQuery } from "../types";
 import useQueryEffect from "./internal/useQuery";
+import { IFetchOptions } from "@pnp/common";
+import { ListQuery, Nullable, ODataQueryable, PnpHookOptions, SPQuery } from "../types";
+import { ParameterError } from "../errors/ParameterError";
 import { insertODataQuery, resolveList, resolveWeb } from "../utils";
 import { useState, useCallback } from "react";
 
@@ -11,40 +13,33 @@ export interface ListItemQuery extends SPQuery, ODataQueryable, ListQuery { }
 export function useListItem<T>(
     itemId: number,
     query: ListItemQuery,
-    exception?: ErrorAction): [Nullable<T>, RequestAction]
+    options?: PnpHookOptions,
+    deps?: React.DependencyList): Nullable<T>
 {
     const [itemData, setItemData] = useState<Nullable<T>>(undefined);
 
-    const loadAction: RequestAction = useCallback(async () =>
+    const loadAction = useCallback((fetchOptions?: IFetchOptions) =>
     {
-        try
-        {
-            if (!isNaN(itemId))
-            {
-                setItemData(undefined);
+        if (isNaN(itemId))
+            throw new ParameterError("useListItem<T>: itemId value is not valid.", itemId);
 
-                const web = resolveWeb(query);
-                const list = resolveList(web, query);
-                const item = list.items.getById(itemId);
+        if (!query)
+            throw new ParameterError("useListItem<T>: query value is not valid.", query);
 
-                const data = await insertODataQuery(item, query).get();
+        setItemData(undefined);
 
-                setItemData(data);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (err)
-        {
-            setItemData(null);
-            throw err;
-        }
+        const web = resolveWeb(query);
+        const list = resolveList(web, query);
+        const item = list.items.getById(itemId);
+
+        return insertODataQuery(item, query)
+            .get(fetchOptions);
+
     }, [itemId, query]);
 
-    useQueryEffect(loadAction, query, exception, [itemId]);
+    const mergedDeps = deps ? [itemId, ...deps] : [itemId];
 
-    return [itemData, loadAction];
+    useQueryEffect(loadAction, setItemData, query, options, mergedDeps);
+
+    return itemData;
 }

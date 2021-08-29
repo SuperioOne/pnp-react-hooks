@@ -6,3 +6,4 @@ export { ignore as __ignore } from "./ignore";
 export { insertODataQuery } from "./insertODataQuery";
 export { resolveList } from "./resolveList";
 export { resolveWeb } from "./resolveWeb";
+export { shallowEqual } from "./shallowEqual";
