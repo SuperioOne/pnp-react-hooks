@@ -1,8 +1,8 @@
 import { sp } from "@pnp/sp";
-import { SPQuery } from "../types";
+import { Nullable, WebOptions } from "../types";
 import { IWeb, Web } from "@pnp/sp/webs";
 
-export function resolveWeb(query?: SPQuery): IWeb
+export function resolveWeb(query: Nullable<WebOptions>): IWeb
 {
     let web: IWeb;
 

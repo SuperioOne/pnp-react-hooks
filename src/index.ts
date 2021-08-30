@@ -1,2 +1,4 @@
-export { useListItem } from "./hooks/useListItem";
-export { useUserInfo } from "./hooks/useUserInfo";
+export { ExceptionMode, LoadActionMode } from "./types";
+
+export { useListItem, ListItemOptions } from "./hooks/useListItem";
+export { useUserInfo, UserInfoOptions } from "./hooks/useUserInfo";

@@ -1,3 +1,5 @@
+import { Nullable } from "../types";
+
 /**
  * Deep comparisons between two arrays.
  * @returns true if contents are equal, otherwise false.
@@ -5,14 +7,14 @@
  * compareArray([1,2,3,4,5], [5,4,2,1,3]) // true
  * compareArray([1,2,3,4,5], [5,4,2,"1",3]) // false
  */
-export function compareArray(left?: readonly unknown[], right?: readonly unknown[]): boolean
+export function compareArray(left: Readonly<Nullable<unknown[]>>, right: Readonly<Nullable<unknown[]>>): boolean
 {
     if (left === right)
     {
         return true;
     }
 
-    if (left === undefined || right === undefined || left.length !== right.length)
+    if (!left || !right || left.length !== right.length)
     {
         return false;
     }

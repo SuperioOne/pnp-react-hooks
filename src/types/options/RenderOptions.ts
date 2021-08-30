@@ -1,9 +1,9 @@
 export interface RenderOptions
 {
-    loadActionOption?: LoadActionOption;
+    loadActionOption?: LoadActionMode;
 }
 
-export enum LoadActionOption
+export enum LoadActionMode
 {
     /**
      * Apply default policy. Clear previous, re-render even same value.

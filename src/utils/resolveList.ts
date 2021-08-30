@@ -1,9 +1,11 @@
-import { ListQuery } from "../types";
+import { ListInfo } from "../types";
 import { IWeb } from "@pnp/sp/webs/types";
 
-export function resolveList(web: IWeb, query: ListQuery)
+export function resolveList(web: IWeb, list: ListInfo)
 {
-    return typeof query.list === "string"
-        ? web.lists.getByTitle(query.list)
-        : web.lists.getById(query.list.toString());
+    // TODO: Check if string is guid
+
+    return typeof list === "string"
+        ? web.lists.getByTitle(list)
+        : web.lists.getById(list);
 }

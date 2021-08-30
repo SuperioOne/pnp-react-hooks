@@ -3,17 +3,17 @@ import "@pnp/sp/lists";
 import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
 import { IFetchOptions } from "@pnp/common";
-import { ListQuery, Nullable, ODataQueryable, PnpHookOptions, SPQuery } from "../types";
+import { ListInfo, Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { insertODataQuery, resolveList, resolveWeb } from "../utils";
 import { useState, useCallback } from "react";
 
-export interface ListItemQuery extends SPQuery, ODataQueryable, ListQuery { }
+export type ListItemOptions = PnpHookOptions<Nullable<ODataQueryable>>;
 
 export function useListItem<T>(
     itemId: number,
-    query: ListItemQuery,
-    options?: PnpHookOptions,
+    list: ListInfo,
+    options?: ListItemOptions,
     deps?: React.DependencyList): Nullable<T>
 {
     const [itemData, setItemData] = useState<Nullable<T>>(undefined);
@@ -23,23 +23,24 @@ export function useListItem<T>(
         if (isNaN(itemId))
             throw new ParameterError("useListItem<T>: itemId value is not valid.", itemId);
 
-        if (!query)
-            throw new ParameterError("useListItem<T>: query value is not valid.", query);
+        if (!list)
+            throw new ParameterError("useListItem<T>: list value is not valid.", list);
 
         setItemData(undefined);
 
-        const web = resolveWeb(query);
-        const list = resolveList(web, query);
-        const item = list.items.getById(itemId);
+        const web = resolveWeb(options);
+        const splist = resolveList(web, list);
+        const item = splist.items.getById(itemId);
 
-        return insertODataQuery(item, query)
+        return insertODataQuery(item, options?.query)
             .get(fetchOptions);
 
-    }, [itemId, query]);
+    }, [itemId, options, list]);
 
-    const mergedDeps = deps ? [itemId, ...deps] : [itemId];
 
-    useQueryEffect(loadAction, setItemData, query, options, mergedDeps);
+    const mergedDeps = deps ? [itemId, list, options?.web, ...deps] : [itemId, list, options?.web];
+
+    useQueryEffect(loadAction, setItemData, options, mergedDeps);
 
     return itemData;
 }

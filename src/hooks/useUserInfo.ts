@@ -3,17 +3,16 @@ import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
 import { IFetchOptions } from "@pnp/common";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import { Nullable, ODataQueryable, PnpHookOptions, SPQuery } from "../types";
+import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { insertODataQuery, resolveWeb } from "../utils";
 import { useState, useCallback } from "react";
 
-export interface UserQuery extends SPQuery, ODataQueryable { }
+export type UserInfoOptions = PnpHookOptions<Nullable<ODataQueryable>>;
 
 export function useUserInfo(
     userIdentifier: number | string,
-    query?: UserQuery,
-    options?: PnpHookOptions,
+    options?: UserInfoOptions,
     deps?: React.DependencyList): Nullable<ISiteUserInfo>
 {
     const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo>>(undefined);
@@ -22,24 +21,26 @@ export function useUserInfo(
     {
         if (userIdentifier)
         {
-            const web = resolveWeb(query);
+            const queryOptions = options?.query;
+
+            const web = resolveWeb(options);
 
             const userQuery = typeof userIdentifier === "number"
                 ? web.siteUsers.getById(userIdentifier)
                 : web.siteUsers.getByEmail(userIdentifier);
 
-            return insertODataQuery(userQuery, query)
+            return insertODataQuery(userQuery, queryOptions)
                 .get(fetchOptions);
         }
         else
         {
             throw new ParameterError("useUserInfo: userIdentifier value is not valid.", userIdentifier);
         }
-    }, [userIdentifier, query]);
+    }, [userIdentifier, options]);
 
     const mergedDeps = deps ? [userIdentifier, ...deps] : [userIdentifier];
 
-    useQueryEffect(loadAction, setSiteUser, query, options, mergedDeps);
+    useQueryEffect(loadAction, setSiteUser, options, mergedDeps);
 
     return siteUser;
 }

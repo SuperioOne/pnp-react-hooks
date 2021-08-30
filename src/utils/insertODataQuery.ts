@@ -1,12 +1,13 @@
 import { _SharePointQueryableCollection, _SharePointQueryableInstance } from "@pnp/sp/sharepointqueryable";
+import { Nullable } from "../types";
 import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
 
 type SharepointQueryable = _SharePointQueryableInstance | _SharePointQueryableCollection;
 type ODataQuery = Partial<ODataQueryableCollection & ODataQueryable>;
 
-export function insertODataQuery<T extends _SharePointQueryableInstance>(instance: T, query?: Partial<ODataQueryable>): T;
-export function insertODataQuery<T extends _SharePointQueryableCollection>(instance: T, query?: ODataQuery): T;
-export function insertODataQuery<T extends SharepointQueryable>(instance: T, query?: ODataQuery): T
+export function insertODataQuery<T extends _SharePointQueryableInstance>(instance: T, query: Nullable<Partial<ODataQueryable>>): T;
+export function insertODataQuery<T extends _SharePointQueryableCollection>(instance: T, query: Nullable<ODataQuery>): T;
+export function insertODataQuery<T extends SharepointQueryable>(instance: T, query: Nullable<ODataQuery>): T
 {
     let _instance: SharepointQueryable = instance;
 

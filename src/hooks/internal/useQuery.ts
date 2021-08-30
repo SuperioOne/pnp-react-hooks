@@ -4,23 +4,24 @@ import { compareTuples, deepCompareQuery } from "../../utils";
 import { from, NextObserver } from "rxjs";
 import { useEffect } from "react";
 import { useRef } from "react";
-import { LoadActionOption } from "../../types/options/RenderOptions";
+import { LoadActionMode } from "../../types/options/RenderOptions";
 
 const ABORT_ERROR = "AbortError";
 
 export default function useQueryEffect<T extends Record<string, unknown>, R>(
     loadAction: RequestAction<R>,
     stateAction: React.Dispatch<React.SetStateAction<Nullable<R>>>,
-    query?: T,
-    options?: PnpHookOptions,
+    options?: PnpHookOptions<Nullable<T>>,
     deps?: React.DependencyList)
 {
-    const cachedQuery = useRef<T | undefined>(undefined);
-    const dependencies = useRef<React.DependencyList | undefined>(undefined);
-    const abortController = useRef<AbortController | undefined>(undefined);
+    const cachedQuery = useRef<Nullable<T>>(undefined);
+    const dependencies = useRef<Nullable<React.DependencyList>>(undefined);
+    const abortController = useRef<Nullable<AbortController>>(undefined);
 
     useEffect(() =>
     {
+        const query = options?.query;
+
         if (!deepCompareQuery(cachedQuery.current, query) || !compareTuples(dependencies.current, deps))
         {
             abortController.current?.abort();
@@ -28,7 +29,7 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
                 ? new AbortController()
                 : undefined;
 
-            if (options?.loadActionOption === undefined || options.loadActionOption !== LoadActionOption.KeepPrevious)
+            if (options?.loadActionOption === undefined || options.loadActionOption !== LoadActionMode.KeepPrevious)
             {
                 stateAction(undefined);
             }
@@ -61,5 +62,5 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
 
         cachedQuery.current = query;
         dependencies.current = deps;
-    }, [deps, loadAction, options, query, stateAction]);
+    }, [deps, loadAction, options, stateAction]);
 }
