@@ -1,4 +1,7 @@
+const performance = require('perf_hooks').performance;
+
 const PROCESS_START = performance.now();
+
 
 const commonjs = require('@rollup/plugin-commonjs');
 const del = require('rollup-plugin-delete');

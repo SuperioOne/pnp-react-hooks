@@ -1,7 +1,7 @@
 import "../../extensions/IFetchOptions.extension";
 import { Nullable, PnpHookOptions, RequestAction } from "../../types";
 import { compareTuples, deepCompareQuery } from "../../utils";
-import { from, NextObserver } from "rxjs";
+import { from, NextObserver, Subscription } from "rxjs";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { LoadActionMode } from "../../types/options/RenderOptions";
@@ -10,13 +10,14 @@ const ABORT_ERROR = "AbortError";
 
 export default function useQueryEffect<T extends Record<string, unknown>, R>(
     loadAction: RequestAction<R>,
-    stateAction: React.Dispatch<React.SetStateAction<Nullable<R>>>,
+    stateAction: (value: Nullable<R>) => void,
     options?: PnpHookOptions<Nullable<T>>,
     deps?: React.DependencyList)
 {
     const cachedQuery = useRef<Nullable<T>>(undefined);
-    const dependencies = useRef<Nullable<React.DependencyList>>(undefined);
+    const dependencies = useRef<Nullable<React.DependencyList>>(null);
     const abortController = useRef<Nullable<AbortController>>(undefined);
+    const subscription = useRef<Nullable<Subscription>>(undefined);
 
     useEffect(() =>
     {
@@ -35,7 +36,12 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
             }
 
             const observer: NextObserver<R> = {
-                next: data => stateAction(data),
+                next: data =>
+                {
+                    stateAction(data);
+                    abortController.current = undefined;
+                    subscription.current?.unsubscribe();
+                },
                 error: (err: Error) =>
                 {
                     if (err.name === ABORT_ERROR)
@@ -54,13 +60,13 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
                 }
             }
 
-            const subscription = from(loadAction({ signal: abortController.current?.signal }))
+            subscription.current = from(loadAction({ signal: abortController.current?.signal }))
                 .subscribe(observer);
 
-            return () => subscription?.unsubscribe();
         }
 
         cachedQuery.current = query;
         dependencies.current = deps;
+
     }, [deps, loadAction, options, stateAction]);
 }
