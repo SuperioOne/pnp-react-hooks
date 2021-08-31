@@ -8,6 +8,7 @@ export interface PnpHookOptions<T> extends ExceptionOptions, RenderOptions, WebO
     query?: Nullable<T>;
 }
 
+export { CacheOptions } from "./CacheOptions";
 export { ExceptionMode, ExceptionOptions } from "./ExceptionOptions";
 export { LoadActionMode, RenderOptions } from "./RenderOptions";
 export { WebOptions } from "./WebOptions";

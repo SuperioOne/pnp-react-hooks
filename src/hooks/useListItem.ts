@@ -3,16 +3,16 @@ import "@pnp/sp/lists";
 import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
 import { IFetchOptions } from "@pnp/common";
-import { ListInfo, Nullable, ODataQueryable, PnpHookOptions } from "../types";
+import { CacheOptions, Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { insertODataQuery, resolveList, resolveWeb } from "../utils";
 import { useState, useCallback } from "react";
 
-export type ListItemOptions = PnpHookOptions<Nullable<ODataQueryable>>;
+export interface ListItemOptions extends PnpHookOptions<Nullable<ODataQueryable>>, CacheOptions { }
 
 export function useListItem<T>(
     itemId: number,
-    list: ListInfo,
+    list: string,
     options?: ListItemOptions,
     deps?: React.DependencyList): Nullable<T>
 {
@@ -26,19 +26,23 @@ export function useListItem<T>(
         if (!list)
             throw new ParameterError("useListItem<T>: list value is not valid.", list);
 
-        setItemData(undefined);
-
         const web = resolveWeb(options);
         const splist = resolveList(web, list);
-        const item = splist.items.getById(itemId);
+        let item = splist.items.getById(itemId);
+
+        if (options?.useCache)
+        {
+            item = item.usingCaching(options.useCache);
+        }
 
         return insertODataQuery(item, options?.query)
             .get(fetchOptions);
 
     }, [itemId, options, list]);
 
-
-    const mergedDeps = deps ? [itemId, list, options?.web, ...deps] : [itemId, list, options?.web];
+    const mergedDeps = deps
+        ? [itemId, list, options?.web, ...deps]
+        : [itemId, list, options?.web];
 
     useQueryEffect(loadAction, setItemData, options, mergedDeps);
 

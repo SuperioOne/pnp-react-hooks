@@ -1,5 +1,4 @@
-export { ExceptionMode, ExceptionOptions, LoadActionMode, PnpHookOptions, RenderOptions, WebOptions } from "./options";
-export { ListQuery, ListInfo } from "./ListQuery";
+export { CacheOptions, ExceptionMode, ExceptionOptions, LoadActionMode, PnpHookOptions, RenderOptions, WebOptions } from "./options";
 export { Nullable } from "./NullableT";
 export { ODataQueryable, ODataQueryableCollection } from "./ODataQueryable";
 export { RequestAction } from "./RequestAction";

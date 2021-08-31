@@ -1,7 +1,6 @@
-import { ListInfo } from "../types";
 import { IWeb } from "@pnp/sp/webs/types";
 
-export function resolveList(web: IWeb, list: ListInfo)
+export function resolveList(web: IWeb, list: string)
 {
     // TODO: Check if string is guid
 
