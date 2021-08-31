@@ -54,5 +54,4 @@ function _isQueryableCollection(instance: SharepointQueryable): instance is _Sha
     return queryableCollection.skip !== undefined
         && queryableCollection.orderBy !== undefined
         && queryableCollection.top !== undefined;
-
 }

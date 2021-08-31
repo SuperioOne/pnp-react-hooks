@@ -3,12 +3,12 @@
         "alwaysStrict": true,
         "module": "ESNext",
         "target": "ES6",
-        "jsx": "preserve",
+        "jsx": "react",
         "strictFunctionTypes": true,
         "declaration": true,
         "moduleResolution": "Node",
         "outDir": "dist",
-        "strictNullChecks": true
+        "strictNullChecks": true,
     },
     "include": [
         "src/**/*"

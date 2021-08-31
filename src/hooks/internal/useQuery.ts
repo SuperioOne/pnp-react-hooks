@@ -1,9 +1,10 @@
 import "../../extensions/IFetchOptions.extension";
+import { InternalContext } from "../../context";
 import { LoadActionMode } from "../../types/options/RenderOptions";
 import { Nullable, PnpHookOptions, RequestAction } from "../../types";
 import { compareTuples, deepCompareQuery } from "../../utils";
 import { from, NextObserver, Subscription } from "rxjs";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useRef } from "react";
 
 const ABORT_ERROR = "AbortError";
@@ -14,6 +15,8 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
     options?: PnpHookOptions<Nullable<T>>,
     deps?: React.DependencyList)
 {
+    const defaultOptions = useContext(InternalContext);
+
     const cachedQuery = useRef<Nullable<T>>(undefined);
     const dependencies = useRef<Nullable<React.DependencyList>>(null);
     const abortController = useRef<Nullable<AbortController>>(undefined);
@@ -34,13 +37,18 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
 
         if (!deepCompareQuery(cachedQuery.current, query) || !compareTuples(dependencies.current, deps))
         {
+            const mergedOptions = options
+                ? { ...defaultOptions, ...options }
+                : defaultOptions;
+
             subscription.current?.unsubscribe();
             abortController.current?.abort();
+
             abortController.current = AbortController
                 ? new AbortController()
                 : undefined;
 
-            if (options?.loadActionOption === undefined || options.loadActionOption !== LoadActionMode.KeepPrevious)
+            if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
             {
                 stateAction(undefined);
             }
@@ -60,11 +68,11 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
                         return;
                     }
 
-                    if (typeof options?.exception === "function")
+                    if (typeof mergedOptions?.exception === "function")
                     {
-                        options.exception(err);
+                        mergedOptions.exception(err);
                     }
-                    else if (!options?.exception)
+                    else if (!mergedOptions?.exception)
                     {
                         throw err;
                     }
@@ -78,5 +86,5 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
         cachedQuery.current = query;
         dependencies.current = deps;
 
-    }, [deps, loadAction, options, stateAction]);
+    }, [deps, loadAction, defaultOptions, options, stateAction]);
 }
