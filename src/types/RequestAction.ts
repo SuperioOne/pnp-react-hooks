@@ -1,3 +1,4 @@
-import { IFetchOptions } from "@pnp/common";
+import { _SharePointQueryableInstance } from "@pnp/sp/sharepointqueryable";
+import { IWeb } from "@pnp/sp/webs/types";
 
-export type RequestAction<T> = (options?: IFetchOptions) => Promise<T>;
+export type RequestAction<T> = (web: IWeb) => _SharePointQueryableInstance<T>;

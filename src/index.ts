@@ -1,5 +1,6 @@
 export { ExceptionMode, LoadActionMode } from "./types";
-export { PnpReactOptionProvider, PnpReactOptions } from "./context";
+export { PnpReactOptionProvider, PnpHookGlobalOptions } from "./context";
 
-export { useListItem, ListItemOptions } from "./hooks/useListItem";
-export { useUserInfo, UserInfoOptions } from "./hooks/useUserInfo";
+export { useListItem } from "./hooks/useListItem";
+export { useUserInfo } from "./hooks/useUserInfo";
+export { useCurrentUser } from "./hooks/useCurrentUser";

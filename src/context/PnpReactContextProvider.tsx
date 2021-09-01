@@ -2,16 +2,20 @@ import * as React from "react";
 import { CacheOptions, ExceptionOptions, RenderOptions, WebOptions } from "../types";
 import { shallowEqual } from "../utils";
 
-export interface PnpReactOptions extends CacheOptions, ExceptionOptions, RenderOptions, WebOptions { }
+export interface PnpHookGlobalOptions extends CacheOptions, ExceptionOptions, RenderOptions, WebOptions
+{   
+    // Enable cache with using Pnp global cache options
+    useCache?: boolean
+}
 
-const DEFAULT_OPTIONS: PnpReactOptions = {};
+const DEFAULT_OPTIONS: PnpHookGlobalOptions = {};
 
-export const InternalContext = React.createContext<PnpReactOptions>(DEFAULT_OPTIONS);
+export const InternalContext = React.createContext<PnpHookGlobalOptions>(DEFAULT_OPTIONS);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function PnpReactOptionProvider(props: { value: PnpReactOptions, children: any })
+export function PnpReactOptionProvider(props: { value: PnpHookGlobalOptions, children: any })
 {
-    const previousValue = React.useRef<PnpReactOptions>(DEFAULT_OPTIONS);
+    const previousValue = React.useRef<PnpHookGlobalOptions>(DEFAULT_OPTIONS);
 
     const value = React.useMemo(() =>
     {
@@ -24,8 +28,7 @@ export function PnpReactOptionProvider(props: { value: PnpReactOptions, children
             previousValue.current = props.value;
             return props.value;
         }
-    }, [props]);
-
+    }, [props.value]);
 
     return (
         <InternalContext.Provider value={value}>

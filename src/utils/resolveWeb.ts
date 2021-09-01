@@ -12,6 +12,7 @@ export function resolveWeb(query: Nullable<WebOptions>): IWeb
     }
     else if (typeof query?.web === "string")
     {
+        // TODO: proper base url check
         web = Web(query.web);
     }
     else

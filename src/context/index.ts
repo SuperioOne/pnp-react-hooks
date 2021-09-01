@@ -1,1 +1,1 @@
-export { PnpReactOptions, PnpReactOptionProvider, InternalContext } from "./PnpReactContextProvider";
+export { PnpHookGlobalOptions, PnpReactOptionProvider, InternalContext } from "./PnpReactContextProvider";
