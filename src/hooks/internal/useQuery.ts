@@ -44,7 +44,7 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
 
             subscription.current?.unsubscribe();
             abortController.current?.abort();
-
+            
             abortController.current = AbortController
                 ? new AbortController()
                 : undefined;

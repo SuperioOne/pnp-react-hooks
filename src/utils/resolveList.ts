@@ -1,10 +1,11 @@
 import { IWeb } from "@pnp/sp/webs/types";
+import isUUID from "./isGuid";
 
 export function resolveList(web: IWeb, list: string)
 {
-    // TODO: Check if string is guid
+    const isGuid = isUUID(list);
 
-    return typeof list === "string"
-        ? web.lists.getByTitle(list)
-        : web.lists.getById(list);
+    return isGuid
+        ? web.lists.getById(list)
+        : web.lists.getByTitle(list);
 }
