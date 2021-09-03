@@ -1,13 +1,13 @@
 import "@pnp/sp/site-users";
-import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import { Nullable, ODataQueryable, PnpHookOptions, CacheOptions } from "../types";
+import { IWeb } from "@pnp/sp/webs/types";
+import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
+import { createInvokable } from "../utils";
 import { useState, useCallback } from "react";
-import { IWeb } from "@pnp/sp/webs";
 
-export interface UserInfoOptions extends PnpHookOptions<ODataQueryable>, CacheOptions { }
+export type UserInfoOptions = PnpHookOptions<ODataQueryable>;
 
 export function useUserInfo(
     userIdentifier: number | string,
@@ -16,13 +16,15 @@ export function useUserInfo(
 {
     const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo>>(undefined);
 
-    const loadAction = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback((web: IWeb) =>
     {
         if (userIdentifier)
         {
-            return typeof userIdentifier === "number"
+            const queryInstance = typeof userIdentifier === "number"
                 ? web.siteUsers.getById(userIdentifier)
                 : web.siteUsers.getByEmail(userIdentifier);
+
+            return createInvokable(queryInstance);
         }
         else
         {
@@ -34,7 +36,7 @@ export function useUserInfo(
         ? [userIdentifier, ...deps]
         : [userIdentifier];
 
-    useQueryEffect(loadAction, setSiteUser, options, mergedDeps);
+    useQueryEffect(invokableFactory, setSiteUser, options, mergedDeps);
 
     return siteUser;
 }

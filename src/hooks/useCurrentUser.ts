@@ -1,12 +1,12 @@
 import "@pnp/sp/site-users";
-import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import { IWeb } from "@pnp/sp/webs";
-import { Nullable, ODataQueryable, PnpHookOptions, CacheOptions } from "../types";
+import { IWeb } from "@pnp/sp/webs/types";
+import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
+import { createInvokable } from "../utils";
 import { useState, useCallback } from "react";
 
-export interface CurrentUserInfoOptions extends PnpHookOptions<ODataQueryable>, CacheOptions { }
+export type CurrentUserInfoOptions = PnpHookOptions<ODataQueryable>;
 
 export function useCurrentUser(
     options?: CurrentUserInfoOptions,
@@ -14,9 +14,9 @@ export function useCurrentUser(
 {
     const [currentUser, setCurrentUser] = useState<Nullable<ISiteUserInfo>>(undefined);
 
-    const loadAction = useCallback((web: IWeb) => web.currentUser, []);
+    const invocableFactory = useCallback((web: IWeb) => createInvokable(web.currentUser), []);
 
-    useQueryEffect(loadAction, setCurrentUser, options, deps);
+    useQueryEffect(invocableFactory, setCurrentUser, options, deps);
 
     return currentUser;
 }

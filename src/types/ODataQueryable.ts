@@ -10,4 +10,5 @@ export interface ODataQueryableCollection extends Record<string, unknown>
     orderBy?: string;
     orderyByAscending?: boolean;
     skip?: number;
+    filter?: string;
 }

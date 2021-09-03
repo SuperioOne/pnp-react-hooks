@@ -1,14 +1,12 @@
 import "@pnp/sp/items";
-import "@pnp/sp/lists";
-import "@pnp/sp/webs";
 import useQueryEffect from "./internal/useQuery";
-import { CacheOptions, Nullable, ODataQueryable, PnpHookOptions } from "../types";
+import { IWeb } from "@pnp/sp/webs/types";
+import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { resolveList } from "../utils";
+import { createInvokable, resolveList } from "../utils";
 import { useState, useCallback } from "react";
-import { IWeb } from "@pnp/sp/webs";
 
-export interface ListItemOptions extends PnpHookOptions<ODataQueryable>, CacheOptions { }
+export type ListItemOptions = PnpHookOptions<ODataQueryable>;
 
 export function useListItem<T>(
     itemId: number,
@@ -18,7 +16,7 @@ export function useListItem<T>(
 {
     const [itemData, setItemData] = useState<Nullable<T>>(undefined);
 
-    const loadAction = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback((web: IWeb) =>
     {
         if (isNaN(itemId))
             throw new ParameterError("useListItem<T>: itemId value is not valid.", itemId);
@@ -26,17 +24,19 @@ export function useListItem<T>(
         if (!list)
             throw new ParameterError("useListItem<T>: list value is not valid.", list);
 
-        return resolveList(web, list)
+        const queryInstance = resolveList(web, list)
             .items
             .getById(itemId);
+
+        return createInvokable(queryInstance);
 
     }, [itemId, list]);
 
     const mergedDeps = deps
-        ? [itemId, list, options?.web, ...deps]
-        : [itemId, list, options?.web];
+        ? [itemId, list, ...deps]
+        : [itemId, list];
 
-    useQueryEffect(loadAction, setItemData, options, mergedDeps);
+    useQueryEffect(invokableFactory, setItemData, options, mergedDeps);
 
     return itemData;
 }

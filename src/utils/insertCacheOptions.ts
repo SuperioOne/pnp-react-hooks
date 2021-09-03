@@ -1,7 +1,7 @@
 import { CacheOptions, Nullable } from "../types";
 import { ICachingOptions } from "@pnp/odata";
 
-// Can't find proper type from pnp library
+// Can't find proper type from pnp library, simply check for function
 type Cacheable<T> = {
     usingCaching(options?: string | ICachingOptions): T;
 }

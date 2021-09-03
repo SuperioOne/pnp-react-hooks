@@ -2,8 +2,9 @@ import { ExceptionOptions } from "./ExceptionOptions";
 import { Nullable } from "../NullableT";
 import { RenderOptions } from "./RenderOptions";
 import { WebOptions } from "./WebOptions";
+import { CacheOptions } from "./CacheOptions";
 
-export interface PnpHookOptions<T> extends ExceptionOptions, RenderOptions, WebOptions
+export interface PnpHookOptions<T> extends ExceptionOptions, RenderOptions, WebOptions, CacheOptions
 {
     query?: Nullable<T>;
 }

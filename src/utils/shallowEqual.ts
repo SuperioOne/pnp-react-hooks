@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // react-reconciler shallowEqual implementation.
 
+import { Nullable } from "../types";
+
 // Pollyfill https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
 function is(x: any, y: any)
 {
@@ -18,26 +20,27 @@ const objectIs = Object.is ? Object.is : is;
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-export function shallowEqual(objA?: Readonly<Record<string, unknown>>, objB?: Readonly<Record<string, unknown>>)
+export function shallowEqual(objA?: Nullable<unknown>, objB?: Nullable<unknown>)
 {
+    
     if (objectIs(objA, objB))
     {
         return true;
     }
-
+    
     if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null)
     {
         return false;
     }
-
+    
     const keysA = Object.keys(objA);
     const keysB = Object.keys(objB);
-
+    
     if (keysA.length !== keysB.length)
     {
         return false;
     }
-
+    
     for (let i = 0; i < keysA.length; i++)
     {
         if (!hasOwnProperty.call(objB, keysA[i]) || !objectIs(objA[keysA[i]], objB[keysA[i]]))

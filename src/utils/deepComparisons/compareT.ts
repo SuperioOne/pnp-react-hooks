@@ -10,10 +10,9 @@ export function compare<T>(left: unknown, right: unknown, comparisonFunc: Compar
     {
         return false;
     }
-    else if (true === leftType === rightType)
+    else if (leftType && rightType)
     {
-        // typescript can't detect cached typeGuards. Enforce type with type casting (doesn't have any impact on compiled code)
-        return comparisonFunc(left as T, right as T);
+        return comparisonFunc(left, right);
     }
     else
     {

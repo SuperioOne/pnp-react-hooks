@@ -1,24 +1,27 @@
 import "../../extensions/IFetchOptions.extension";
 import { InternalContext } from "../../context";
 import { LoadActionMode } from "../../types/options/RenderOptions";
-import { Nullable, PnpHookOptions, RequestAction } from "../../types";
-import { compareTuples, deepCompareQuery, insertCacheOptions, insertODataQuery, resolveWeb } from "../../utils";
+import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions } from "../../types";
+import { compareTuples, deepCompareQuery, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
 import { from, NextObserver, Subscription } from "rxjs";
 import { useCallback, useContext, useEffect } from "react";
 import { useRef } from "react";
+import { IWeb } from "@pnp/sp/webs";
 
 const ABORT_ERROR = "AbortError";
 
-export default function useQueryEffect<T extends Record<string, unknown>, R>(
-    loadAction: RequestAction<R>,
+export default function useQueryEffect<T extends ODataQueryable | ODataQueryableCollection, R>(
+    invokableFactory: InvokableFactory<R>,
     stateAction: (value: Nullable<R>) => void,
     options?: PnpHookOptions<Nullable<T>>,
     deps?: React.DependencyList)
 {
     const globalOptions = useContext(InternalContext);
 
-    const cachedQuery = useRef<Nullable<T>>(undefined);
-    const dependencies = useRef<Nullable<React.DependencyList>>(null);
+    const prevQuery = useRef<Nullable<T>>(undefined);
+    const prevWebOption = useRef<Nullable<IWeb | string>>(null);
+    const prevdependencies = useRef<Nullable<React.DependencyList>>(null);
+
     const abortController = useRef<Nullable<AbortController>>(undefined);
     const subscription = useRef<Nullable<Subscription>>(undefined);
 
@@ -35,8 +38,13 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
     useEffect(() =>
     {
         const query = options?.query;
+        const webOption = globalOptions?.web ?? options?.web;
 
-        if (!deepCompareQuery(cachedQuery.current, query) || !compareTuples(dependencies.current, deps))
+        const shouldUpdate = !deepCompareQuery(prevQuery.current, query)
+            || !compareTuples(prevdependencies.current, deps)
+            || !shallowEqual(prevWebOption.current, webOption);
+
+        if (shouldUpdate)
         {
             const mergedOptions = options
                 ? { ...globalOptions, ...options }
@@ -44,7 +52,7 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
 
             subscription.current?.unsubscribe();
             abortController.current?.abort();
-            
+
             abortController.current = AbortController
                 ? new AbortController()
                 : undefined;
@@ -76,17 +84,20 @@ export default function useQueryEffect<T extends Record<string, unknown>, R>(
             };
 
             const web = resolveWeb(mergedOptions);
+            const invokeable = invokableFactory(web);
 
-            let spQuery = loadAction(web);
-            spQuery = insertODataQuery(spQuery, query);
-            spQuery = insertCacheOptions(spQuery, query);
+            insertODataQuery(invokeable.__instance, query);
+            insertCacheOptions(invokeable.__instance, mergedOptions);
 
-            subscription.current = from(spQuery.get({ signal: abortController.current?.signal }))
+            subscription.current = from(
+                invokeable({
+                    signal: abortController.current?.signal
+                }))
                 .subscribe(observer);
         }
 
-        cachedQuery.current = query;
-        dependencies.current = deps;
-
-    }, [deps, loadAction, globalOptions, options, stateAction, _cleanUp]);
+        prevQuery.current = query;
+        prevWebOption.current = webOption;
+        prevdependencies.current = deps;
+    });
 }

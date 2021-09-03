@@ -1,57 +1,57 @@
-import { _SharePointQueryableCollection, _SharePointQueryableInstance } from "@pnp/sp/sharepointqueryable";
-import { Nullable } from "../types";
-import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
+import { _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
+import { Nullable, ODataQueryable, ODataQueryableCollection, SharepointQueryable } from "../types";
 
-type SharepointQueryable = _SharePointQueryableInstance | _SharePointQueryableCollection;
 type ODataQuery = Partial<ODataQueryableCollection & ODataQueryable>;
 
-export function insertODataQuery<T extends _SharePointQueryableInstance>(instance: T, query: Nullable<Partial<ODataQueryable>>): T;
-export function insertODataQuery<T extends _SharePointQueryableCollection>(instance: T, query: Nullable<ODataQuery>): T;
-export function insertODataQuery<T extends SharepointQueryable>(instance: T, query: Nullable<ODataQuery>): T
+export function insertODataQuery(instance: Readonly<SharepointQueryable>, query: Nullable<ODataQuery>)
 {
-    let _instance: SharepointQueryable = instance;
-
     if (!query)
     {
-        return instance as T;
+        return instance;
     }
 
-    if (_isQueryableCollection(_instance))
+    if (_isQueryableCollection(instance))
     {
         if (query.skip)
         {
-            _instance = _instance.skip(query.skip);
+            instance.skip(query.skip);
         }
 
         if (query.orderBy)
         {
-            _instance = _instance.orderBy(query.orderBy, query.orderyByAscending);
+            instance.orderBy(query.orderBy, query.orderyByAscending);
         }
 
         if (query.top)
         {
-            _instance = _instance.top(query.top);
+            instance.top(query.top);
+        }
+
+        if (query.filter)
+        {
+            instance.filter(query.filter);
         }
     }
 
     if (query.expand && query.expand.length > 0)
     {
-        _instance = _instance.expand(...query.expand);
+        instance = instance.expand(...query.expand);
     }
 
     if (query.select && query.select.length > 0)
     {
-        _instance = _instance.select(...query.select);
+        instance = instance.select(...query.select);
     }
 
-    return _instance as T;
+    return instance;
 }
 
-function _isQueryableCollection(instance: SharepointQueryable): instance is _SharePointQueryableCollection
+function _isQueryableCollection(instance: Readonly<SharepointQueryable>): instance is _SharePointQueryableCollection
 {
     const queryableCollection = instance as _SharePointQueryableCollection;
 
     return queryableCollection.skip !== undefined
         && queryableCollection.orderBy !== undefined
-        && queryableCollection.top !== undefined;
+        && queryableCollection.top !== undefined
+        && queryableCollection.filter !== undefined;
 }
