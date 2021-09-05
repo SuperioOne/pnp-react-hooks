@@ -28,7 +28,7 @@ export function useUserInfo(
         }
         else
         {
-            throw new ParameterError("useUserInfo: userIdentifier value is not valid.", userIdentifier);
+            throw new ParameterError("useUserInfo: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
         }
     }, [userIdentifier]);
 

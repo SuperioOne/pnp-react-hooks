@@ -1,11 +1,13 @@
 export class ParameterError extends Error
 {
-    public readonly values: unknown[];
+    public readonly parameterValue: unknown;
+    public readonly parameterName: string;
 
-    constructor(message: string | undefined, ...values: unknown[])
+    constructor(message: string | undefined, parameterName: string, value?: unknown)
     {
         super(message);
-        this.values = values;
+        this.parameterValue = value;
+        this.parameterName = parameterName;
         this.name = "ParameterError"
     }
 }

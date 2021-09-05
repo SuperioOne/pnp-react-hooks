@@ -14,15 +14,15 @@ export function useListItem<T>(
     options?: ListItemOptions,
     deps?: React.DependencyList): Nullable<T>
 {
-    const [itemData, setItemData] = useState<Nullable<T>>(undefined);
+    const [itemData, setItemData] = useState<Nullable<T>>();
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
         if (isNaN(itemId))
-            throw new ParameterError("useListItem<T>: itemId value is not valid.", itemId);
+            throw new ParameterError("useListItem<T>: itemId value is not valid.", "itemId", itemId);
 
         if (!list)
-            throw new ParameterError("useListItem<T>: list value is not valid.", list);
+            throw new ParameterError("useListItem<T>: list value is not valid.", "list", list);
 
         const queryInstance = resolveList(web, list)
             .items

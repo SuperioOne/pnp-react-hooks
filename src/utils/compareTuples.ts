@@ -1,4 +1,3 @@
-import { ParameterError } from "../errors/ParameterError";
 import { Nullable } from "../types";
 
 /**
@@ -37,5 +36,5 @@ export function compareTuples(left: Readonly<Nullable<unknown[]>>, right: Readon
         return true;
     }
 
-    throw new ParameterError("Tuple lenghts are not same.", left, right);
+    throw new Error("Tuple lenghts are not same.");
 }
