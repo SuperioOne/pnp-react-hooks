@@ -1,6 +1,4 @@
 import "@pnp/sp/files";
-import "@pnp/sp/lists";
-import "@pnp/sp/folders";
 import useQueryEffect from "./internal/useQuery";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
@@ -29,7 +27,6 @@ export function useFile(fileIdentifier: string, options?: FileOptions<FileOperat
     {
         if (fileIdentifier)
         {
-            web.lists.getById("").rootFolder.files.getByName
             const isUniqueId = isUUID(fileIdentifier);
             let queryInstance: IFile;
 
@@ -67,8 +64,8 @@ export function useFile(fileIdentifier: string, options?: FileOptions<FileOperat
     }, [fileIdentifier, options?.type]);
 
     const mergedDeps = deps
-        ? [fileIdentifier, ...deps]
-        : [fileIdentifier];
+        ? [fileIdentifier, options?.type, ...deps]
+        : [fileIdentifier, options?.type];
 
     useQueryEffect(invokableFactory, setFileInfo, options, mergedDeps);
 

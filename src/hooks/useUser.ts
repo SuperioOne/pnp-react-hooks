@@ -9,7 +9,7 @@ import { useState, useCallback } from "react";
 
 export type UserInfoOptions = PnpHookOptions<ODataQueryable>;
 
-export function useUserInfo(
+export function useUser(
     userIdentifier: number | string,
     options?: UserInfoOptions,
     deps?: React.DependencyList): Nullable<ISiteUserInfo>
@@ -28,7 +28,7 @@ export function useUserInfo(
         }
         else
         {
-            throw new ParameterError("useUserInfo: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
+            throw new ParameterError("useUser: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
         }
     }, [userIdentifier]);
 
