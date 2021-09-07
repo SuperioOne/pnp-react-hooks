@@ -24,7 +24,7 @@ export function useUser(
                 ? web.siteUsers.getById(userIdentifier)
                 : web.siteUsers.getByEmail(userIdentifier);
 
-            return createInvokable(queryInstance);
+            return createInvokable(queryInstance, queryInstance.defaultAction);
         }
         else
         {

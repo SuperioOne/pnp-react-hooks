@@ -25,18 +25,14 @@ async function buildProject()
         plugins: [
             del({ targets: 'dist/*' }),
             typescript(),
-            commonjs(),
             nodeResolve(),
+            commonjs(),
             visualizer(),
         ],
         input: "src/index.ts",
         external: [
             "react",
-            "@pnp/sp/items",
-            "@pnp/sp/lists",
-            "@pnp/sp/webs",
-            "@pnp/sp/site-users",
-            "@pnp/sp"
+            /^(?:@pnp\/sp|@pnp\/sp\/.{1,100})$/,
         ]
     });
 

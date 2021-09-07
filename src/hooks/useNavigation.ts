@@ -2,29 +2,35 @@ import "@pnp/sp/navigation";
 import useQueryEffect from "./internal/useQuery";
 import { INavNodeInfo } from "@pnp/sp/navigation/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions } from "../types";
+import { NavigationTypes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { createInvokable } from "../utils";
 import { useState, useCallback } from "react";
 
-export interface NavigationOptions extends PnpHookOptions<ODataQueryableCollection & ODataQueryable>
+export interface NavigationOptions extends PnpHookOptions<ODataQueryableCollection>
 {
-    type?: "topNavigation" | "quickLaunch";
+    type?: NavigationTypes;
 }
 
 export function useNavigation(
     options?: NavigationOptions,
     deps?: React.DependencyList): Nullable<Array<INavNodeInfo>>
 {
-    const [itemData, setItemData] = useState<Nullable<Array<INavNodeInfo>>>();
+    const [navigationNodes, setNavigationNodes] = useState<Nullable<Array<INavNodeInfo>>>();
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
         switch (options?.type)
         {
             case "quickLaunch":
-                return createInvokable(web.navigation.quicklaunch);
+                {
+                    const queryInstance = web.navigation.quicklaunch;
+                    return createInvokable(queryInstance, queryInstance.defaultAction);
+                }
             default:
-                return createInvokable(web.navigation.topNavigationBar);
+                {
+                    const queryInstance = web.navigation.topNavigationBar;
+                    return createInvokable(queryInstance, queryInstance.defaultAction);
+                }
         }
 
     }, [options?.type]);
@@ -33,7 +39,7 @@ export function useNavigation(
         ? [options?.type, ...deps]
         : [options?.type];
 
-    useQueryEffect(invokableFactory, setItemData, options, mergedDeps);
+    useQueryEffect(invokableFactory, setNavigationNodes, options, mergedDeps);
 
-    return itemData;
+    return navigationNodes;
 }

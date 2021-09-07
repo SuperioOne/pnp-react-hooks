@@ -28,7 +28,7 @@ export function useListItem<T>(
             .items
             .getById(itemId);
 
-        return createInvokable(queryInstance);
+        return createInvokable(queryInstance, queryInstance.defaultAction);
 
     }, [itemId, list]);
 

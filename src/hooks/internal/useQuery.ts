@@ -1,24 +1,24 @@
 import "../../extensions/IFetchOptions.extension";
+import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
+import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
 import { LoadActionMode } from "../../types/options/RenderOptions";
-import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions } from "../../types";
 import { compareTuples, deepCompareQuery, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
 import { from, NextObserver, Subscription } from "rxjs";
 import { useCallback, useContext, useEffect } from "react";
 import { useRef } from "react";
-import { IWeb } from "@pnp/sp/webs";
 
 const ABORT_ERROR = "AbortError";
 
-export default function useQueryEffect<T extends ODataQueryable | ODataQueryableCollection, R>(
-    invokableFactory: InvokableFactory<R>,
-    stateAction: (value: Nullable<R>) => void,
-    options?: PnpHookOptions<Nullable<T>>,
+export default function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
+    invokableFactory: InvokableFactory<TReturn, TContext>,
+    stateAction: (value: Nullable<TReturn>) => void,
+    options?: PnpHookOptions<Nullable<TQuery>>,
     deps?: React.DependencyList)
 {
     const globalOptions = useContext(InternalContext);
 
-    const prevQuery = useRef<Nullable<T>>(undefined);
+    const prevQuery = useRef<Nullable<TQuery>>(undefined);
     const prevWebOption = useRef<Nullable<IWeb | string>>(null);
     const prevdependencies = useRef<Nullable<React.DependencyList>>(null);
 
@@ -62,7 +62,7 @@ export default function useQueryEffect<T extends ODataQueryable | ODataQueryable
                 stateAction(undefined);
             }
 
-            const observer: NextObserver<R> = {
+            const observer: NextObserver<TReturn> = {
                 next: data => stateAction(data),
                 complete: _cleanUp,
                 error: (err: Error) =>
@@ -86,11 +86,11 @@ export default function useQueryEffect<T extends ODataQueryable | ODataQueryable
             const web = resolveWeb(mergedOptions);
             const invokeable = invokableFactory(web);
 
-            insertODataQuery(invokeable.__instance, query);
-            insertCacheOptions(invokeable.__instance, mergedOptions);
+            insertODataQuery(invokeable.instance, query);
+            insertCacheOptions(invokeable.instance, mergedOptions);
 
             subscription.current = from(
-                invokeable({
+                invokeable.invoke({
                     signal: abortController.current?.signal
                 }))
                 .subscribe(observer);

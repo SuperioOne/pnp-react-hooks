@@ -1,6 +1,7 @@
-export { CacheOptions, ExceptionMode, ExceptionOptions, LoadActionMode, PnpHookOptions, RenderOptions, WebOptions } from "./options";
-export { InvokableFactory, Invokable  } from "./Invokeable";
-export { Nullable } from "./NullableT";
-export { ODataQueryable, ODataQueryableCollection } from "./ODataQueryable";
 export { SharepointQueryable } from "./SharepointQueryable";
-export { isODataQueryable, isODataQueryableCollection } from "./typeGuards";
+export { PnpActionFunction } from "./PnpActionFunction";
+export { ODataQueryable, ODataQueryableCollection } from "./ODataQueryable";
+export { Nullable } from "./NullableT";
+export { InvokableFactory, Invokable } from "./invokeable";
+export { FileReturnTypes, NavigationTypes } from "./literalTypes";
+export { CacheOptions, ExceptionMode, ExceptionOptions, LoadActionMode, PnpHookOptions, RenderOptions, WebOptions } from "./options";

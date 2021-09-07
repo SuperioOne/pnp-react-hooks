@@ -1,12 +1,6 @@
-import { CacheOptions, Nullable } from "../types";
-import { ICachingOptions } from "@pnp/odata";
+import { CacheOptions, Nullable, SharepointQueryable } from "../types";
 
-// Can't find proper type from pnp library, simply check for function
-type Cacheable<T> = {
-    usingCaching(options?: string | ICachingOptions): T;
-}
-
-export function insertCacheOptions<T extends Cacheable<T>>(instance: T, options: Nullable<CacheOptions>): T
+export function insertCacheOptions<T extends SharepointQueryable>(instance: T, options: Nullable<CacheOptions>): SharepointQueryable
 {
     if (options?.useCache && instance.usingCaching)
     {

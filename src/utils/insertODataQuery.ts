@@ -1,9 +1,7 @@
 import { _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
-import { Nullable, ODataQueryable, ODataQueryableCollection, SharepointQueryable } from "../types";
+import { Nullable, ODataQueryableCollection, SharepointQueryable } from "../types";
 
-type ODataQuery = Partial<ODataQueryableCollection & ODataQueryable>;
-
-export function insertODataQuery(instance: Readonly<SharepointQueryable>, query: Nullable<ODataQuery>)
+export function insertODataQuery(instance: Readonly<SharepointQueryable>, query: Nullable<ODataQueryableCollection>)
 {
     if (!query)
     {

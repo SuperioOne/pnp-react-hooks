@@ -1,4 +1,4 @@
-import { ODataQueryable, ODataQueryableCollection } from "./ODataQueryable";
+import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
 
 export function isODataQueryable(obj: unknown): obj is ODataQueryable
 {

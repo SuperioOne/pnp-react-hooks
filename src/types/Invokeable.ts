@@ -6,6 +6,6 @@ export type InvokableFactory<TResult, TContext extends SharepointQueryable = Sha
 
 export interface Invokable<TResult, TContext extends SharepointQueryable> 
 {
-    <Type = TResult>(options?: IFetchOptions): Promise<Type>;
-    __instance: TContext;
+    invoke: <Type = TResult>(options?: IFetchOptions) => Promise<Type>;
+    instance: TContext;
 }
