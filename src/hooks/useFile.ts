@@ -2,7 +2,7 @@ import "@pnp/sp/files";
 import useQueryEffect from "./internal/useQuery";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes } from "../types";
+import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes, InvokableFactory } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, isUUID } from "../utils";
 import { useState, useCallback } from "react";
@@ -22,7 +22,7 @@ export function useFile(fileIdentifier: string, options?: FileOptions<FileReturn
 {
     const [fileInfo, setFileInfo] = useState<Nullable<InstanceTypes>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory: InvokableFactory<InstanceTypes, IFile> = useCallback((web: IWeb) =>
     {
         if (fileIdentifier)
         {

@@ -7,11 +7,11 @@ import { ParameterError } from "../errors/ParameterError";
 import { createInvokable } from "../utils";
 import { useState, useCallback } from "react";
 
-export type UserInfoOptions = PnpHookOptions<ODataQueryable>;
+export type UserOptions = PnpHookOptions<ODataQueryable>;
 
 export function useUser(
     userIdentifier: number | string,
-    options?: UserInfoOptions,
+    options?: UserOptions,
     deps?: React.DependencyList): Nullable<ISiteUserInfo>
 {
     const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo>>(undefined);

@@ -6,10 +6,10 @@ import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { createInvokable } from "../utils";
 import { useState, useCallback } from "react";
 
-export type UserInfoOptions = PnpHookOptions<ODataQueryableCollection>;
+export type SiteUsersOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useSiteUsers(
-    options?: UserInfoOptions,
+    options?: SiteUsersOptions,
     deps?: React.DependencyList): Nullable<Array<ISiteUserInfo>>
 {
     const [siteUser, setSiteUser] = useState<Nullable<Array<ISiteUserInfo>>>(undefined);

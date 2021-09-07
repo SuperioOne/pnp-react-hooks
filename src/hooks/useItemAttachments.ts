@@ -7,12 +7,12 @@ import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
-export type AttachmentOptions = PnpHookOptions<ODataQueryableCollection>;
+export type ItemAttachmentsOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useItemAttachments(
     itemId: number,
     list: string,
-    options?: AttachmentOptions,
+    options?: ItemAttachmentsOptions,
     deps?: React.DependencyList): Nullable<Array<IAttachmentInfo>>
 {
     const [attachments, setAttachments] = useState<Nullable<Array<IAttachmentInfo>>>();
