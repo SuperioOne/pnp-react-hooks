@@ -1,7 +1,5 @@
 const performance = require('perf_hooks').performance;
-
 const PROCESS_START = performance.now();
-
 
 const commonjs = require('@rollup/plugin-commonjs');
 const del = require('rollup-plugin-delete');
@@ -17,7 +15,6 @@ const outputOptions = {
     preserveModulesRoot: "src"
 };
 
-
 async function buildProject()
 {
     // create a bundle
@@ -32,7 +29,7 @@ async function buildProject()
         input: "src/index.ts",
         external: [
             "react",
-            /^(?:@pnp\/sp|@pnp\/sp\/.{1,100})$/,
+            /^(?:@pnp\/sp|@pnp\/sp\/.{1,150})$/,
         ]
     });
 

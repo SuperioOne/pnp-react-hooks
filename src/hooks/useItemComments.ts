@@ -42,6 +42,3 @@ export function useItemComments(
 
     return comments;
 }
-
-
-
