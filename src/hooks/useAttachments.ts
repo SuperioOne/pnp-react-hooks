@@ -9,7 +9,7 @@ import { useState, useCallback } from "react";
 
 export type ItemAttachmentsOptions = PnpHookOptions<ODataQueryableCollection>;
 
-export function useItemAttachments(
+export function useAttachments(
     itemId: number,
     list: string,
     options?: ItemAttachmentsOptions,
@@ -20,10 +20,10 @@ export function useItemAttachments(
     const invokableFactory = useCallback((web: IWeb) =>
     {
         if (isNaN(itemId))
-            throw new ParameterError("useItemAttachments: itemId value is not valid.", "itemId", itemId);
+            throw new ParameterError("useAttachment: itemId value is not valid.", "itemId", itemId);
 
         if (!list)
-            throw new ParameterError("useItemAttachments: list value is not valid.", "list", list);
+            throw new ParameterError("useAttachment: list value is not valid.", "list", list);
 
         const queryInstance = resolveList(web, list)
             .items
