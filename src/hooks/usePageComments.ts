@@ -37,7 +37,7 @@ export function usePageComments(
     }, [pageRelativePath]);
 
     const mergedDeps = deps
-        ? [pageRelativePath, ...deps]
+        ? [pageRelativePath].concat(deps)
         : [pageRelativePath];
 
     useQueryEffect(invokableFactory, setComments, options, mergedDeps);

@@ -1,4 +1,3 @@
-import "../../extensions/IFetchOptions.extension";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
 import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
@@ -11,7 +10,7 @@ import { useRef } from "react";
 const ABORT_ERROR = "AbortError";
 
 export default function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
-    invokableFactory: InvokableFactory<TReturn, TContext>,
+    invokableFactory: InvokableFactory<TContext>,
     stateAction: (value: Nullable<TReturn>) => void,
     options?: PnpHookOptions<Nullable<TQuery>>,
     deps?: React.DependencyList)
@@ -22,13 +21,11 @@ export default function useQueryEffect<TQuery extends ODataQueryable | ODataQuer
     const prevWebOption = useRef<Nullable<IWeb | string>>(null);
     const prevdependencies = useRef<Nullable<React.DependencyList>>(null);
 
-    const abortController = useRef<Nullable<AbortController>>(undefined);
     const subscription = useRef<Nullable<Subscription>>(undefined);
 
     const _cleanUp = useCallback(() =>
     {
         subscription.current?.unsubscribe();
-        abortController.current = undefined;
         subscription.current = undefined;
     }, []);
 
@@ -50,12 +47,7 @@ export default function useQueryEffect<TQuery extends ODataQueryable | ODataQuer
                 ? { ...globalOptions, ...options }
                 : globalOptions;
 
-            subscription.current?.unsubscribe();
-            abortController.current?.abort();
-
-            abortController.current = AbortController
-                ? new AbortController()
-                : undefined;
+            _cleanUp();
 
             if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
             {
@@ -86,13 +78,10 @@ export default function useQueryEffect<TQuery extends ODataQueryable | ODataQuer
             const web = resolveWeb(mergedOptions);
             const invokeable = invokableFactory(web);
 
-            insertODataQuery(invokeable.instance, query);
-            insertCacheOptions(invokeable.instance, mergedOptions);
+            insertODataQuery(invokeable, query);
+            insertCacheOptions(invokeable, mergedOptions);
 
-            subscription.current = from(
-                invokeable.invoke({
-                    signal: abortController.current?.signal
-                }))
+            subscription.current = from(invokeable())
                 .subscribe(observer);
         }
 

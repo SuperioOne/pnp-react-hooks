@@ -2,7 +2,7 @@ import "@pnp/sp/files";
 import useQueryEffect from "./internal/useQuery";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes, InvokableFactory } from "../types";
+import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, isUUID } from "../utils";
 import { useState, useCallback } from "react";
@@ -22,7 +22,7 @@ export function useFile(fileIdentifier: string, options?: FileOptions<FileReturn
 {
     const [fileInfo, setFileInfo] = useState<Nullable<InstanceTypes>>(undefined);
 
-    const invokableFactory: InvokableFactory<InstanceTypes, IFile> = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback((web: IWeb) =>
     {
         if (fileIdentifier)
         {
@@ -53,7 +53,7 @@ export function useFile(fileIdentifier: string, options?: FileOptions<FileReturn
                 case "buffer": return createInvokable(queryInstance, queryInstance.getBuffer);
                 case "blob": return createInvokable(queryInstance, queryInstance.getBlob);
                 case "text": return createInvokable(queryInstance, queryInstance.getText);
-                default: return createInvokable(queryInstance, queryInstance.defaultAction);
+                default: return createInvokable(queryInstance);
             }
         }
         else
@@ -63,7 +63,7 @@ export function useFile(fileIdentifier: string, options?: FileOptions<FileReturn
     }, [fileIdentifier, options?.type]);
 
     const mergedDeps = deps
-        ? [fileIdentifier, options?.type, ...deps]
+        ? [fileIdentifier, options?.type].concat(deps)
         : [fileIdentifier, options?.type];
 
     useQueryEffect(invokableFactory, setFileInfo, options, mergedDeps);

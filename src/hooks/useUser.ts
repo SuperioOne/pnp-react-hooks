@@ -24,7 +24,7 @@ export function useUser(
                 ? web.siteUsers.getById(userIdentifier)
                 : web.siteUsers.getByEmail(userIdentifier);
 
-            return createInvokable(queryInstance, queryInstance.defaultAction);
+            return createInvokable(queryInstance);
         }
         else
         {
@@ -33,7 +33,7 @@ export function useUser(
     }, [userIdentifier]);
 
     const mergedDeps = deps
-        ? [userIdentifier, ...deps]
+        ? [userIdentifier].concat(deps)
         : [userIdentifier];
 
     useQueryEffect(invokableFactory, setSiteUser, options, mergedDeps);

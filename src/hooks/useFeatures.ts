@@ -37,12 +37,12 @@ export function useFeatures(
                     break;
                 }
         }
-        return createInvokable(queryInstance, queryInstance.defaultAction);
+        return createInvokable(queryInstance);
 
     }, [options?.scope]);
 
     const mergedDeps = deps
-        ? [options?.scope, ...deps]
+        ? [options?.scope].concat(deps)
         : [options?.scope];
 
     useQueryEffect(invokableFactory, setFeatures, options, mergedDeps);

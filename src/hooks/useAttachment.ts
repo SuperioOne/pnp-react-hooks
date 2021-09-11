@@ -1,7 +1,7 @@
 import "@pnp/sp/attachments";
 import useQueryEffect from "./internal/useQuery";
-import { FileReturnTypes, InvokableFactory, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { IAttachment, IAttachmentInfo } from "@pnp/sp/attachments/types";
+import { FileReturnTypes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
+import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, resolveList } from "../utils";
@@ -22,7 +22,7 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
 {
     const [attachent, setAttachment] = useState<Nullable<InstanceTypes>>();
 
-    const invokableFactory: InvokableFactory<InstanceTypes, IAttachment> = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback((web: IWeb) =>
     {
         if (isNaN(itemId))
             throw new ParameterError("useAttachment: itemId value is not valid.", "itemId", itemId);
@@ -44,13 +44,13 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
             case "buffer": return createInvokable(queryInstance, queryInstance.getBuffer);
             case "blob": return createInvokable(queryInstance, queryInstance.getBlob);
             case "text": return createInvokable(queryInstance, queryInstance.getText);
-            default: return createInvokable(queryInstance, queryInstance.defaultAction);
+            default: return createInvokable(queryInstance);
         }
 
     }, [itemId, list, attachmentName, options?.type]);
 
     const mergedDeps = deps
-        ? [attachmentName, itemId, list, options?.type, ...deps]
+        ? [attachmentName, itemId, list, options?.type].concat(deps)
         : [attachmentName, itemId, list, options?.type];
 
     useQueryEffect(invokableFactory, setAttachment, options, mergedDeps);

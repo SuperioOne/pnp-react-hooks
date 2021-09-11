@@ -30,12 +30,12 @@ export function useItemComments(
             .getById(itemId)
             .comments;
 
-        return createInvokable(queryInstance, queryInstance.defaultAction);
+        return createInvokable(queryInstance);
 
     }, [itemId, list]);
 
     const mergedDeps = deps
-        ? [itemId, list, ...deps]
+        ? [itemId, list].concat(deps)
         : [itemId, list];
 
     useQueryEffect(invokableFactory, setComments, options, mergedDeps);

@@ -22,12 +22,12 @@ export function useContentTypes(
         const queryInstance = (typeof options?.list === "string" ? resolveList(web, options.list) : web)
             .contentTypes;
 
-        return createInvokable(queryInstance, queryInstance.defaultAction);
+        return createInvokable(queryInstance);
 
     }, [options?.list]);
 
     const mergedDeps = deps
-        ? [options?.list, ...deps]
+        ? [options?.list].concat(deps)
         : [options?.list];
 
     useQueryEffect(invokableFactory, setContentTypes, options, mergedDeps);

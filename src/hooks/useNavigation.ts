@@ -24,19 +24,19 @@ export function useNavigation(
             case "quickLaunch":
                 {
                     const queryInstance = web.navigation.quicklaunch;
-                    return createInvokable(queryInstance, queryInstance.defaultAction);
+                    return createInvokable(queryInstance);
                 }
             default:
                 {
                     const queryInstance = web.navigation.topNavigationBar;
-                    return createInvokable(queryInstance, queryInstance.defaultAction);
+                    return createInvokable(queryInstance);
                 }
         }
 
     }, [options?.type]);
 
     const mergedDeps = deps
-        ? [options?.type, ...deps]
+        ? [options?.type].concat(deps)
         : [options?.type];
 
     useQueryEffect(invokableFactory, setNavigationNodes, options, mergedDeps);
