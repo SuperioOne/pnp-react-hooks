@@ -36,13 +36,13 @@ export function useIsMemberOf(
             switch (typeof options?.userIdentifier)
             {
                 case "number":
-                    user = web.siteUsers.getById(options.userIdentifier);
+                    user = this.siteUsers.getById(options.userIdentifier);
                     break;
                 case "string":
-                    user = web.siteUsers.getByEmail(options.userIdentifier);
+                    user = this.siteUsers.getByEmail(options.userIdentifier);
                     break;
                 default:
-                    user = web.currentUser
+                    user = this.currentUser
                     break;
             }
 
