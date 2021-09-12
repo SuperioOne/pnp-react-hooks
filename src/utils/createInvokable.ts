@@ -7,9 +7,9 @@ export function createInvokable<TResult, TContext extends SharepointQueryable = 
     {
         return new Proxy(instance,
             {
-                apply: function (_, thisArg, argsArray)
+                apply: function (context, thisArg, argsArray)
                 {
-                    return Reflect.apply(func, thisArg, argsArray);
+                    return Reflect.apply(func, context, argsArray);
                 }
             });
     }

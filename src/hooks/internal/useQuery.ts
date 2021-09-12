@@ -7,8 +7,6 @@ import { from, NextObserver, Subscription } from "rxjs";
 import { useCallback, useContext, useEffect } from "react";
 import { useRef } from "react";
 
-const ABORT_ERROR = "AbortError";
-
 export default function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
     invokableFactory: InvokableFactory<TContext>,
     stateAction: (value: Nullable<TReturn>) => void,
@@ -30,7 +28,7 @@ export default function useQueryEffect<TQuery extends ODataQueryable | ODataQuer
     }, []);
 
     // Component unmount cleanup
-    useEffect(() => _cleanUp, [_cleanUp]);
+    useEffect(_cleanUp, [_cleanUp]);
 
     useEffect(() =>
     {
@@ -59,10 +57,7 @@ export default function useQueryEffect<TQuery extends ODataQueryable | ODataQuer
                 complete: _cleanUp,
                 error: (err: Error) =>
                 {
-                    if (err.name === ABORT_ERROR)
-                    {
-                        return;
-                    }
+                    stateAction(null);
 
                     if (typeof mergedOptions.exception === "function")
                     {
