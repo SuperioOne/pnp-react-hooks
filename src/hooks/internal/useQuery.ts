@@ -7,7 +7,7 @@ import { from, NextObserver, Subscription } from "rxjs";
 import { useCallback, useContext, useEffect } from "react";
 import { useRef } from "react";
 
-export default function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
+export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
     invokableFactory: InvokableFactory<TContext>,
     stateAction: (value: Nullable<TReturn>) => void,
     options?: PnpHookOptions<Nullable<TQuery>>,

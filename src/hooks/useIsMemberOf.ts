@@ -1,5 +1,5 @@
 import "@pnp/sp/site-groups";
-import useQueryEffect from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQuery";
 import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions, CacheOptions } from "../types";
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";

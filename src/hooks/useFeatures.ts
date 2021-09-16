@@ -1,6 +1,6 @@
 import "@pnp/sp/features/site";
 import "@pnp/sp/features/web";
-import useQueryEffect from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQuery";
 import { FeatureScopes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { IFeatureInfo, IFeatures } from "@pnp/sp/features/types";
 import { IWeb } from "@pnp/sp/webs/types";

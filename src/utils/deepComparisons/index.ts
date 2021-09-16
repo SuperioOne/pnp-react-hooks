@@ -1,1 +1,1 @@
-export { deepCompareQuery as default } from "./deepCompareQuery";
+export { deepCompareQuery } from "./deepCompareQuery";

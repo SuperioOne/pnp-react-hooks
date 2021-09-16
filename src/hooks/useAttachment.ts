@@ -1,5 +1,5 @@
 import "@pnp/sp/attachments";
-import useQueryEffect from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQuery";
 import { FileReturnTypes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";

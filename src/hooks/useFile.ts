@@ -1,5 +1,5 @@
 import "@pnp/sp/files";
-import useQueryEffect from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQuery";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes } from "../types";

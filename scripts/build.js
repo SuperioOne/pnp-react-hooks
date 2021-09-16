@@ -1,5 +1,23 @@
 const performance = require('perf_hooks').performance;
+const args = require("args");
+
 const PROCESS_START = performance.now();
+
+args
+    .option("outDir", "Set output directory", ".")
+    .option("format", "Build output type (amd, cjs, es, iife, umd, system)", "es")
+    .option("quiet", "Do not show output", false)
+    .option("sourceMap", "Generate source maps", false)
+
+const options = args.parse(process.argv);
+
+if (options.help)
+{
+    args.showHelp();
+    exit(1);
+}
+
+process.argv
 
 const commonjs = require('@rollup/plugin-commonjs');
 const del = require('rollup-plugin-delete');
@@ -7,21 +25,37 @@ const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const rollup = require('rollup');
 const typescript = require('@rollup/plugin-typescript');
 const { visualizer } = require('rollup-plugin-visualizer');
+require('colors');
 
 const outputOptions = {
-    dir: "dist",
-    format: "es",
+    dir: options.outDir,
+    format: options.format,
     preserveModules: true,
-    preserveModulesRoot: "src"
+    preserveModulesRoot: "src",
+    sourcemap: options.sourceMap
 };
+
+function writeRollupError(err)
+{
+    console.error(err.message.red);
+
+    if (typeof err.loc === "object" && err.loc.file)
+    {
+        console.error(`at ${err.loc.file}${err.loc.line > -1 ? `:${err.loc.line}` : ""}${err.loc.column > -1 ? `:${err.loc.column}` : ""}`.yellow.italic);
+    }
+}
 
 async function buildProject()
 {
     // create a bundle
     const bundle = await rollup.rollup({
         plugins: [
-            del({ targets: 'dist/*' }),
-            typescript(),
+            del({ targets: `${options.outDir}/*` }),
+            typescript({
+                outDir: options.outDir,
+                sourceMap: options.sourceMap,
+                noEmitOnError: true
+            }),
             nodeResolve(),
             commonjs(),
             visualizer(),
@@ -45,13 +79,20 @@ buildProject()
     {
         const PROCESS_TIME = performance.now() - PROCESS_START;
 
-        console.log(`Build Time: ${PROCESS_TIME}ms`);
-        console.log("Build Successfully Completed.");
+        if (!options.q)
+        {
+            console.log(`Build Duration: ${PROCESS_TIME.toFixed(2)}ms`.yellow);
+            console.log("Build Successfully Completed.".green);
+        }
 
         process.exit(0);
     })
     .catch((err) =>
     {
-        console.error(err);
+        if (!options.q)
+        {
+            writeRollupError(err);
+        }
+
         process.exit(-1);
     })

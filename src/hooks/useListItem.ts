@@ -1,5 +1,5 @@
 import "@pnp/sp/items";
-import useQueryEffect from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQuery";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
