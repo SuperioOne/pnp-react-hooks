@@ -11,7 +11,10 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\debug\\index.js",
+            "args": [
+                "--experimental-specifier-resolution=node",
+                "${workspaceFolder}\\debug\\test.js"
+            ],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],

@@ -1,12 +1,16 @@
 {
+  "type": "module",
+  "engines": {
+    "node": ">= 14.0.0"
+  },
   "name": "ease-point-react",
   "version": "0.0.0",
   "description": "PnpJS React hooks for easier usage.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node ./scripts/build.js -o dist -f es",
-    "build-debug": "node ./scripts/build.js -o debug -f cjs --sourceMap"
+    "build": "node ./scripts/build.js -o bin/release -f es",
+    "build-debug": "node ./scripts/build.js -o bin/debug --sourceMap"
   },
   "keywords": [
     "pnp",

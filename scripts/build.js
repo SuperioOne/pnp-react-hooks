@@ -1,5 +1,12 @@
-const performance = require('perf_hooks').performance;
-const args = require("args");
+import 'colors';
+import * as rollup from 'rollup';
+import args from 'args';
+import commonjs from '@rollup/plugin-commonjs';
+import del from 'rollup-plugin-delete';
+import typescript from '@rollup/plugin-typescript';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { performance } from 'perf_hooks';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const PROCESS_START = performance.now();
 
@@ -16,16 +23,6 @@ if (options.help)
     args.showHelp();
     exit(1);
 }
-
-process.argv
-
-const commonjs = require('@rollup/plugin-commonjs');
-const del = require('rollup-plugin-delete');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const rollup = require('rollup');
-const typescript = require('@rollup/plugin-typescript');
-const { visualizer } = require('rollup-plugin-visualizer');
-require('colors');
 
 const outputOptions = {
     dir: options.outDir,
@@ -56,13 +53,15 @@ async function buildProject()
                 sourceMap: options.sourceMap,
                 noEmitOnError: true
             }),
-            nodeResolve(),
             commonjs(),
+            nodeResolve(),
             visualizer(),
         ],
         input: "src/index.ts",
         external: [
+            "tslib",
             "react",
+            "rxjs",
             /^(?:@pnp\/sp|@pnp\/sp\/.{1,150})$/,
         ]
     });

@@ -1,3 +1,5 @@
+console.log("test");
+
 export { ExceptionMode, LoadActionMode } from "./types";
 export { PnpReactOptionProvider, PnpHookGlobalOptions } from "./context";
 
@@ -20,3 +22,4 @@ export { useNavigation } from "./hooks/useNavigation";
 export { usePageComments } from "./hooks/usePageComments";
 export { useSiteUsers } from "./hooks/useSiteUsers";
 export { useUser } from "./hooks/useUser";
+
