@@ -1,5 +1,5 @@
 import "@pnp/sp/fields";
-import { useQueryEffect } from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";

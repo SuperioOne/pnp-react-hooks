@@ -1,21 +1,25 @@
-import { IWeb } from "@pnp/sp/webs/types";
-import { InternalContext } from "../../context";
-import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
-import { LoadActionMode } from "../../types/options/RenderOptions";
-import { compareTuples, deepCompareQuery, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
-import { from, NextObserver, Subscription } from "rxjs";
-import { useCallback, useContext, useEffect } from "react";
 import { useRef } from "react";
+import { useCallback, useContext, useEffect } from "react";
+import { from, NextObserver, Subscription } from "rxjs";
+import { compareTuples, resolveWeb, shallowEqual } from "../../utils";
+import { LoadActionMode, RenderOptions } from "../../types/options/RenderOptions";
+import { InternalContext } from "../../context";
+import { IWeb } from "@pnp/sp/webs/types";
+import { ExceptionOptions, InvokableFactory, Nullable, SharepointQueryable, WebOptions } from "../../types";
 
-export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
+export interface _CustomRequestOptions extends ExceptionOptions, RenderOptions, WebOptions { }
+
+/**
+ * Unlike useQueryEffect, this hook doesn't check and insert caching and query options for complex queries.
+ */
+export function useRequestEffect<TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
     invokableFactory: InvokableFactory<TContext>,
     stateAction: (value: Nullable<TReturn>) => void,
-    options?: PnpHookOptions<Nullable<TQuery>>,
+    options?: _CustomRequestOptions,
     deps?: React.DependencyList)
 {
     const globalOptions = useContext(InternalContext);
 
-    const prevQuery = useRef<Nullable<TQuery>>(undefined);
     const prevWebOption = useRef<Nullable<IWeb | string>>(null);
     const prevdependencies = useRef<Nullable<React.DependencyList>>(null);
 
@@ -27,16 +31,13 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
         subscription.current = undefined;
     }, []);
 
-    // Component unmount cleanup
     useEffect(_cleanUp, [_cleanUp]);
 
     useEffect(() =>
     {
-        const query = options?.query;
         const webOption = globalOptions?.web ?? options?.web;
 
-        const shouldUpdate = !deepCompareQuery(prevQuery.current, query)
-            || !compareTuples(prevdependencies.current, deps)
+        const shouldUpdate = !compareTuples(prevdependencies.current, deps)
             || !shallowEqual(prevWebOption.current, webOption);
 
         if (shouldUpdate)
@@ -73,14 +74,10 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
             const web = resolveWeb(mergedOptions);
             const invokeable = invokableFactory(web);
 
-            insertODataQuery(invokeable, query);
-            insertCacheOptions(invokeable, mergedOptions);
-
             subscription.current = from(invokeable())
                 .subscribe(observer);
         }
 
-        prevQuery.current = query;
         prevWebOption.current = webOption;
         prevdependencies.current = deps;
     });

@@ -1,5 +1,5 @@
 import "@pnp/sp/navigation";
-import { useQueryEffect } from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { INavNodeInfo } from "@pnp/sp/navigation/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { NavigationTypes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";

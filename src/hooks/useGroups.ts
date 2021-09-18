@@ -1,5 +1,5 @@
 import "@pnp/sp/site-groups";
-import { useQueryEffect } from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, PnpHookOptions, ODataQueryableCollection } from "../types";

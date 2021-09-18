@@ -1,20 +1,16 @@
 import "@pnp/sp/site-groups";
-import { useQueryEffect } from "./internal/useQuery";
-import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions, CacheOptions } from "../types";
+import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { createInvokable } from "../utils";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
+import { useRequestEffect } from "./internal/useRequestEffect";
 
 export interface IsMemberOfOptions extends ExceptionOptions, RenderOptions, WebOptions
 {
     userIdentifier?: string | number;
 }
-
-// This request should not be cached. We simply wrap options object and inject
-// caching to always false in case of global config.
-interface _IsMemberOfOptions extends IsMemberOfOptions, CacheOptions { }
 
 type MemberInfo = [Nullable<boolean>, Nullable<ISiteGroupInfo>];
 
@@ -61,14 +57,11 @@ export function useIsMemberOf(
 
     }, [options?.userIdentifier, groupIdentifier]);
 
-    // Enforce cache option to disabled
-    const internalOptions: _IsMemberOfOptions = useMemo(() => ({ ...options, useCache: false }), [options]);
-
     const mergedDeps = deps
         ? [groupIdentifier, options?.userIdentifier].concat(deps)
         : [groupIdentifier, options?.userIdentifier];
 
-    useQueryEffect(invokableFactory, setIsMember, internalOptions, mergedDeps);
+    useRequestEffect(invokableFactory, setIsMember, options, mergedDeps);
 
     return isMember ?? DEFAULT;
 }

@@ -1,5 +1,5 @@
 import "@pnp/sp/content-types";
-import { useQueryEffect } from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { createInvokable, resolveList } from "../utils";

@@ -1,7 +1,7 @@
 import "@pnp/sp/clientside-pages";
 import "@pnp/sp/comments";
 import "@pnp/sp/comments/clientside-page";
-import { useQueryEffect } from "./internal/useQuery";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpActionFunction, PnpHookOptions } from "../types";

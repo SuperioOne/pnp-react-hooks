@@ -8,3 +8,4 @@ export { deepCompareQuery } from "./deepComparisons";
 export { createInvokable } from "./createInvokable";
 export { compareTuples } from "./compareTuples";
 export { compareArray } from "./compareArray";
+export { isUrl, UrlType } from "./isUrl";
