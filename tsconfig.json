@@ -7,7 +7,6 @@
         "strictFunctionTypes": true,
         "declaration": true,
         "moduleResolution": "Node",
-        "outDir": "dist",
         "strictNullChecks": true,
     },
     "exclude": [

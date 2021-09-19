@@ -1,5 +1,3 @@
-import './components';
-import 'colors';
 import 'colors';
 import * as ReactDOM from "react-dom";
 import * as readline from "readline";

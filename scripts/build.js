@@ -56,7 +56,7 @@ async function buildProject()
                 outDir: options.outDir,
                 sourceMap: options.sourceMap,
                 noEmitOnError: true,
-                include: [`${root}/**/**`]
+                include: [`${root}/**/*`]
             }),
             commonjs(),
             nodeResolve(),
@@ -64,10 +64,13 @@ async function buildProject()
         ],
         input: options.build,
         external: [
+            "jsdom",
+            "colors",
             "tslib",
             "react",
+            "react-dom",
             "rxjs",
-            /^(?:@pnp\/sp|@pnp\/sp\/.{1,150})$/,
+            /^@pnp\/.{1,150}$/,
         ]
     });
 

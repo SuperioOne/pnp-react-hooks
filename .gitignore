@@ -4,4 +4,4 @@ package-lock.json
 stats.html
 bin
 .bin
-.conf/msalSettings.ts
+debug/msalSettings.ts
