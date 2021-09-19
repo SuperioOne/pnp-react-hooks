@@ -55,7 +55,8 @@ async function buildProject()
             typescript({
                 outDir: options.outDir,
                 sourceMap: options.sourceMap,
-                noEmitOnError: true
+                noEmitOnError: true,
+                include: [`${root}/**/**`]
             }),
             commonjs(),
             nodeResolve(),

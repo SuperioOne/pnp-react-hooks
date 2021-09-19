@@ -1,34 +1,32 @@
-import { JSDOM } from "jsdom";
-import * as ReactDOM from "react-dom";
-import * as fs from "fs";
-import * as readline from "readline";
+import './components';
 import 'colors';
-
-const dom = new JSDOM(`<!DOCTYPE html><div id="react">Hello world</div>`);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(global as any).window = dom.window;
-
-const debugModes = fs.readdir("/debug", err =>
-{
-    console.error(err);
-    process.exit(-1);
-});
+import 'colors';
+import * as ReactDOM from "react-dom";
+import * as readline from "readline";
+import { Example } from "./components/Example";
+import { InitEnvironment } from "./init";
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-console.debug(debugModes);
-
-rl.question('Name? ', (answer) =>
+(async () =>
 {
-    import(answer)
-        .then(Component =>
-        {
-            const element = dom.window.document.getElementById("react");
-            ReactDOM.render(Component(), element);
-        })
-        .catch(console.error);
-});
+    const [rootElement] = await InitEnvironment();
+
+    ReactDOM.render(Example(), rootElement);
+
+    // eslint-disable-next-line no-constant-condition
+    rl.on('line', (input) =>
+    {
+        window.dispatchEvent(new Event(input));
+    });
+
+})()
+    .then(() => console.log("Completed"))
+    .catch(err =>
+    {
+        console.error(err);
+        process.exit(-1);
+    });
