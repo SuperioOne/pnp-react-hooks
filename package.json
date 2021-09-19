@@ -9,8 +9,8 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node ./scripts/build.js -o bin/release -f es",
-    "build-debug": "node ./scripts/build.js -o bin/debug --sourceMap"
+    "build": "node ./scripts/build.js -o .bin/release --build src/index.ts",
+    "build-debug": "node ./scripts/build.js -o .bin/debug --build src/index.ts --sourceMap"
   },
   "keywords": [
     "pnp",
@@ -28,6 +28,7 @@
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-typescript": "^8.2.5",
+    "@types/args": "^3.0.1",
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.30.0",

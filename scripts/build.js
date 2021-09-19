@@ -15,8 +15,10 @@ args
     .option("format", "Build output type (amd, cjs, es, iife, umd, system)", "es")
     .option("quiet", "Do not show output", false)
     .option("sourceMap", "Generate source maps", false)
+    .option("build", "Start building");
 
 const options = args.parse(process.argv);
+
 
 if (options.help)
 {
@@ -24,11 +26,13 @@ if (options.help)
     exit(1);
 }
 
+const root = options.build.split("/").find(e => e !== "");
+
 const outputOptions = {
     dir: options.outDir,
     format: options.format,
     preserveModules: true,
-    preserveModulesRoot: "src",
+    preserveModulesRoot: root,
     sourcemap: options.sourceMap
 };
 
@@ -57,7 +61,7 @@ async function buildProject()
             nodeResolve(),
             visualizer(),
         ],
-        input: "src/index.ts",
+        input: options.build,
         external: [
             "tslib",
             "react",
