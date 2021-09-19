@@ -1,3 +1,4 @@
+import "@pnp/sp/files";
 import "@pnp/sp/folders";
 import "@pnp/sp/lists";
 import { CacheOptions, ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
