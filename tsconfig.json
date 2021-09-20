@@ -7,7 +7,7 @@
         "strictFunctionTypes": true,
         "declaration": true,
         "moduleResolution": "Node",
-        "strictNullChecks": true,
+        "strictNullChecks": true
     },
     "exclude": [
         "node_modules",

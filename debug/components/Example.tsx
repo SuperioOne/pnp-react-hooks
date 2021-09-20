@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export function Example()
+export function BaseExample()
 {
     const [counter, setCounter] = React.useState<number>(0);
 
@@ -10,9 +10,6 @@ export function Example()
         {
             setCounter(counter + 1);
         };
-
-        console.debug(window);
-        console.debug(counter);
 
         window.addEventListener("increase", eventHandler, false);
 

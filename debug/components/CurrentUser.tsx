@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useCurrentUser } from "../../src";
 
-export function Example()
+export function CurrentUserDebug()
 {
     const currentUser = useCurrentUser();
     const [counter, setCounter] = React.useState<number>(0);
