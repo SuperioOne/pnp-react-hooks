@@ -6,8 +6,10 @@ export function BaseExample()
 
     React.useEffect(() =>
     {
-        const eventHandler = () =>
+        const eventHandler = (e: Event) =>
         {
+            // access custom args
+            console.log((e as CustomEvent).detail);
             setCounter(counter + 1);
         };
 

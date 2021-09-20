@@ -1,10 +1,9 @@
 import 'colors';
+import * as Components from "./components";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as readline from "readline";
 import { InitEnvironment } from "./init";
-
-import * as Components from "./components";
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -13,9 +12,10 @@ const rl = readline.createInterface({
 
 const eventLoop = () => 
 {
-    setTimeout(() => eventLoop(), 100);
+    setTimeout(() => eventLoop(), 20);
 }
 
+// TODO: Its lowest priority but some code refactoring would be nice.
 InitEnvironment()
     .then(rootElement =>
     {
@@ -41,8 +41,8 @@ InitEnvironment()
                 console.log("/EXIT".padEnd(20, " "), "- Exit from debugging.");
                 console.log("/HELP".padEnd(20, " "), "- Show help menu.");
                 console.log("/LIST".padEnd(20, " "), "- List mountable components");
-                console.log("/MNT [Name]".padEnd(20, " "), "- Mount component. Automatically unmounts if a component is already mounted.");
-                console.log("/UMNT".padEnd(20, " "), "- Unmount currently loaded component.");
+                console.log("/MOUNT [Name]".padEnd(20, " "), "- Mount component. Automatically unmounts if a component is already mounted.");
+                console.log("/UMOUNT".padEnd(20, " "), "- Unmount currently loaded component.");
                 console.log("/EVENT".padEnd(20, " "), "- Trigger a global event.");
                 console.log("");
             }
@@ -52,7 +52,7 @@ InitEnvironment()
 
                 components.forEach(e => console.log(` * ${e.toString()}`.green))
             }
-            else if (input.toUpperCase().startsWith("/MNT"))
+            else if (input.toUpperCase().startsWith("/MOUNT"))
             {
                 const options = input.trim().split(" ");
 
@@ -68,7 +68,7 @@ InitEnvironment()
                     console.log("Unexpected event input.".yellow);
                 }
             }
-            else if (input.toUpperCase().startsWith("/UMNT"))
+            else if (input.toUpperCase().startsWith("/UMOUNT"))
             {
                 const unmount = ReactDOM.unmountComponentAtNode(rootElement);
                 console.log(unmount ? "Component unmounted".green : "There is no component to unmount".yellow);
@@ -77,9 +77,9 @@ InitEnvironment()
             {
                 const options = input.trim().split(" ");
 
-                if (options.length === 2)
+                if (options.length > 1)
                 {
-                    window.dispatchEvent(new window.Event(options[1]));
+                    window.dispatchEvent(new window.CustomEvent(options[1], { detail: [...(options).slice(1)] }));
                 }
                 else
                 {
