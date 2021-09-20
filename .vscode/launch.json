@@ -19,6 +19,7 @@
                 "${workspaceFolder}/**/*.js"
             ],
             "preLaunchTask": "npm: build-debug",
+            "trace": true
         }
     ]
 }

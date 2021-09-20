@@ -1,7 +1,9 @@
 import * as React from "react";
+import { useCurrentUser } from "../../src";
 
 export function Example()
 {
+    const currentUser = useCurrentUser();
     const [counter, setCounter] = React.useState<number>(0);
 
     React.useEffect(() =>
@@ -11,13 +13,13 @@ export function Example()
             setCounter(counter + 1);
         };
 
-        console.debug(window);
+        console.debug(currentUser);
         console.debug(counter);
 
         window.addEventListener("increase", eventHandler, false);
 
         return () => window.removeEventListener("increase", eventHandler);
-    }, [counter]);
+    }, [counter, currentUser]);
 
     return (<div>{counter}</div>);
 }

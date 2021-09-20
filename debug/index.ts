@@ -1,30 +1,32 @@
 import 'colors';
+import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as readline from "readline";
-import { Example } from "./components/Example";
 import { InitEnvironment } from "./init";
+
+import { Example } from "./components/CurrentUser";
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-(async () =>
+const eventLoop = () => 
 {
-    const [rootElement] = await InitEnvironment();
+    setTimeout(() => eventLoop(),100);
+}
 
-    ReactDOM.render(Example(), rootElement);
-
-    // eslint-disable-next-line no-constant-condition
-    rl.on('line', (input) =>
+InitEnvironment()
+    .then(rootElement =>
     {
-        window.dispatchEvent(new Event(input));
-    });
+        ReactDOM.render(React.createElement(Example), rootElement);
 
-})()
-    .then(() => console.log("Completed"))
-    .catch(err =>
-    {
-        console.error(err);
-        process.exit(-1);
-    });
+        // eslint-disable-next-line no-constant-condition
+        rl.on('line', (input) =>
+        {
+            window.dispatchEvent(new window.Event(input));
+        });
+
+        eventLoop();
+    })
+    .catch(console.error);

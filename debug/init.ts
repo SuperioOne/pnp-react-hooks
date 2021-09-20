@@ -17,7 +17,7 @@ function InitJSDOM()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).window = dom.window;
 
-    return [dom.window.document.getElementById(ROOT_DIV_ID)];
+    return dom.window.document.getElementById(ROOT_DIV_ID);
 }
 
 async function InitPnp()

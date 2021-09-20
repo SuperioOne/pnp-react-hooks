@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node ./scripts/build.js -o .bin/release --build src/index.ts",
-    "build-debug": "node ./scripts/build.js -o .bin/debug --build src/index.ts --sourceMap -q && node ./scripts/build.js -o .bin/start --build debug/index.ts --sourceMap -q"
+    "build-debug": "node ./scripts/build.js -o .bin/start --build debug/index.ts --sourceMap -q"
   },
   "keywords": [
     "pnp",

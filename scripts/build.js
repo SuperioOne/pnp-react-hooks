@@ -56,7 +56,8 @@ async function buildProject()
                 outDir: options.outDir,
                 sourceMap: options.sourceMap,
                 noEmitOnError: true,
-                include: [`${root}/**/*`]
+                include: [`${root}/**/*`],
+                mapRoot: "."
             }),
             commonjs(),
             nodeResolve(),
