@@ -15,15 +15,22 @@ args
     .option("format", "Build output type (amd, cjs, es, iife, umd, system)", "es")
     .option("quiet", "Do not show output", false)
     .option("sourceMap", "Generate source maps", false)
-    .option("build", "Start building");
+    .option("build", "Start building")
+    .option("includeDirs", "tsc build include");
+
 
 const options = args.parse(process.argv);
-
 
 if (options.help)
 {
     args.showHelp();
     exit(1);
+}
+
+let include = undefined;
+if (options?.includeDirs)
+{
+    include = options?.includeDirs.replace(/(?:\[|\]|\s|"|'|`)/g, "").split(",");
 }
 
 const root = options.build.split("/").find(e => e !== "");
@@ -56,8 +63,8 @@ async function buildProject()
                 outDir: options.outDir,
                 sourceMap: options.sourceMap,
                 noEmitOnError: true,
-                include: [`${root}/**/*`],
-                mapRoot: "."
+                include: include,
+                mapRoot: options.sourceMap ? "." : undefined
             }),
             commonjs(),
             nodeResolve(),

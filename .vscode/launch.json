@@ -13,13 +13,13 @@
             ],
             "args": [
                 "--experimental-specifier-resolution=node",
-                "${workspaceFolder}\\.bin\\start\\index.js"
+                "${workspaceFolder}\\.bin\\debug\\index.js"
             ],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
             "preLaunchTask": "npm: build-debug",
-            "trace": true
+            "console": "externalTerminal"
         }
     ]
 }

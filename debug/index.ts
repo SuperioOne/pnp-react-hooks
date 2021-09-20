@@ -13,7 +13,7 @@ const rl = readline.createInterface({
 
 const eventLoop = () => 
 {
-    setTimeout(() => eventLoop(),100);
+    setTimeout(() => eventLoop(), 100);
 }
 
 InitEnvironment()
@@ -24,7 +24,14 @@ InitEnvironment()
         // eslint-disable-next-line no-constant-condition
         rl.on('line', (input) =>
         {
-            window.dispatchEvent(new window.Event(input));
+            if (input.toUpperCase() === "EXIT")
+            {
+                process.exit(0);
+            }
+            else
+            {
+                window.dispatchEvent(new window.Event(input));
+            }
         });
 
         eventLoop();
