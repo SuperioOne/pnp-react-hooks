@@ -6,7 +6,7 @@ import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpActionFunction, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable } from "../utils";
+import { createInvokable, isUrl, UrlType } from "../utils";
 import { useState, useCallback } from "react";
 
 export type PageCommentsOptions = PnpHookOptions<ODataQueryableCollection>;
@@ -20,10 +20,7 @@ export function usePageComments(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        // TODO: validate relative url
-        const isRelativeUrl = true;
-
-        if (!isRelativeUrl)
+        if (!isUrl(pageRelativePath, UrlType.Relative))
             throw new ParameterError("usePageComments: pageRelativePath value is not valid.", "pageRelativePath", pageRelativePath);
 
         const action: PnpActionFunction<IWeb, Array<ICommentInfo>> = async function ()

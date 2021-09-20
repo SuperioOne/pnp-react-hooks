@@ -1,7 +1,7 @@
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, PnpHookOptions, ODataQueryableCollection } from "../types";
-import { createInvokable } from "../utils";
+import { createInvokable, isEmail } from "../utils";
 import { useState, useCallback } from "react";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { GroupOptions } from "./useGroup";
@@ -24,7 +24,9 @@ export function useGroupUser(
 
         const queryInstance = typeof userIdentifier === "number"
             ? group.users.getById(userIdentifier)
-            : group.users.getByEmail(userIdentifier);
+            : isEmail(userIdentifier)
+                ? group.users.getByEmail(userIdentifier)
+                : group.users.getByLoginName(userIdentifier);
 
         return createInvokable(queryInstance);
     }, [groupIdentifier, userIdentifier]);

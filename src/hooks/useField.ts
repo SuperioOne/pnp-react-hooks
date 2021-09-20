@@ -22,9 +22,7 @@ export function useField(
     const invokableFactory = useCallback((web: IWeb) =>
     {
         if (!fieldIdentifier)
-        {
             throw new ParameterError("useField: fieldIdentifier value is neither unique id or relative url.", "fieldIdentifier", fieldIdentifier);
-        }
 
         const scope = (typeof options?.list === "string" ? resolveList(web, options.list) : web)
             .fields;

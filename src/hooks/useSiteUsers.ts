@@ -14,11 +14,7 @@ export function useSiteUsers(
 {
     const [siteUser, setSiteUser] = useState<Nullable<Array<ISiteUserInfo>>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) =>
-    {
-        const queryInstance = web.siteUsers;
-        return createInvokable(queryInstance);
-    }, []);
+    const invokableFactory = useCallback((web: IWeb) => createInvokable(web.siteUsers), []);
 
     useQueryEffect(invokableFactory, setSiteUser, options, deps);
 

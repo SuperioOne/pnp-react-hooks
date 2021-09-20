@@ -3,7 +3,7 @@ import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOption
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable } from "../utils";
+import { createInvokable, isEmail } from "../utils";
 import { useState, useCallback } from "react";
 import { useRequestEffect } from "./internal/useRequestEffect";
 
@@ -35,7 +35,9 @@ export function useIsMemberOf(
                     user = this.siteUsers.getById(options.userIdentifier);
                     break;
                 case "string":
-                    user = this.siteUsers.getByEmail(options.userIdentifier);
+                    user = isEmail(options.userIdentifier)
+                        ? this.siteUsers.getByEmail(options.userIdentifier)
+                        : this.siteUsers.getByLoginName(options.userIdentifier)
                     break;
                 default:
                     user = this.currentUser

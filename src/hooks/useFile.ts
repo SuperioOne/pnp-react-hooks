@@ -4,7 +4,7 @@ import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, isUUID } from "../utils";
+import { createInvokable, isUrl, isUUID, UrlType } from "../utils";
 import { useState, useCallback } from "react";
 
 type InstanceTypes = IFileInfo | ArrayBuffer | Blob | string;
@@ -35,10 +35,7 @@ export function useFile(fileIdentifier: string, options?: FileOptions<FileReturn
             }
             else 
             {
-                // TODO: validate relative url
-                const isRelativeUrl = true;
-
-                if (isRelativeUrl)
+                if (isUrl(fileIdentifier, UrlType.Relative))
                 {
                     queryInstance = web.getFileByServerRelativeUrl(fileIdentifier);
                 }

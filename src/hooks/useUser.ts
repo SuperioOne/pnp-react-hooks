@@ -1,10 +1,10 @@
 import "@pnp/sp/site-users";
-import { useQueryEffect } from "./internal/useQueryEffect";
-import { ISiteUserInfo } from "@pnp/sp/site-users/types";
+import { ISiteUserInfo, ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable } from "../utils";
+import { createInvokable, isEmail } from "../utils";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export type UserOptions = PnpHookOptions<ODataQueryable>;
@@ -20,15 +20,32 @@ export function useUser(
     {
         if (userIdentifier)
         {
-            const queryInstance = typeof userIdentifier === "number"
-                ? web.siteUsers.getById(userIdentifier)
-                : web.siteUsers.getByEmail(userIdentifier);
+            let user: ISiteUser;
 
-            return createInvokable(queryInstance);
+            switch (typeof userIdentifier)
+            {
+                case "number":
+                    {
+                        user = web.siteUsers.getById(userIdentifier);
+                        break;
+                    }
+                case "string":
+                    {
+                        user = isEmail(userIdentifier)
+                            ? web.siteUsers.getByEmail(userIdentifier)
+                            : web.siteUsers.getByLoginName(userIdentifier);
+
+                        break;
+                    }
+                default:
+                    throw new ParameterError("useUser: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
+            }
+
+            return createInvokable(user);
         }
         else
         {
-            throw new ParameterError("useUser: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
+            throw new ParameterError("useUser: userIdentifier value is empty.", "userIdentifier", userIdentifier);
         }
     }, [userIdentifier]);
 
