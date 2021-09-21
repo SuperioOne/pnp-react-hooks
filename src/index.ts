@@ -5,6 +5,7 @@ export { useAttachment } from "./hooks/useAttachment";
 export { useAttachments } from "./hooks/useAttachments";
 export { useContentTypes } from "./hooks/useContentTypes";
 export { useCurrentUser } from "./hooks/useCurrentUser";
+export { useCurrentUserHasPermission } from "./hooks/useCurrentUserHasPermission";
 export { useFeatures } from "./hooks/useFeatures";
 export { useField } from "./hooks/useField";
 export { useFields } from "./hooks/useFields";
@@ -21,4 +22,4 @@ export { usePageComments } from "./hooks/usePageComments";
 export { useRegionalSetting } from "./hooks/useRegionalSetting";
 export { useSiteUsers } from "./hooks/useSiteUsers";
 export { useUser } from "./hooks/useUser";
-
+export { useUserHasPermission } from "./hooks/useUserHasPermission";
