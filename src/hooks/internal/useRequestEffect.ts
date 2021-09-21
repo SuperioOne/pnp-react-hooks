@@ -10,7 +10,7 @@ import { ExceptionOptions, InvokableFactory, Nullable, SharepointQueryable, WebO
 export interface _CustomRequestOptions extends ExceptionOptions, RenderOptions, WebOptions { }
 
 /**
- * Unlike useQueryEffect, this hook doesn't check and insert caching and query options for complex queries.
+ * Unlike useQueryEffect, this hook doesn't insert caching and query options.
  */
 export function useRequestEffect<TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
     invokableFactory: InvokableFactory<TContext>,
@@ -20,15 +20,14 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
 {
     const globalOptions = useContext(InternalContext);
 
-    const prevWebOption = useRef<Nullable<IWeb | string>>(null);
-    const prevdependencies = useRef<Nullable<React.DependencyList>>(null);
-
-    const subscription = useRef<Nullable<Subscription>>(undefined);
+    const _prevWebOption = useRef<Nullable<IWeb | string>>(null);
+    const _prevdependencies = useRef<Nullable<React.DependencyList>>(null);
+    const _subscription = useRef<Nullable<Subscription>>(undefined);
 
     const _cleanUp = useCallback(() =>
     {
-        subscription.current?.unsubscribe();
-        subscription.current = undefined;
+        _subscription.current?.unsubscribe();
+        _subscription.current = undefined;
     }, []);
 
     useEffect(_cleanUp, [_cleanUp]);
@@ -37,8 +36,8 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
     {
         const webOption = globalOptions?.web ?? options?.web;
 
-        const shouldUpdate = !compareTuples(prevdependencies.current, deps)
-            || !shallowEqual(prevWebOption.current, webOption);
+        const shouldUpdate = !compareTuples(_prevdependencies.current, deps)
+            || !shallowEqual(_prevWebOption.current, webOption);
 
         if (shouldUpdate)
         {
@@ -74,11 +73,11 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
             const web = resolveWeb(mergedOptions);
             const invokeable = invokableFactory(web);
 
-            subscription.current = from(invokeable())
+            _subscription.current = from(invokeable())
                 .subscribe(observer);
         }
 
-        prevWebOption.current = webOption;
-        prevdependencies.current = deps;
+        _prevWebOption.current = webOption;
+        _prevdependencies.current = deps;
     });
 }

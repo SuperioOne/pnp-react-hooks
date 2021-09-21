@@ -1,4 +1,5 @@
 export { SharepointQueryable } from "./SharepointQueryable";
+export { ScopeInfo, ListScope, ItemScope } from "./ScopeInfo";
 export { PnpActionFunction } from "./PnpActionFunction";
 export { ODataQueryable, ODataQueryableCollection } from "./ODataQueryable";
 export { Nullable } from "./NullableT";

@@ -15,16 +15,15 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
 {
     const globalOptions = useContext(InternalContext);
 
-    const prevQuery = useRef<Nullable<TQuery>>(undefined);
-    const prevWebOption = useRef<Nullable<IWeb | string>>(null);
-    const prevdependencies = useRef<Nullable<React.DependencyList>>(null);
-
-    const subscription = useRef<Nullable<Subscription>>(undefined);
+    const _prevQuery = useRef<Nullable<TQuery>>(undefined);
+    const _prevWebOption = useRef<Nullable<IWeb | string>>(null);
+    const _prevdependencies = useRef<Nullable<React.DependencyList>>(null);
+    const _subscription = useRef<Nullable<Subscription>>(undefined);
 
     const _cleanUp = useCallback(() =>
     {
-        subscription.current?.unsubscribe();
-        subscription.current = undefined;
+        _subscription.current?.unsubscribe();
+        _subscription.current = undefined;
     }, []);
 
     useEffect(_cleanUp, [_cleanUp]);
@@ -34,9 +33,9 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
         const query = options?.query;
         const webOption = globalOptions?.web ?? options?.web;
 
-        const shouldUpdate = !deepCompareQuery(prevQuery.current, query)
-            || !compareTuples(prevdependencies.current, deps)
-            || !shallowEqual(prevWebOption.current, webOption);
+        const shouldUpdate = !deepCompareQuery(_prevQuery.current, query)
+            || !compareTuples(_prevdependencies.current, deps)
+            || !shallowEqual(_prevWebOption.current, webOption);
 
         if (shouldUpdate)
         {
@@ -75,12 +74,12 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
             insertODataQuery(invokeable, query);
             insertCacheOptions(invokeable, mergedOptions);
 
-            subscription.current = from(invokeable())
+            _subscription.current = from(invokeable())
                 .subscribe(observer);
         }
 
-        prevQuery.current = query;
-        prevWebOption.current = webOption;
-        prevdependencies.current = deps;
+        _prevQuery.current = query;
+        _prevWebOption.current = webOption;
+        _prevdependencies.current = deps;
     });
 }

@@ -4,10 +4,9 @@ import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOption
 import { IItem } from "@pnp/sp/items/types";
 import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { PermissionKind } from "@pnp/sp/security/types";
 import { createInvokable, resolveList } from "../utils";
 import { useRequestEffect } from "./internal/useRequestEffect";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 
 interface Scope
 {
@@ -20,24 +19,11 @@ export interface CurrentUserPermissionOptions extends ExceptionOptions, RenderOp
     scope?: Scope;
 }
 
-export function useCurrentUserHasPermission(
-    permissionKinds: Array<PermissionKind> | PermissionKind,
+export function useRoleAssignments(
     options?: CurrentUserPermissionOptions,
     deps?: React.DependencyList): Nullable<boolean>
 {
     const [hasPermission, setHasPermission] = useState<Nullable<boolean>>(undefined);
-
-    const _permissionFlag: PermissionKind = useMemo(() =>
-    {
-        if (typeof permissionKinds === "number")
-        {
-            return permissionKinds;
-        }
-        else
-        {
-            return permissionKinds.reduce((p, c) => p | c);
-        }
-    }, [permissionKinds]);
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
@@ -59,17 +45,17 @@ export function useCurrentUserHasPermission(
                 permissionScope = this;
             }
 
-            const basePermission = await permissionScope.getCurrentUserEffectivePermissions();
+            const basePermission = await permissionScope.roleAssignments();
 
-            return permissionScope.hasPermissions(basePermission, _permissionFlag)
+            return permissionScope()
         }
 
         return createInvokable(web, action);
     }, [options, _permissionFlag]);
 
     const mergedDeps = deps
-        ? [_permissionFlag, options?.scope?.list, options?.scope?.item].concat(deps)
-        : [_permissionFlag, options?.scope?.list, options?.scope?.item];
+        ? [options?.scope?.list, options?.scope?.item].concat(deps)
+        : [options?.scope?.list, options?.scope?.item];
 
     useRequestEffect(invokableFactory, setHasPermission, options, mergedDeps);
 

@@ -1,7 +1,6 @@
 import "@pnp/sp/items";
-import "@pnp/sp/security/item";
-import "@pnp/sp/security/list";
-import "@pnp/sp/security/web";
+import "@pnp/sp/security";
+import "@pnp/sp/site-users";
 import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
 import { IItem } from "@pnp/sp/items/types";
 import { IList } from "@pnp/sp/lists/types";
@@ -37,7 +36,6 @@ export function useUserHasPermission(
         {
             return permissionKinds;
         }
-
         else
         {
             return permissionKinds.reduce((p, c) => p | c);
@@ -80,7 +78,6 @@ export function useUserHasPermission(
                     permissionScope = permissionScope.items.getById(options.scope.item);
                 }
             }
-
             else
             {
                 permissionScope = this;
@@ -88,7 +85,7 @@ export function useUserHasPermission(
 
             const basePermission = await permissionScope.getUserEffectivePermissions(userLoginName);
 
-            return this.hasPermissions(basePermission, _permissionFlag);
+            return permissionScope.hasPermissions(basePermission, _permissionFlag);
         };
 
         return createInvokable(web, action);

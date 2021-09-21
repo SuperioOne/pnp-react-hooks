@@ -10,3 +10,5 @@ export { isUrl, UrlType } from "./isUrl";
 export { resolveList } from "./resolveList";
 export { resolveWeb } from "./resolveWeb";
 export { shallowEqual } from "./shallowEqual";
+export { resolveScope } from "./resolveScope"
+export { resolveSiteUser } from "./resolveSiteUser";
