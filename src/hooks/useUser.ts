@@ -1,9 +1,8 @@
-import "@pnp/sp/site-users";
-import { ISiteUserInfo, ISiteUser } from "@pnp/sp/site-users/types";
+import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, isEmail } from "../utils";
+import { createInvokable, resolveUser } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
@@ -20,26 +19,7 @@ export function useUser(
     {
         if (userIdentifier)
         {
-            let user: ISiteUser;
-
-            switch (typeof userIdentifier)
-            {
-                case "number":
-                    {
-                        user = web.siteUsers.getById(userIdentifier);
-                        break;
-                    }
-                case "string":
-                    {
-                        user = isEmail(userIdentifier)
-                            ? web.siteUsers.getByEmail(userIdentifier)
-                            : web.siteUsers.getByLoginName(userIdentifier);
-
-                        break;
-                    }
-                default:
-                    throw new ParameterError("useUser: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
-            }
+            const user = resolveUser(web.siteUsers, userIdentifier);
 
             return createInvokable(user);
         }

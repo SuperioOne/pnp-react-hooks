@@ -7,8 +7,9 @@ export { insertODataQuery } from "./insertODataQuery";
 export { isEmail } from "./isEmail";
 export { isUUID } from "./isUUID";
 export { isUrl, UrlType } from "./isUrl";
+export { resolveGroup } from "./resolveGroup";
 export { resolveList } from "./resolveList";
+export { resolveScope } from "./resolveScope";
+export { resolveUser } from "./resolveUser";
 export { resolveWeb } from "./resolveWeb";
 export { shallowEqual } from "./shallowEqual";
-export { resolveScope } from "./resolveScope"
-export { resolveSiteUser } from "./resolveSiteUser";

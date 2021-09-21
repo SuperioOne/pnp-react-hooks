@@ -3,7 +3,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, isUUID, resolveList } from "../utils";
+import { createInvokable, isUUID, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 import { ParameterError } from "../errors/ParameterError";
 
@@ -24,16 +24,17 @@ export function useField(
         if (!fieldIdentifier)
             throw new ParameterError("useField: fieldIdentifier value is neither unique id or relative url.", "fieldIdentifier", fieldIdentifier);
 
-        const scope = (typeof options?.list === "string" ? resolveList(web, options.list) : web)
-            .fields;
+        const scope = resolveScope(web, {
+            list: options?.list
+        });
 
         if (isUUID(fieldIdentifier))
         {
-            return createInvokable(scope.getById(fieldIdentifier));
+            return createInvokable(scope.fields.getById(fieldIdentifier));
         }
         else
         {
-            return createInvokable(scope.getByInternalNameOrTitle(fieldIdentifier));
+            return createInvokable(scope.fields.getByInternalNameOrTitle(fieldIdentifier));
         }
 
     }, [options?.list, fieldIdentifier]);

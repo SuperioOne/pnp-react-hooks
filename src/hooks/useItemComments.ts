@@ -1,4 +1,5 @@
 import "@pnp/sp/comments";
+import "@pnp/sp/items";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";

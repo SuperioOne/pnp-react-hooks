@@ -27,7 +27,7 @@ export function usePageComments(
         {
             const page = await this.loadClientsidePage(pageRelativePath);
             return page.getComments();
-        }
+        };
 
         return createInvokable(web, action);
 

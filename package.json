@@ -11,7 +11,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts",
     "build-debug": "node ./scripts/build.js -o .bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap --quiet",
-    "build-test": "node ./scripts/build.js -o .bin/tests --includeDirs ['src/**/*','tests/**/*','.config/**/*'] --build tests/index.ts --sourceMap"
+    "build-test": "node ./scripts/build.js -o .bin/tests --includeDirs ['src/**/*','tests/**/*','.config/**/*'] --build tests/index.ts --sourceMap",
+    "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*",
+    "lint-fix": "node ./node_modules/eslint/bin/eslint.js src/**/* --fix"
   },
   "keywords": [
     "pnp",

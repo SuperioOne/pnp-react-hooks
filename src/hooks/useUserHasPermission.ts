@@ -1,13 +1,10 @@
-import "@pnp/sp/items";
 import "@pnp/sp/security";
 import "@pnp/sp/site-users";
 import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
-import { IItem } from "@pnp/sp/items/types";
-import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { ParameterError } from "../errors/ParameterError";
 import { PermissionKind } from "@pnp/sp/security/types";
-import { createInvokable, isEmail, resolveList } from "../utils";
+import { createInvokable, isEmail, resolveScope } from "../utils";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback, useMemo } from "react";
 
@@ -67,25 +64,14 @@ export function useUserHasPermission(
                     throw new ParameterError("useUserHasPermission: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
             }
 
-            let permissionScope: IWeb | IList | IItem;
+            const scope = resolveScope(web, {
+                list: options?.scope?.list,
+                item: options?.scope?.item
+            });
 
-            if (options?.scope?.list)
-            {
-                permissionScope = resolveList(this, options.scope.list);
+            const basePermission = await scope.getUserEffectivePermissions(userLoginName);
 
-                if (options.scope.item && !isNaN(options.scope.item))
-                {
-                    permissionScope = permissionScope.items.getById(options.scope.item);
-                }
-            }
-            else
-            {
-                permissionScope = this;
-            }
-
-            const basePermission = await permissionScope.getUserEffectivePermissions(userLoginName);
-
-            return permissionScope.hasPermissions(basePermission, _permissionFlag);
+            return scope.hasPermissions(basePermission, _permissionFlag);
         };
 
         return createInvokable(web, action);

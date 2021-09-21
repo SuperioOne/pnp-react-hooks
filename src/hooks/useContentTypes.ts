@@ -2,7 +2,7 @@ import "@pnp/sp/content-types";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, resolveList, resolveScope } from "../utils";
+import { createInvokable, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 import { IContentTypeInfo } from "@pnp/sp/content-types";
 
@@ -19,10 +19,9 @@ export function useContentTypes(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        const queryInstance = (typeof options?.list === "string" ? resolveList(web, options.list) : web)
-            .contentTypes;
+        const scope = resolveScope(web, { list: options?.list });
 
-        return createInvokable(queryInstance);
+        return createInvokable(scope.contentTypes);
 
     }, [options?.list]);
 

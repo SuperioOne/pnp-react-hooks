@@ -8,6 +8,6 @@ export class ParameterError extends Error
         super(message);
         this.parameterValue = value;
         this.parameterName = parameterName;
-        this.name = "ParameterError"
+        this.name = "ParameterError";
     }
 }

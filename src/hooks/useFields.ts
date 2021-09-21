@@ -3,7 +3,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, resolveList } from "../utils";
+import { createInvokable, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 
 export interface FieldsOptions extends PnpHookOptions<ODataQueryableCollection>
@@ -19,10 +19,9 @@ export function useFields(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        const queryInstance = (typeof options?.list === "string" ? resolveList(web, options.list) : web)
-            .fields;
+        const scope = resolveScope(web, { list: options?.list });
 
-        return createInvokable(queryInstance);
+        return createInvokable(scope.fields);
 
     }, [options?.list]);
 

@@ -1,7 +1,7 @@
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, PnpHookOptions, ODataQueryableCollection } from "../types";
-import { createInvokable } from "../utils";
+import { createInvokable, resolveGroup } from "../utils";
 import { useState, useCallback } from "react";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { GroupOptions } from "./useGroup";
@@ -17,11 +17,10 @@ export function useGroupUsers(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        const queryInstance = typeof groupIdentifier === "number"
-            ? web.siteGroups.getById(groupIdentifier)
-            : web.siteGroups.getByName(groupIdentifier);
+        const group = resolveGroup(web, groupIdentifier);
 
-        return createInvokable(queryInstance.users);
+        return createInvokable(group.users);
+        
     }, [groupIdentifier]);
 
     const mergedDeps = deps

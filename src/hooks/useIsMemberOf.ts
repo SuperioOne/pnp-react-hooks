@@ -3,7 +3,7 @@ import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOption
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable, isEmail } from "../utils";
+import { createInvokable, resolveUser } from "../utils";
 import { useState, useCallback } from "react";
 import { useRequestEffect } from "./internal/useRequestEffect";
 
@@ -27,22 +27,9 @@ export function useIsMemberOf(
     {
         const action: PnpActionFunction<IWeb, MemberInfo> = async function ()
         {
-            let user: ISiteUser;
-
-            switch (typeof options?.userIdentifier)
-            {
-                case "number":
-                    user = this.siteUsers.getById(options.userIdentifier);
-                    break;
-                case "string":
-                    user = isEmail(options.userIdentifier)
-                        ? this.siteUsers.getByEmail(options.userIdentifier)
-                        : this.siteUsers.getByLoginName(options.userIdentifier)
-                    break;
-                default:
-                    user = this.currentUser
-                    break;
-            }
+            const user: ISiteUser = options?.userIdentifier
+                ? resolveUser(this.siteUsers, options.userIdentifier)
+                : this.currentUser;
 
             const queryInstance = typeof groupIdentifier === "number"
                 ? user.groups.filter(`Id eq ${groupIdentifier}`)
@@ -53,7 +40,7 @@ export function useIsMemberOf(
             return response.length === 1
                 ? [true, response[0]]
                 : [false, undefined];
-        }
+        };
 
         return createInvokable(web, action);
 

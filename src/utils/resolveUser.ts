@@ -1,20 +1,21 @@
-import { IWeb } from "@pnp/sp/webs/types";
+import "@pnp/sp/site-users";
+import { ISiteUsers } from "@pnp/sp/site-users/types";
 import { ParameterError } from "../errors/ParameterError";
 import { isEmail } from "./isEmail";
 
-export function resolveSiteUser(web: IWeb, userIdentifier: string)
+export function resolveUser(users: ISiteUsers, userIdentifier: string | number)
 {
     switch (typeof userIdentifier)
     {
         case "number":
             {
-                return web.siteUsers.getById(userIdentifier);
+                return users.getById(userIdentifier);
             }
         case "string":
             {
                 return isEmail(userIdentifier)
-                    ? web.siteUsers.getByEmail(userIdentifier)
-                    : web.siteUsers.getByLoginName(userIdentifier);
+                    ? users.getByEmail(userIdentifier)
+                    : users.getByLoginName(userIdentifier);
             }
         default:
             throw new ParameterError("resolveUser: userIdentifier value is not valid.", "userIdentifier", userIdentifier);

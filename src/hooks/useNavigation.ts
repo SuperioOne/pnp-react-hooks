@@ -23,13 +23,11 @@ export function useNavigation(
         {
             case "quickLaunch":
                 {
-                    const queryInstance = web.navigation.quicklaunch;
-                    return createInvokable(queryInstance);
+                    return createInvokable(web.navigation.quicklaunch);
                 }
             default:
                 {
-                    const queryInstance = web.navigation.topNavigationBar;
-                    return createInvokable(queryInstance);
+                    return createInvokable(web.navigation.topNavigationBar);
                 }
         }
 

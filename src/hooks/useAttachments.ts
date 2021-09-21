@@ -1,4 +1,5 @@
 import "@pnp/sp/attachments";
+import "@pnp/sp/items";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";

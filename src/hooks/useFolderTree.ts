@@ -72,7 +72,7 @@ export function useFolderTree(
             };
 
             return treeNode;
-        }
+        };
 
         return createInvokable(rootFolder, buildTree);
 
