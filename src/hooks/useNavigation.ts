@@ -15,7 +15,7 @@ export function useNavigation(
     options?: NavigationOptions,
     deps?: React.DependencyList): Nullable<Array<INavNodeInfo>>
 {
-    const [navigationNodes, setNavigationNodes] = useState<Nullable<Array<INavNodeInfo>>>();
+    const [navNodes, setNavNodes] = useState<Nullable<Array<INavNodeInfo>>>();
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
@@ -33,11 +33,11 @@ export function useNavigation(
 
     }, [options?.type]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [options?.type].concat(deps)
         : [options?.type];
 
-    useQueryEffect(invokableFactory, setNavigationNodes, options, mergedDeps);
+    useQueryEffect(invokableFactory, setNavNodes, options, _mergedDeps);
 
-    return navigationNodes;
+    return navNodes;
 }

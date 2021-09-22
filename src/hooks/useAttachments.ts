@@ -26,20 +26,20 @@ export function useAttachments(
         if (!list)
             throw new ParameterError("useAttachment: list value is not valid.", "list", list);
 
-        const queryInstance = resolveList(web, list)
+        const queryInst = resolveList(web, list)
             .items
             .getById(itemId)
             .attachmentFiles;
 
-        return createInvokable(queryInstance);
+        return createInvokable(queryInst);
 
     }, [itemId, list]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [itemId, list].concat(deps)
         : [itemId, list];
 
-    useQueryEffect(invokableFactory, setAttachments, options, mergedDeps);
+    useQueryEffect(invokableFactory, setAttachments, options, _mergedDeps);
 
     return attachments;
 }

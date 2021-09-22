@@ -9,7 +9,7 @@ import { useRequestEffect } from "./internal/useRequestEffect";
 
 export interface IsMemberOfOptions extends ExceptionOptions, RenderOptions, WebOptions
 {
-    userIdentifier?: string | number;
+    userId?: string | number;
 }
 
 type MemberInfo = [Nullable<boolean>, Nullable<ISiteGroupInfo>];
@@ -17,7 +17,7 @@ type MemberInfo = [Nullable<boolean>, Nullable<ISiteGroupInfo>];
 const DEFAULT: MemberInfo = [undefined, undefined];
 
 export function useIsMemberOf(
-    groupIdentifier: string | number,
+    groupId: string | number,
     options?: IsMemberOfOptions,
     deps?: React.DependencyList): MemberInfo
 {
@@ -27,13 +27,13 @@ export function useIsMemberOf(
     {
         const action: PnpActionFunction<IWeb, MemberInfo> = async function ()
         {
-            const user: ISiteUser = options?.userIdentifier
-                ? resolveUser(this.siteUsers, options.userIdentifier)
+            const user: ISiteUser = options?.userId
+                ? resolveUser(this.siteUsers, options.userId)
                 : this.currentUser;
 
-            const queryInstance = typeof groupIdentifier === "number"
-                ? user.groups.filter(`Id eq ${groupIdentifier}`)
-                : user.groups.filter(`Title eq '${groupIdentifier}'`);
+            const queryInstance = typeof groupId === "number"
+                ? user.groups.filter(`Id eq ${groupId}`)
+                : user.groups.filter(`Title eq '${groupId}'`);
 
             const response = await queryInstance.top(1).get();
 
@@ -44,13 +44,13 @@ export function useIsMemberOf(
 
         return createInvokable(web, action);
 
-    }, [options?.userIdentifier, groupIdentifier]);
+    }, [options?.userId, groupId]);
 
-    const mergedDeps = deps
-        ? [groupIdentifier, options?.userIdentifier].concat(deps)
-        : [groupIdentifier, options?.userIdentifier];
+    const _mergedDeps = deps
+        ? [groupId, options?.userId].concat(deps)
+        : [groupId, options?.userId];
 
-    useRequestEffect(invokableFactory, setIsMember, options, mergedDeps);
+    useRequestEffect(invokableFactory, setIsMember, options, _mergedDeps);
 
     return isMember ?? DEFAULT;
 }

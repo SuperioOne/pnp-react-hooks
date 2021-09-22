@@ -5,7 +5,7 @@ import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 export type RoleDefinitionOptions = PnpHookOptions<ODataQueryable>;
 
@@ -16,7 +16,7 @@ interface RoleType
 }
 
 export function useRoleDefinition(
-    roleIdentifier: string | number | RoleType,
+    roleDefId: string | number | RoleType,
     options?: RoleDefinitionOptions,
     deps?: React.DependencyList): Nullable<IRoleDefinitionInfo>
 {
@@ -24,32 +24,37 @@ export function useRoleDefinition(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        let queryInstance: IRoleDefinition;
+        let queryInst: IRoleDefinition;
 
-        switch (typeof roleIdentifier)
+        switch (typeof roleDefId)
         {
             case "number":
-                queryInstance = web.roleDefinitions.getById(roleIdentifier);
+                queryInst = web.roleDefinitions.getById(roleDefId);
                 break;
             case "string":
-                queryInstance = web.roleDefinitions.getByName(roleIdentifier);
+                queryInst = web.roleDefinitions.getByName(roleDefId);
                 break;
             case "object":
-                queryInstance = web.roleDefinitions.getByType(roleIdentifier.roleType);
+                queryInst = web.roleDefinitions.getByType(roleDefId.roleType);
                 break;
             default:
-                throw new ParameterError("useRoleDefinition: role definition identifier type is not valid.", "roleIdentifier", roleIdentifier);
+                throw new ParameterError("useRoleDefinition: role definition identifier type is not valid.", "roleIdentifier", roleDefId);
         }
 
-        return createInvokable(queryInstance);
+        return createInvokable(queryInst);
 
-    }, [roleIdentifier]);
+    }, [roleDefId]);
 
-    const mergedDeps = deps
-        ? [roleIdentifier].concat(deps)
-        : [roleIdentifier];
+    // normalize RoleType for dependencies
+    const _normRoleId = useMemo(() =>
+        typeof roleDefId === "object" ? roleDefId.roleType : roleDefId
+        , [roleDefId]);
 
-    useQueryEffect(invokableFactory, setRoleDefinition, options, mergedDeps);
+    const _mergedDeps = deps
+        ? [_normRoleId].concat(deps)
+        : [_normRoleId];
+
+    useQueryEffect(invokableFactory, setRoleDefinition, options, _mergedDeps);
 
     return roleDefinition;
 }

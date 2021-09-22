@@ -13,24 +13,24 @@ export function useListItems<T>(
     options?: ListItemsOptions,
     deps?: React.DependencyList): Nullable<Array<T>>
 {
-    const [itemCollection, setItemCollection] = useState<Nullable<Array<T>>>();
+    const [items, setItems] = useState<Nullable<Array<T>>>();
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
         if (!list)
             throw new ParameterError("useListItem<T>: list value is not valid.", "list", list);
 
-        const queryInstance = resolveList(web, list).items;
+        const spList = resolveList(web, list);
 
-        return createInvokable(queryInstance);
+        return createInvokable(spList.items);
 
     }, [list]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [list].concat(deps)
         : [list];
 
-    useQueryEffect(invokableFactory, setItemCollection, options, mergedDeps);
+    useQueryEffect(invokableFactory, setItems, options, _mergedDeps);
 
-    return itemCollection;
+    return items;
 }

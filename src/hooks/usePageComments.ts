@@ -33,11 +33,11 @@ export function usePageComments(
 
     }, [pageRelativePath]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [pageRelativePath].concat(deps)
         : [pageRelativePath];
 
-    useQueryEffect(invokableFactory, setComments, options, mergedDeps);
+    useQueryEffect(invokableFactory, setComments, options, _mergedDeps);
 
     return comments;
 }

@@ -9,7 +9,7 @@ import { useState, useCallback } from "react";
 export type UserOptions = PnpHookOptions<ODataQueryable>;
 
 export function useUser(
-    userIdentifier: number | string,
+    userId: number | string,
     options?: UserOptions,
     deps?: React.DependencyList): Nullable<ISiteUserInfo>
 {
@@ -17,23 +17,23 @@ export function useUser(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        if (userIdentifier)
+        if (userId)
         {
-            const user = resolveUser(web.siteUsers, userIdentifier);
+            const user = resolveUser(web.siteUsers, userId);
 
             return createInvokable(user);
         }
         else
         {
-            throw new ParameterError("useUser: userIdentifier value is empty.", "userIdentifier", userIdentifier);
+            throw new ParameterError("useUser: userIdentifier value is empty.", "userIdentifier", userId);
         }
-    }, [userIdentifier]);
+    }, [userId]);
 
-    const mergedDeps = deps
-        ? [userIdentifier].concat(deps)
-        : [userIdentifier];
+    const _mergedDeps = deps
+        ? [userId].concat(deps)
+        : [userId];
 
-    useQueryEffect(invokableFactory, setSiteUser, options, mergedDeps);
+    useQueryEffect(invokableFactory, setSiteUser, options, _mergedDeps);
 
     return siteUser;
 }

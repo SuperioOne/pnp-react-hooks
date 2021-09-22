@@ -24,17 +24,11 @@ export function useCurrentUserHasPermission(
 {
     const [hasPermission, setHasPermission] = useState<Nullable<boolean>>(undefined);
 
-    const _permissionFlag: PermissionKind = useMemo(() =>
-    {
-        if (typeof permissionKinds === "number")
-        {
-            return permissionKinds;
-        }
-        else
-        {
-            return permissionKinds.reduce((p, c) => p | c);
-        }
-    }, [permissionKinds]);
+    const _permFlag = useMemo(() =>
+        typeof permissionKinds === "number"
+            ? permissionKinds
+            : permissionKinds.reduce((p, c) => p | c)
+        , [permissionKinds]);
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
@@ -45,19 +39,20 @@ export function useCurrentUserHasPermission(
                 item: options?.scope?.item
             });
 
-            const basePermission = await scope.getCurrentUserEffectivePermissions();
+            const basePerm = await scope.getCurrentUserEffectivePermissions();
 
-            return scope.hasPermissions(basePermission, _permissionFlag);
+            return scope.hasPermissions(basePerm, _permFlag);
         };
 
         return createInvokable(web, action);
-    }, [options, _permissionFlag]);
 
-    const mergedDeps = deps
-        ? [_permissionFlag, options?.scope?.list, options?.scope?.item].concat(deps)
-        : [_permissionFlag, options?.scope?.list, options?.scope?.item];
+    }, [options, _permFlag]);
 
-    useRequestEffect(invokableFactory, setHasPermission, options, mergedDeps);
+    const _mergedDeps = deps
+        ? [_permFlag, options?.scope?.list, options?.scope?.item].concat(deps)
+        : [_permFlag, options?.scope?.list, options?.scope?.item];
+
+    useRequestEffect(invokableFactory, setHasPermission, options, _mergedDeps);
 
     return hasPermission;
 }

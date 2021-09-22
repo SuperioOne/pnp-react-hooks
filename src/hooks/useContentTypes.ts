@@ -25,11 +25,11 @@ export function useContentTypes(
 
     }, [options?.list]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [options?.list].concat(deps)
         : [options?.list];
 
-    useQueryEffect(invokableFactory, setContentTypes, options, mergedDeps);
+    useQueryEffect(invokableFactory, setContentTypes, options, _mergedDeps);
 
     return contentTypes;
 }

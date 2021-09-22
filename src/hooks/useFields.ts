@@ -25,11 +25,11 @@ export function useFields(
 
     }, [options?.list]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [options?.list].concat(deps)
         : [options?.list];
 
-    useQueryEffect(invokableFactory, setFields, options, mergedDeps);
+    useQueryEffect(invokableFactory, setFields, options, _mergedDeps);
 
     return fields;
 }

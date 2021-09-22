@@ -33,11 +33,11 @@ export function useRoleAssignments(
         return createInvokable(scope.roleAssignments);
     }, [options]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [options?.scope?.list, options?.scope?.item].concat(deps)
         : [options?.scope?.list, options?.scope?.item];
 
-    useQueryEffect(invokableFactory, setRoleAssignments, options, mergedDeps);
+    useQueryEffect(invokableFactory, setRoleAssignments, options, _mergedDeps);
 
     return roleAssignments;
 }

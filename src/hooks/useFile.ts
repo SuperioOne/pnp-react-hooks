@@ -14,56 +14,56 @@ export interface FileOptions<T extends FileReturnTypes = "info"> extends PnpHook
     type?: T;
 }
 
-export function useFile(fileIdentifier: string, options?: FileOptions, deps?: React.DependencyList): Nullable<IFileInfo>;
-export function useFile(fileIdentifier: string, options?: FileOptions<"blob">, deps?: React.DependencyList): Nullable<Blob>;
-export function useFile(fileIdentifier: string, options?: FileOptions<"buffer">, deps?: React.DependencyList): Nullable<ArrayBuffer>;
-export function useFile(fileIdentifier: string, options?: FileOptions<"text">, deps?: React.DependencyList): Nullable<string>;
-export function useFile(fileIdentifier: string, options?: FileOptions<FileReturnTypes>, deps?: React.DependencyList): Nullable<InstanceTypes>
+export function useFile(fileId: string, options?: FileOptions, deps?: React.DependencyList): Nullable<IFileInfo>;
+export function useFile(fileId: string, options?: FileOptions<"blob">, deps?: React.DependencyList): Nullable<Blob>;
+export function useFile(fileId: string, options?: FileOptions<"buffer">, deps?: React.DependencyList): Nullable<ArrayBuffer>;
+export function useFile(fileId: string, options?: FileOptions<"text">, deps?: React.DependencyList): Nullable<string>;
+export function useFile(fileId: string, options?: FileOptions<FileReturnTypes>, deps?: React.DependencyList): Nullable<InstanceTypes>
 {
     const [fileInfo, setFileInfo] = useState<Nullable<InstanceTypes>>(undefined);
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        if (fileIdentifier)
+        if (fileId)
         {
-            const isUniqueId = isUUID(fileIdentifier);
-            let queryInstance: IFile;
+            const isUniqueId = isUUID(fileId);
+            let queryInst: IFile;
 
             if (isUniqueId)
             {
-                queryInstance = web.getFileById(fileIdentifier);
+                queryInst = web.getFileById(fileId);
             }
             else 
             {
-                if (isUrl(fileIdentifier, UrlType.Relative))
+                if (isUrl(fileId, UrlType.Relative))
                 {
-                    queryInstance = web.getFileByServerRelativeUrl(fileIdentifier);
+                    queryInst = web.getFileByServerRelativeUrl(fileId);
                 }
                 else
                 {
-                    throw new ParameterError("useFile: fileIdentifier value is neither unique id or relative url.", "fileIdentifier", fileIdentifier);
+                    throw new ParameterError("useFile: fileId value is neither unique id or relative url.", "fileId", fileId);
                 }
             }
 
             switch (options?.type)
             {
-                case "buffer": return createInvokable(queryInstance, queryInstance.getBuffer);
-                case "blob": return createInvokable(queryInstance, queryInstance.getBlob);
-                case "text": return createInvokable(queryInstance, queryInstance.getText);
-                default: return createInvokable(queryInstance);
+                case "buffer": return createInvokable(queryInst, queryInst.getBuffer);
+                case "blob": return createInvokable(queryInst, queryInst.getBlob);
+                case "text": return createInvokable(queryInst, queryInst.getText);
+                default: return createInvokable(queryInst);
             }
         }
         else
         {
-            throw new ParameterError("useFile: fileIdentifier value is empty.", "fileIdentifier", fileIdentifier);
+            throw new ParameterError("useFile: fileId value is empty.", "fileId", fileId);
         }
-    }, [fileIdentifier, options?.type]);
+    }, [fileId, options?.type]);
 
-    const mergedDeps = deps
-        ? [fileIdentifier, options?.type].concat(deps)
-        : [fileIdentifier, options?.type];
+    const _mergedDeps = deps
+        ? [fileId, options?.type].concat(deps)
+        : [fileId, options?.type];
 
-    useQueryEffect(invokableFactory, setFileInfo, options, mergedDeps);
+    useQueryEffect(invokableFactory, setFileInfo, options, _mergedDeps);
 
     return fileInfo;
 }

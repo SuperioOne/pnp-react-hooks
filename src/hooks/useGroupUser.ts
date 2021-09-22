@@ -1,16 +1,16 @@
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, PnpHookOptions, ODataQueryableCollection } from "../types";
+import { Nullable, PnpHookOptions, ODataQueryable } from "../types";
 import { createInvokable, resolveGroup, resolveUser } from "../utils";
 import { useState, useCallback } from "react";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { GroupOptions } from "./useGroup";
 
-export type GroupUserOptions = PnpHookOptions<ODataQueryableCollection>;
+export type GroupUserOptions = PnpHookOptions<ODataQueryable>;
 
 export function useGroupUser(
-    groupIdentifier: string | number,
-    userIdentifier: string | number,
+    groupId: string | number,
+    userId: string | number,
     options?: GroupOptions,
     deps?: React.DependencyList): Nullable<ISiteUserInfo>
 {
@@ -18,18 +18,18 @@ export function useGroupUser(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        const group = resolveGroup(web, groupIdentifier);
-        const user = resolveUser(group.users, userIdentifier);
+        const group = resolveGroup(web, groupId);
+        const user = resolveUser(group.users, userId);
 
         return createInvokable(user);
-        
-    }, [groupIdentifier, userIdentifier]);
 
-    const mergedDeps = deps
-        ? [groupIdentifier, userIdentifier].concat(deps)
-        : [groupIdentifier, userIdentifier];
+    }, [groupId, userId]);
 
-    useQueryEffect(invokableFactory, setGroupUser, options, mergedDeps);
+    const _mergedDeps = deps
+        ? [groupId, userId].concat(deps)
+        : [groupId, userId];
+
+    useQueryEffect(invokableFactory, setGroupUser, options, _mergedDeps);
 
     return groupUser;
 }

@@ -9,25 +9,25 @@ import { GroupOptions } from "./useGroup";
 export type GroupUsersOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useGroupUsers(
-    groupIdentifier: string | number,
+    groupId: string | number,
     options?: GroupOptions,
     deps?: React.DependencyList): Nullable<Array<ISiteUserInfo>>
 {
-    const [group, setGroup] = useState<Nullable<Array<ISiteUserInfo>>>();
+    const [groupUsers, setGroupUsers] = useState<Nullable<Array<ISiteUserInfo>>>();
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        const group = resolveGroup(web, groupIdentifier);
+        const group = resolveGroup(web, groupId);
 
         return createInvokable(group.users);
         
-    }, [groupIdentifier]);
+    }, [groupId]);
 
-    const mergedDeps = deps
-        ? [groupIdentifier].concat(deps)
-        : [groupIdentifier];
+    const _mergedDeps = deps
+        ? [groupId].concat(deps)
+        : [groupId];
 
-    useQueryEffect(invokableFactory, setGroup, options, mergedDeps);
+    useQueryEffect(invokableFactory, setGroupUsers, options, _mergedDeps);
 
-    return group;
+    return groupUsers;
 }

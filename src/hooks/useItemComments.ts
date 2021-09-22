@@ -35,11 +35,11 @@ export function useItemComments(
 
     }, [itemId, list]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [itemId, list].concat(deps)
         : [itemId, list];
 
-    useQueryEffect(invokableFactory, setComments, options, mergedDeps);
+    useQueryEffect(invokableFactory, setComments, options, _mergedDeps);
 
     return comments;
 }

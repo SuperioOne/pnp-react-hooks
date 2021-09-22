@@ -21,23 +21,17 @@ export interface UserPermissionOptions extends ExceptionOptions, RenderOptions, 
 
 export function useUserHasPermission(
     permissionKinds: Array<PermissionKind> | PermissionKind,
-    userIdentifier: string | number,
+    userId: string | number,
     options?: UserPermissionOptions,
     deps?: React.DependencyList): Nullable<boolean>
 {
     const [hasPermission, setHasPermission] = useState<Nullable<boolean>>(undefined);
 
-    const _permissionFlag: PermissionKind = useMemo(() =>
-    {
-        if (typeof permissionKinds === "number")
-        {
-            return permissionKinds;
-        }
-        else
-        {
-            return permissionKinds.reduce((p, c) => p | c);
-        }
-    }, [permissionKinds]);
+    const _permFlag: PermissionKind = useMemo(() =>
+        typeof permissionKinds === "number"
+            ? permissionKinds
+            : permissionKinds.reduce((p, c) => p | c)
+        , [permissionKinds]);
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
@@ -45,23 +39,23 @@ export function useUserHasPermission(
         {
             let userLoginName: string;
 
-            switch (typeof userIdentifier)
+            switch (typeof userId)
             {
                 case "number":
                     {
-                        userLoginName = (await web.siteUsers.getById(userIdentifier).select("LoginName")()).LoginName;
+                        userLoginName = (await web.siteUsers.getById(userId).select("LoginName")()).LoginName;
                         break;
                     }
                 case "string":
                     {
-                        userLoginName = isEmail(userIdentifier)
-                            ? (await web.siteUsers.getByEmail(userIdentifier).select("LoginName")()).LoginName
-                            : userIdentifier;
+                        userLoginName = isEmail(userId)
+                            ? (await web.siteUsers.getByEmail(userId).select("LoginName")()).LoginName
+                            : userId;
 
                         break;
                     }
                 default:
-                    throw new ParameterError("useUserHasPermission: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
+                    throw new ParameterError("useUserHasPermission: userIdentifier value is not valid.", "userIdentifier", userId);
             }
 
             const scope = resolveScope(web, {
@@ -69,19 +63,19 @@ export function useUserHasPermission(
                 item: options?.scope?.item
             });
 
-            const basePermission = await scope.getUserEffectivePermissions(userLoginName);
+            const basePerm = await scope.getUserEffectivePermissions(userLoginName);
 
-            return scope.hasPermissions(basePermission, _permissionFlag);
+            return scope.hasPermissions(basePerm, _permFlag);
         };
 
         return createInvokable(web, action);
-    }, [userIdentifier, options, _permissionFlag]);
+    }, [userId, options, _permFlag]);
 
-    const mergedDeps = deps
-        ? [userIdentifier, _permissionFlag, options?.scope?.list, options?.scope?.item].concat(deps)
-        : [userIdentifier, _permissionFlag, options?.scope?.list, options?.scope?.item];
+    const _mergedDeps = deps
+        ? [userId, _permFlag, options?.scope?.list, options?.scope?.item].concat(deps)
+        : [userId, _permFlag, options?.scope?.list, options?.scope?.item];
 
-    useRequestEffect(invokableFactory, setHasPermission, options, mergedDeps);
+    useRequestEffect(invokableFactory, setHasPermission, options, _mergedDeps);
 
     return hasPermission;
 }

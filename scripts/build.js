@@ -6,7 +6,6 @@ import del from 'rollup-plugin-delete';
 import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { performance } from 'perf_hooks';
-import { visualizer } from 'rollup-plugin-visualizer';
 
 const PROCESS_START = performance.now();
 
@@ -16,21 +15,22 @@ args
     .option("quiet", "Do not show output", false)
     .option("sourceMap", "Generate source maps", false)
     .option("build", "Start building")
-    .option("includeDirs", "tsc build include");
+    .option("includeDirs", "tsc build include")
+    .option("dry-run", "start building without emitting output files.", false);
 
 
 const options = args.parse(process.argv);
-
-if (options.help)
-{
-    args.showHelp();
-    exit(1);
-}
 
 let include = undefined;
 if (options?.includeDirs)
 {
     include = options?.includeDirs.replace(/(?:\[|\]|\s|"|'|`)/g, "").split(",");
+}
+
+if (options["dry-run"])
+{
+    options.sourceMap = false;
+    options.outDir = undefined;
 }
 
 const root = options.build.split("/").find(e => e !== "");
@@ -68,7 +68,6 @@ async function buildProject()
             }),
             commonjs(),
             nodeResolve(),
-            visualizer(),
         ],
         input: options.build,
         external: [
@@ -82,9 +81,11 @@ async function buildProject()
         ]
     });
 
-    await bundle.generate(outputOptions);
-
-    await bundle.write(outputOptions);
+    if (!options["dry-run"])
+    {
+        await bundle.generate(outputOptions);
+        await bundle.write(outputOptions);
+    }
 
     await bundle.close();
 }

@@ -1,14 +1,14 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { FileReturnTypes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
+import { FileReturnTypes, Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
-export interface AttachmentOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryableCollection>
+export interface AttachmentOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>
 {
     type?: T;
 }
@@ -21,7 +21,7 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
 export function useAttachment(attachmentName: string, itemId: number, list: string, options?: AttachmentOptions<"text">, deps?: React.DependencyList): Nullable<string>;
 export function useAttachment(attachmentName: string, itemId: number, list: string, options?: AttachmentOptions<FileReturnTypes>, deps?: React.DependencyList): Nullable<InstanceTypes>
 {
-    const [attachent, setAttachment] = useState<Nullable<InstanceTypes>>();
+    const [attachment, setAttachment] = useState<Nullable<InstanceTypes>>();
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
@@ -34,7 +34,7 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
         if (!attachmentName)
             throw new ParameterError("useAttachment: attachmentName value is not valid.", "attachmentName", attachmentName);
 
-        const queryInstance = resolveList(web, list)
+        const queryInst = resolveList(web, list)
             .items
             .getById(itemId)
             .attachmentFiles
@@ -42,19 +42,19 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
 
         switch (options?.type)
         {
-            case "buffer": return createInvokable(queryInstance, queryInstance.getBuffer);
-            case "blob": return createInvokable(queryInstance, queryInstance.getBlob);
-            case "text": return createInvokable(queryInstance, queryInstance.getText);
-            default: return createInvokable(queryInstance);
+            case "buffer": return createInvokable(queryInst, queryInst.getBuffer);
+            case "blob": return createInvokable(queryInst, queryInst.getBlob);
+            case "text": return createInvokable(queryInst, queryInst.getText);
+            default: return createInvokable(queryInst);
         }
 
     }, [itemId, list, attachmentName, options?.type]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [attachmentName, itemId, list, options?.type].concat(deps)
         : [attachmentName, itemId, list, options?.type];
 
-    useQueryEffect(invokableFactory, setAttachment, options, mergedDeps);
+    useQueryEffect(invokableFactory, setAttachment, options, _mergedDeps);
 
-    return attachent;
+    return attachment;
 }

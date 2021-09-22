@@ -21,31 +21,31 @@ export function useFeatures(
 
     const invokableFactory = useCallback((web: IWeb) =>
     {
-        let queryInstance: IFeatures;
+        let queryInst: IFeatures;
 
         switch (options?.scope)
         {
             case "site": {
 
-                queryInstance = sp.site.features;
+                queryInst = sp.site.features;
                 break;
             }
             case "web":
             default:
                 {
-                    queryInstance = web.features;
+                    queryInst = web.features;
                     break;
                 }
         }
-        return createInvokable(queryInstance);
+        return createInvokable(queryInst);
 
     }, [options?.scope]);
 
-    const mergedDeps = deps
+    const _mergedDeps = deps
         ? [options?.scope].concat(deps)
         : [options?.scope];
 
-    useQueryEffect(invokableFactory, setFeatures, options, mergedDeps);
+    useQueryEffect(invokableFactory, setFeatures, options, _mergedDeps);
 
     return features;
 }
