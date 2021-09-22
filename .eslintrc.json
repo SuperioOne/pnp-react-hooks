@@ -6,7 +6,7 @@
     "ignorePatterns": [
         "node_modules/**/*",
         "scripts/**/*",
-        "dist/**/*"
+        ".bin/**/*"
     ],
     "extends": [
         "eslint:recommended",
@@ -30,6 +30,14 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "@typescript-eslint/explicit-module-boundary-types": "off",
-        "semi": ["warn", "always"]
+        "semi": [
+            "warn",
+            "always"
+        ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

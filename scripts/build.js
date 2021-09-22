@@ -27,10 +27,12 @@ if (options?.includeDirs)
     include = options?.includeDirs.replace(/(?:\[|\]|\s|"|'|`)/g, "").split(",");
 }
 
-if (options["dry-run"])
+if (options.dryRun)
 {
     options.sourceMap = false;
     options.outDir = undefined;
+
+    console.log("Dry-run started".yellow);
 }
 
 const root = options.build.split("/").find(e => e !== "");
@@ -55,20 +57,25 @@ function writeRollupError(err)
 
 async function buildProject()
 {
-    // create a bundle
+    const plugins = [
+        typescript({
+            outDir: options.outDir,
+            sourceMap: options.sourceMap,
+            noEmitOnError: true,
+            include: include,
+            mapRoot: options.sourceMap ? "." : undefined
+        }),
+        commonjs(),
+        nodeResolve(),
+    ];
+
+    if (!options.dryRun)
+    {
+        plugins.unshift(del({ targets: `${options.outDir}/*` }));
+    }
+
     const bundle = await rollup.rollup({
-        plugins: [
-            del({ targets: `${options.outDir}/*` }),
-            typescript({
-                outDir: options.outDir,
-                sourceMap: options.sourceMap,
-                noEmitOnError: true,
-                include: include,
-                mapRoot: options.sourceMap ? "." : undefined
-            }),
-            commonjs(),
-            nodeResolve(),
-        ],
+        plugins: plugins,
         input: options.build,
         external: [
             "jsdom",
@@ -81,7 +88,7 @@ async function buildProject()
         ]
     });
 
-    if (!options["dry-run"])
+    if (!options.dryRun)
     {
         await bundle.generate(outputOptions);
         await bundle.write(outputOptions);
