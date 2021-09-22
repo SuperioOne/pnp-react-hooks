@@ -12,13 +12,13 @@ interface Scope
     item?: number;
 }
 
-export interface CurrentUserPermissionOptions extends PnpHookOptions<ODataQueryableCollection>
+export interface RoleAssignmentsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     scope?: Scope;
 }
 
 export function useRoleAssignments(
-    options?: CurrentUserPermissionOptions,
+    options?: RoleAssignmentsOptions,
     deps?: React.DependencyList): Nullable<Array<IRoleAssignmentInfo>>
 {
     const [roleAssignments, setRoleAssignments] = useState<Nullable<Array<IRoleAssignmentInfo>>>(undefined);

@@ -3,17 +3,17 @@
   "engines": {
     "node": ">= 14.0.0"
   },
-  "name": "ease-point-react",
+  "name": "pnp-react-hooks",
   "version": "0.0.0",
-  "description": "PnpJS React hooks for easier usage.",
-  "main": "dist/index.js",
+  "description": "PnPJS React hooks library.",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts",
-    "build-debug": "node ./scripts/build.js -o .bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap --quiet",
+    "build-debug": "node ./scripts/build.js -o .bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap",
     "build-test": "node ./scripts/build.js -o .bin/tests --includeDirs ['src/**/*','tests/**/*','.config/**/*'] --build tests/index.ts --sourceMap",
     "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*",
-    "lint-fix": "node ./node_modules/eslint/bin/eslint.js src/**/* --fix"
+    "lint-fix": "node ./node_modules/eslint/bin/eslint.js src/**/* --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "pnp",
@@ -23,11 +23,9 @@
   ],
   "author": "",
   "license": "ISC",
-  "peerDependencies": {
-    "@pnp/sp": "^2.8.0",
-    "react": ">=16.9.0 <18.0.0"
-  },
   "devDependencies": {
+    "@pnp/sp": "^2.8.0",
+    "react": ">=16.9.0 <18.0.0",
     "@pnp/nodejs": "^2.8.0",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
@@ -51,9 +49,7 @@
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-visualizer": "^5.5.2",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.2"
-  },
-  "dependencies": {
+    "typescript": "^4.4.2",
     "rxjs": "^7.3.0"
   }
 }

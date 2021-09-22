@@ -1,13 +1,13 @@
 import { JSDOM } from "jsdom";
 import { sp } from "@pnp/sp";
 import { MsalFetchClient } from "@pnp/nodejs";
-import config from "../.config/msalSettings"
+import config from "../.config/msalSettings";
 
 const ROOT_DIV_ID = "react";
 
 export async function InitEnvironment()
 {
-    await InitPnp();
+    InitPnp();
     return InitJSDOM();
 }
 
@@ -20,7 +20,7 @@ function InitJSDOM()
     return dom.window.document.getElementById(ROOT_DIV_ID);
 }
 
-async function InitPnp()
+function InitPnp()
 {
     sp.setup({
         sp: {

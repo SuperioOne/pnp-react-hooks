@@ -12,10 +12,10 @@ const rl = readline.createInterface({
 
 const eventLoop = () => 
 {
-    setTimeout(() => eventLoop(), 20);
-}
+    setTimeout(() => eventLoop(), 500);
+};
 
-// TODO: Its lowest priority but some code refactoring would be nice.
+// TODO: Its the lowest priority but a better cli code with similar functionality would be nice.
 InitEnvironment()
     .then(rootElement =>
     {
@@ -50,7 +50,7 @@ InitEnvironment()
             {
                 const components = Object.keys(Components);
 
-                components.forEach(e => console.log(` * ${e.toString()}`.green))
+                components.forEach(e => console.log(` * ${e.toString()}`.green));
             }
             else if (input.toUpperCase().startsWith("/MOUNT"))
             {

@@ -1,6 +1,8 @@
 import { sp } from "@pnp/sp";
 import { Nullable, WebOptions } from "../types";
 import { IWeb, Web } from "@pnp/sp/webs";
+import { isUrl, UrlType } from ".";
+import { ParameterError } from "../errors/ParameterError";
 
 export function resolveWeb(query: Nullable<WebOptions>): IWeb
 {
@@ -12,7 +14,9 @@ export function resolveWeb(query: Nullable<WebOptions>): IWeb
     }
     else if (typeof query?.web === "string")
     {
-        // TODO: proper base url check
+        if (!isUrl(query.web, UrlType.Absolute))
+            throw new ParameterError("resolveWeb: web parameter is not a absolute url.", "web", query.web);
+
         web = Web(query.web);
     }
     else
