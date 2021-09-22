@@ -1,7 +1,4 @@
 node_modules
-dist
-package-lock.json
 stats.html
-bin
 .bin
 .config/msalSettings.ts
