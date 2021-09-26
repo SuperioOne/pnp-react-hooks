@@ -34,50 +34,54 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
 
     useEffect(() =>
     {
-        const webOption = globalOptions?.web ?? options?.web;
-
-        const shouldUpdate = !compareTuples(_prevdependencies.current, deps)
-            || !shallowEqual(_prevWebOption.current, webOption);
-
-        if (shouldUpdate)
+        // TODO: Error handling
+        setTimeout(async () => 
         {
-            const mergedOptions = options
-                ? { ...globalOptions, ...options }
-                : globalOptions;
+            const webOption = globalOptions?.web ?? options?.web;
 
-            _cleanUp();
+            const shouldUpdate = !compareTuples(_prevdependencies.current, deps)
+                || !shallowEqual(_prevWebOption.current, webOption);
 
-            if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+            if (shouldUpdate)
             {
-                stateAction(undefined);
+                const mergedOptions = options
+                    ? { ...globalOptions, ...options }
+                    : globalOptions;
+
+                _cleanUp();
+
+                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                {
+                    stateAction(undefined);
+                }
+
+                const observer: NextObserver<TReturn> = {
+                    next: data => stateAction(data),
+                    complete: _cleanUp,
+                    error: (err: Error) =>
+                    {
+                        stateAction(null);
+
+                        if (typeof mergedOptions.exception === "function")
+                        {
+                            mergedOptions.exception(err);
+                        }
+                        else if (!mergedOptions.exception)
+                        {
+                            throw err;
+                        }
+                    }
+                };
+
+                const web = resolveWeb(mergedOptions);
+                const invokeable = await invokableFactory(web);
+
+                _subscription.current = from(invokeable())
+                    .subscribe(observer);
             }
 
-            const observer: NextObserver<TReturn> = {
-                next: data => stateAction(data),
-                complete: _cleanUp,
-                error: (err: Error) =>
-                {
-                    stateAction(null);
-
-                    if (typeof mergedOptions.exception === "function")
-                    {
-                        mergedOptions.exception(err);
-                    }
-                    else if (!mergedOptions.exception)
-                    {
-                        throw err;
-                    }
-                }
-            };
-
-            const web = resolveWeb(mergedOptions);
-            const invokeable = invokableFactory(web);
-
-            _subscription.current = from(invokeable())
-                .subscribe(observer);
-        }
-
-        _prevWebOption.current = webOption;
-        _prevdependencies.current = deps;
+            _prevWebOption.current = webOption;
+            _prevdependencies.current = deps;
+        }, 0);
     });
 }

@@ -1,12 +1,13 @@
 import "@pnp/sp/clientside-pages";
 import "@pnp/sp/comments";
 import "@pnp/sp/comments/clientside-page";
-import { useQueryEffect } from "./internal/useQueryEffect";
+import { IClientsidePage } from "@pnp/sp/clientside-pages/types";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpActionFunction, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, isUrl, UrlType } from "../utils";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export type PageCommentsOptions = PnpHookOptions<ODataQueryableCollection>;
@@ -18,18 +19,19 @@ export function usePageComments(
 {
     const [comments, setComments] = useState<Nullable<Array<ICommentInfo>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (!isUrl(pageRelativePath, UrlType.Relative))
             throw new ParameterError("usePageComments: pageRelativePath value is not valid.", "pageRelativePath", pageRelativePath);
 
-        const action: PnpActionFunction<IWeb, Array<ICommentInfo>> = async function ()
+        const page = await web.loadClientsidePage(pageRelativePath);
+
+        const action: PnpActionFunction<IClientsidePage, Array<ICommentInfo>> = async function ()
         {
-            const page = await this.loadClientsidePage(pageRelativePath);
-            return page.getComments();
+            return this.getComments();
         };
 
-        return createInvokable(web, action);
+        return createInvokable(page, action);
 
     }, [pageRelativePath]);
 

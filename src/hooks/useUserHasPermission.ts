@@ -33,7 +33,7 @@ export function useUserHasPermission(
             : permissionKinds.reduce((p, c) => p | c)
         , [permissionKinds]);
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         const action: PnpActionFunction<IWeb, boolean> = async function ()
         {

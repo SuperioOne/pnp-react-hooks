@@ -14,7 +14,7 @@ export function useRoleDefinitions(
 {
     const [roleDefinitions, setRoleDefinitions] = useState<Nullable<Array<IRoleDefinitionInfo>>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) => createInvokable(web.roleDefinitions), []);
+    const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.roleDefinitions), []);
 
     useQueryEffect(invokableFactory, setRoleDefinitions, options, deps);
 

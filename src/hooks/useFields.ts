@@ -17,7 +17,7 @@ export function useFields(
 {
     const [fields, setFields] = useState<Nullable<Array<IFields>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         const scope = resolveScope(web, { list: options?.list });
 

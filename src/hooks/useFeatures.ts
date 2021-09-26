@@ -19,7 +19,7 @@ export function useFeatures(
 {
     const [features, setFeatures] = useState<Nullable<Array<IFeatureInfo>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         let queryInst: IFeatures;
 

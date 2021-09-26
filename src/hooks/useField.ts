@@ -19,7 +19,7 @@ export function useField(
 {
     const [field, setField] = useState<Nullable<IFields>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (!fieldId)
             throw new ParameterError("useField: fieldId value is neither unique id or relative url.", "fieldId", fieldId);

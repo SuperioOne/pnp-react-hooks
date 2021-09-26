@@ -9,7 +9,7 @@ export enum ListOptions
     /**
      * Fetch data in multiple calls and merge each page on client side. 
      */
-    LoadAll = 1,
+    All = 1,
 
     /**
      * Check list item count and decide automatically. Only use this option when list size is not predictable even with filtering. 

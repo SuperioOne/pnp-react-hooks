@@ -18,7 +18,7 @@ export function useAttachments(
 {
     const [attachments, setAttachments] = useState<Nullable<Array<IAttachmentInfo>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (isNaN(itemId))
             throw new ParameterError("useAttachment: itemId value is not valid.", "itemId", itemId);

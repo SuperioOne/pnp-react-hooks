@@ -16,7 +16,7 @@ export function useListItem<T>(
 {
     const [itemData, setItemData] = useState<Nullable<T>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (isNaN(itemId))
             throw new ParameterError("useListItem<T>: itemId value is not valid.", "itemId", itemId);

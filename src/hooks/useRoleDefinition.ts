@@ -22,7 +22,7 @@ export function useRoleDefinition(
 {
     const [roleDefinition, setRoleDefinition] = useState<Nullable<IRoleDefinitionInfo>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         let queryInst: IRoleDefinition;
 

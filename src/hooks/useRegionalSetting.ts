@@ -14,7 +14,7 @@ export function useRegionalSetting(
 {
     const [regionalSetting, setRegionalSetting] = useState<Nullable<IRegionalSettingsInfo>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) => createInvokable(web.regionalSettings), []);
+    const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.regionalSettings), []);
 
     useQueryEffect(invokableFactory, setRegionalSetting, options, deps);
 

@@ -23,7 +23,7 @@ export function useRoleAssignments(
 {
     const [roleAssignments, setRoleAssignments] = useState<Nullable<Array<IRoleAssignmentInfo>>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         const scope = resolveScope(web, {
             list: options?.scope?.list,

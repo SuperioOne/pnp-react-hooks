@@ -14,7 +14,7 @@ export function useGroups(
 {
     const [groups, setGroups] = useState<Nullable<Array<ISiteGroupInfo>>>();
 
-    const invokableFactory = useCallback((web: IWeb) => createInvokable(web.siteGroups), []);
+    const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.siteGroups), []);
 
     useQueryEffect(invokableFactory, setGroups, options, deps);
 

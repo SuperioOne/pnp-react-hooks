@@ -16,7 +16,7 @@ export function useGroupUser(
 {
     const [groupUser, setGroupUser] = useState<Nullable<ISiteUserInfo>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         const group = resolveGroup(web, groupId);
         const user = resolveUser(group.users, userId);

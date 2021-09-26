@@ -32,7 +32,7 @@ export function useFolderTree(
 {
     const [folderTree, setFolderTree] = useState<Nullable<TreeContext>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         let rootFolder: IFolder;
 

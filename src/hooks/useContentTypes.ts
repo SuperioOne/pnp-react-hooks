@@ -17,7 +17,7 @@ export function useContentTypes(
 {
     const [contentTypes, setContentTypes] = useState<Nullable<Array<IContentTypeInfo>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         const scope = resolveScope(web, { list: options?.list });
 

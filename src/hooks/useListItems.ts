@@ -1,12 +1,11 @@
 import "@pnp/sp/items";
-import { useQueryEffect } from "./internal/useQueryEffect";
+import { IItems } from "@pnp/sp/items";
 import { IWeb } from "@pnp/sp/webs/types";
 import { ListOptions, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, resolveList } from "../utils";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
-import { IList } from "@pnp/sp/lists";
-import { IItems } from "@pnp/sp/items";
 
 export interface ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
@@ -20,7 +19,7 @@ export function useListItems<T>(
 {
     const [items, setItems] = useState<Nullable<Array<T>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (!list)
             throw new ParameterError("useListItem<T>: list value is not valid.", "list", list);
@@ -30,14 +29,23 @@ export function useListItems<T>(
         switch (options?.mode)
         {
             case ListOptions.Auto:
-                return createInvokable(spList, getAuto);
-            case ListOptions.LoadAll:
-                return createInvokable(spList, getAll);
+                {
+                    const listInfo = await spList.select("ItemCount")();
+
+                    return listInfo.ItemCount > 100
+                        ? createInvokable(spList.items, _getAll)
+                        : createInvokable(spList.items);
+                }
+            case ListOptions.All:
+                {
+                    return createInvokable(spList.items, _getAll);
+                }
             case ListOptions.Default:
             default:
-                return createInvokable(spList.items);
+                {
+                    return createInvokable(spList.items);
+                }
         }
-
     }, [list, options?.mode]);
 
     const _mergedDeps = deps
@@ -49,33 +57,7 @@ export function useListItems<T>(
     return items;
 }
 
-function getAll<T>(this: IList)
+async function _getAll(this: IItems)
 {
-    return _getAllItems<T>(this.items);
-}
-
-async function getAuto(this: IList)
-{
-    const list = await this.select("ItemCount")();
-
-    return list.ItemCount > 5000
-        ? _getAllItems(this.items)
-        : this.items.get;
-}
-
-async function _getAllItems<T>(items: IItems)
-{
-    const response: Array<Array<T>> = [];
-
-    let batch = await items.getPaged();
-
-    response.push(batch.results as Array<T>);
-
-    while (batch.hasNext)
-    {
-        batch = await batch.getNext();
-        response.push(batch.results as Array<T>);
-    }
-
-    return Array.prototype.concat(...response) as Array<T>;
+    return this.getAll();
 }

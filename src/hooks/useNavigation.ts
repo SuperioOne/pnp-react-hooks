@@ -17,7 +17,7 @@ export function useNavigation(
 {
     const [navNodes, setNavNodes] = useState<Nullable<Array<INavNodeInfo>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         switch (options?.type)
         {

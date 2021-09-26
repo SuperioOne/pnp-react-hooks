@@ -14,7 +14,7 @@ export function useCurrentUser(
 {
     const [currentUser, setCurrentUser] = useState<Nullable<ISiteUserInfo>>(undefined);
 
-    const invocableFactory = useCallback((web: IWeb) => createInvokable(web.currentUser), []);
+    const invocableFactory = useCallback(async (web: IWeb) => createInvokable(web.currentUser), []);
 
     useQueryEffect(invocableFactory, setCurrentUser, options, deps);
 

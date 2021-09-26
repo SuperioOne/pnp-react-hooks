@@ -18,7 +18,7 @@ export function useItemComments(
 {
     const [comments, setComments] = useState<Nullable<Array<ICommentInfo>>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (isNaN(itemId))
             throw new ParameterError("useItemComments: itemId value is not valid.", "itemId", itemId);
@@ -26,12 +26,12 @@ export function useItemComments(
         if (!list)
             throw new ParameterError("useItemComments: list value is not valid.", "list", list);
 
-        const queryInstance = resolveList(web, list)
+        const queryInst = resolveList(web, list)
             .items
             .getById(itemId)
             .comments;
 
-        return createInvokable(queryInstance);
+        return createInvokable(queryInst);
 
     }, [itemId, list]);
 

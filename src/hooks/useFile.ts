@@ -22,7 +22,7 @@ export function useFile(fileId: string, options?: FileOptions<FileReturnTypes>, 
 {
     const [fileInfo, setFileInfo] = useState<Nullable<InstanceTypes>>(undefined);
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (fileId)
         {

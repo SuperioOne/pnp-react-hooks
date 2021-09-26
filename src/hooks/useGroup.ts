@@ -14,7 +14,7 @@ export function useGroup(
 {
     const [group, setGroup] = useState<Nullable<ISiteGroupInfo>>();
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         const group = resolveGroup(web, groupId);
 

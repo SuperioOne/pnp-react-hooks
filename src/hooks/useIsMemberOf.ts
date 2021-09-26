@@ -23,7 +23,7 @@ export function useIsMemberOf(
 {
     const [isMember, setIsMember] = useState<Nullable<MemberInfo>>(DEFAULT);
 
-    const invokableFactory = useCallback((web: IWeb) =>
+    const invokableFactory = useCallback(async (web: IWeb) =>
     {
         const action: PnpActionFunction<IWeb, MemberInfo> = async function ()
         {
