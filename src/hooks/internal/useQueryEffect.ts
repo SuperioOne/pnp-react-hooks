@@ -2,7 +2,7 @@ import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
 import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
 import { LoadActionMode } from "../../types/options/RenderOptions";
-import { compareTuples, deepCompareQuery, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
+import { compareTuples, deepCompareQuery, errorHandler, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
 import { from, NextObserver, Subscription } from "rxjs";
 import { useCallback, useContext, useEffect } from "react";
 import { useRef } from "react";
@@ -59,15 +59,7 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
                     error: (err: Error) =>
                     {
                         stateAction(null);
-
-                        if (typeof mergedOptions.exception === "function")
-                        {
-                            mergedOptions.exception(err);
-                        }
-                        else if (!mergedOptions.exception)
-                        {
-                            throw err;
-                        }
+                        errorHandler(err, mergedOptions);
                     }
                 };
 

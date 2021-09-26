@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useCallback, useContext, useEffect } from "react";
-import { from, NextObserver, Subscription } from "rxjs";
-import { compareTuples, resolveWeb, shallowEqual } from "../../utils";
+import { from, merge, NextObserver, Subscription } from "rxjs";
+import { compareTuples, errorHandler, resolveWeb, shallowEqual } from "../../utils";
 import { LoadActionMode, RenderOptions } from "../../types/options/RenderOptions";
 import { InternalContext } from "../../context";
 import { IWeb } from "@pnp/sp/webs/types";
@@ -61,15 +61,7 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
                     error: (err: Error) =>
                     {
                         stateAction(null);
-
-                        if (typeof mergedOptions.exception === "function")
-                        {
-                            mergedOptions.exception(err);
-                        }
-                        else if (!mergedOptions.exception)
-                        {
-                            throw err;
-                        }
+                        errorHandler(err, mergedOptions);
                     }
                 };
 

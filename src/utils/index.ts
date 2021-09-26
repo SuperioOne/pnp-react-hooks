@@ -2,6 +2,7 @@ export { compareArray } from "./compareArray";
 export { compareTuples } from "./compareTuples";
 export { createInvokable } from "./createInvokable";
 export { deepCompareQuery } from "./deepComparisons";
+export { errorHandler } from "./errorHandler";
 export { insertCacheOptions } from "./insertCacheOptions";
 export { insertODataQuery } from "./insertODataQuery";
 export { isEmail } from "./isEmail";

@@ -25,6 +25,7 @@ export { useRegionalSetting } from "./hooks/useRegionalSetting";
 export { useRoleAssignments } from "./hooks/useRoleAssignments";
 export { useRoleDefinition } from "./hooks/useRoleDefinition";
 export { useRoleDefinitions } from "./hooks/useRoleDefinitions";
+export { useSearch } from "./hooks/useSearch";
 export { useSiteUsers } from "./hooks/useSiteUsers";
 export { useUser } from "./hooks/useUser";
 export { useUserHasPermission } from "./hooks/useUserHasPermission";
