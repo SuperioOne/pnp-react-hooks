@@ -1,28 +1,37 @@
 import "@pnp/sp/items";
-import { IItems } from "@pnp/sp/items";
+import { IItems } from "@pnp/sp/items/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ListOptions, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
+import { ListOptions, Nullable, ODataQueryableCollection, PagedODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, resolveList } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
-export interface ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
+interface _ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     mode?: ListOptions;
 }
 
-export function useListItems<T>(
-    list: string,
-    options?: ListItemsOptions,
-    deps?: React.DependencyList): Nullable<Array<T>>
+export interface ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
+{
+    mode?: ListOptions.Default;
+}
+
+export interface PagedItemsOptions extends PnpHookOptions<PagedODataQueryable>
+{
+    mode: ListOptions.Auto | ListOptions.All;
+}
+
+export function useListItems<T>(list: string, options?: PagedItemsOptions, deps?: React.DependencyList): Nullable<Array<T>>;
+export function useListItems<T>(list: string, options?: ListItemsOptions, deps?: React.DependencyList): Nullable<Array<T>>;
+export function useListItems<T>(list: string, options?: _ListItemsOptions, deps?: React.DependencyList): Nullable<Array<T>>
 {
     const [items, setItems] = useState<Nullable<Array<T>>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (!list)
-            throw new ParameterError("useListItem<T>: list value is not valid.", "list", list);
+            throw new ParameterError("useListItems<T>: list value is not valid.", "list", list);
 
         const spList = resolveList(web, list);
 

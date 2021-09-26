@@ -4,7 +4,7 @@ import { compareODataQueryable } from "./compareODataQueryable";
 import { compareODataQueryableCollection } from "./compareODataQueryableCollection";
 import { isODataQueryableCollection, isODataQueryable } from "../typeGuards";
 
-export function deepCompareQuery<T extends Record<string, unknown>>(left: Nullable<T>, right: Nullable<T>)
+export function deepCompareQuery<T>(left: Nullable<T>, right: Nullable<T>)
 {
     return left === right
         || (

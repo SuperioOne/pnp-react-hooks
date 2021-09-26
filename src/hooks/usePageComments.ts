@@ -4,7 +4,7 @@ import "@pnp/sp/comments/clientside-page";
 import { IClientsidePage } from "@pnp/sp/clientside-pages/types";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryableCollection, PnpActionFunction, PnpHookOptions } from "../types";
+import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, isUrl, UrlType } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
@@ -26,7 +26,7 @@ export function usePageComments(
 
         const page = await web.loadClientsidePage(pageRelativePath);
 
-        const action: PnpActionFunction<IClientsidePage, Array<ICommentInfo>> = async function ()
+        const action = async function (this: IClientsidePage)
         {
             return this.getComments();
         };
