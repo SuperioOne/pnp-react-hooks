@@ -6,7 +6,10 @@ import { InternalContext } from "../context";
 import { SearchResults } from "@pnp/sp/search";
 import { compareTuples, errorHandler, shallowEqual } from "../utils";
 import { sp } from "@pnp/sp";
-import { useCallback, useContext, useEffect, useMemo, useReducer, useRef } from "react";
+import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
+
+const INITIAL_PAGE_INDEX = 1;
+const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
 
 export interface SearchOptions extends RenderOptions, CacheOptions, ExceptionOptions
 {
@@ -18,13 +21,13 @@ export function useSearch(
     options?: SearchOptions,
     deps?: React.DependencyList): [Nullable<SpSearchResult>, (pageNo: number) => void]
 {
-    const [searchState, dispatch] = useReducer(reducer, INITIAL_STATE);
+    const [searchState, dispatch] = useReducer(_reducer, INITIAL_STATE);
 
     const globalOptions = useContext(InternalContext);
 
     const _subscription = useRef<Nullable<Subscription>>(undefined);
     const _searchOptions = useRef<Nullable<ISearchQuery | string>>(null);
-    const _prevPage = useRef<number>(INITIAL_STATE.currentPage);
+    const _prevPage = useRef<number>(INITIAL_PAGE_INDEX);
     const _prevDeps = useRef<Nullable<React.DependencyList>>(null);
 
     const _pageChangeDispatcher = useCallback((pageNo: number) => dispatch({
@@ -59,7 +62,11 @@ export function useSearch(
 
             if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
             {
-                dispatch({ type: ActionTypes.NewSearchResult, data: undefined });
+                dispatch({
+                    type: ActionTypes.NewSearchResult,
+                    userResult: undefined,
+                    pnpResult: searchState.pnpResult
+                });
             }
 
             const observer: CompletionObserver<SearchResults> = {
@@ -75,23 +82,25 @@ export function useSearch(
 
             if (pageChanged)
             {
-                if (!searchState.searchResult)
+                if (!searchState.pnpResult)
                     throw new TypeError("useSearch: search result object is undefined.");
 
                 observer.next = data => dispatch({
                     type: ActionTypes.NewSearchResult,
-                    data: data,
+                    pnpResult: data,
+                    userResult: _createSPSearchResult(data, searchState.currentPage),
                     pageNo: searchState.currentPage
                 });
 
-                resultPromise = searchState.searchResult.getPage(searchState.currentPage);
+                resultPromise = searchState.pnpResult.getPage(searchState.currentPage);
             }
             else
             {
                 observer.next = data => dispatch({
                     type: ActionTypes.NewSearchResult,
-                    data: data,
-                    pageNo: 0
+                    pnpResult: data,
+                    userResult: _createSPSearchResult(data, INITIAL_PAGE_INDEX),
+                    pageNo: INITIAL_PAGE_INDEX
                 });
 
                 resultPromise = mergedOptions?.useCache === true
@@ -107,48 +116,49 @@ export function useSearch(
         _prevDeps.current = deps;
         _searchOptions.current = searchOptions;
 
-    }, [searchState.currentPage, searchOptions, searchState.searchResult, options, globalOptions, deps, _cleanUp]);
+    }, [searchState.currentPage, searchOptions, searchState.pnpResult, options, globalOptions, deps, _cleanUp]);
 
-    const userResult = useMemo((): SpSearchResult | undefined | null =>
-    {
-        // strip non-managed properties
-        return searchState.searchResult ?
-            {
-                ElapsedTime: searchState.searchResult.ElapsedTime,
-                PrimarySearchResults: searchState.searchResult.PrimarySearchResults,
-                RawSearchResults: searchState.searchResult.RawSearchResults,
-                RowCount: searchState.searchResult.RowCount,
-                TotalRows: searchState.searchResult.TotalRows,
-                TotalRowsIncludingDuplicates: searchState.searchResult.TotalRowsIncludingDuplicates,
-                CurrentPage: searchState.currentPage
-            }
-            : searchState.searchResult;
-    }, [searchState.currentPage, searchState.searchResult]);
-
-    return [userResult, _pageChangeDispatcher];
+    return [searchState.userResult, _pageChangeDispatcher];
 }
 
-function reducer(state: SearchState, action: SearchAction): SearchState
+const _reducer = (state: SearchState, action: SearchAction): SearchState => 
 {
     switch (action.type)
     {
         case ActionTypes.ChangePageNo:
-            if (action.pageNo < 1)
-                return { ...state, currentPage: 1 };
+            if (action.pageNo < INITIAL_PAGE_INDEX)
+                return { ...state, currentPage: INITIAL_PAGE_INDEX };
             else
                 return { ...state, currentPage: action.pageNo };
         case ActionTypes.Reset:
-            return { currentPage: 0, searchResult: action.resetValue };
+            return {
+                currentPage: INITIAL_PAGE_INDEX,
+                pnpResult: action.resetValue,
+                userResult: action.resetValue
+            };
         case ActionTypes.NewSearchResult:
-            return { currentPage: action.pageNo ?? state.currentPage, searchResult: action.data };
+            return {
+                currentPage: action.pageNo ?? state.currentPage,
+                pnpResult: action.pnpResult,
+                userResult: action.userResult
+            };
         default:
             throw new Error(`useSearch: Unexpected action type received.`);
     }
-}
+};
 
-const INITIAL_STATE: SearchState = { currentPage: 1 };
+const _createSPSearchResult = (sResult: SearchResults, pageNo: number) =>
+({
+    ElapsedTime: sResult.ElapsedTime,
+    PrimarySearchResults: sResult.PrimarySearchResults,
+    RawSearchResults: sResult.RawSearchResults,
+    RowCount: sResult.RowCount,
+    TotalRows: sResult.TotalRows,
+    TotalRowsIncludingDuplicates: sResult.TotalRowsIncludingDuplicates,
+    CurrentPage: pageNo
+});
 
-// using numbers instead of literal strings
+// using number enums instead of literal strings
 enum ActionTypes
 {
     ChangePageResult = 0,
@@ -159,8 +169,9 @@ enum ActionTypes
 
 interface SearchState
 {
-    searchResult?: SearchResults | null;
+    pnpResult?: SearchResults | null;
     currentPage: number;
+    userResult?: SpSearchResult | null;
 }
 
 interface Action<T extends ActionTypes>
@@ -170,7 +181,7 @@ interface Action<T extends ActionTypes>
 
 interface ResetAction extends Action<ActionTypes.Reset>
 {
-    resetValue?: null | undefined | SearchResults;
+    resetValue?: null | undefined;
 }
 
 interface ChangePageNoAction extends Action<ActionTypes.ChangePageNo>
@@ -180,8 +191,9 @@ interface ChangePageNoAction extends Action<ActionTypes.ChangePageNo>
 
 interface NewResultsAction extends Action<ActionTypes.NewSearchResult>
 {
-    data?: SearchResults;
     pageNo?: number;
+    pnpResult: SearchResults | null | undefined;
+    userResult: SpSearchResult | null | undefined;
 }
 
 type SearchAction = ResetAction | ChangePageNoAction | NewResultsAction;
