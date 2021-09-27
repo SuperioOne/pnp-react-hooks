@@ -79,7 +79,7 @@ InitEnvironment()
 
                 if (options.length > 1)
                 {
-                    window.dispatchEvent(new window.CustomEvent(options[1], { detail: [...(options).slice(1)] }));
+                    window.dispatchEvent(new window.CustomEvent(options[1], { detail: [...(options).slice(2)] }));
                 }
                 else
                 {

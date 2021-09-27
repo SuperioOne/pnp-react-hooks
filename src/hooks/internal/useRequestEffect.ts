@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useCallback, useContext, useEffect } from "react";
-import { from, merge, NextObserver, Subscription } from "rxjs";
+import { from, NextObserver, Subscription } from "rxjs";
 import { compareTuples, errorHandler, resolveWeb, shallowEqual } from "../../utils";
 import { LoadActionMode, RenderOptions } from "../../types/options/RenderOptions";
 import { InternalContext } from "../../context";

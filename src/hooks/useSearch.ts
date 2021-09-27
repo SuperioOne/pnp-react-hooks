@@ -1,10 +1,10 @@
 import "@pnp/sp/search";
 import { CacheOptions, ExceptionOptions, LoadActionMode, Nullable, RenderOptions } from "../types";
+import { CompletionObserver, from, Subscription } from "rxjs";
 import { ISearchQuery, ISearchResponse, ISearchResult } from "@pnp/sp/search/types";
 import { InternalContext } from "../context";
 import { SearchResults } from "@pnp/sp/search";
 import { compareTuples, errorHandler, shallowEqual } from "../utils";
-import { CompletionObserver, from, Subscription } from "rxjs";
 import { sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useMemo, useReducer, useRef } from "react";
 
@@ -22,10 +22,10 @@ export function useSearch(
 
     const globalOptions = useContext(InternalContext);
 
-    const _prevDeps = useRef<Nullable<React.DependencyList>>(null);
-    const _prevPage = useRef<number>(INITIAL_STATE.currentPage);
-    const _searchOptions = useRef<Nullable<ISearchQuery | string>>(null);
     const _subscription = useRef<Nullable<Subscription>>(undefined);
+    const _searchOptions = useRef<Nullable<ISearchQuery | string>>(null);
+    const _prevPage = useRef<number>(INITIAL_STATE.currentPage);
+    const _prevDeps = useRef<Nullable<React.DependencyList>>(null);
 
     const _pageChangeDispatcher = useCallback((pageNo: number) => dispatch({
         type: ActionTypes.ChangePageNo,
@@ -45,10 +45,9 @@ export function useSearch(
         const optionsChanged = !compareTuples(_prevDeps.current, deps)
             || !shallowEqual(_searchOptions.current, searchOptions);
 
-        // if options are changed page no change is ignored
+        // if options are changed page change is ignored
         const pageChanged = !optionsChanged
-            && _prevPage.current !== searchState.currentPage
-            && searchState.searchResult;
+            && _prevPage.current !== searchState.currentPage;
 
         if (optionsChanged || pageChanged)
         {
@@ -60,7 +59,7 @@ export function useSearch(
 
             if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
             {
-                dispatch({ type: ActionTypes.Reset });
+                dispatch({ type: ActionTypes.NewSearchResult, data: undefined });
             }
 
             const observer: CompletionObserver<SearchResults> = {
@@ -121,9 +120,10 @@ export function useSearch(
                 RowCount: searchState.searchResult.RowCount,
                 TotalRows: searchState.searchResult.TotalRows,
                 TotalRowsIncludingDuplicates: searchState.searchResult.TotalRowsIncludingDuplicates,
+                CurrentPage: searchState.currentPage
             }
             : searchState.searchResult;
-    }, [searchState.searchResult]);
+    }, [searchState.currentPage, searchState.searchResult]);
 
     return [userResult, _pageChangeDispatcher];
 }
@@ -133,17 +133,20 @@ function reducer(state: SearchState, action: SearchAction): SearchState
     switch (action.type)
     {
         case ActionTypes.ChangePageNo:
-            return { ...state, currentPage: action.pageNo };
+            if (action.pageNo < 1)
+                return { ...state, currentPage: 1 };
+            else
+                return { ...state, currentPage: action.pageNo };
         case ActionTypes.Reset:
             return { currentPage: 0, searchResult: action.resetValue };
         case ActionTypes.NewSearchResult:
-            return { currentPage: action.pageNo, searchResult: action.data };
+            return { currentPage: action.pageNo ?? state.currentPage, searchResult: action.data };
         default:
             throw new Error(`useSearch: Unexpected action type received.`);
     }
 }
 
-const INITIAL_STATE: SearchState = { currentPage: 0 };
+const INITIAL_STATE: SearchState = { currentPage: 1 };
 
 // using numbers instead of literal strings
 enum ActionTypes
@@ -178,7 +181,7 @@ interface ChangePageNoAction extends Action<ActionTypes.ChangePageNo>
 interface NewResultsAction extends Action<ActionTypes.NewSearchResult>
 {
     data?: SearchResults;
-    pageNo: number;
+    pageNo?: number;
 }
 
 type SearchAction = ResetAction | ChangePageNoAction | NewResultsAction;
@@ -191,4 +194,5 @@ interface SpSearchResult
     TotalRowsIncludingDuplicates: number;
     RawSearchResults: ISearchResponse;
     PrimarySearchResults: Array<ISearchResult>;
+    CurrentPage: number;
 }
