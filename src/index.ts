@@ -26,6 +26,7 @@ export { useRoleAssignments } from "./hooks/useRoleAssignments";
 export { useRoleDefinition } from "./hooks/useRoleDefinition";
 export { useRoleDefinitions } from "./hooks/useRoleDefinitions";
 export { useSearch } from "./hooks/useSearch";
+export { useSearchUser } from "./hooks/useSearchUser";
 export { useSiteUsers } from "./hooks/useSiteUsers";
 export { useUser } from "./hooks/useUser";
 export { useUserHasPermission } from "./hooks/useUserHasPermission";

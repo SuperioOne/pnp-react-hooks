@@ -54,7 +54,7 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
                 }
 
                 const observer: NextObserver<TReturn> = {
-                    next: data => stateAction(data),
+                    next: stateAction,
                     complete: _cleanUp,
                     error: (err: Error) =>
                     {
