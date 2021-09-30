@@ -43,7 +43,7 @@ export function useSearch(
         _subscription.current = undefined;
     }, []);
 
-    useEffect(_cleanup, [_cleanup]);
+    useEffect(() => _cleanup, [_cleanup]);
 
     useEffect(() =>
     {

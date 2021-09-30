@@ -2,7 +2,7 @@ import "@pnp/sp/security";
 import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { PermissionKind } from "@pnp/sp/security/types";
-import { createInvokable, resolveScope } from "../utils";
+import { createInvokable, mergeDependencies, resolveScope } from "../utils";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback, useMemo } from "react";
 
@@ -48,9 +48,9 @@ export function useCurrentUserHasPermission(
 
     }, [options, _permFlag]);
 
-    const _mergedDeps = deps
-        ? [_permFlag, options?.scope?.list, options?.scope?.item].concat(deps)
-        : [_permFlag, options?.scope?.list, options?.scope?.item];
+    const _mergedDeps = mergeDependencies(
+        [_permFlag, options?.scope?.list, options?.scope?.item],
+        deps);
 
     useRequestEffect(invokableFactory, setHasPermission, options, _mergedDeps);
 

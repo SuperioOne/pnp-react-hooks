@@ -4,7 +4,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { FeatureScopes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { IFeatureInfo, IFeatures } from "@pnp/sp/features/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable } from "../utils";
+import { createInvokable, mergeDependencies } from "../utils";
 import { sp } from "@pnp/sp";
 import { useState, useCallback } from "react";
 
@@ -41,9 +41,7 @@ export function useFeatures(
 
     }, [options?.scope]);
 
-    const _mergedDeps = deps
-        ? [options?.scope].concat(deps)
-        : [options?.scope];
+    const _mergedDeps = mergeDependencies([options?.scope], deps);
 
     useQueryEffect(invokableFactory, setFeatures, options, _mergedDeps);
 

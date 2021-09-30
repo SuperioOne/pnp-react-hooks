@@ -2,7 +2,7 @@ import "@pnp/sp/items";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, FilteredODataQueryable, PnpHookOptions } from "../types";
 import { IItems, PagedItemCollection } from "@pnp/sp/items/types";
-import { resolveList, createInvokable, errorHandler } from "../utils";
+import { resolveList, createInvokable, errorHandler, mergeDependencies } from "../utils";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { from, NextObserver, Subscription } from "rxjs";
@@ -36,7 +36,7 @@ export function useListItemsPaged<T>(
         _subscription.current = undefined;
     }, []);
 
-    useEffect(_cleanup, [_cleanup]);
+    useEffect(() => _cleanup, [_cleanup]);
 
     const _insertNewPage = useCallback((pageResult: Nullable<PagedItemCollection<Array<T>>>) =>
     {
@@ -49,10 +49,7 @@ export function useListItemsPaged<T>(
                 : (pageState?.results ?? Array.prototype).concat(pageResult.results);
 
             newState.hasNext = pageResult.hasNext;
-            
-            newState.getNext = pageResult.hasNext
-                ? pageResult.getNext
-                : undefined;
+            newState.pagedResult = pageResult;
         }
         else
         {
@@ -67,7 +64,7 @@ export function useListItemsPaged<T>(
     {
         setTimeout(async () =>
         {
-            if (pageState?.getNext)
+            if (pageState?.pagedResult)
             {
                 _cleanup();
 
@@ -89,7 +86,7 @@ export function useListItemsPaged<T>(
                     }
                 };
 
-                _subscription.current = from(pageState.getNext())
+                _subscription.current = from(pageState.pagedResult.getNext())
                     .subscribe(observer);
             }
         }, 0);
@@ -111,9 +108,9 @@ export function useListItemsPaged<T>(
         return createInvokable(queryInst, action);
     }, [options?.pageSize, list, _cleanup]);
 
-    const _mergedDeps = deps
-        ? [options?.returnOnlyPageResult, list].concat(deps)
-        : [options?.returnOnlyPageResult, list];
+    const _mergedDeps = mergeDependencies(
+        [options?.pageSize, options?.returnOnlyPageResult, list],
+        deps);
 
     useQueryEffect(invokableFactory, _insertNewPage, options, _mergedDeps);
 
@@ -126,6 +123,6 @@ type NextPageDispatch = (callback?: () => void) => void;
 interface State<T = any>
 {
     results?: Nullable<Array<T>>;
-    getNext?: () => Promise<PagedItemCollection<T[]>>;
+    pagedResult?: PagedItemCollection<T[]>;
     hasNext?: boolean;
 }

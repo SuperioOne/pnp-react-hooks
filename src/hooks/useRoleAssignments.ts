@@ -1,7 +1,7 @@
 import "@pnp/sp/security";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable, resolveScope } from "../utils";
+import { createInvokable, mergeDependencies, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 import { IRoleAssignmentInfo } from "@pnp/sp/security/types";
 import { useQueryEffect } from "./internal/useQueryEffect";
@@ -33,9 +33,9 @@ export function useRoleAssignments(
         return createInvokable(scope.roleAssignments);
     }, [options]);
 
-    const _mergedDeps = deps
-        ? [options?.scope?.list, options?.scope?.item].concat(deps)
-        : [options?.scope?.list, options?.scope?.item];
+    const _mergedDeps = mergeDependencies(
+        [options?.scope?.list, options?.scope?.item],
+        deps);
 
     useQueryEffect(invokableFactory, setRoleAssignments, options, _mergedDeps);
 

@@ -4,7 +4,7 @@ import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOption
 import { IWeb } from "@pnp/sp/webs/types";
 import { ParameterError } from "../errors/ParameterError";
 import { PermissionKind } from "@pnp/sp/security/types";
-import { createInvokable, isEmail, resolveScope } from "../utils";
+import { createInvokable, isEmail, mergeDependencies, resolveScope } from "../utils";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback, useMemo } from "react";
 
@@ -71,9 +71,9 @@ export function useUserHasPermission(
         return createInvokable(web, action);
     }, [userId, options, _permFlag]);
 
-    const _mergedDeps = deps
-        ? [userId, _permFlag, options?.scope?.list, options?.scope?.item].concat(deps)
-        : [userId, _permFlag, options?.scope?.list, options?.scope?.item];
+    const _mergedDeps = mergeDependencies(
+        [userId, _permFlag, options?.scope?.list, options?.scope?.item],
+        deps);
 
     useRequestEffect(invokableFactory, setHasPermission, options, _mergedDeps);
 

@@ -5,7 +5,7 @@ import { FileReturnTypes, Nullable, ODataQueryable, PnpHookOptions } from "../ty
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, resolveList } from "../utils";
+import { createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
 export interface AttachmentOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>
@@ -50,9 +50,9 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
 
     }, [itemId, list, attachmentName, options?.type]);
 
-    const _mergedDeps = deps
-        ? [attachmentName, itemId, list, options?.type].concat(deps)
-        : [attachmentName, itemId, list, options?.type];
+    const _mergedDeps = mergeDependencies(
+        [attachmentName, itemId, list, options?.type], 
+        deps);
 
     useQueryEffect(invokableFactory, setAttachment, options, _mergedDeps);
 

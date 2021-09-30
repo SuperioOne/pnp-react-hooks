@@ -3,7 +3,7 @@ import { IRoleDefinition, IRoleDefinitionInfo, RoleTypeKind } from "@pnp/sp/secu
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable } from "../utils";
+import { createInvokable, mergeDependencies } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback, useMemo } from "react";
 
@@ -50,9 +50,7 @@ export function useRoleDefinition(
         typeof roleDefId === "object" ? roleDefId.roleType : roleDefId
         , [roleDefId]);
 
-    const _mergedDeps = deps
-        ? [_normRoleId].concat(deps)
-        : [_normRoleId];
+    const _mergedDeps = mergeDependencies([_normRoleId], deps);
 
     useQueryEffect(invokableFactory, setRoleDefinition, options, _mergedDeps);
 

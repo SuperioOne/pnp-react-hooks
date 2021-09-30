@@ -8,6 +8,7 @@ export { insertODataQuery } from "./insertODataQuery";
 export { isEmail } from "./isEmail";
 export { isUUID } from "./isUUID";
 export { isUrl, UrlType } from "./isUrl";
+export { mergeDependencies } from "./mergeDependencies";
 export { resolveGroup } from "./resolveGroup";
 export { resolveList } from "./resolveList";
 export { resolveScope } from "./resolveScope";

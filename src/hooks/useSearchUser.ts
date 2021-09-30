@@ -29,13 +29,13 @@ export function useSearchUser(
     const _searchOptions = useRef<Nullable<IClientPeoplePickerQueryParameters | string>>(null);
     const _prevDeps = useRef<Nullable<React.DependencyList>>(null);
 
-    const _cleanUp = useCallback(() =>
+    const _cleanup = useCallback(() =>
     {
         _subscription.current?.unsubscribe();
         _subscription.current = undefined;
     }, []);
 
-    useEffect(_cleanUp, [_cleanUp]);
+    useEffect(() => _cleanup, [_cleanup]);
 
     useEffect(() =>
     {
@@ -48,7 +48,7 @@ export function useSearchUser(
                 ? { ...globalOptions, ...options }
                 : globalOptions;
 
-            _cleanUp();
+            _cleanup();
 
             if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
             {
@@ -57,7 +57,7 @@ export function useSearchUser(
 
             const observer: NextObserver<Array<IPeoplePickerEntity>> = {
                 next: setProfiles,
-                complete: _cleanUp,
+                complete: _cleanup,
                 error: (err: Error) =>
                 {
                     setProfiles(null);
@@ -79,7 +79,7 @@ export function useSearchUser(
         _prevDeps.current = deps;
         _searchOptions.current = searchOptions;
 
-    }, [searchOptions, options, globalOptions, deps, _cleanUp]);
+    }, [searchOptions, options, globalOptions, deps, _cleanup]);
 
     return profiles;
 }

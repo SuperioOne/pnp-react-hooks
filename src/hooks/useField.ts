@@ -3,7 +3,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { createInvokable, isUUID, resolveScope } from "../utils";
+import { createInvokable, isUUID, mergeDependencies, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 import { ParameterError } from "../errors/ParameterError";
 
@@ -22,7 +22,10 @@ export function useField(
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
         if (!fieldId)
-            throw new ParameterError("useField: fieldId value is neither unique id or relative url.", "fieldId", fieldId);
+            throw new ParameterError(
+                "useField: fieldId value is neither unique id or relative url.",
+                "fieldId",
+                fieldId);
 
         const scope = resolveScope(web, {
             list: options?.list
@@ -39,9 +42,7 @@ export function useField(
 
     }, [options?.list, fieldId]);
 
-    const _mergedDeps = deps
-        ? [fieldId, options?.list].concat(deps)
-        : [fieldId, options?.list];
+    const _mergedDeps = mergeDependencies([fieldId, options?.list], deps);
 
     useQueryEffect(invokableFactory, setField, options, _mergedDeps);
 

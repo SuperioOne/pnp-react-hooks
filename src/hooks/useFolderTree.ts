@@ -6,7 +6,7 @@ import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IFolder, IFolderInfo } from "@pnp/sp/folders/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, isUrl, isUUID, resolveList, UrlType } from "../utils";
+import { createInvokable, isUrl, isUUID, mergeDependencies, resolveList, UrlType } from "../utils";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback } from "react";
 
@@ -52,7 +52,10 @@ export function useFolderTree(
             }
             else
             {
-                throw new ParameterError("useFolderTree: folder identifier value is not valid.", "folderIdentifier", folderIdentifier);
+                throw new ParameterError(
+                    "useFolderTree: folder identifier value is not valid.",
+                    "folderIdentifier",
+                    folderIdentifier);
             }
         }
 
@@ -79,11 +82,9 @@ export function useFolderTree(
     }, [options?.list, folderIdentifier]);
 
 
-    const mergedDeps = deps
-        ? [folderIdentifier, options?.list].concat(deps)
-        : [folderIdentifier, options?.list];
+    const _mergedDeps = mergeDependencies([folderIdentifier, options?.list], deps);
 
-    useRequestEffect(invokableFactory, setFolderTree, options, mergedDeps);
+    useRequestEffect(invokableFactory, setFolderTree, options, _mergedDeps);
 
     return folderTree;
 }

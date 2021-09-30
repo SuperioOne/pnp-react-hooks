@@ -6,7 +6,7 @@ import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, isUrl, UrlType } from "../utils";
+import { createInvokable, isUrl, mergeDependencies, UrlType } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
@@ -35,9 +35,7 @@ export function usePageComments(
 
     }, [pageRelativePath]);
 
-    const _mergedDeps = deps
-        ? [pageRelativePath].concat(deps)
-        : [pageRelativePath];
+    const _mergedDeps = mergeDependencies([pageRelativePath], deps);
 
     useQueryEffect(invokableFactory, setComments, options, _mergedDeps);
 

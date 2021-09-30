@@ -3,7 +3,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, resolveScope } from "../utils";
+import { createInvokable, mergeDependencies, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 
 export interface FieldsOptions extends PnpHookOptions<ODataQueryableCollection>
@@ -25,9 +25,7 @@ export function useFields(
 
     }, [options?.list]);
 
-    const _mergedDeps = deps
-        ? [options?.list].concat(deps)
-        : [options?.list];
+    const _mergedDeps = mergeDependencies([options?.list], deps);
 
     useQueryEffect(invokableFactory, setFields, options, _mergedDeps);
 

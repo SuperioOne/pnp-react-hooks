@@ -3,7 +3,7 @@ import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOption
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable, resolveUser } from "../utils";
+import { createInvokable, mergeDependencies, resolveUser } from "../utils";
 import { useState, useCallback } from "react";
 import { useRequestEffect } from "./internal/useRequestEffect";
 
@@ -46,9 +46,7 @@ export function useIsMemberOf(
 
     }, [options?.userId, groupId]);
 
-    const _mergedDeps = deps
-        ? [groupId, options?.userId].concat(deps)
-        : [groupId, options?.userId];
+    const _mergedDeps = mergeDependencies([groupId, options?.userId], deps);
 
     useRequestEffect(invokableFactory, setIsMember, options, _mergedDeps);
 

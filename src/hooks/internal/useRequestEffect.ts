@@ -30,7 +30,7 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
         _subscription.current = undefined;
     }, []);
 
-    useEffect(_cleanup, [_cleanup]);
+    useEffect(() => _cleanup, [_cleanup]);
 
     useEffect(() =>
     {

@@ -1,6 +1,6 @@
 import { IWeb } from "@pnp/sp/webs/types";
 
-export interface WebOptions extends Record<string, unknown>
+export interface WebOptions
 {
     web?: IWeb | string;
 }

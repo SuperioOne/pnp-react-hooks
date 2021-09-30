@@ -2,7 +2,7 @@ import { IListInfo } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, resolveList } from "../utils";
+import { createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
@@ -26,9 +26,7 @@ export function useList(
 
     }, [list]);
 
-    const _mergedDeps = deps
-        ? [list].concat(deps)
-        : [list];
+    const _mergedDeps = mergeDependencies([list], deps);
 
     useQueryEffect(invokableFactory, setListInfo, options, _mergedDeps);
 

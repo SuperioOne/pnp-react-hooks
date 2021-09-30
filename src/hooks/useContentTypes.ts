@@ -2,7 +2,7 @@ import "@pnp/sp/content-types";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, resolveScope } from "../utils";
+import { createInvokable, mergeDependencies, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 import { IContentTypeInfo } from "@pnp/sp/content-types";
 
@@ -25,9 +25,7 @@ export function useContentTypes(
 
     }, [options?.list]);
 
-    const _mergedDeps = deps
-        ? [options?.list].concat(deps)
-        : [options?.list];
+    const _mergedDeps = mergeDependencies([options?.list], deps);
 
     useQueryEffect(invokableFactory, setContentTypes, options, _mergedDeps);
 

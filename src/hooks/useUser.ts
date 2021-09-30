@@ -2,7 +2,7 @@ import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, resolveUser } from "../utils";
+import { createInvokable, mergeDependencies, resolveUser } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
@@ -29,9 +29,7 @@ export function useUser(
         }
     }, [userId]);
 
-    const _mergedDeps = deps
-        ? [userId].concat(deps)
-        : [userId];
+    const _mergedDeps = mergeDependencies([userId], deps);
 
     useQueryEffect(invokableFactory, setSiteUser, options, _mergedDeps);
 

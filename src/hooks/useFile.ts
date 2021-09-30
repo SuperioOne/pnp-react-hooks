@@ -4,7 +4,7 @@ import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, isUrl, isUUID, UrlType } from "../utils";
+import { createInvokable, isUrl, isUUID, mergeDependencies, UrlType } from "../utils";
 import { useState, useCallback } from "react";
 
 type InstanceTypes = IFileInfo | ArrayBuffer | Blob | string;
@@ -41,7 +41,10 @@ export function useFile(fileId: string, options?: FileOptions<FileReturnTypes>, 
                 }
                 else
                 {
-                    throw new ParameterError("useFile: fileId value is neither unique id or relative url.", "fileId", fileId);
+                    throw new ParameterError(
+                        "useFile: fileId value is neither unique id or relative url.",
+                        "fileId",
+                        fileId);
                 }
             }
 
@@ -59,9 +62,7 @@ export function useFile(fileId: string, options?: FileOptions<FileReturnTypes>, 
         }
     }, [fileId, options?.type]);
 
-    const _mergedDeps = deps
-        ? [fileId, options?.type].concat(deps)
-        : [fileId, options?.type];
+    const _mergedDeps = mergeDependencies([fileId, options?.type], deps);
 
     useQueryEffect(invokableFactory, setFileInfo, options, _mergedDeps);
 

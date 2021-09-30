@@ -3,7 +3,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { INavNodeInfo } from "@pnp/sp/navigation/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { NavigationTypes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable } from "../utils";
+import { createInvokable, mergeDependencies } from "../utils";
 import { useState, useCallback } from "react";
 
 export interface NavigationOptions extends PnpHookOptions<ODataQueryableCollection>
@@ -33,9 +33,7 @@ export function useNavigation(
 
     }, [options?.type]);
 
-    const _mergedDeps = deps
-        ? [options?.type].concat(deps)
-        : [options?.type];
+    const _mergedDeps = mergeDependencies([options?.type], deps);
 
     useQueryEffect(invokableFactory, setNavNodes, options, _mergedDeps);
 

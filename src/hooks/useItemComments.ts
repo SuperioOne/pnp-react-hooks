@@ -5,7 +5,7 @@ import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, resolveList } from "../utils";
+import { createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
 export type ItemCommentsOptions = PnpHookOptions<ODataQueryableCollection>;
@@ -35,9 +35,7 @@ export function useItemComments(
 
     }, [itemId, list]);
 
-    const _mergedDeps = deps
-        ? [itemId, list].concat(deps)
-        : [itemId, list];
+    const _mergedDeps = mergeDependencies([itemId, list], deps);
 
     useQueryEffect(invokableFactory, setComments, options, _mergedDeps);
 

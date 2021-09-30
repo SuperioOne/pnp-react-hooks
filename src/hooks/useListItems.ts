@@ -1,9 +1,9 @@
 import "@pnp/sp/items";
 import { IItems } from "@pnp/sp/items/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ListOptions, Nullable, ODataQueryableCollection, PagedODataQueryable, PnpHookOptions } from "../types";
+import { ListOptions, Nullable, ODataQueryableCollection, FilteredODataQueryable, PnpHookOptions } from "../types";
 import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, resolveList } from "../utils";
+import { createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
@@ -17,7 +17,7 @@ export interface ListItemsOptions extends PnpHookOptions<ODataQueryableCollectio
     mode?: ListOptions.Default;
 }
 
-export interface PagedItemsOptions extends PnpHookOptions<PagedODataQueryable>
+export interface PagedItemsOptions extends PnpHookOptions<FilteredODataQueryable>
 {
     mode: ListOptions.Auto | ListOptions.All;
 }
@@ -57,9 +57,7 @@ export function useListItems<T>(list: string, options?: _ListItemsOptions, deps?
         }
     }, [list, options?.mode]);
 
-    const _mergedDeps = deps
-        ? [list, options?.mode].concat(deps)
-        : [list, options?.mode];
+    const _mergedDeps = mergeDependencies([list, options?.mode], deps);
 
     useQueryEffect(invokableFactory, setItems, options, _mergedDeps);
 
