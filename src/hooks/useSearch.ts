@@ -16,10 +16,12 @@ export interface SearchOptions extends RenderOptions, CacheOptions, ExceptionOpt
     useCache?: boolean;
 }
 
+export type GetPageDispatch = (pageNo: number) => void;
+
 export function useSearch(
     searchOptions: ISearchQuery | string,
     options?: SearchOptions,
-    deps?: React.DependencyList): [Nullable<SpSearchResult>, (pageNo: number) => void]
+    deps?: React.DependencyList): [Nullable<SpSearchResult>, GetPageDispatch]
 {
     const [searchState, dispatch] = useReducer(_reducer, INITIAL_STATE);
 
@@ -30,25 +32,25 @@ export function useSearch(
     const _prevPage = useRef<number>(INITIAL_PAGE_INDEX);
     const _prevDeps = useRef<Nullable<React.DependencyList>>(null);
 
-    const _pageChangeDispatcher = useCallback((pageNo: number) => dispatch({
+    const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number) => dispatch({
         type: ActionTypes.ChangePageNo,
         pageNo: pageNo
     }), []);
 
-    const _cleanUp = useCallback(() =>
+    const _cleanup = useCallback(() =>
     {
         _subscription.current?.unsubscribe();
         _subscription.current = undefined;
     }, []);
 
-    useEffect(_cleanUp, [_cleanUp]);
+    useEffect(_cleanup, [_cleanup]);
 
     useEffect(() =>
     {
         const optionsChanged = !compareTuples(_prevDeps.current, deps)
             || !shallowEqual(_searchOptions.current, searchOptions);
 
-        // if options are changed page change is ignored
+        // page change is ignored, if options are changed 
         const pageChanged = !optionsChanged
             && _prevPage.current !== searchState.currentPage;
 
@@ -58,7 +60,7 @@ export function useSearch(
                 ? { ...globalOptions, ...options }
                 : globalOptions;
 
-            _cleanUp();
+            _cleanup();
 
             if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
             {
@@ -70,7 +72,7 @@ export function useSearch(
             }
 
             const observer: CompletionObserver<SearchResults> = {
-                complete: _cleanUp,
+                complete: _cleanup,
                 error: (err: Error) =>
                 {
                     dispatch({ type: ActionTypes.Reset, resetValue: null });
@@ -116,9 +118,9 @@ export function useSearch(
         _prevDeps.current = deps;
         _searchOptions.current = searchOptions;
 
-    }, [searchState.currentPage, searchOptions, searchState.pnpResult, options, globalOptions, deps, _cleanUp]);
+    }, [searchState.currentPage, searchOptions, searchState.pnpResult, options, globalOptions, deps, _cleanup]);
 
-    return [searchState.userResult, _pageChangeDispatcher];
+    return [searchState.userResult, _getPageDispatch];
 }
 
 const _reducer = (state: SearchState, action: SearchAction): SearchState => 

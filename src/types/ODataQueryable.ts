@@ -13,8 +13,7 @@ export interface ODataQueryableCollection extends ODataQueryable
     filter?: string;
 }
 
-export interface PagedODataQueryable extends ODataQueryable
+export interface FilteredODataQueryable extends ODataQueryable
 {
-    top?: number;
     filter?: string;
 }

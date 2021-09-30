@@ -1,6 +1,7 @@
 export interface RenderOptions
 {
     loadActionOption?: LoadActionMode;
+    disabled?: boolean;
 }
 
 export enum LoadActionMode

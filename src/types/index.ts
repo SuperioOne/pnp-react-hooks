@@ -1,6 +1,6 @@
 export { SharepointQueryable } from "./SharepointQueryable";
 export { PnpActionFunction } from "./PnpActionFunction";
-export { ODataQueryable, ODataQueryableCollection, PagedODataQueryable } from "./ODataQueryable";
+export { ODataQueryable, ODataQueryableCollection, FilteredODataQueryable  } from "./ODataQueryable";
 export { Nullable, Override } from "./utilityTypes";
 export { InvokableFactory } from "./invokeable";
 export { FileReturnTypes, NavigationTypes, FeatureScopes } from "./literalTypes";

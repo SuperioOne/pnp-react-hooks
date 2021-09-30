@@ -5,7 +5,7 @@ export function SearchUserDebug()
 {
     const [term, setTerm] = React.useState("*");
 
-    const users = useSearchUser(term, { resolveSiteUserInfo: true });
+    const users = useSearchUser(term);
 
     const [counter, setCounter] = React.useState<number>(0);
 

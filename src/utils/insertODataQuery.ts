@@ -1,7 +1,7 @@
 import { _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
 import { Nullable, ODataQueryableCollection, SharepointQueryable } from "../types";
 
-export function insertODataQuery(instance: Readonly<SharepointQueryable>, query: Nullable<ODataQueryableCollection>)
+export function insertODataQuery<T extends SharepointQueryable>(instance: T, query: Nullable<ODataQueryableCollection>): T
 {
     if (!query)
     {
@@ -33,12 +33,12 @@ export function insertODataQuery(instance: Readonly<SharepointQueryable>, query:
 
     if (query.expand && query.expand.length > 0)
     {
-        instance = instance.expand(...query.expand);
+        instance.expand(...query.expand);
     }
 
     if (query.select && query.select.length > 0)
     {
-        instance = instance.select(...query.select);
+        instance.select(...query.select);
     }
 
     return instance;

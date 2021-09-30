@@ -24,13 +24,13 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
     const _prevdependencies = useRef<Nullable<React.DependencyList>>(null);
     const _subscription = useRef<Nullable<Subscription>>(undefined);
 
-    const _cleanUp = useCallback(() =>
+    const _cleanup = useCallback(() =>
     {
         _subscription.current?.unsubscribe();
         _subscription.current = undefined;
     }, []);
 
-    useEffect(_cleanUp, [_cleanUp]);
+    useEffect(_cleanup, [_cleanup]);
 
     useEffect(() =>
     {
@@ -48,7 +48,7 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
                     ? { ...globalOptions, ...options }
                     : globalOptions;
 
-                _cleanUp();
+                _cleanup();
 
                 if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
                 {
@@ -57,7 +57,7 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
 
                 const observer: NextObserver<TReturn> = {
                     next: stateAction,
-                    complete: _cleanUp,
+                    complete: _cleanup,
                     error: (err: Error) =>
                     {
                         stateAction(null);

@@ -18,6 +18,7 @@ export { useItemComments } from "./hooks/useItemComments";
 export { useList } from "./hooks/useList";
 export { useListItem } from "./hooks/useListItem";
 export { useListItems } from "./hooks/useListItems";
+export { useListItemsPaged } from "./hooks/useListItemsPaged";
 export { useLists } from "./hooks/useLists";
 export { useNavigation } from "./hooks/useNavigation";
 export { usePageComments } from "./hooks/usePageComments";
