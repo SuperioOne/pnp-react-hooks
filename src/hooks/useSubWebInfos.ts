@@ -1,4 +1,4 @@
-import { IWeb, IWebInfo } from "@pnp/sp/webs/types";
+import { IWeb, IWebInfosData } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
 import { createInvokable } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
@@ -8,9 +8,9 @@ export type SubWebInfosOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useSubWebInfos(
     options?: SubWebInfosOptions,
-    deps?: React.DependencyList): Nullable<IWebInfo>
+    deps?: React.DependencyList): Nullable<IWebInfosData[]>
 {
-    const [subWebs, setSubWebs] = useState<Nullable<IWebInfo>>();
+    const [subWebs, setSubWebs] = useState<Nullable<IWebInfosData[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.webinfos), []);
 

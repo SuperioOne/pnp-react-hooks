@@ -1,11 +1,11 @@
-import { IWeb } from "@pnp/sp/webs/types";
-import { InternalContext } from "../../context";
-import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
-import { LoadActionMode } from "../../types/options/RenderOptions";
-import { compareTuples, deepCompareQuery, errorHandler, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
-import { from, NextObserver, Subscription } from "rxjs";
-import { useCallback, useContext, useEffect } from "react";
 import { useRef } from "react";
+import { useCallback, useContext, useEffect } from "react";
+import { from, NextObserver, Subscription } from "rxjs";
+import { compareTuples, deepCompareQuery, errorHandler, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
+import { LoadActionMode } from "../../types/options/RenderOptions";
+import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
+import { InternalContext } from "../../context";
+import { IWeb } from "@pnp/sp/webs/types";
 
 export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
     invokableFactory: InvokableFactory<TContext>,

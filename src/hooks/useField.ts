@@ -3,9 +3,8 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { createInvokable, isUUID, mergeDependencies, resolveScope } from "../utils";
+import { assert, createInvokable, isUUID, mergeDependencies, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
-import { ParameterError } from "../errors/ParameterError";
 
 export interface FieldOptions extends PnpHookOptions<ODataQueryable>
 {
@@ -21,11 +20,7 @@ export function useField(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        if (!fieldId)
-            throw new ParameterError(
-                "useField: fieldId value is neither unique id or relative url.",
-                "fieldId",
-                fieldId);
+        assert(typeof fieldId === "string");
 
         const scope = resolveScope(web, {
             list: options?.list

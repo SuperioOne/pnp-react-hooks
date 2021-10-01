@@ -1,6 +1,8 @@
 export { ExceptionMode, LoadActionMode } from "./types";
 export { PnpReactOptionProvider, PnpHookGlobalOptions } from "./context";
 
+export { useApp } from "./hooks/useApp";
+export { useApps } from "./hooks/useApps";
 export { useAttachment } from "./hooks/useAttachment";
 export { useAttachments } from "./hooks/useAttachments";
 export { useContentTypes } from "./hooks/useContentTypes";
@@ -34,3 +36,8 @@ export { useUser } from "./hooks/useUser";
 export { useUserHasPermission } from "./hooks/useUserHasPermission";
 export { useWebInfo } from "./hooks/useWebInfo";
 export { useWebProperties } from "./hooks/useWebProperties";
+
+// TODO: assert error message system
+// TODO: assert functions for strings, numbers like range check etc.
+// TODO: effect runs doesn't handle some exception cases
+// TODO: invokable factory type safety cannot be validated in compiler

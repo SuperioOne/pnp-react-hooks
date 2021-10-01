@@ -4,8 +4,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { FileReturnTypes, Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, mergeDependencies, resolveList } from "../utils";
+import { assert, createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
 export interface AttachmentOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>
@@ -25,14 +24,8 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        if (isNaN(itemId))
-            throw new ParameterError("useAttachment: itemId value is not valid.", "itemId", itemId);
-
-        if (!list)
-            throw new ParameterError("useAttachment: list value is not valid.", "list", list);
-
-        if (!attachmentName)
-            throw new ParameterError("useAttachment: attachmentName value is not valid.", "attachmentName", attachmentName);
+        assert(!isNaN(itemId), "itemId value is not valid.");
+        assert(typeof attachmentName === "string", "attachmentName value is not valid.");
 
         const queryInst = resolveList(web, list)
             .items
@@ -51,7 +44,7 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
     }, [itemId, list, attachmentName, options?.type]);
 
     const _mergedDeps = mergeDependencies(
-        [attachmentName, itemId, list, options?.type], 
+        [attachmentName, itemId, list, options?.type],
         deps);
 
     useQueryEffect(invokableFactory, setAttachment, options, _mergedDeps);

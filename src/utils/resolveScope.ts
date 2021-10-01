@@ -6,6 +6,7 @@ import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Override } from "../types";
 import { resolveList } from "./resolveList";
+import { assert } from ".";
 
 interface ScopeInfo
 {
@@ -32,6 +33,9 @@ export function resolveScope(web: IWeb, scopeInfo?: ScopeInfo): IWeb | IList | I
 
         if (scopeInfo.item)
         {
+            assert(!isNaN(scopeInfo.item) && scopeInfo.item > 0
+                , "Can't get item scope. Item id is defined but it's not in a valid range");
+
             return scope.items.getById(scopeInfo.item);
         }
 

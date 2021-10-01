@@ -1,7 +1,6 @@
 import { IListInfo } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
@@ -17,9 +16,6 @@ export function useList(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        if (!list)
-            throw new ParameterError("useList: list value is not valid.", "list", list);
-
         const queryInst = resolveList(web, list);
 
         return createInvokable(queryInst);
