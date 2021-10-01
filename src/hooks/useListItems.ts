@@ -2,7 +2,6 @@ import "@pnp/sp/items";
 import { IItems } from "@pnp/sp/items/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { ListOptions, Nullable, ODataQueryableCollection, FilteredODataQueryable, PnpHookOptions } from "../types";
-import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
@@ -30,9 +29,6 @@ export function useListItems<T>(list: string, options?: _ListItemsOptions, deps?
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        if (!list)
-            throw new ParameterError("useListItems<T>: list value is not valid.", "list", list);
-
         const spList = resolveList(web, list);
 
         switch (options?.mode)

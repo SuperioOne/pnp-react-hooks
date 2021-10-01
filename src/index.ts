@@ -29,5 +29,8 @@ export { useRoleDefinitions } from "./hooks/useRoleDefinitions";
 export { useSearch } from "./hooks/useSearch";
 export { useSearchUser } from "./hooks/useSearchUser";
 export { useSiteUsers } from "./hooks/useSiteUsers";
+export { useSubWebInfos } from "./hooks/useSubWebInfos";
 export { useUser } from "./hooks/useUser";
 export { useUserHasPermission } from "./hooks/useUserHasPermission";
+export { useWebInfo } from "./hooks/useWebInfo";
+export { useWebProperties } from "./hooks/useWebProperties";

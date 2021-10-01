@@ -1,8 +1,11 @@
 export { BaseExample } from "./Example";
 export { CurrentUserDebug } from "./CurrentUserDebug";
 export { ListItemsDebug } from "./ListItemsDebug";
+export { ListItemsPagedDebug } from "./ListItemsPagedDebug";
 export { RoleAssignmentDebug } from "./RoleAssignmentDebug";
 export { RoleDefinitionsDebug } from "./RoleDefinitionsDebug";
 export { SearchDebug } from "./SearchDebug";
 export { SearchUserDebug } from "./SearchUserDebug";
-export { ListItemsPagedDebug } from "./ListItemsPagedDebug";
+export { SubWebInfosDebug } from "./SubWebInfoDebug";
+export { WebInfoDebug } from "./WebInfoDebug";
+export { WebPropertiesDebug } from "./WebPropertiesDebug";

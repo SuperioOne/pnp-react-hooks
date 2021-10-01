@@ -1,3 +1,4 @@
+export { assert } from "./assert";
 export { compareArray } from "./compareArray";
 export { compareTuples } from "./compareTuples";
 export { createInvokable } from "./createInvokable";

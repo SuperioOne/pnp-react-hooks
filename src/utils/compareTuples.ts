@@ -1,4 +1,5 @@
 import { Nullable } from "../types";
+import { assert } from "./assert";
 
 /**
  * Deep comparisons between two **sorted** arrays or tuples.
@@ -21,20 +22,17 @@ export function compareTuples(left: Readonly<Nullable<unknown[]>>, right: Readon
         return false;
     }
 
-    if (left.length === right.length)
-    {
-        for (let index = 0; index < left.length; index++)
-        {
-            if (Object.is(left[index], right[index]))
-            {
-                continue;
-            }
+    assert(left.length === right.length, "Tuple lenghts are not same.");
 
-            return false;
+    for (let index = 0; index < left.length; index++)
+    {
+        if (Object.is(left[index], right[index]))
+        {
+            continue;
         }
 
-        return true;
+        return false;
     }
 
-    throw new Error("Tuple lenghts are not same.");
+    return true;
 }
