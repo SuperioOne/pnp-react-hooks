@@ -13,9 +13,9 @@ export interface ItemCommentsOptions extends PnpHookOptions<ODataQueryableCollec
 
 export function useContentTypes(
     options?: ItemCommentsOptions,
-    deps?: React.DependencyList): Nullable<Array<IContentTypeInfo>>
+    deps?: React.DependencyList): Nullable<IContentTypeInfo[]>
 {
-    const [contentTypes, setContentTypes] = useState<Nullable<Array<IContentTypeInfo>>>();
+    const [contentTypes, setContentTypes] = useState<Nullable<IContentTypeInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {

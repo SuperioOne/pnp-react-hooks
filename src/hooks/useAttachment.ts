@@ -4,7 +4,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { FileReturnTypes, Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { assert, createInvokable, mergeDependencies, resolveList } from "../utils";
+import { assertID, assertString, createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
 export interface AttachmentOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>
@@ -24,8 +24,8 @@ export function useAttachment(attachmentName: string, itemId: number, list: stri
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        assert(!isNaN(itemId), "itemId value is not valid.");
-        assert(typeof attachmentName === "string", "attachmentName value is not valid.");
+        assertID(itemId, "itemId value is not valid.");
+        assertString(attachmentName, "attachmentName value is not valid.");
 
         const queryInst = resolveList(web, list)
             .items

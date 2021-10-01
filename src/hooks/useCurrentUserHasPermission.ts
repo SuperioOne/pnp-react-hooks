@@ -18,7 +18,7 @@ export interface CurrentUserPermissionOptions extends ExceptionOptions, RenderOp
 }
 
 export function useCurrentUserHasPermission(
-    permissionKinds: Array<PermissionKind> | PermissionKind,
+    permissionKinds: PermissionKind[] | PermissionKind,
     options?: CurrentUserPermissionOptions,
     deps?: React.DependencyList): Nullable<boolean>
 {

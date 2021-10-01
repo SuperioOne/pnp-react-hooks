@@ -4,8 +4,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, mergeDependencies, resolveList } from "../utils";
+import { assertID, createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
 export type ItemCommentsOptions = PnpHookOptions<ODataQueryableCollection>;
@@ -14,17 +13,13 @@ export function useItemComments(
     itemId: number,
     list: string,
     options?: ItemCommentsOptions,
-    deps?: React.DependencyList): Nullable<Array<ICommentInfo>>
+    deps?: React.DependencyList): Nullable<ICommentInfo[]>
 {
-    const [comments, setComments] = useState<Nullable<Array<ICommentInfo>>>();
+    const [comments, setComments] = useState<Nullable<ICommentInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        if (isNaN(itemId))
-            throw new ParameterError("useItemComments: itemId value is not valid.", "itemId", itemId);
-
-        if (!list)
-            throw new ParameterError("useItemComments: list value is not valid.", "list", list);
+        assertID(itemId, "itemId value is not valid.");
 
         const queryInst = resolveList(web, list)
             .items

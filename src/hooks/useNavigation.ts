@@ -13,9 +13,9 @@ export interface NavigationOptions extends PnpHookOptions<ODataQueryableCollecti
 
 export function useNavigation(
     options?: NavigationOptions,
-    deps?: React.DependencyList): Nullable<Array<INavNodeInfo>>
+    deps?: React.DependencyList): Nullable<INavNodeInfo[]>
 {
-    const [navNodes, setNavNodes] = useState<Nullable<Array<INavNodeInfo>>>();
+    const [navNodes, setNavNodes] = useState<Nullable<INavNodeInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {

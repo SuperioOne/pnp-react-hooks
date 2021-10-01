@@ -19,9 +19,9 @@ interface SearchUserOptions extends RenderOptions, ExceptionOptions { }
 export function useSearchUser(
     searchOptions: IClientPeoplePickerQueryParameters | string,
     options?: SearchUserOptions,
-    deps?: React.DependencyList): Nullable<Array<IPeoplePickerEntity>>
+    deps?: React.DependencyList): Nullable<IPeoplePickerEntity[]>
 {
-    const [profiles, setProfiles] = useState<Nullable<Array<IPeoplePickerEntity>>>();
+    const [profiles, setProfiles] = useState<Nullable<IPeoplePickerEntity[]>>();
 
     const globalOptions = useContext(InternalContext);
 
@@ -55,7 +55,7 @@ export function useSearchUser(
                 setProfiles(undefined);
             }
 
-            const observer: NextObserver<Array<IPeoplePickerEntity>> = {
+            const observer: NextObserver<IPeoplePickerEntity[]> = {
                 next: setProfiles,
                 complete: _cleanup,
                 error: (err: Error) =>

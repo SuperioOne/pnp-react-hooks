@@ -10,9 +10,9 @@ export type SiteUsersOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useSiteUsers(
     options?: SiteUsersOptions,
-    deps?: React.DependencyList): Nullable<Array<ISiteUserInfo>>
+    deps?: React.DependencyList): Nullable<ISiteUserInfo[]>
 {
-    const [siteUser, setSiteUser] = useState<Nullable<Array<ISiteUserInfo>>>(undefined);
+    const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo[]>>(undefined);
 
     const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.siteUsers), []);
 

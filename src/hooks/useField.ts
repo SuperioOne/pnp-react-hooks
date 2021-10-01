@@ -3,7 +3,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { assert, createInvokable, isUUID, mergeDependencies, resolveScope } from "../utils";
+import { assertString, createInvokable, isUUID, mergeDependencies, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 
 export interface FieldOptions extends PnpHookOptions<ODataQueryable>
@@ -20,7 +20,7 @@ export function useField(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        assert(typeof fieldId === "string");
+        assertString(fieldId, "fileId is not a valid string.");
 
         const scope = resolveScope(web, {
             list: options?.list

@@ -1,7 +1,7 @@
 export interface ODataQueryable
 {
-    expand?: Array<string>;
-    select?: Array<string>;
+    expand?: string[];
+    select?: string[];
 }
 
 export interface ODataQueryableCollection extends ODataQueryable

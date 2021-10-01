@@ -5,7 +5,6 @@ import { CacheOptions, ExceptionOptions, Nullable, PnpActionFunction, RenderOpti
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IFolder, IFolderInfo } from "@pnp/sp/folders/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ParameterError } from "../errors/ParameterError";
 import { createInvokable, isUrl, isUUID, mergeDependencies, resolveList, UrlType } from "../utils";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback } from "react";
@@ -19,8 +18,8 @@ export interface FolderTreeOptions extends ExceptionOptions, RenderOptions, WebO
 // TODO: Node and context management functions are missing and logic is not complete
 interface TreeContext
 {
-    folders: Array<TreeNode<IFolderInfo>>;
-    files: Array<TreeNode<IFileInfo>>;
+    folders: TreeNode<IFolderInfo>[];
+    files: TreeNode<IFileInfo>[];
     root: TreeNode<IFolderInfo>;
     up?: () => Promise<void>;
 }
@@ -46,17 +45,11 @@ export function useFolderTree(
             {
                 rootFolder = web.getFolderById(folderIdentifier);
             }
-            else if (isUrl(folderIdentifier, UrlType.Relative))
+            else /*(isUrl(folderIdentifier, UrlType.Relative))*/
             {
                 rootFolder = web.getFolderByServerRelativeUrl(folderIdentifier);
             }
-            else
-            {
-                throw new ParameterError(
-                    "useFolderTree: folder identifier value is not valid.",
-                    "folderIdentifier",
-                    folderIdentifier);
-            }
+
         }
 
         const buildTree: PnpActionFunction<IFolder, TreeContext> = async function ()

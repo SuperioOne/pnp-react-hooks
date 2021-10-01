@@ -9,9 +9,9 @@ export type ListsOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useLists(
     options?: ListsOptions,
-    deps?: React.DependencyList): Nullable<Array<IListInfo>>
+    deps?: React.DependencyList): Nullable<IListInfo[]>
 {
-    const [lists, setLists] = useState<Nullable<Array<IListInfo>>>();
+    const [lists, setLists] = useState<Nullable<IListInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.lists), []);
 

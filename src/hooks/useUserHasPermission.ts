@@ -2,9 +2,8 @@ import "@pnp/sp/security";
 import "@pnp/sp/site-users";
 import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ParameterError } from "../errors/ParameterError";
 import { PermissionKind } from "@pnp/sp/security/types";
-import { createInvokable, isEmail, mergeDependencies, resolveScope } from "../utils";
+import { assertID, assertString, createInvokable, isEmail, mergeDependencies, resolveScope } from "../utils";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback, useMemo } from "react";
 
@@ -20,7 +19,7 @@ export interface UserPermissionOptions extends ExceptionOptions, RenderOptions, 
 }
 
 export function useUserHasPermission(
-    permissionKinds: Array<PermissionKind> | PermissionKind,
+    permissionKinds: PermissionKind[] | PermissionKind,
     userId: string | number,
     options?: UserPermissionOptions,
     deps?: React.DependencyList): Nullable<boolean>
@@ -43,11 +42,15 @@ export function useUserHasPermission(
             {
                 case "number":
                     {
+                        assertID(userId, "userId is not valid ID.");
+
                         userLoginName = (await web.siteUsers.getById(userId).select("LoginName")()).LoginName;
                         break;
                     }
                 case "string":
                     {
+                        assertString(userId, "userId is not valid or empty");
+
                         userLoginName = isEmail(userId)
                             ? (await web.siteUsers.getByEmail(userId).select("LoginName")()).LoginName
                             : userId;
@@ -55,7 +58,7 @@ export function useUserHasPermission(
                         break;
                     }
                 default:
-                    throw new ParameterError("useUserHasPermission: userIdentifier value is not valid.", "userIdentifier", userId);
+                    throw new TypeError("userId value type is not string or number.");
             }
 
             const scope = resolveScope(web, {

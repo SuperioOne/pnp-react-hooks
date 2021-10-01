@@ -10,9 +10,9 @@ export type GroupsOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useGroups(
     options?: GroupsOptions,
-    deps?: React.DependencyList): Nullable<Array<ISiteGroupInfo>>
+    deps?: React.DependencyList): Nullable<ISiteGroupInfo[]>
 {
-    const [groups, setGroups] = useState<Nullable<Array<ISiteGroupInfo>>>();
+    const [groups, setGroups] = useState<Nullable<ISiteGroupInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.siteGroups), []);
 

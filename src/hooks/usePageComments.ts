@@ -5,8 +5,7 @@ import { IClientsidePage } from "@pnp/sp/clientside-pages/types";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, isUrl, mergeDependencies, UrlType } from "../utils";
+import { assert, createInvokable, isUrl, mergeDependencies, UrlType } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
@@ -15,14 +14,14 @@ export type PageCommentsOptions = PnpHookOptions<ODataQueryableCollection>;
 export function usePageComments(
     pageRelativePath: string,
     options?: PageCommentsOptions,
-    deps?: React.DependencyList): Nullable<Array<ICommentInfo>>
+    deps?: React.DependencyList): Nullable<ICommentInfo[]>
 {
-    const [comments, setComments] = useState<Nullable<Array<ICommentInfo>>>();
+    const [comments, setComments] = useState<Nullable<ICommentInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        if (!isUrl(pageRelativePath, UrlType.Relative))
-            throw new ParameterError("usePageComments: pageRelativePath value is not valid.", "pageRelativePath", pageRelativePath);
+        assert(isUrl(pageRelativePath, UrlType.Relative),
+            "pageRelativePath value is not valid.");
 
         const page = await web.loadClientsidePage(pageRelativePath);
 

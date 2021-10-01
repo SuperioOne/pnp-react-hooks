@@ -15,9 +15,9 @@ export interface FeaturesOptions extends PnpHookOptions<ODataQueryableCollection
 
 export function useFeatures(
     options?: FeaturesOptions,
-    deps?: React.DependencyList): Nullable<Array<IFeatureInfo>>
+    deps?: React.DependencyList): Nullable<IFeatureInfo[]>
 {
-    const [features, setFeatures] = useState<Nullable<Array<IFeatureInfo>>>();
+    const [features, setFeatures] = useState<Nullable<IFeatureInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {

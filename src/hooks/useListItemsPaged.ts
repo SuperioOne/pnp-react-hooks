@@ -22,7 +22,7 @@ interface ListItemsPagedOptions extends PnpHookOptions<FilteredODataQueryable>
 export function useListItemsPaged<T>(
     list: string,
     options?: ListItemsPagedOptions,
-    deps?: React.DependencyList): [Nullable<Array<T>>, NextPageDispatch, Nullable<boolean>]
+    deps?: React.DependencyList): [Nullable<T[]>, NextPageDispatch, Nullable<boolean>]
 {
     const globalOptions = useContext(InternalContext);
 
@@ -38,7 +38,7 @@ export function useListItemsPaged<T>(
 
     useEffect(() => _cleanup, [_cleanup]);
 
-    const _insertNewPage = useCallback((pageResult: Nullable<PagedItemCollection<Array<T>>>) =>
+    const _insertNewPage = useCallback((pageResult: Nullable<PagedItemCollection<T[]>>) =>
     {
         const newState: State<T> = {};
 
@@ -72,7 +72,7 @@ export function useListItemsPaged<T>(
                     ? options
                     : globalOptions;
 
-                const observer: NextObserver<PagedItemCollection<Array<T>>> = {
+                const observer: NextObserver<PagedItemCollection<T[]>> = {
                     next: _insertNewPage,
                     complete: () =>
                     {
@@ -102,7 +102,7 @@ export function useListItemsPaged<T>(
         {
             // cancels and clears getNext call when new parameters applied
             _cleanup();
-            return this.getPaged<Array<T>>();
+            return this.getPaged<T[]>();
         };
 
         return createInvokable(queryInst, action);
@@ -122,7 +122,7 @@ type NextPageDispatch = (callback?: () => void) => void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface State<T = any>
 {
-    results?: Nullable<Array<T>>;
+    results?: Nullable<T[]>;
     pagedResult?: PagedItemCollection<T[]>;
     hasNext?: boolean;
 }

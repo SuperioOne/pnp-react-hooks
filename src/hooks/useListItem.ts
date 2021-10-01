@@ -2,7 +2,7 @@ import "@pnp/sp/items";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { assert, createInvokable, mergeDependencies, resolveList } from "../utils";
+import { assertID, createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
 export type ListItemOptions = PnpHookOptions<ODataQueryable>;
@@ -17,8 +17,7 @@ export function useListItem<T>(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        assert(!isNaN(itemId),
-            "itemId value is not valid.");
+        assertID(itemId, "itemId value is not valid.");
 
         const queryInst = resolveList(web, list)
             .items

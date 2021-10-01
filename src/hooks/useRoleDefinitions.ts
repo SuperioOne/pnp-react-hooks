@@ -10,9 +10,9 @@ export type RoleDefinitionsOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useRoleDefinitions(
     options?: RoleDefinitionsOptions,
-    deps?: React.DependencyList): Nullable<Array<IRoleDefinitionInfo>>
+    deps?: React.DependencyList): Nullable<IRoleDefinitionInfo[]>
 {
-    const [roleDefinitions, setRoleDefinitions] = useState<Nullable<Array<IRoleDefinitionInfo>>>(undefined);
+    const [roleDefinitions, setRoleDefinitions] = useState<Nullable<IRoleDefinitionInfo[]>>(undefined);
 
     const invokableFactory = useCallback(async (web: IWeb) => createInvokable(web.roleDefinitions), []);
 

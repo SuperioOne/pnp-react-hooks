@@ -4,7 +4,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { assert, createInvokable, mergeDependencies, resolveList } from "../utils";
+import { assertID, createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
 
 export type ItemAttachmentsOptions = PnpHookOptions<ODataQueryableCollection>;
@@ -13,13 +13,13 @@ export function useAttachments(
     itemId: number,
     list: string,
     options?: ItemAttachmentsOptions,
-    deps?: React.DependencyList): Nullable<Array<IAttachmentInfo>>
+    deps?: React.DependencyList): Nullable<IAttachmentInfo[]>
 {
-    const [attachments, setAttachments] = useState<Nullable<Array<IAttachmentInfo>>>();
+    const [attachments, setAttachments] = useState<Nullable<IAttachmentInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        assert(!isNaN(itemId), "itemId value is not valid.");
+        assertID(itemId, "itemId value is not valid.");
 
         const queryInst = resolveList(web, list)
             .items

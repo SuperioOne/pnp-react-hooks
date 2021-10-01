@@ -1,23 +1,27 @@
 import "@pnp/sp/site-users";
 import { ISiteUsers } from "@pnp/sp/site-users/types";
-import { ParameterError } from "../errors/ParameterError";
+import { assertString, assertID } from "./assert";
 import { isEmail } from "./isEmail";
 
-export function resolveUser(users: ISiteUsers, userIdentifier: string | number)
+export function resolveUser(users: ISiteUsers, userId: string | number)
 {
-    switch (typeof userIdentifier)
+    switch (typeof userId)
     {
         case "number":
             {
-                return users.getById(userIdentifier);
+                assertID(userId, "userId is not valid ID.");
+
+                return users.getById(userId);
             }
         case "string":
             {
-                return isEmail(userIdentifier)
-                    ? users.getByEmail(userIdentifier)
-                    : users.getByLoginName(userIdentifier);
+                assertString(userId, "userId is not valid or empty string");
+
+                return isEmail(userId)
+                    ? users.getByEmail(userId)
+                    : users.getByLoginName(userId);
             }
         default:
-            throw new ParameterError("resolveUser: userIdentifier value is not valid.", "userIdentifier", userIdentifier);
+            throw new TypeError("userId value type is not string or number.");
     }
 }

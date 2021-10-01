@@ -4,7 +4,7 @@ import { CompletionObserver, from, Subscription } from "rxjs";
 import { ISearchQuery, ISearchResponse, ISearchResult } from "@pnp/sp/search/types";
 import { InternalContext } from "../context";
 import { SearchResults } from "@pnp/sp/search";
-import { compareTuples, errorHandler, shallowEqual } from "../utils";
+import { assert, compareTuples, errorHandler, shallowEqual } from "../utils";
 import { sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 
@@ -84,8 +84,7 @@ export function useSearch(
 
             if (pageChanged)
             {
-                if (!searchState.pnpResult)
-                    throw new TypeError("useSearch: search result object is undefined.");
+                assert(searchState.pnpResult, "search result object is undefined.");
 
                 observer.next = data => dispatch({
                     type: ActionTypes.NewSearchResult,
@@ -207,6 +206,6 @@ interface SpSearchResult
     TotalRows: number;
     TotalRowsIncludingDuplicates: number;
     RawSearchResults: ISearchResponse;
-    PrimarySearchResults: Array<ISearchResult>;
+    PrimarySearchResults: ISearchResult[];
     CurrentPage: number;
 }

@@ -17,7 +17,7 @@ export function useApp<T>(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        assert(isUUID(appId), "AppId is not a valid.");
+        assert(isUUID(appId), "AppId is not a valid guid string.");
 
         return createInvokable(web.getAppCatalog().getAppById(appId));
     }, [appId]);

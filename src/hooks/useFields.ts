@@ -13,9 +13,9 @@ export interface FieldsOptions extends PnpHookOptions<ODataQueryableCollection>
 
 export function useFields(
     options?: FieldsOptions,
-    deps?: React.DependencyList): Nullable<Array<IFields>>
+    deps?: React.DependencyList): Nullable<IFields[]>
 {
-    const [fields, setFields] = useState<Nullable<Array<IFields>>>();
+    const [fields, setFields] = useState<Nullable<IFields[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {

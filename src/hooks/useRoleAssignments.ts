@@ -19,9 +19,9 @@ export interface RoleAssignmentsOptions extends PnpHookOptions<ODataQueryableCol
 
 export function useRoleAssignments(
     options?: RoleAssignmentsOptions,
-    deps?: React.DependencyList): Nullable<Array<IRoleAssignmentInfo>>
+    deps?: React.DependencyList): Nullable<IRoleAssignmentInfo[]>
 {
-    const [roleAssignments, setRoleAssignments] = useState<Nullable<Array<IRoleAssignmentInfo>>>(undefined);
+    const [roleAssignments, setRoleAssignments] = useState<Nullable<IRoleAssignmentInfo[]>>(undefined);
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {

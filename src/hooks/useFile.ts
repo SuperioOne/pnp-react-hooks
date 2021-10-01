@@ -3,8 +3,7 @@ import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes } from "../types";
-import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, isUrl, isUUID, mergeDependencies, UrlType } from "../utils";
+import { assertString, createInvokable, isUrl, isUUID, mergeDependencies, UrlType } from "../utils";
 import { useState, useCallback } from "react";
 
 type InstanceTypes = IFileInfo | ArrayBuffer | Blob | string;
@@ -24,42 +23,35 @@ export function useFile(fileId: string, options?: FileOptions<FileReturnTypes>, 
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        if (fileId)
+        assertString(fileId, "fileId is not valid string value.");
+
+        const isUniqueId = isUUID(fileId);
+        let queryInst: IFile;
+
+        if (isUniqueId)
         {
-            const isUniqueId = isUUID(fileId);
-            let queryInst: IFile;
-
-            if (isUniqueId)
+            queryInst = web.getFileById(fileId);
+        }
+        else 
+        {
+            if (isUrl(fileId, UrlType.Relative))
             {
-                queryInst = web.getFileById(fileId);
+                queryInst = web.getFileByServerRelativeUrl(fileId);
             }
-            else 
+            else
             {
-                if (isUrl(fileId, UrlType.Relative))
-                {
-                    queryInst = web.getFileByServerRelativeUrl(fileId);
-                }
-                else
-                {
-                    throw new ParameterError(
-                        "useFile: fileId value is neither unique id or relative url.",
-                        "fileId",
-                        fileId);
-                }
-            }
-
-            switch (options?.type)
-            {
-                case "buffer": return createInvokable(queryInst, queryInst.getBuffer);
-                case "blob": return createInvokable(queryInst, queryInst.getBlob);
-                case "text": return createInvokable(queryInst, queryInst.getText);
-                default: return createInvokable(queryInst);
+                throw new TypeError("fileId value is neither unique id or relative url.");
             }
         }
-        else
+
+        switch (options?.type)
         {
-            throw new ParameterError("useFile: fileId value is empty.", "fileId", fileId);
+            case "buffer": return createInvokable(queryInst, queryInst.getBuffer);
+            case "blob": return createInvokable(queryInst, queryInst.getBlob);
+            case "text": return createInvokable(queryInst, queryInst.getText);
+            default: return createInvokable(queryInst);
         }
+
     }, [fileId, options?.type]);
 
     const _mergedDeps = mergeDependencies([fileId, options?.type], deps);

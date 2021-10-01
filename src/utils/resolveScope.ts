@@ -1,12 +1,12 @@
-import "@pnp/sp/webs";
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
+import "@pnp/sp/webs";
 import { IItem } from "@pnp/sp/items/types";
 import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Override } from "../types";
+import { assertID } from "./assert";
 import { resolveList } from "./resolveList";
-import { assert } from ".";
 
 interface ScopeInfo
 {
@@ -33,8 +33,8 @@ export function resolveScope(web: IWeb, scopeInfo?: ScopeInfo): IWeb | IList | I
 
         if (scopeInfo.item)
         {
-            assert(!isNaN(scopeInfo.item) && scopeInfo.item > 0
-                , "Can't get item scope. Item id is defined but it's not in a valid range");
+            assertID(scopeInfo.item,
+                "Can't get item scope. ID is undefined or negative.");
 
             return scope.items.getById(scopeInfo.item);
         }

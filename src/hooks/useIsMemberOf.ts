@@ -1,9 +1,9 @@
 import "@pnp/sp/site-groups";
 import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
-import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
+import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable, mergeDependencies, resolveUser } from "../utils";
+import { assertID, assertString, createInvokable, mergeDependencies, resolveUser } from "../utils";
 import { useState, useCallback } from "react";
 import { useRequestEffect } from "./internal/useRequestEffect";
 
@@ -31,11 +31,27 @@ export function useIsMemberOf(
                 ? resolveUser(this.siteUsers, options.userId)
                 : this.currentUser;
 
-            const queryInstance = typeof groupId === "number"
-                ? user.groups.filter(`Id eq ${groupId}`)
-                : user.groups.filter(`Title eq '${groupId}'`);
+            let groups: ISiteGroups;
 
-            const response = await queryInstance.top(1).get();
+            switch (typeof groupId)
+            {
+                case "number":
+                    {
+                        assertID(groupId, "groupId is not a valid Id.");
+                        groups = user.groups.filter(`Id eq ${groupId}`);
+                        break;
+                    }
+                case "string":
+                    {
+                        assertString(groupId, "groupName is not a valid name string.");
+                        groups = user.groups.filter(`Title eq '${groupId}'`);
+                        break;
+                    }
+                default:
+                    throw new TypeError("groupId type is not valid.");
+            }
+
+            const response = await groups.top(1).get();
 
             return response.length === 1
                 ? [true, response[0]]

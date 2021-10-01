@@ -1,4 +1,4 @@
-export { assert } from "./assert";
+export { assert, assertNumber, assertRange, assertString, assertMax, assertMin, assertID } from "./assert";
 export { compareArray } from "./compareArray";
 export { compareTuples } from "./compareTuples";
 export { createInvokable } from "./createInvokable";

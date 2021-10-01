@@ -2,8 +2,7 @@ import "@pnp/sp/security";
 import { IRoleDefinition, IRoleDefinitionInfo, RoleTypeKind } from "@pnp/sp/security/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { ParameterError } from "../errors/ParameterError";
-import { createInvokable, mergeDependencies } from "../utils";
+import { assertID, assertString, createInvokable, mergeDependencies } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback, useMemo } from "react";
 
@@ -29,16 +28,22 @@ export function useRoleDefinition(
         switch (typeof roleDefId)
         {
             case "number":
-                queryInst = web.roleDefinitions.getById(roleDefId);
-                break;
+                {
+                    assertID(roleDefId, "Role definition id is not a valid number.");
+                    queryInst = web.roleDefinitions.getById(roleDefId);
+                    break;
+                }
             case "string":
-                queryInst = web.roleDefinitions.getByName(roleDefId);
-                break;
+                {
+                    assertString(roleDefId, "Role definition id is not a valid string.");
+                    queryInst = web.roleDefinitions.getByName(roleDefId);
+                    break;
+                }
             case "object":
                 queryInst = web.roleDefinitions.getByType(roleDefId.roleType);
                 break;
             default:
-                throw new ParameterError("useRoleDefinition: role definition identifier type is not valid.", "roleIdentifier", roleDefId);
+                throw new TypeError("role definition id type is not valid.");
         }
 
         return createInvokable(queryInst);
