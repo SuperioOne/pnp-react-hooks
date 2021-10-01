@@ -3,12 +3,11 @@ import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { createInvokable } from "../utils";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
-import { WebInfoOptions } from "./useWebInfo";
 
 export type WebPropertiesOptions = PnpHookOptions<ODataQueryable>;
 
 export function useWebProperties<T>(
-    options?: WebInfoOptions,
+    options?: WebPropertiesOptions,
     deps?: React.DependencyList): Nullable<T>
 {
     const [properties, setProperties] = useState<Nullable<T>>();

@@ -4,13 +4,12 @@ import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
 import { assert, createInvokable, isUUID, mergeDependencies } from "../utils";
 import { useCallback, useState } from "react";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { WebAppsOptions } from "./useApps";
 
 export type WebAppOptions = PnpHookOptions<ODataQueryable>;
 
 export function useApp<T>(
     appId: string,
-    options?: WebAppsOptions,
+    options?: WebAppOptions,
     deps?: React.DependencyList): Nullable<T>
 {
     const [apps, setApps] = useState<Nullable<T>>();

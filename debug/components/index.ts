@@ -1,6 +1,7 @@
 export { BaseExample } from "./Example";
 
 export { AppsDebug } from "./AppsDebug";
+export { ChangesDebug } from "./ChangesDebug";
 export { CurrentUserDebug } from "./CurrentUserDebug";
 export { ListItemsDebug } from "./ListItemsDebug";
 export { ListItemsPagedDebug } from "./ListItemsPagedDebug";

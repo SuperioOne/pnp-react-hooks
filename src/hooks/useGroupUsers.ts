@@ -4,13 +4,12 @@ import { Nullable, PnpHookOptions, ODataQueryableCollection } from "../types";
 import { createInvokable, mergeDependencies, resolveGroup } from "../utils";
 import { useState, useCallback } from "react";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import { GroupOptions } from "./useGroup";
 
 export type GroupUsersOptions = PnpHookOptions<ODataQueryableCollection>;
 
 export function useGroupUsers(
     groupId: string | number,
-    options?: GroupOptions,
+    options?: GroupUsersOptions,
     deps?: React.DependencyList): Nullable<ISiteUserInfo[]>
 {
     const [groupUsers, setGroupUsers] = useState<Nullable<ISiteUserInfo[]>>();

@@ -5,6 +5,7 @@ export { useApp } from "./hooks/useApp";
 export { useApps } from "./hooks/useApps";
 export { useAttachment } from "./hooks/useAttachment";
 export { useAttachments } from "./hooks/useAttachments";
+export { useChanges } from "./hooks/useChanges";
 export { useContentTypes } from "./hooks/useContentTypes";
 export { useCurrentUser } from "./hooks/useCurrentUser";
 export { useCurrentUserHasPermission } from "./hooks/useCurrentUserHasPermission";

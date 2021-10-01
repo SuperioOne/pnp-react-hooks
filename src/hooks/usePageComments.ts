@@ -25,7 +25,7 @@ export function usePageComments(
 
         const page = await web.loadClientsidePage(pageRelativePath);
 
-        const action = async function (this: IClientsidePage)
+        const action = function (this: IClientsidePage)
         {
             return this.getComments();
         };
