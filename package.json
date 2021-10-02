@@ -12,8 +12,7 @@
     "build-debug": "node ./scripts/build.js -o .bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap",
     "build-dry": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts --dry-run",
     "build-test": "node ./scripts/build.js -o .bin/tests --includeDirs ['src/**/*','tests/**/*','.config/**/*'] --build tests/index.ts --sourceMap",
-    "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*"
   },
   "keywords": [
     "pnp",

@@ -57,44 +57,57 @@ function writeRollupError(err)
 
 async function buildProject()
 {
-    const plugins = [
-        typescript({
-            outDir: options.outDir,
-            sourceMap: options.sourceMap,
-            noEmitOnError: true,
-            include: include,
-            mapRoot: options.sourceMap ? "." : undefined
-        }),
-        commonjs(),
-        nodeResolve(),
-    ];
+    let bundle;
 
-    if (!options.dryRun)
+    try
     {
-        plugins.unshift(del({ targets: `${options.outDir}/*` }));
+        const plugins = [
+            typescript({
+                outDir: options.outDir,
+                sourceMap: options.sourceMap,
+                noEmitOnError: true,
+                include: include,
+                mapRoot: options.sourceMap ? "." : undefined
+            }),
+            commonjs(),
+            nodeResolve(),
+        ];
+
+        if (!options.dryRun)
+        {
+            plugins.unshift(del({ targets: `${options.outDir}/*` }));
+        }
+
+        bundle = await rollup.rollup({
+            plugins: plugins,
+            input: options.build,
+            external: [
+                "jsdom",
+                "colors",
+                "tslib",
+                "react",
+                "react-dom",
+                "rxjs",
+                /^@pnp\/.{1,150}$/,
+            ]
+        });
+
+        if (!options.dryRun)
+        {
+            await bundle.generate(outputOptions);
+            await bundle.write(outputOptions);
+        }
+
+        await bundle.close();
     }
-
-    const bundle = await rollup.rollup({
-        plugins: plugins,
-        input: options.build,
-        external: [
-            "jsdom",
-            "colors",
-            "tslib",
-            "react",
-            "react-dom",
-            "rxjs",
-            /^@pnp\/.{1,150}$/,
-        ]
-    });
-
-    if (!options.dryRun)
+    catch (err)
     {
-        await bundle.generate(outputOptions);
-        await bundle.write(outputOptions);
+        throw err;
     }
-
-    await bundle.close();
+    finally
+    {
+        bundle?.close();
+    }
 }
 
 buildProject()
@@ -118,4 +131,4 @@ buildProject()
         }
 
         process.exit(-1);
-    })
+    });
