@@ -7,12 +7,12 @@ export interface RenderOptions
 export enum LoadActionMode
 {
     /**
-     * Apply default policy. Clear previous, re-render even same value.
+     * Clear return value until new return value available.
      */
     ClearPrevious = 0,
 
     /**
-     * When reload triggered keep previous value and deferr re-render.
+     * Keep previous value and deferr re-render when render triggered.
      */
     KeepPrevious = 1
 }

@@ -34,7 +34,7 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
         setTimeout(async () =>
         {
             const query = options?.query;
-            const webOption = globalOptions?.web ?? options?.web;
+            const webOption = options?.web ?? globalOptions?.web;
 
             const shouldUpdate = !deepCompareQuery(_prevQuery.current, query)
                 || !compareTuples(_prevdependencies.current, deps)

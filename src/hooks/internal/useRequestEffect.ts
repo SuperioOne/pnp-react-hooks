@@ -37,7 +37,7 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
         // TODO: Error handling
         setTimeout(async () => 
         {
-            const webOption = globalOptions?.web ?? options?.web;
+            const webOption = options?.web ?? globalOptions?.web;
 
             const shouldUpdate = !compareTuples(_prevdependencies.current, deps)
                 || !shallowEqual(_prevWebOption.current, webOption);
@@ -50,7 +50,7 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
 
                 _cleanup();
 
-                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                if (mergedOptions?.loadActionOption === LoadActionMode.ClearPrevious)
                 {
                     stateAction(undefined);
                 }
@@ -75,5 +75,5 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
             _prevWebOption.current = webOption;
             _prevdependencies.current = deps;
         }, 0);
-    });
+    }, [stateAction, options, invokableFactory, globalOptions, deps, _cleanup]);
 }

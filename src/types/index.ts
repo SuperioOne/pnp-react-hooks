@@ -1,9 +1,10 @@
-export { SharepointQueryable } from "./SharepointQueryable";
-export { PnpActionFunction } from "./PnpActionFunction";
-export { ODataQueryable, ODataQueryableCollection, FilteredODataQueryable  } from "./ODataQueryable";
-export { Nullable, Override } from "./utilityTypes";
-export { InvokableFactory } from "./invokeable";
+export { ChangeTokenInfo} from "./ChangeTokenInfo";
 export { FileReturnTypes, NavigationTypes, FeatureScopes } from "./literalTypes";
+export { InvokableFactory } from "./invokeable";
+export { Nullable, Override } from "./utilityTypes";
+export { ODataQueryable, ODataQueryableCollection, FilteredODataQueryable  } from "./ODataQueryable";
+export { PnpActionFunction } from "./PnpActionFunction";
+export { SharepointQueryable } from "./SharepointQueryable";
 export
 {
     CacheOptions,
