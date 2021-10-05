@@ -1,23 +1,30 @@
 import { useRef } from "react";
 import { useCallback, useContext, useEffect } from "react";
 import { from, NextObserver, Subscription } from "rxjs";
-import { compareTuples, deepCompareQuery, errorHandler, insertCacheOptions, insertODataQuery, resolveWeb, shallowEqual } from "../../utils";
 import { LoadActionMode } from "../../types/options/RenderOptions";
-import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
 import { InternalContext } from "../../context";
 import { IWeb } from "@pnp/sp/webs/types";
+import { shallowEqual, resolveWeb, insertODataQuery, insertCacheOptions, errorHandler, deepCompareQuery, compareTuples } from "../../utils";
+import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
 
-export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCollection, TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
-    invokableFactory: InvokableFactory<TContext>,
-    stateAction: (value: Nullable<TReturn>) => void,
-    options?: PnpHookOptions<Nullable<TQuery>>,
-    deps?: React.DependencyList)
+
+export function useQueryEffect<
+    TQuery extends ODataQueryable | ODataQueryableCollection,
+    TReturn,
+    TContext extends SharepointQueryable = SharepointQueryable>(
+        invokableFactory: InvokableFactory<TContext>,
+        stateAction: (value: Nullable<TReturn>) => void,
+        options?: PnpHookOptions<Nullable<TQuery>>,
+        deps?: React.DependencyList)
 {
     const globalOptions = useContext(InternalContext);
 
-    const _prevQuery = useRef<Nullable<TQuery>>(undefined);
-    const _prevWebOption = useRef<Nullable<IWeb | string>>(null);
-    const _prevdependencies = useRef<Nullable<React.DependencyList>>(null);
+    const _innerState = useRef<TrackedState<TQuery>>({
+        externalDependencies: null,
+        query: undefined,
+        webOptions: null
+    });
+
     const _subscription = useRef<Nullable<Subscription>>(undefined);
 
     const _cleanup = useCallback(() =>
@@ -36,9 +43,9 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
             const query = options?.query;
             const webOption = options?.web ?? globalOptions?.web;
 
-            const shouldUpdate = !deepCompareQuery(_prevQuery.current, query)
-                || !compareTuples(_prevdependencies.current, deps)
-                || !shallowEqual(_prevWebOption.current, webOption);
+            const shouldUpdate = !deepCompareQuery(_innerState.current.query, query)
+                || !compareTuples(_innerState.current.externalDependencies, deps)
+                || !shallowEqual(_innerState.current.webOptions, webOption);
 
             if (shouldUpdate)
             {
@@ -73,9 +80,19 @@ export function useQueryEffect<TQuery extends ODataQueryable | ODataQueryableCol
                     .subscribe(observer);
             }
 
-            _prevQuery.current = query;
-            _prevWebOption.current = webOption;
-            _prevdependencies.current = deps;
+            _innerState.current = {
+                externalDependencies: deps,
+                query: query,
+                webOptions: webOption
+            };
+
         }, 0);
     });
+}
+
+interface TrackedState<T>
+{
+    webOptions: Nullable<IWeb | string>;
+    externalDependencies: Nullable<React.DependencyList>
+    query: Nullable<T>;
 }

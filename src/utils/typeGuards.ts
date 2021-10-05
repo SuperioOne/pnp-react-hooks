@@ -1,3 +1,4 @@
+import * as React from "react";
 import { ODataQueryable, ODataQueryableCollection } from "../types";
 
 export function isODataQueryable(obj: unknown): obj is ODataQueryable
@@ -18,4 +19,9 @@ export function isODataQueryableCollection(obj: unknown): obj is ODataQueryableC
             || (typeof (obj as ODataQueryableCollection).skip) === "number"
             || (typeof (obj as ODataQueryableCollection).top) === "number"
         );
+}
+
+export function isReactDependencyList(obj: unknown): obj is React.DependencyList
+{
+    return Array.isArray(obj);
 }

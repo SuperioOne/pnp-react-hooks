@@ -1,6 +1,6 @@
 import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ChangeTokenInfo, ExceptionOptions, Nullable, WebOptions } from "../types";
+import { ChangeTokenInfo, ExceptionOptions, IChangeTokenInfo, Nullable, WebOptions } from "../types";
 import { createInvokable, mergeDependencies, resolveList, shallowEqual } from "../utils";
 import { useState, useCallback } from "react";
 import { useRequestEffect } from "./internal/useRequestEffect";
@@ -13,11 +13,11 @@ export interface ListTokenOptions extends WebOptions, ExceptionOptions
 export function useListChangeToken(
     list: string,
     options?: ListTokenOptions,
-    deps?: React.DependencyList): Nullable<ChangeTokenInfo>
+    deps?: React.DependencyList): Nullable<IChangeTokenInfo>
 {
-    const [token, setToken] = useState<Nullable<ChangeTokenInfo>>();
+    const [token, setToken] = useState<Nullable<IChangeTokenInfo>>();
 
-    const _setTokenProxy = useCallback((newToken: Nullable<ChangeTokenInfo>) =>
+    const _setTokenProxy = useCallback((newToken: Nullable<IChangeTokenInfo>) =>
     {
         if (!shallowEqual(newToken, token))
         {
@@ -35,17 +35,11 @@ export function useListChangeToken(
                 "LastItemModifiedDate",
                 "LastItemUserModifiedDate");
 
-        const action = async function (this: IList): Promise<ChangeTokenInfo>
+        const action = async function (this: IList): Promise<IChangeTokenInfo>
         {
             const listInfo = await this();
 
-            return {
-                CurrentChangeToken: listInfo.CurrentChangeToken,
-                Id: listInfo.Id,
-                LastItemDeletedDate: listInfo.LastItemDeletedDate,
-                LastItemModifiedDate: listInfo.LastItemModifiedDate,
-                LastItemUserModifiedDate: listInfo.LastItemUserModifiedDate,
-            };
+            return new ChangeTokenInfo(listInfo);
         };
 
         return createInvokable(spList, action);

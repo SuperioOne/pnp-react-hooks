@@ -12,16 +12,21 @@ export interface _CustomRequestOptions extends ExceptionOptions, RenderOptions, 
 /**
  * Unlike useQueryEffect, this hook doesn't insert caching and query options.
  */
-export function useRequestEffect<TReturn, TContext extends SharepointQueryable = SharepointQueryable>(
-    invokableFactory: InvokableFactory<TContext>,
-    stateAction: (value: Nullable<TReturn>) => void,
-    options?: _CustomRequestOptions,
-    deps?: React.DependencyList)
+export function useRequestEffect<
+    TReturn,
+    TContext extends SharepointQueryable = SharepointQueryable>(
+        invokableFactory: InvokableFactory<TContext>,
+        stateAction: (value: Nullable<TReturn>) => void,
+        options?: _CustomRequestOptions,
+        deps?: React.DependencyList)
 {
     const globalOptions = useContext(InternalContext);
 
-    const _prevWebOption = useRef<Nullable<IWeb | string>>(null);
-    const _prevdependencies = useRef<Nullable<React.DependencyList>>(null);
+    const _innerState = useRef<TrackedState>({
+        externalDependencies: null,
+        webOptions: null
+    });
+
     const _subscription = useRef<Nullable<Subscription>>(undefined);
 
     const _cleanup = useCallback(() =>
@@ -39,8 +44,8 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
         {
             const webOption = options?.web ?? globalOptions?.web;
 
-            const shouldUpdate = !compareTuples(_prevdependencies.current, deps)
-                || !shallowEqual(_prevWebOption.current, webOption);
+            const shouldUpdate = !compareTuples(_innerState.current.externalDependencies, deps)
+                || !shallowEqual(_innerState.current.webOptions, webOption);
 
             if (shouldUpdate)
             {
@@ -72,8 +77,16 @@ export function useRequestEffect<TReturn, TContext extends SharepointQueryable =
                     .subscribe(observer);
             }
 
-            _prevWebOption.current = webOption;
-            _prevdependencies.current = deps;
+            _innerState.current = {
+                externalDependencies: deps,
+                webOptions: webOption
+            };
         }, 0);
     }, [stateAction, options, invokableFactory, globalOptions, deps, _cleanup]);
+}
+
+interface TrackedState
+{
+    webOptions: Nullable<IWeb | string>;
+    externalDependencies: Nullable<React.DependencyList>
 }

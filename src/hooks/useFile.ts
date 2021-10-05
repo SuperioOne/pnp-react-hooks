@@ -13,11 +13,30 @@ export interface FileOptions<T extends FileReturnTypes = "info"> extends PnpHook
     type?: T;
 }
 
-export function useFile(fileId: string, options?: FileOptions, deps?: React.DependencyList): Nullable<IFileInfo>;
-export function useFile(fileId: string, options?: FileOptions<"blob">, deps?: React.DependencyList): Nullable<Blob>;
-export function useFile(fileId: string, options?: FileOptions<"buffer">, deps?: React.DependencyList): Nullable<ArrayBuffer>;
-export function useFile(fileId: string, options?: FileOptions<"text">, deps?: React.DependencyList): Nullable<string>;
-export function useFile(fileId: string, options?: FileOptions<FileReturnTypes>, deps?: React.DependencyList): Nullable<InstanceTypes>
+export function useFile(
+    fileId: string,
+    options?: FileOptions,
+    deps?: React.DependencyList): Nullable<IFileInfo>;
+
+export function useFile(
+    fileId: string,
+    options?: FileOptions<"blob">,
+    deps?: React.DependencyList): Nullable<Blob>;
+
+export function useFile(
+    fileId: string,
+    options?: FileOptions<"buffer">,
+    deps?: React.DependencyList): Nullable<ArrayBuffer>;
+
+export function useFile(
+    fileId: string,
+    options?: FileOptions<"text">,
+    deps?: React.DependencyList): Nullable<string>;
+
+export function useFile(
+    fileId: string,
+    options?: FileOptions<FileReturnTypes>,
+    deps?: React.DependencyList): Nullable<InstanceTypes>
 {
     const [fileInfo, setFileInfo] = useState<Nullable<InstanceTypes>>(undefined);
 

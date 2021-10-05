@@ -12,3 +12,5 @@ export { SearchUserDebug } from "./SearchUserDebug";
 export { SubWebInfosDebug } from "./SubWebInfoDebug";
 export { WebInfoDebug } from "./WebInfoDebug";
 export { WebPropertiesDebug } from "./WebPropertiesDebug";
+export { ListChangeEffectDebug } from "./ListChangeEffectDebug";
+export { ListTokenDebug } from "./ListTokenDebug";

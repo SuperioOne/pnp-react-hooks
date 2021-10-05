@@ -27,10 +27,13 @@ export function useSearch(
 
     const globalOptions = useContext(InternalContext);
 
+    const _innerState = useRef<TrackedState>({
+        externalDependencies: null,
+        page: INITIAL_PAGE_INDEX,
+        searchOptions: null
+    });
+
     const _subscription = useRef<Nullable<Subscription>>(undefined);
-    const _searchOptions = useRef<Nullable<ISearchQuery | string>>(null);
-    const _prevPage = useRef<number>(INITIAL_PAGE_INDEX);
-    const _prevDeps = useRef<Nullable<React.DependencyList>>(null);
 
     const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number) => dispatch({
         type: ActionTypes.ChangePageNo,
@@ -47,12 +50,12 @@ export function useSearch(
 
     useEffect(() =>
     {
-        const optionsChanged = !compareTuples(_prevDeps.current, deps)
-            || !shallowEqual(_searchOptions.current, searchOptions);
+        const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
+            || !shallowEqual(_innerState.current.searchOptions, searchOptions);
 
         // page change is ignored, if options are changed 
         const pageChanged = !optionsChanged
-            && _prevPage.current !== searchState.currentPage;
+            && _innerState.current.page !== searchState.currentPage;
 
         if (optionsChanged || pageChanged)
         {
@@ -113,9 +116,11 @@ export function useSearch(
                 .subscribe(observer);
         }
 
-        _prevPage.current = searchState.currentPage;
-        _prevDeps.current = deps;
-        _searchOptions.current = searchOptions;
+        _innerState.current = {
+            externalDependencies: deps,
+            page: searchState.currentPage,
+            searchOptions: searchOptions
+        };
 
     }, [searchState.currentPage, searchOptions, searchState.pnpResult, options, globalOptions, deps, _cleanup]);
 
@@ -150,13 +155,13 @@ const _reducer = (state: SearchState, action: SearchAction): SearchState =>
 
 const _createSPSearchResult = (sResult: SearchResults, pageNo: number) =>
 ({
+    CurrentPage: pageNo,
     ElapsedTime: sResult.ElapsedTime,
     PrimarySearchResults: sResult.PrimarySearchResults,
     RawSearchResults: sResult.RawSearchResults,
     RowCount: sResult.RowCount,
     TotalRows: sResult.TotalRows,
-    TotalRowsIncludingDuplicates: sResult.TotalRowsIncludingDuplicates,
-    CurrentPage: pageNo
+    TotalRowsIncludingDuplicates: sResult.TotalRowsIncludingDuplicates
 });
 
 // using number enums instead of literal strings
@@ -201,11 +206,18 @@ type SearchAction = ResetAction | ChangePageNoAction | NewResultsAction;
 
 interface SpSearchResult
 {
+    CurrentPage: number;
     ElapsedTime: number;
+    PrimarySearchResults: ISearchResult[];
+    RawSearchResults: ISearchResponse;
     RowCount: number;
     TotalRows: number;
     TotalRowsIncludingDuplicates: number;
-    RawSearchResults: ISearchResponse;
-    PrimarySearchResults: ISearchResult[];
-    CurrentPage: number;
+}
+
+interface TrackedState
+{
+    searchOptions: Nullable<ISearchQuery | string>;
+    externalDependencies: Nullable<React.DependencyList>
+    page: number;
 }

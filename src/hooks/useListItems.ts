@@ -21,9 +21,20 @@ export interface PagedItemsOptions extends PnpHookOptions<FilteredODataQueryable
     mode: ListOptions.Auto | ListOptions.All;
 }
 
-export function useListItems<T>(list: string, options?: PagedItemsOptions, deps?: React.DependencyList): Nullable<T[]>;
-export function useListItems<T>(list: string, options?: ListItemsOptions, deps?: React.DependencyList): Nullable<T[]>;
-export function useListItems<T>(list: string, options?: _ListItemsOptions, deps?: React.DependencyList): Nullable<T[]>
+export function useListItems<T>(
+    list: string,
+    options?: PagedItemsOptions,
+    deps?: React.DependencyList): Nullable<T[]>;
+
+export function useListItems<T>(
+    list: string,
+    options?: ListItemsOptions,
+    deps?: React.DependencyList): Nullable<T[]>;
+
+export function useListItems<T>(
+    list: string,
+    options?: _ListItemsOptions,
+    deps?: React.DependencyList): Nullable<T[]>
 {
     const [items, setItems] = useState<Nullable<T[]>>();
 

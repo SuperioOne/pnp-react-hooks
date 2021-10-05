@@ -26,8 +26,11 @@ export function useSearchUser(
     const globalOptions = useContext(InternalContext);
 
     const _subscription = useRef<Nullable<Subscription>>(undefined);
-    const _searchOptions = useRef<Nullable<IClientPeoplePickerQueryParameters | string>>(null);
-    const _prevDeps = useRef<Nullable<React.DependencyList>>(null);
+
+    const _innerState = useRef<TrackedState>({
+        externalDependencies: null,
+        searchOptions: null
+    });
 
     const _cleanup = useCallback(() =>
     {
@@ -39,8 +42,8 @@ export function useSearchUser(
 
     useEffect(() =>
     {
-        const optionsChanged = !compareTuples(_prevDeps.current, deps)
-            || !shallowEqual(_searchOptions.current, searchOptions);
+        const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
+            || !shallowEqual(_innerState.current.searchOptions, searchOptions);
 
         if (optionsChanged)
         {
@@ -76,10 +79,18 @@ export function useSearchUser(
                 .subscribe(observer);
         }
 
-        _prevDeps.current = deps;
-        _searchOptions.current = searchOptions;
-
+        _innerState.current = {
+            externalDependencies: deps,
+            searchOptions: searchOptions
+        };
+        
     }, [searchOptions, options, globalOptions, deps, _cleanup]);
 
     return profiles;
+}
+
+interface TrackedState
+{
+    searchOptions: Nullable<IClientPeoplePickerQueryParameters | string>;
+    externalDependencies: Nullable<React.DependencyList>
 }

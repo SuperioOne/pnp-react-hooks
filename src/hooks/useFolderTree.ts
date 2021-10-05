@@ -25,7 +25,7 @@ interface TreeContext
 }
 
 export function useFolderTree(
-    folderIdentifier: string,
+    folderId: string,
     options?: FolderTreeOptions,
     deps?: React.DependencyList): Nullable<TreeContext>
 {
@@ -41,15 +41,18 @@ export function useFolderTree(
         }
         else
         {
-            if (isUUID(folderIdentifier))
+            if (isUUID(folderId))
             {
-                rootFolder = web.getFolderById(folderIdentifier);
+                rootFolder = web.getFolderById(folderId);
             }
-            else /*(isUrl(folderIdentifier, UrlType.Relative))*/
+            else if (isUrl(folderId, UrlType.Relative))
             {
-                rootFolder = web.getFolderByServerRelativeUrl(folderIdentifier);
+                rootFolder = web.getFolderByServerRelativeUrl(folderId);
             }
-
+            else
+            {
+                throw new TypeError("folderIdentifier is not a valid type");
+            }
         }
 
         const buildTree: PnpActionFunction<IFolder, TreeContext> = async function ()
@@ -72,10 +75,10 @@ export function useFolderTree(
 
         return createInvokable(rootFolder, buildTree);
 
-    }, [options?.list, folderIdentifier]);
+    }, [options?.list, folderId]);
 
 
-    const _mergedDeps = mergeDependencies([folderIdentifier, options?.list], deps);
+    const _mergedDeps = mergeDependencies([folderId, options?.list], deps);
 
     useRequestEffect(invokableFactory, setFolderTree, options, _mergedDeps);
 

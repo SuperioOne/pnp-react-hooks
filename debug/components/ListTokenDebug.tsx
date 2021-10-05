@@ -3,7 +3,7 @@ import { useListChangeToken } from "../../src";
 
 export function ListTokenDebug()
 {
-    const token = useListChangeToken("Test List", {});
+    const token = useListChangeToken("Test List");
     const [counter, setCounter] = React.useState<number>(0);
 
     React.useEffect(() =>
@@ -11,7 +11,7 @@ export function ListTokenDebug()
         const eventHandler = () => setCounter(counter + 1);
 
         console.debug(`render count: ${counter}`);
-        console.debug(`Token: ${token}`);
+        console.debug(token);
 
         window.addEventListener("render", eventHandler, false);
 

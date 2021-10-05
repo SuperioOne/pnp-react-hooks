@@ -7,6 +7,7 @@ export { errorHandler } from "./errorHandler";
 export { insertCacheOptions } from "./insertCacheOptions";
 export { insertODataQuery } from "./insertODataQuery";
 export { isEmail } from "./isEmail";
+export { isODataQueryable, isODataQueryableCollection, isReactDependencyList } from "./typeGuards";
 export { isUUID } from "./isUUID";
 export { isUrl, UrlType } from "./isUrl";
 export { mergeDependencies } from "./mergeDependencies";
