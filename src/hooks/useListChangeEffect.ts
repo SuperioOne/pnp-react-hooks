@@ -90,42 +90,49 @@ export function useListChangeEffect(
                     ? { ...globalOptions, ...options }
                     : globalOptions;
 
-                const web = resolveWeb(mergedOptions);
-                const spList = resolveList(web, list)
-                    .select(
-                        "CurrentChangeToken",
-                        "ID",
-                        "LastItemDeletedDate",
-                        "LastItemModifiedDate",
-                        "LastItemUserModifiedDate");
+                try
+                {
+                    const web = resolveWeb(mergedOptions);
+                    const spList = resolveList(web, list)
+                        .select(
+                            "CurrentChangeToken",
+                            "ID",
+                            "LastItemDeletedDate",
+                            "LastItemModifiedDate",
+                            "LastItemUserModifiedDate");
 
 
-                const observer: NextObserver<IChangeTokenInfo> = {
-                    next: (newToken) =>
-                    {
-                        if (!shallowEqual(newToken?.LastChanges, _token.current?.LastChanges))
+                    const observer: NextObserver<IChangeTokenInfo> = {
+                        next: (newToken) =>
                         {
-                            _token.current = newToken;
-                            action(newToken);
-                        }
-                    },
-                    complete: _cleanup,
-                    error: (err: Error) => errorHandler(err, mergedOptions)
-                };
+                            if (!shallowEqual(newToken?.LastChanges, _token.current?.LastChanges))
+                            {
+                                _token.current = newToken;
+                                action(newToken);
+                            }
+                        },
+                        complete: _cleanup,
+                        error: (err: Error) => errorHandler(err, mergedOptions)
+                    };
 
-                // if observable is null or interval is changed register a new one.
-                if (!_observable.current || _innerState.current.interval !== interval)
-                    _observable.current = timer(1, interval);
+                    // if observable is null or interval is changed register a new one.
+                    if (!_observable.current || _innerState.current.interval !== interval)
+                        _observable.current = timer(1, interval);
 
-                const newSubscription = _observable.current
-                    .pipe(
-                        exhaustMap(() => from(_getToken(spList))),
-                        share()
-                    )
-                    .subscribe(observer);
+                    const newSubscription = _observable.current
+                        .pipe(
+                            exhaustMap(() => from(_getToken(spList))),
+                            share()
+                        )
+                        .subscribe(observer);
 
-                _cleanup();
-                _subscription.current = newSubscription;
+                    _cleanup();
+                    _subscription.current = newSubscription;
+                }
+                catch (err)
+                {
+                    errorHandler(err, mergedOptions);
+                }
             }
         }
 

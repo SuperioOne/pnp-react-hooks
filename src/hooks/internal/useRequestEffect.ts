@@ -39,7 +39,6 @@ export function useRequestEffect<
 
     useEffect(() =>
     {
-        // TODO: Error handling
         setTimeout(async () => 
         {
             const webOption = options?.web ?? globalOptions?.web;
@@ -53,30 +52,37 @@ export function useRequestEffect<
                     ? { ...globalOptions, ...options }
                     : globalOptions;
 
-                _cleanup();
-
-                if (mergedOptions?.loadActionOption === LoadActionMode.ClearPrevious)
+                try
                 {
-                    stateAction(undefined);
-                }
+                    _cleanup();
 
-                const observer: NextObserver<TReturn> = {
-                    next: stateAction,
-                    complete: _cleanup,
-                    error: (err: Error) =>
+                    if (mergedOptions?.loadActionOption === LoadActionMode.ClearPrevious)
                     {
-                        stateAction(null);
-                        errorHandler(err, mergedOptions);
+                        stateAction(undefined);
                     }
-                };
 
-                const web = resolveWeb(mergedOptions);
-                const invokeable = await invokableFactory(web);
+                    const observer: NextObserver<TReturn> = {
+                        next: stateAction,
+                        complete: _cleanup,
+                        error: (err: Error) =>
+                        {
+                            stateAction(null);
+                            errorHandler(err, mergedOptions);
+                        }
+                    };
 
-                _subscription.current = from(invokeable())
-                    .subscribe(observer);
+                    const web = resolveWeb(mergedOptions);
+                    const invokeable = await invokableFactory(web);
+
+                    _subscription.current = from(invokeable())
+                        .subscribe(observer);
+                }
+                catch (err)
+                {
+                    errorHandler(err, mergedOptions);
+                }
             }
-
+            
             _innerState.current = {
                 externalDependencies: deps,
                 webOptions: webOption

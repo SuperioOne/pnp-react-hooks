@@ -36,7 +36,6 @@ export function useQueryEffect<
 
     useEffect(() =>
     {
-        // TODO: Error handling
         setTimeout(async () =>
         {
             const query = options?.query;
@@ -52,39 +51,45 @@ export function useQueryEffect<
                     ? { ...globalOptions, ...options }
                     : globalOptions;
 
-                _cleanup();
-
-                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                try
                 {
-                    stateAction(undefined);
-                }
+                    _cleanup();
 
-                const observer: NextObserver<TReturn> = {
-                    next: stateAction,
-                    complete: _cleanup,
-                    error: (err: Error) =>
+                    if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
                     {
-                        stateAction(null);
-                        errorHandler(err, mergedOptions);
+                        stateAction(undefined);
                     }
-                };
 
-                const web = resolveWeb(mergedOptions);
-                const invokeable = await invokableFactory(web);
+                    const observer: NextObserver<TReturn> = {
+                        next: stateAction,
+                        complete: _cleanup,
+                        error: (err: Error) =>
+                        {
+                            stateAction(null);
+                            errorHandler(err, mergedOptions);
+                        }
+                    };
 
-                insertODataQuery(invokeable, query);
-                insertCacheOptions(invokeable, mergedOptions);
+                    const web = resolveWeb(mergedOptions);
+                    const invokeable = await invokableFactory(web);
 
-                _subscription.current = from(invokeable())
-                    .subscribe(observer);
+                    insertODataQuery(invokeable, query);
+                    insertCacheOptions(invokeable, mergedOptions);
+
+                    _subscription.current = from(invokeable())
+                        .subscribe(observer);
+                }
+                catch (err)
+                {
+                    errorHandler(err, mergedOptions);
+                }
             }
-
+            
             _innerState.current = {
                 externalDependencies: deps,
                 query: query,
                 webOptions: webOption
             };
-
         }, 0);
     });
 }

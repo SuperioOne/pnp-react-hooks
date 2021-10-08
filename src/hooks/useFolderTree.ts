@@ -46,8 +46,7 @@ export function useFolderTree(
 
     useEffect(() =>
     {
-        // TODO: Error handling
-        setTimeout(async () =>
+        setTimeout(() =>
         {
             const fileQuery = options?.fileQuery;
             const folderFilter = options?.folderFilter;
@@ -63,100 +62,107 @@ export function useFolderTree(
 
             if (shouldUpdate)
             {
-                // reset to home path if some state changed but current root path is still same
-                if (state.currentFolderUrl === _innerState.current.folderUrl)
-                {
-                    path = rootFolderUrl;
-                }
-
-                assert(typeof path === "string" && isUrl(path, UrlType.Relative), "path value is not valid");
-
                 const mergedOptions = options
                     ? { ...globalOptions, ...options }
                     : globalOptions;
 
-                _cleanup();
-
-                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                try
                 {
-                    dispatch({ type: ActionTypes.Reset, resetValue: undefined });
-                }
-
-                const observer: NextObserver<TreeContext> = {
-                    next: (tree) =>
+                    // reset to home path if some state changed but current root path is still same
+                    if (state.currentFolderUrl === _innerState.current.folderUrl)
                     {
-                        dispatch({ type: ActionTypes.NewTreeResult, context: tree, currentPath: path });
-                        state.callback?.();
-                    },
-                    complete: _cleanup,
-                    error: (err: Error) =>
-                    {
-                        dispatch({ type: ActionTypes.Reset, resetValue: null });
-                        errorHandler(err, mergedOptions);
-                    }
-                };
-
-                const web = resolveWeb(mergedOptions);
-                const rootFolder = web.getFolderByServerRelativePath(path);
-
-                const getFolderTree = async (): Promise<TreeContext> =>
-                {
-                    assertString(path, "Path value is empty or null.");
-
-                    const filesReq = insertODataQuery(rootFolder.files, fileQuery);
-                    const subFolderReq = rootFolder.folders;
-                    const isRootCall = compareURL(path, rootFolderUrl);
-
-                    if (folderFilter)
-                    {
-                        subFolderReq.filter(folderFilter);
+                        path = rootFolderUrl;
                     }
 
-                    insertCacheOptions(filesReq, mergedOptions);
-                    insertCacheOptions(subFolderReq, mergedOptions);
-                    insertCacheOptions(rootFolder, mergedOptions);
+                    assert(typeof path === "string" && isUrl(path, UrlType.Relative), "path value is not valid");
 
-                    const [files, subFolders, rootInfo, parentPath] = await Promise.all([
+                    _cleanup();
 
-                        filesReq.get(),
-                        subFolderReq.get(),
-                        rootFolder.get(),
-                        isRootCall ? undefined : rootFolder.parentFolder.serverRelativeUrl.get()
-                    ]);
-
-                    let upCallback: RootChangeCallback | undefined = undefined;
-
-                    if (!isRootCall)
+                    if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
                     {
-                        upCallback = (c) => dispatch({
-                            type: ActionTypes.ChangePath,
-                            callback: c,
-                            path: parentPath
-                        });
+                        dispatch({ type: ActionTypes.Reset, resetValue: undefined });
                     }
 
-                    return {
-                        files: files,
-                        folders: subFolders.map(f => ({
-                            ...f,
-                            setAsRoot: (c) => dispatch({
-                                type: ActionTypes.ChangePath,
-                                path: f.ServerRelativeUrl,
-                                callback: c
-                            })
-                        })),
-                        root: rootInfo,
-                        home: (c) => dispatch({
-                            type: ActionTypes.ChangePath,
-                            callback: c,
-                            path: rootFolderUrl
-                        }),
-                        up: upCallback,
+                    const observer: NextObserver<TreeContext> = {
+                        next: (tree) =>
+                        {
+                            dispatch({ type: ActionTypes.NewTreeResult, context: tree, currentPath: path });
+                            state.callback?.();
+                        },
+                        complete: _cleanup,
+                        error: (err: Error) =>
+                        {
+                            dispatch({ type: ActionTypes.Reset, resetValue: null });
+                            errorHandler(err, mergedOptions);
+                        }
                     };
-                };
 
-                _subscription.current = from(getFolderTree())
-                    .subscribe(observer);
+                    const web = resolveWeb(mergedOptions);
+                    const rootFolder = web.getFolderByServerRelativePath(path);
+
+                    const getFolderTree = async (): Promise<TreeContext> =>
+                    {
+                        assertString(path, "Path value is empty or null.");
+
+                        const filesReq = insertODataQuery(rootFolder.files, fileQuery);
+                        const subFolderReq = rootFolder.folders;
+                        const isRootCall = compareURL(path, rootFolderUrl);
+
+                        if (folderFilter)
+                        {
+                            subFolderReq.filter(folderFilter);
+                        }
+
+                        insertCacheOptions(filesReq, mergedOptions);
+                        insertCacheOptions(subFolderReq, mergedOptions);
+                        insertCacheOptions(rootFolder, mergedOptions);
+
+                        const [files, subFolders, rootInfo, parentPath] = await Promise.all([
+
+                            filesReq.get(),
+                            subFolderReq.get(),
+                            rootFolder.get(),
+                            isRootCall ? undefined : rootFolder.parentFolder.serverRelativeUrl.get()
+                        ]);
+
+                        let upCallback: RootChangeCallback | undefined = undefined;
+
+                        if (!isRootCall)
+                        {
+                            upCallback = (c) => dispatch({
+                                type: ActionTypes.ChangePath,
+                                callback: c,
+                                path: parentPath
+                            });
+                        }
+
+                        return {
+                            files: files,
+                            folders: subFolders.map(f => ({
+                                ...f,
+                                setAsRoot: (c) => dispatch({
+                                    type: ActionTypes.ChangePath,
+                                    path: f.ServerRelativeUrl,
+                                    callback: c
+                                })
+                            })),
+                            root: rootInfo,
+                            home: (c) => dispatch({
+                                type: ActionTypes.ChangePath,
+                                callback: c,
+                                path: rootFolderUrl
+                            }),
+                            up: upCallback,
+                        };
+                    };
+
+                    _subscription.current = from(getFolderTree())
+                        .subscribe(observer);
+                }
+                catch (err)
+                {
+                    errorHandler(err, mergedOptions);
+                }
             }
 
             _innerState.current = {

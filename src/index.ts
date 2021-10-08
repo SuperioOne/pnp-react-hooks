@@ -44,5 +44,4 @@ export { useWebInfo } from "./hooks/useWebInfo";
 export { useWebProperties } from "./hooks/useWebProperties";
 
 // TODO: assert error message system
-// TODO: effect runs doesn't handle some exception cases
 // TODO: invokable factory type safety cannot be validated in compiler

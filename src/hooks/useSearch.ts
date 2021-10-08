@@ -64,61 +64,68 @@ export function useSearch(
                 ? { ...globalOptions, ...options }
                 : globalOptions;
 
-            _cleanup();
-
-            if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+            try
             {
-                dispatch({
-                    type: ActionTypes.NewSearchResult,
-                    userResult: undefined,
-                    pnpResult: searchState.pnpResult
-                });
-            }
+                _cleanup();
 
-            const observer: CompletionObserver<SearchResults> = {
-                complete: _cleanup,
-                error: (err: Error) =>
+                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
                 {
-                    dispatch({ type: ActionTypes.Reset, resetValue: null });
-                    errorHandler(err, mergedOptions);
-                }
-            };
-
-            let resultPromise: Promise<SearchResults>;
-
-            if (pageChanged)
-            {
-                assert(searchState.pnpResult, "search result object is undefined.");
-
-                observer.next = data =>
-                {
-                    searchState.callback?.();
                     dispatch({
                         type: ActionTypes.NewSearchResult,
-                        pnpResult: data,
-                        userResult: _createSPSearchResult(data, searchState.currentPage),
-                        pageNo: searchState.currentPage
+                        userResult: undefined,
+                        pnpResult: searchState.pnpResult
                     });
+                }
+
+                const observer: CompletionObserver<SearchResults> = {
+                    complete: _cleanup,
+                    error: (err: Error) =>
+                    {
+                        dispatch({ type: ActionTypes.Reset, resetValue: null });
+                        errorHandler(err, mergedOptions);
+                    }
                 };
 
-                resultPromise = searchState.pnpResult.getPage(searchState.currentPage);
+                let resultPromise: Promise<SearchResults>;
+
+                if (pageChanged)
+                {
+                    assert(searchState.pnpResult, "search result object is undefined.");
+
+                    observer.next = data =>
+                    {
+                        searchState.callback?.();
+                        dispatch({
+                            type: ActionTypes.NewSearchResult,
+                            pnpResult: data,
+                            userResult: _createSPSearchResult(data, searchState.currentPage),
+                            pageNo: searchState.currentPage
+                        });
+                    };
+
+                    resultPromise = searchState.pnpResult.getPage(searchState.currentPage);
+                }
+                else
+                {
+                    observer.next = data => dispatch({
+                        type: ActionTypes.NewSearchResult,
+                        pnpResult: data,
+                        userResult: _createSPSearchResult(data, INITIAL_PAGE_INDEX),
+                        pageNo: INITIAL_PAGE_INDEX
+                    });
+
+                    resultPromise = mergedOptions?.useCache === true
+                        ? sp.searchWithCaching(searchOptions)
+                        : sp.search(searchOptions);
+                }
+
+                _subscription.current = from(resultPromise)
+                    .subscribe(observer);
             }
-            else
+            catch (err)
             {
-                observer.next = data => dispatch({
-                    type: ActionTypes.NewSearchResult,
-                    pnpResult: data,
-                    userResult: _createSPSearchResult(data, INITIAL_PAGE_INDEX),
-                    pageNo: INITIAL_PAGE_INDEX
-                });
-
-                resultPromise = mergedOptions?.useCache === true
-                    ? sp.searchWithCaching(searchOptions)
-                    : sp.search(searchOptions);
+                errorHandler(err, mergedOptions);
             }
-
-            _subscription.current = from(resultPromise)
-                .subscribe(observer);
         }
 
         _innerState.current = {

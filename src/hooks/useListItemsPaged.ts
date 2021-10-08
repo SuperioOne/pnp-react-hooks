@@ -62,35 +62,31 @@ export function useListItemsPaged<T>(
 
     const getNext: NextPageDispatch = useCallback((callback) =>
     {
-        setTimeout(async () =>
+        if (pageState?.pagedResult)
         {
-            if (pageState?.pagedResult)
-            {
-                _cleanup();
+            _cleanup();
 
-                const exceptionOpt = options?.exception
-                    ? options
-                    : globalOptions;
+            const exceptionOpt = options?.exception
+                ? options
+                : globalOptions;
 
-                const observer: NextObserver<PagedItemCollection<T[]>> = {
-                    next: _insertNewPage,
-                    complete: () =>
-                    {
-                        _cleanup();
-                        callback?.();
-                    },
-                    error: (err: Error) =>
-                    {
-                        _insertNewPage(null);
-                        errorHandler(err, exceptionOpt);
-                    }
-                };
+            const observer: NextObserver<PagedItemCollection<T[]>> = {
+                next: _insertNewPage,
+                complete: () =>
+                {
+                    _cleanup();
+                    callback?.();
+                },
+                error: (err: Error) =>
+                {
+                    _insertNewPage(null);
+                    errorHandler(err, exceptionOpt);
+                }
+            };
 
-                _subscription.current = from(pageState.pagedResult.getNext())
-                    .subscribe(observer);
-            }
-        }, 0);
-
+            _subscription.current = from(pageState.pagedResult.getNext())
+                .subscribe(observer);
+        }
     }, [pageState, options, globalOptions, _insertNewPage, _cleanup]);
 
     const invokableFactory = useCallback(async (web: IWeb) =>
