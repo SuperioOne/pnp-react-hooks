@@ -12,6 +12,8 @@ export { useCurrentUserHasPermission } from "./hooks/useCurrentUserHasPermission
 export { useFeatures } from "./hooks/useFeatures";
 export { useField } from "./hooks/useField";
 export { useFields } from "./hooks/useFields";
+export { useFile } from "./hooks/useFile";
+export { useFolder } from "./hooks/useFolder";
 export { useFolderTree } from "./hooks/useFolderTree";
 export { useGroup } from "./hooks/useGroup";
 export { useGroupUser } from "./hooks/useGroupUser";
