@@ -16,7 +16,7 @@ export interface SearchOptions extends RenderOptions, CacheOptions, ExceptionOpt
     useCache?: boolean;
 }
 
-export type GetPageDispatch = (pageNo: number) => void;
+export type GetPageDispatch = (pageNo: number, callback?: () => void) => void;
 
 export function useSearch(
     searchOptions: ISearchQuery | string,
@@ -35,9 +35,10 @@ export function useSearch(
 
     const _subscription = useRef<Nullable<Subscription>>(undefined);
 
-    const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number) => dispatch({
+    const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number, callback?: () => void) => dispatch({
         type: ActionTypes.ChangePageNo,
-        pageNo: pageNo
+        pageNo: pageNo,
+        callback: callback
     }), []);
 
     const _cleanup = useCallback(() =>
@@ -89,12 +90,16 @@ export function useSearch(
             {
                 assert(searchState.pnpResult, "search result object is undefined.");
 
-                observer.next = data => dispatch({
-                    type: ActionTypes.NewSearchResult,
-                    pnpResult: data,
-                    userResult: _createSPSearchResult(data, searchState.currentPage),
-                    pageNo: searchState.currentPage
-                });
+                observer.next = data =>
+                {
+                    searchState.callback?.();
+                    dispatch({
+                        type: ActionTypes.NewSearchResult,
+                        pnpResult: data,
+                        userResult: _createSPSearchResult(data, searchState.currentPage),
+                        pageNo: searchState.currentPage
+                    });
+                };
 
                 resultPromise = searchState.pnpResult.getPage(searchState.currentPage);
             }
@@ -122,7 +127,7 @@ export function useSearch(
             searchOptions: searchOptions
         };
 
-    }, [searchState.currentPage, searchOptions, searchState.pnpResult, options, globalOptions, deps, _cleanup]);
+    }, [searchState, searchOptions, options, globalOptions, deps, _cleanup]);
 
     return [searchState.userResult, _getPageDispatch];
 }
@@ -133,14 +138,14 @@ const _reducer = (state: SearchState, action: SearchAction): SearchState =>
     {
         case ActionTypes.ChangePageNo:
             if (action.pageNo < INITIAL_PAGE_INDEX)
-                return { ...state, currentPage: INITIAL_PAGE_INDEX };
+                return { ...state, currentPage: INITIAL_PAGE_INDEX, callback: action.callback };
             else
-                return { ...state, currentPage: action.pageNo };
+                return { ...state, currentPage: action.pageNo, callback: action.callback };
         case ActionTypes.Reset:
             return {
                 currentPage: INITIAL_PAGE_INDEX,
                 pnpResult: action.resetValue,
-                userResult: action.resetValue
+                userResult: action.resetValue,
             };
         case ActionTypes.NewSearchResult:
             return {
@@ -178,6 +183,7 @@ interface SearchState
     pnpResult?: SearchResults | null;
     currentPage: number;
     userResult?: SpSearchResult | null;
+    callback?: () => void;
 }
 
 interface Action<T extends ActionTypes>
@@ -193,6 +199,7 @@ interface ResetAction extends Action<ActionTypes.Reset>
 interface ChangePageNoAction extends Action<ActionTypes.ChangePageNo>
 {
     pageNo: number;
+    callback?: () => void;
 }
 
 interface NewResultsAction extends Action<ActionTypes.NewSearchResult>

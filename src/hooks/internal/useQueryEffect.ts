@@ -7,7 +7,6 @@ import { IWeb } from "@pnp/sp/webs/types";
 import { shallowEqual, resolveWeb, insertODataQuery, insertCacheOptions, errorHandler, deepCompareQuery, compareTuples } from "../../utils";
 import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
 
-
 export function useQueryEffect<
     TQuery extends ODataQueryable | ODataQueryableCollection,
     TReturn,

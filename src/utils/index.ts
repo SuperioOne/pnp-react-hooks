@@ -16,4 +16,6 @@ export { resolveList } from "./resolveList";
 export { resolveScope } from "./resolveScope";
 export { resolveUser } from "./resolveUser";
 export { resolveWeb } from "./resolveWeb";
+export { resolveFolder } from "./resolveFolder";
 export { shallowEqual } from "./shallowEqual";
+export { compareURL } from "./compareURL";

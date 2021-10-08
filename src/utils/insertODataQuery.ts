@@ -24,11 +24,11 @@ export function insertODataQuery<T extends SharepointQueryable>(instance: T, que
         {
             instance.top(query.top);
         }
+    }
 
-        if (query.filter)
-        {
-            instance.filter(query.filter);
-        }
+    if (_isFilterable(instance) && query.filter)
+    {
+        instance.filter(query.filter);
     }
 
     if (query.expand && query.expand.length > 0)
@@ -48,8 +48,14 @@ function _isQueryableCollection(instance: Readonly<SharepointQueryable>): instan
 {
     const queryableCollection = instance as _SharePointQueryableCollection;
 
-    return queryableCollection.skip !== undefined
-        && queryableCollection.orderBy !== undefined
-        && queryableCollection.top !== undefined
-        && queryableCollection.filter !== undefined;
+    return typeof queryableCollection.skip === "function"
+        && typeof queryableCollection.orderBy === "function"
+        && typeof queryableCollection.top === "function"
+        && typeof queryableCollection.filter === "function";
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function _isFilterable(instance: any): instance is { filter: (f: string) => unknown }
+{
+    return typeof instance.filter === "function";
 }
