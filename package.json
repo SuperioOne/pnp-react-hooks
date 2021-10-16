@@ -20,7 +20,7 @@
     "react",
     "sp"
   ],
-  "author": "",
+  "author": "Timur Olur",
   "license": "ISC",
   "devDependencies": {
     "@pnp/nodejs": "^2.9.0",

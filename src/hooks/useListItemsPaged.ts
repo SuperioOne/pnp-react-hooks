@@ -62,7 +62,7 @@ export function useListItemsPaged<T>(
 
     const getNext: NextPageDispatch = useCallback((callback) =>
     {
-        if (pageState?.pagedResult)
+        if (pageState?.pagedResult && options?.disabled !== true)
         {
             _cleanup();
 

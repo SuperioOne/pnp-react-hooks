@@ -42,48 +42,51 @@ export function useSearchUser(
 
     useEffect(() =>
     {
-        const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
-            || !shallowEqual(_innerState.current.searchOptions, searchOptions);
-
-        if (optionsChanged)
+        if (options?.disabled !== true)
         {
-            const mergedOptions = options
-                ? { ...globalOptions, ...options }
-                : globalOptions;
+            const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
+                || !shallowEqual(_innerState.current.searchOptions, searchOptions);
 
-            _cleanup();
-
-            if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+            if (optionsChanged)
             {
-                setProfiles(undefined);
+                const mergedOptions = options
+                    ? { ...globalOptions, ...options }
+                    : globalOptions;
+
+                _cleanup();
+
+                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                {
+                    setProfiles(undefined);
+                }
+
+                const observer: NextObserver<IPeoplePickerEntity[]> = {
+                    next: setProfiles,
+                    complete: _cleanup,
+                    error: (err: Error) =>
+                    {
+                        setProfiles(null);
+                        errorHandler(err, mergedOptions);
+                    }
+                };
+
+                const opt = typeof searchOptions === "string"
+                    ? {
+                        ...DEFAULT_OPTIONS,
+                        QueryString: searchOptions
+                    }
+                    : searchOptions;
+
+                _subscription.current = from(sp.profiles.clientPeoplePickerSearchUser(opt))
+                    .subscribe(observer);
             }
 
-            const observer: NextObserver<IPeoplePickerEntity[]> = {
-                next: setProfiles,
-                complete: _cleanup,
-                error: (err: Error) =>
-                {
-                    setProfiles(null);
-                    errorHandler(err, mergedOptions);
-                }
+            _innerState.current = {
+                externalDependencies: deps,
+                searchOptions: searchOptions
             };
-
-            const opt = typeof searchOptions === "string"
-                ? {
-                    ...DEFAULT_OPTIONS,
-                    QueryString: searchOptions
-                }
-                : searchOptions;
-
-            _subscription.current = from(sp.profiles.clientPeoplePickerSearchUser(opt))
-                .subscribe(observer);
         }
 
-        _innerState.current = {
-            externalDependencies: deps,
-            searchOptions: searchOptions
-        };
-        
     }, [searchOptions, options, globalOptions, deps, _cleanup]);
 
     return profiles;

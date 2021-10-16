@@ -70,7 +70,7 @@ export function useListChangeEffect(
             options = pOptions;
         }
 
-        if (options?.disabled === false)
+        if (options?.disabled === true)
         {
             _cleanup();
         }

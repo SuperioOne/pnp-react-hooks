@@ -34,12 +34,23 @@ export function useSearch(
     });
 
     const _subscription = useRef<Nullable<Subscription>>(undefined);
+    const _disabled = useRef<boolean | undefined>(options?.disabled);
 
-    const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number, callback?: () => void) => dispatch({
-        type: ActionTypes.ChangePageNo,
-        pageNo: pageNo,
-        callback: callback
-    }), []);
+    const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number, callback?: () => void) =>
+    {
+        if (_disabled.current !== true)
+        {
+            dispatch({
+                type: ActionTypes.ChangePageNo,
+                pageNo: pageNo,
+                callback: callback
+            });
+        }
+        else
+        {
+            console.warn("useSearch hook is disabled. Hook will not load requested page.");
+        }
+    }, []);
 
     const _cleanup = useCallback(() =>
     {
@@ -51,89 +62,93 @@ export function useSearch(
 
     useEffect(() =>
     {
-        const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
-            || !shallowEqual(_innerState.current.searchOptions, searchOptions);
+        _disabled.current = options?.disabled;
 
-        // page change is ignored, if options are changed 
-        const pageChanged = !optionsChanged
-            && _innerState.current.page !== searchState.currentPage;
-
-        if (optionsChanged || pageChanged)
+        if (_disabled.current !== true)
         {
-            const mergedOptions = options
-                ? { ...globalOptions, ...options }
-                : globalOptions;
+            const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
+                || !shallowEqual(_innerState.current.searchOptions, searchOptions);
 
-            try
+            // page change is ignored, if options are changed 
+            const pageChanged = !optionsChanged
+                && _innerState.current.page !== searchState.currentPage;
+
+            if (optionsChanged || pageChanged)
             {
-                _cleanup();
+                const mergedOptions = options
+                    ? { ...globalOptions, ...options }
+                    : globalOptions;
 
-                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                try
                 {
-                    dispatch({
-                        type: ActionTypes.NewSearchResult,
-                        userResult: undefined,
-                        pnpResult: searchState.pnpResult
-                    });
-                }
+                    _cleanup();
 
-                const observer: CompletionObserver<SearchResults> = {
-                    complete: _cleanup,
-                    error: (err: Error) =>
+                    if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
                     {
-                        dispatch({ type: ActionTypes.Reset, resetValue: null });
-                        errorHandler(err, mergedOptions);
-                    }
-                };
-
-                let resultPromise: Promise<SearchResults>;
-
-                if (pageChanged)
-                {
-                    assert(searchState.pnpResult, "search result object is undefined.");
-
-                    observer.next = data =>
-                    {
-                        searchState.callback?.();
                         dispatch({
                             type: ActionTypes.NewSearchResult,
-                            pnpResult: data,
-                            userResult: _createSPSearchResult(data, searchState.currentPage),
-                            pageNo: searchState.currentPage
+                            userResult: undefined,
+                            pnpResult: searchState.pnpResult
                         });
+                    }
+
+                    const observer: CompletionObserver<SearchResults> = {
+                        complete: _cleanup,
+                        error: (err: Error) =>
+                        {
+                            dispatch({ type: ActionTypes.Reset, resetValue: null });
+                            errorHandler(err, mergedOptions);
+                        }
                     };
 
-                    resultPromise = searchState.pnpResult.getPage(searchState.currentPage);
+                    let resultPromise: Promise<SearchResults>;
+
+                    if (pageChanged)
+                    {
+                        assert(searchState.pnpResult, "search result object is undefined.");
+
+                        observer.next = data =>
+                        {
+                            searchState.callback?.();
+                            dispatch({
+                                type: ActionTypes.NewSearchResult,
+                                pnpResult: data,
+                                userResult: _createSPSearchResult(data, searchState.currentPage),
+                                pageNo: searchState.currentPage
+                            });
+                        };
+
+                        resultPromise = searchState.pnpResult.getPage(searchState.currentPage);
+                    }
+                    else
+                    {
+                        observer.next = data => dispatch({
+                            type: ActionTypes.NewSearchResult,
+                            pnpResult: data,
+                            userResult: _createSPSearchResult(data, INITIAL_PAGE_INDEX),
+                            pageNo: INITIAL_PAGE_INDEX
+                        });
+
+                        resultPromise = mergedOptions?.useCache === true
+                            ? sp.searchWithCaching(searchOptions)
+                            : sp.search(searchOptions);
+                    }
+
+                    _subscription.current = from(resultPromise)
+                        .subscribe(observer);
                 }
-                else
+                catch (err)
                 {
-                    observer.next = data => dispatch({
-                        type: ActionTypes.NewSearchResult,
-                        pnpResult: data,
-                        userResult: _createSPSearchResult(data, INITIAL_PAGE_INDEX),
-                        pageNo: INITIAL_PAGE_INDEX
-                    });
-
-                    resultPromise = mergedOptions?.useCache === true
-                        ? sp.searchWithCaching(searchOptions)
-                        : sp.search(searchOptions);
+                    errorHandler(err, mergedOptions);
                 }
+            }
 
-                _subscription.current = from(resultPromise)
-                    .subscribe(observer);
-            }
-            catch (err)
-            {
-                errorHandler(err, mergedOptions);
-            }
+            _innerState.current = {
+                externalDependencies: deps,
+                page: searchState.currentPage,
+                searchOptions: searchOptions
+            };
         }
-
-        _innerState.current = {
-            externalDependencies: deps,
-            page: searchState.currentPage,
-            searchOptions: searchOptions
-        };
-
     }, [searchState, searchOptions, options, globalOptions, deps, _cleanup]);
 
     return [searchState.userResult, _getPageDispatch];

@@ -42,7 +42,6 @@ export function useChanges<T>(
 
     }, [options?.list]);
 
-
     const _mergedDeps = mergeDependencies([options?.list, _changeQery], deps);
 
     useRequestEffect(invokableFactory, setChanges, options, _mergedDeps);

@@ -21,7 +21,7 @@ export function useFolderTree(
     options?: FolderTreeOptions,
     deps?: React.DependencyList): Nullable<TreeContext>
 {
-    const [state, dispatch] = useReducer(_reducer, { currentFolderUrl: rootFolderUrl });
+    const [state, _dispatch] = useReducer(_reducer, { currentFolderUrl: rootFolderUrl });
 
     const globalOptions = useContext(InternalContext);
 
@@ -34,7 +34,21 @@ export function useFolderTree(
         webOptions: null
     });
 
+    const _disabled = useRef<boolean | undefined>(options?.disabled);
     const _subscription = useRef<Nullable<Subscription>>(undefined);
+
+    // dispatch proxy for disabling callbacks. Prevents any state change when hook is disabled.
+    const dispatch = useCallback((action: TreeAction) =>
+    {
+        if (_disabled.current !== true)
+        {
+            _dispatch(action);
+        }
+        else
+        {
+            console.warn("useFolderTree hook is disabled. Callback will not change any state.");
+        }
+    }, []);
 
     const _cleanup = useCallback(() =>
     {
@@ -46,7 +60,9 @@ export function useFolderTree(
 
     useEffect(() =>
     {
-        setTimeout(() =>
+        _disabled.current = options?.disabled;
+
+        if (_disabled.current !== true)
         {
             const fileQuery = options?.fileQuery;
             const folderFilter = options?.folderFilter;
@@ -68,7 +84,7 @@ export function useFolderTree(
 
                 try
                 {
-                    // reset to home path if some state changed but current root path is still same
+                    // reset to the home path, if root path is still same.
                     if (state.currentFolderUrl === _innerState.current.folderUrl)
                     {
                         path = rootFolderUrl;
@@ -173,8 +189,8 @@ export function useFolderTree(
                 initialRootUrl: rootFolderUrl,
                 webOptions: webOption
             };
-        }, 0);
-    });
+        }
+    }, [state, rootFolderUrl, options, globalOptions, deps, _cleanup, dispatch]);
 
     return state.treeContext;
 }

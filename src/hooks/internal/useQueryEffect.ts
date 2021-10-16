@@ -36,61 +36,64 @@ export function useQueryEffect<
 
     useEffect(() =>
     {
-        setTimeout(async () =>
+        if (options?.disabled !== true)
         {
-            const query = options?.query;
-            const webOption = options?.web ?? globalOptions?.web;
-
-            const shouldUpdate = !deepCompareQuery(_innerState.current.query, query)
-                || !compareTuples(_innerState.current.externalDependencies, deps)
-                || !shallowEqual(_innerState.current.webOptions, webOption);
-
-            if (shouldUpdate)
+            setTimeout(async () =>
             {
-                const mergedOptions = options
-                    ? { ...globalOptions, ...options }
-                    : globalOptions;
+                const query = options?.query;
+                const webOption = options?.web ?? globalOptions?.web;
 
-                try
+                const shouldUpdate = !deepCompareQuery(_innerState.current.query, query)
+                    || !compareTuples(_innerState.current.externalDependencies, deps)
+                    || !shallowEqual(_innerState.current.webOptions, webOption);
+
+                if (shouldUpdate)
                 {
-                    _cleanup();
+                    const mergedOptions = options
+                        ? { ...globalOptions, ...options }
+                        : globalOptions;
 
-                    if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                    try
                     {
-                        stateAction(undefined);
-                    }
+                        _cleanup();
 
-                    const observer: NextObserver<TReturn> = {
-                        next: stateAction,
-                        complete: _cleanup,
-                        error: (err: Error) =>
+                        if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
                         {
-                            stateAction(null);
-                            errorHandler(err, mergedOptions);
+                            stateAction(undefined);
                         }
-                    };
 
-                    const web = resolveWeb(mergedOptions);
-                    const invokeable = await invokableFactory(web);
+                        const observer: NextObserver<TReturn> = {
+                            next: stateAction,
+                            complete: _cleanup,
+                            error: (err: Error) =>
+                            {
+                                stateAction(null);
+                                errorHandler(err, mergedOptions);
+                            }
+                        };
 
-                    insertODataQuery(invokeable, query);
-                    insertCacheOptions(invokeable, mergedOptions);
+                        const web = resolveWeb(mergedOptions);
+                        const invokeable = await invokableFactory(web);
 
-                    _subscription.current = from(invokeable())
-                        .subscribe(observer);
+                        insertODataQuery(invokeable, query);
+                        insertCacheOptions(invokeable, mergedOptions);
+
+                        _subscription.current = from(invokeable())
+                            .subscribe(observer);
+                    }
+                    catch (err)
+                    {
+                        errorHandler(err, mergedOptions);
+                    }
                 }
-                catch (err)
-                {
-                    errorHandler(err, mergedOptions);
-                }
-            }
-            
-            _innerState.current = {
-                externalDependencies: deps,
-                query: query,
-                webOptions: webOption
-            };
-        }, 0);
+
+                _innerState.current = {
+                    externalDependencies: deps,
+                    query: query,
+                    webOptions: webOption
+                };
+            }, 0);
+        }
     });
 }
 
