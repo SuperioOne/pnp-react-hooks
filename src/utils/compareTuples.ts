@@ -22,7 +22,7 @@ export function compareTuples(left: Readonly<Nullable<unknown[]>>, right: Readon
         return false;
     }
 
-    assert(left.length === right.length, "Tuple lenghts are not same.");
+    assert(left.length === right.length, "Tuple lengths are not same.");
 
     for (let index = 0; index < left.length; index++)
     {
