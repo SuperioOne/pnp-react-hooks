@@ -1,6 +1,4 @@
-// TODO: Implement url comparison
-
 export function compareURL(left: string, right: string)
 {
-    return true;
+    return encodeURI(left).toLowerCase() === encodeURI(right).toLowerCase();
 }

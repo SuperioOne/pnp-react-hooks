@@ -15,7 +15,7 @@ export function resolveWeb(query: Nullable<WebOptions>): IWeb
     else if (typeof query?.web === "string")
     {
         assert(isUrl(query.web, UrlType.Absolute),
-            "Web parameter is not a absolute url.");
+            "Web parameter is not an absolute url.");
 
         web = Web(query.web);
     }

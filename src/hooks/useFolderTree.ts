@@ -17,11 +17,11 @@ export interface FolderTreeOptions extends ExceptionOptions, RenderOptions, WebO
 }
 
 export function useFolderTree(
-    rootFolderUrl: string,
+    rootFolderRelativeUrl: string,
     options?: FolderTreeOptions,
     deps?: React.DependencyList): Nullable<TreeContext>
 {
-    const [state, _dispatch] = useReducer(_reducer, { currentFolderUrl: rootFolderUrl });
+    const [state, _dispatch] = useReducer(_reducer, { currentFolderUrl: rootFolderRelativeUrl });
 
     const globalOptions = useContext(InternalContext);
 
@@ -70,7 +70,7 @@ export function useFolderTree(
             let path = state.currentFolderUrl;
 
             const shouldUpdate = state.currentFolderUrl !== _innerState.current.folderUrl
-                || _innerState.current.initialRootUrl !== rootFolderUrl
+                || _innerState.current.initialRootUrl !== rootFolderRelativeUrl
                 || _innerState.current.folderFilter !== folderFilter
                 || !deepCompareQuery(_innerState.current.fileQuery, fileQuery)
                 || !compareTuples(_innerState.current.externalDependencies, deps)
@@ -87,7 +87,7 @@ export function useFolderTree(
                     // reset to the home path, if root path is still same.
                     if (state.currentFolderUrl === _innerState.current.folderUrl)
                     {
-                        path = rootFolderUrl;
+                        path = rootFolderRelativeUrl;
                     }
 
                     assert(typeof path === "string" && isUrl(path, UrlType.Relative), "path value is not valid");
@@ -122,7 +122,7 @@ export function useFolderTree(
 
                         const filesReq = insertODataQuery(rootFolder.files, fileQuery);
                         const subFolderReq = rootFolder.folders;
-                        const isRootCall = compareURL(path, rootFolderUrl);
+                        const isRootCall = compareURL(path, rootFolderRelativeUrl);
 
                         if (folderFilter)
                         {
@@ -166,7 +166,7 @@ export function useFolderTree(
                             home: (c) => dispatch({
                                 type: ActionTypes.ChangePath,
                                 callback: c,
-                                path: rootFolderUrl
+                                path: rootFolderRelativeUrl
                             }),
                             up: upCallback,
                         };
@@ -186,11 +186,11 @@ export function useFolderTree(
                 fileQuery: fileQuery,
                 folderUrl: path,
                 folderFilter: folderFilter,
-                initialRootUrl: rootFolderUrl,
+                initialRootUrl: rootFolderRelativeUrl,
                 webOptions: webOption
             };
         }
-    }, [state, rootFolderUrl, options, globalOptions, deps, _cleanup, dispatch]);
+    }, [state, rootFolderRelativeUrl, options, globalOptions, deps, _cleanup, dispatch]);
 
     return state.treeContext;
 }
