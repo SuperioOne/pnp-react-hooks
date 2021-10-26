@@ -19,23 +19,33 @@ function normalizePath(pathVal)
 
 args
     .option("outDir", "Set output directory", "./package")
-    .option("srcDir", "source directory", ".")
     .option("packagejson", "Source package json file", "package.json")
 
 const options = args.parse(process.argv);
 
 const outDir = normalizePath(options.outDir);
-const srcDir = normalizePath(options.srcDir);
 const packagejson = normalizePath(options.packagejson);
 
 setTimeout(async () =>
 {
     try
     {
-        await fse.remove(outDir);
-        await fse.mkdirs(outDir);
-        await fse.copy(srcDir, outDir, { recursive: true });
-        await fse.copyFile(packagejson, outDir);
+        const omitedKeys = [
+            "devDependencies",
+            "scripts",
+            "type",
+            "engines"
+        ];
+
+        const packageInfo = await fse.readJSON(packagejson);
+
+        for (let i = 0; i < omitedKeys.length; i++)
+        {
+            const key = omitedKeys[i];
+            Reflect.deleteProperty(packageInfo, key);
+        }
+
+        await fse.writeJSON(path.join(outDir, "package.json"), packageInfo, { spaces: 4 });
     }
     catch (err)
     {

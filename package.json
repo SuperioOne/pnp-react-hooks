@@ -6,13 +6,13 @@
   "name": "pnp-react-hooks",
   "version": "0.0.0",
   "description": "PnPJS React hooks library.",
-  "main": "src/index.ts",
+  "main": "index.js",
   "scripts": {
     "build": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts",
+    "build-pack": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts && node ./scripts/omitPackageJson.js --outDir .bin/release && npm pack .bin/release --pack-destination .bin/",
     "build-debug": "node ./scripts/build.js -o .bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap",
     "build-dry": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts --dry-run",
     "build-test": "node ./scripts/build.js -o .bin/tests --includeDirs ['src/**/*','tests/**/*','.config/**/*'] --build tests/index.ts --sourceMap",
-    "build-pack": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts && node ./scripts/pack.js --outDir .bin/pack --srcDir .bin/release",
     "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*"
   },
   "keywords": [
@@ -49,9 +49,11 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@pnp/sp": "^2.9.0",
-    "react": ">=16.9.0 <18.0.0",
     "rxjs": "^7.3.0",
     "tslib": "^2.3.1"
+  },
+  "peerDependencies": {
+    "@pnp/sp": "^2.9.0",
+    "react": ">=16.9.0 <18.0.0"
   }
 }
