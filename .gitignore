@@ -2,3 +2,4 @@ node_modules
 stats.html
 .bin
 .config/msalSettings.ts
+temp

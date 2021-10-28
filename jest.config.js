@@ -1,7 +1,12 @@
 export default {
     roots: [
-        ".bin/tests"
+        "./tests/",
+        "./src/"
     ],
-    coverageDirectory: "/src/",
-    collectCoverage: true
+    extensionsToTreatAsEsm: [".ts", ".tsx"],
+    collectCoverageFrom: [
+        "src/**/*.{ts,tsx}",
+        "!<rootDir>/node_modules/"
+    ],
+    coverageDirectory: "./temp/coverage"
 };

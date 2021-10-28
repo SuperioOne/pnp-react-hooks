@@ -9,12 +9,13 @@
   "main": "index.js",
   "scripts": {
     "build": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts",
-    "build-pack": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts && node ./scripts/omitPackageJson.js --outDir .bin/release && npm pack .bin/release --pack-destination .bin/",
+    "pack": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts && node ./scripts/omitPackageJson.js --outDir .bin/release && npm pack .bin/release --pack-destination .bin/",
     "build-debug": "node ./scripts/build.js -o .bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap",
     "build-dry": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts --dry-run",
-    "build-test": "node ./scripts/build.js -o .bin/tests --includeDirs ['src/**/*','tests/**/*','.config/**/*'] --build tests/index.ts --format cjs",
     "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test-coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --collectCoverage",
+    "clean": "node ./scripts/clean.js"
   },
   "keywords": [
     "pnp",
@@ -25,6 +26,10 @@
   "author": "Timur Olur",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
     "@pnp/nodejs": "^2.9.0",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-json": "^4.1.0",
@@ -38,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
     "args": "^5.0.1",
+    "babel-jest": "^27.3.1",
     "colors": "^1.4.0",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.25.1",
@@ -46,6 +52,7 @@
     "jest": "^27.2.1",
     "jsdom": "^17.0.0",
     "react-dom": "^17.0.2",
+    "react-test-renderer": "^17.0.2",
     "rollup": "^2.56.3",
     "rollup-plugin-delete": "^2.0.0",
     "typescript": "^4.4.3"
