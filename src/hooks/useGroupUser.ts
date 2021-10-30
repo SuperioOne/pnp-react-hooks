@@ -1,3 +1,4 @@
+import "@pnp/sp/site-users";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, PnpHookOptions, ODataQueryable } from "../types";

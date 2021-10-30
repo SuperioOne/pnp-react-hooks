@@ -1,4 +1,3 @@
-import "@pnp/sp/site-users";
 import { ISiteUsers } from "@pnp/sp/site-users/types";
 import { assertString, assertID } from "./assert";
 import { isEmail } from "./isEmail";

@@ -1,10 +1,5 @@
 import { Web } from "@pnp/sp/webs";
 import { resolveFolder } from "../../src/utils/resolveFolder";
-// import { resolveGroup } from "../../src/utils/resolveGroup";
-// import { resolveList } from "../../src/utils/resolveList";
-// import { resolveScope } from "../../src/utils/resolveScope";
-// import { resolveUser } from "../../src/utils/resolveUser";
-// import { resolveWeb } from "../../src/utils/resolveWeb";
 
 test('resolveFolder by GUID', () =>
 {

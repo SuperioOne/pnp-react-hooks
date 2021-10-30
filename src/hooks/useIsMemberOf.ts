@@ -1,4 +1,5 @@
 import "@pnp/sp/site-groups";
+import "@pnp/sp/site-users";
 import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
 import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";

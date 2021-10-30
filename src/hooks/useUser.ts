@@ -1,3 +1,4 @@
+import "@pnp/sp/site-users";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
