@@ -1,6 +1,6 @@
 import { compareArray } from "../../src/utils/compareArray";
 
-test('Equal array comparison is', () =>
+test('Equal array comparison', () =>
 {
     const a = [1, 2, 3, 4, 5, 6, 7];
     const b = [1, 2, 3, 4, 5, 6, 7];
@@ -8,7 +8,7 @@ test('Equal array comparison is', () =>
     expect(compareArray(a, b)).toBe(true);
 });
 
-test('Different type array check is', () =>
+test('Different type array check', () =>
 {
     const a = ["1", 2, "3", 4, 5, 6, 7];
     const b = [1, 2, 3, 4, 5, 6, 7];
@@ -16,7 +16,7 @@ test('Different type array check is', () =>
     expect(compareArray(a, b)).toBe(false);
 });
 
-test('Different element order is', () =>
+test('Different element order', () =>
 {
     const a = [4, 5, 6, 7, 2, 3, 1];
     const b = [1, 2, 3, 4, 5, 6, 7];
@@ -24,7 +24,7 @@ test('Different element order is', () =>
     expect(compareArray(a, b)).toBe(true);
 });
 
-test('Different element(number) size is', () =>
+test('Different element(number) size', () =>
 {
     const a = [4, 5, 2, 3, 1];
     const b = [1, 2, 3, 4, 5, 7];
@@ -32,7 +32,7 @@ test('Different element(number) size is', () =>
     expect(compareArray(a, b)).toBe(false);
 });
 
-test('Different element(string) size is', () =>
+test('Different element(string) size', () =>
 {
     const a = ["4", "5", "2", "3", "1"];
     const b = ["1", "2", "3", "4", "5", "7"];
@@ -40,7 +40,7 @@ test('Different element(string) size is', () =>
     expect(compareArray(a, b)).toBe(false);
 });
 
-test('Repeating element(string) is', () =>
+test('Repeating element(string)', () =>
 {
     const a = ["4", "1", "5", "1", "2", "3", "1"];
     const b = ["4", "1", "5", "1", "2", "3", "1"];
@@ -48,9 +48,25 @@ test('Repeating element(string) is', () =>
     expect(compareArray(a, b)).toBe(true);
 });
 
-test('Same reference is', () =>
+test('Same reference', () =>
 {
     const a = ["4", "1", "5", "1", "2", "3", "1"];
 
     expect(compareArray(a, a)).toBe(true);
+});
+
+test('null reference', () =>
+{
+    const a = ["4", "1", "5", "1", "2", "3", "1"];
+    const b = null;
+
+    expect(compareArray(a, b)).toBe(false);
+});
+
+test('undefined value', () =>
+{
+    const a = ["4", "1", "5", "1", "2", "3", "1"];
+    const b = undefined;
+
+    expect(compareArray(a, b)).toBe(false);
 });

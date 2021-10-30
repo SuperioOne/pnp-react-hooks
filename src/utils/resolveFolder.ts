@@ -1,6 +1,7 @@
+import "@pnp/sp/folders";
 import { IWeb } from "@pnp/sp/webs";
-import { isUrl, UrlType } from "./isUrl";
 import { isUUID } from "./isUUID";
+import { isUrl, UrlType } from "./isUrl";
 
 export function resolveFolder(web: IWeb, folderId: string)
 {

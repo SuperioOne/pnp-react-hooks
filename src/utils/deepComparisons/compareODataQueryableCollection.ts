@@ -8,5 +8,6 @@ export function compareODataQueryableCollection(left?: ODataQueryableCollection,
             && left?.orderBy === right?.orderBy
             && left?.orderyByAscending === right?.orderyByAscending
             && left?.skip === right?.skip
+            && left?.filter === right?.filter
         );
 }

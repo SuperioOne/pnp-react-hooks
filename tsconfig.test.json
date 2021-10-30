@@ -1,13 +1,15 @@
 {
     "compilerOptions": {
         "alwaysStrict": true,
-        "module": "ESNext",
+        "module": "CommonJs",
         "target": "ESNext",
         "jsx": "react",
         "strictFunctionTypes": true,
         "declaration": true,
         "moduleResolution": "Node",
         "strictNullChecks": true,
+        "esModuleInterop": true,
+        "allowJs": true
     },
     "exclude": [
         "node_modules",
