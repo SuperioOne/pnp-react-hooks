@@ -1,12 +1,17 @@
 import "@pnp/sp/site-groups";
 import "@pnp/sp/site-users";
-import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
+import { ExceptionOptions, RenderOptions, WebOptions } from "../types/options";
 import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { assertID, assertString, createInvokable, mergeDependencies, resolveUser } from "../utils";
-import { useState, useCallback } from "react";
+import { Nullable } from "../types/utilityTypes";
+import { PnpActionFunction } from "../types/PnpActionFunction";
+import { assertID, assertString } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveUser } from "../utils/resolveUser";
 import { useRequestEffect } from "./internal/useRequestEffect";
+import { useState, useCallback } from "react";
 
 export interface IsMemberOfOptions extends ExceptionOptions, RenderOptions, WebOptions
 {

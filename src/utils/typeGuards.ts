@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ODataQueryable, ODataQueryableCollection } from "../types";
+import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
 
 export function isODataQueryable(obj: unknown): obj is ODataQueryable
 {

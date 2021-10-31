@@ -1,10 +1,16 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
-import { useQueryEffect } from "./internal/useQueryEffect";
-import { FileReturnTypes, Nullable, ODataQueryable, PnpHookOptions } from "../types";
+import { FileReturnTypes } from "../types/literalTypes";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { assertID, assertString, createInvokable, mergeDependencies, resolveList } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryable } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { assertID, assertString } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveList } from "../utils/resolveList";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export interface AttachmentOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>

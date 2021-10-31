@@ -4,8 +4,13 @@ import "@pnp/sp/comments/clientside-page";
 import { IClientsidePage } from "@pnp/sp/clientside-pages/types";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { assert, createInvokable, isUrl, mergeDependencies, UrlType } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { assert } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { isUrl, UrlType } from "../utils/isUrl";
+import { mergeDependencies } from "../utils/mergeDependencies";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 

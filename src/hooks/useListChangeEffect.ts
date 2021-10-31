@@ -1,10 +1,17 @@
-import { ChangeTokenInfo, ExceptionOptions, IChangeTokenInfo, Nullable, WebOptions } from "../types";
-import { IList } from "@pnp/sp/lists/types";
-import { IWeb } from "@pnp/sp/webs/types";
-import { compareTuples, errorHandler, isReactDependencyList, resolveList, resolveWeb, shallowEqual } from "../utils";
 import { useCallback, useEffect, useRef, useContext } from "react";
+import { shallowEqual } from "../utils/shallowEqual";
+import { resolveWeb } from "../utils/resolveWeb";
+import { resolveList } from "../utils/resolveList";
+import { isReactDependencyList } from "../utils/typeGuards";
+import { errorHandler } from "../utils/errorHandler";
+import { compareTuples } from "../utils/compareTuples";
+import { WebOptions, ExceptionOptions } from "../types/options";
+import { Nullable } from "../types/utilityTypes";
 import { NextObserver, Subscription, Observable, from, timer, share, exhaustMap } from "rxjs";
 import { InternalContext } from "../context";
+import { IWeb } from "@pnp/sp/webs/types";
+import { IList } from "@pnp/sp/lists/types";
+import { IChangeTokenInfo, ChangeTokenInfo } from "../types/ChangeTokenInfo";
 
 const DEFAULT_INTERVAL = 60000;
 

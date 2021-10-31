@@ -1,9 +1,16 @@
 import "@pnp/sp/files";
-import { useQueryEffect } from "./internal/useQueryEffect";
+import { FileReturnTypes } from "../types/literalTypes";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, PnpHookOptions, FileReturnTypes } from "../types";
-import { assertString, createInvokable, isUrl, isUUID, mergeDependencies, UrlType } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryable } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { assertString } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { isUUID } from "../utils/isUUID";
+import { isUrl, UrlType } from "../utils/isUrl";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 type InstanceTypes = IFileInfo | ArrayBuffer | Blob | string;

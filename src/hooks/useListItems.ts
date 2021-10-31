@@ -1,8 +1,12 @@
 import "@pnp/sp/items";
 import { IItems } from "@pnp/sp/items/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ListOptions, Nullable, ODataQueryableCollection, FilteredODataQueryable, PnpHookOptions } from "../types";
-import { createInvokable, mergeDependencies, resolveList } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection, FilteredODataQueryable } from "../types/ODataQueryable";
+import { PnpHookOptions, ListOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveList } from "../utils/resolveList";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 

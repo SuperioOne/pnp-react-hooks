@@ -1,4 +1,4 @@
-import { ExceptionOptions } from "../types";
+import { ExceptionOptions } from "../types/options";
 
 export function errorHandler(err: Error, options: ExceptionOptions)
 {

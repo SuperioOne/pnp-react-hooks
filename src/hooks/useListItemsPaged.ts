@@ -1,12 +1,17 @@
 import "@pnp/sp/items";
-import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, FilteredODataQueryable, PnpHookOptions } from "../types";
+import { FilteredODataQueryable } from "../types/ODataQueryable";
 import { IItems, PagedItemCollection } from "@pnp/sp/items/types";
-import { resolveList, createInvokable, errorHandler, mergeDependencies } from "../utils";
+import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
+import { Nullable } from "../types/utilityTypes";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { errorHandler } from "../utils/errorHandler";
+import { from, NextObserver, Subscription } from "rxjs";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveList } from "../utils/resolveList";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { from, NextObserver, Subscription } from "rxjs";
-import { InternalContext } from "../context";
 
 const DEFAULT_PAGE_SIZE = 2000;
 

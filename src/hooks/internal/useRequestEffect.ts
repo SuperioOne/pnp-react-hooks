@@ -1,11 +1,17 @@
 import { useRef } from "react";
 import { useCallback, useContext, useEffect } from "react";
+import { shallowEqual } from "../../utils/shallowEqual";
+import { resolveWeb } from "../../utils/resolveWeb";
 import { from, NextObserver, Subscription } from "rxjs";
-import { compareTuples, errorHandler, resolveWeb, shallowEqual } from "../../utils";
+import { errorHandler } from "../../utils/errorHandler";
+import { compareTuples } from "../../utils/compareTuples";
+import { SharepointQueryable } from "../../types/SharepointQueryable";
+import { Nullable } from "../../types/utilityTypes";
 import { LoadActionMode, RenderOptions } from "../../types/options/RenderOptions";
+import { InvokableFactory } from "../../types/Invokeable";
 import { InternalContext } from "../../context";
 import { IWeb } from "@pnp/sp/webs/types";
-import { ExceptionOptions, InvokableFactory, Nullable, SharepointQueryable, WebOptions } from "../../types";
+import { ExceptionOptions, WebOptions } from "../../types/options";
 
 export interface _CustomRequestOptions extends ExceptionOptions, RenderOptions, WebOptions { }
 

@@ -1,10 +1,14 @@
 import "@pnp/sp/security";
-import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable, mergeDependencies, resolveScope } from "../utils";
-import { useState, useCallback } from "react";
 import { IRoleAssignmentInfo } from "@pnp/sp/security/types";
+import { IWeb } from "@pnp/sp/webs/types";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveScope } from "../utils/resolveScope";
 import { useQueryEffect } from "./internal/useQueryEffect";
+import { useState, useCallback } from "react";
 
 interface Scope
 {

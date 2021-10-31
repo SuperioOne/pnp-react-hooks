@@ -1,8 +1,9 @@
 import { sp } from "@pnp/sp";
-import { Nullable, WebOptions } from "../types";
-import { IWeb, Web } from "@pnp/sp/webs";
 import { isUrl, UrlType } from "./isUrl";
 import { assert } from "./assert";
+import { WebOptions } from "../types/options";
+import { Nullable } from "../types/utilityTypes";
+import { IWeb, Web } from "@pnp/sp/webs";
 
 export function resolveWeb(query: Nullable<WebOptions>): IWeb
 {

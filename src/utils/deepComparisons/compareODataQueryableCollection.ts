@@ -1,4 +1,4 @@
-import { ODataQueryableCollection } from "../../types";
+import { ODataQueryableCollection } from "../../types/ODataQueryable";
 
 export function compareODataQueryableCollection(left?: ODataQueryableCollection, right?: ODataQueryableCollection)
 {

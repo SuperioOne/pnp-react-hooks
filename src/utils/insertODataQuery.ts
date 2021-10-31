@@ -1,5 +1,7 @@
 import { _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
-import { Nullable, ODataQueryableCollection, SharepointQueryable } from "../types";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { SharepointQueryable } from "../types/SharepointQueryable";
+import { Nullable } from "../types/utilityTypes";
 
 export function insertODataQuery<T extends SharepointQueryable>(instance: T, query: Nullable<ODataQueryableCollection>): T
 {

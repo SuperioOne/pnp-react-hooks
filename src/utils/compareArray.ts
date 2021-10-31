@@ -1,4 +1,4 @@
-import { Nullable } from "../types";
+import { Nullable } from "../types/utilityTypes";
 
 /**
  * Deep comparisons between two arrays.

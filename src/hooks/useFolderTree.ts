@@ -1,12 +1,23 @@
 import "@pnp/sp/files";
 import "@pnp/sp/folders";
-import { CacheOptions, ExceptionOptions, FilteredODataQueryable, LoadActionMode, Nullable, RenderOptions, WebOptions } from "../types";
+import { ExceptionOptions, RenderOptions, WebOptions, CacheOptions, LoadActionMode } from "../types/options";
+import { FilteredODataQueryable } from "../types/ODataQueryable";
 import { IFileInfo } from "@pnp/sp/files/types";
 import { IFolderInfo } from "@pnp/sp/folders/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../context";
-import { assert, assertString, compareTuples, compareURL, deepCompareQuery, errorHandler, insertCacheOptions, insertODataQuery, isUrl, resolveWeb, shallowEqual, UrlType } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { assert, assertString } from "../utils/assert";
+import { compareTuples } from "../utils/compareTuples";
+import { compareURL } from "../utils/compareURL";
+import { deepCompareQuery } from "../utils/deepComparisons";
+import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
+import { insertCacheOptions } from "../utils/insertCacheOptions";
+import { insertODataQuery } from "../utils/insertODataQuery";
+import { isUrl, UrlType } from "../utils/isUrl";
+import { resolveWeb } from "../utils/resolveWeb";
+import { shallowEqual } from "../utils/shallowEqual";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
 
 export interface FolderTreeOptions extends ExceptionOptions, RenderOptions, WebOptions, CacheOptions

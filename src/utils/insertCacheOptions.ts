@@ -1,4 +1,6 @@
-import { CacheOptions, Nullable, SharepointQueryable } from "../types";
+import { CacheOptions } from "../types/options";
+import { Nullable } from "../types/utilityTypes";
+import { SharepointQueryable } from "../types/SharepointQueryable";
 
 export function insertCacheOptions<T extends SharepointQueryable>(instance: T, options: Nullable<CacheOptions>): SharepointQueryable
 {

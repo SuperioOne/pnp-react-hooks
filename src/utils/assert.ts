@@ -1,5 +1,5 @@
 import { AssertError } from "../errors/AssertError";
-import { Nullable } from "../types";
+import { Nullable } from "../types/utilityTypes";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function assert(condition: any, msg?: string): asserts condition

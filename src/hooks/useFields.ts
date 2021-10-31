@@ -1,9 +1,13 @@
 import "@pnp/sp/fields";
-import { useQueryEffect } from "./internal/useQueryEffect";
 import { IFields } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, mergeDependencies, resolveScope } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveScope } from "../utils/resolveScope";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export interface FieldsOptions extends PnpHookOptions<ODataQueryableCollection>

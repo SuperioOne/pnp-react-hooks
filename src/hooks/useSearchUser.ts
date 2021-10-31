@@ -1,9 +1,12 @@
 import "@pnp/sp/profiles";
-import { ExceptionOptions, LoadActionMode, Nullable, RenderOptions } from "../types";
 import { IClientPeoplePickerQueryParameters, IPeoplePickerEntity } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../context";
-import { compareTuples, errorHandler, shallowEqual } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { RenderOptions, ExceptionOptions, LoadActionMode } from "../types/options";
+import { compareTuples } from "../utils/compareTuples";
+import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
+import { shallowEqual } from "../utils/shallowEqual";
 import { sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 

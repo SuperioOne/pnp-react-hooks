@@ -4,7 +4,7 @@ import "@pnp/sp/webs";
 import { IItem } from "@pnp/sp/items/types";
 import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Override } from "../types";
+import { Override } from "../types/utilityTypes";
 import { assertID } from "./assert";
 import { resolveList } from "./resolveList";
 

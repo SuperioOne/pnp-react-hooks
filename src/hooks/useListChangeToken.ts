@@ -1,9 +1,14 @@
-import { IList } from "@pnp/sp/lists/types";
-import { IWeb } from "@pnp/sp/webs/types";
-import { ChangeTokenInfo, ExceptionOptions, IChangeTokenInfo, Nullable, WebOptions } from "../types";
-import { createInvokable, mergeDependencies, resolveList, shallowEqual } from "../utils";
 import { useState, useCallback } from "react";
 import { useRequestEffect } from "./internal/useRequestEffect";
+import { shallowEqual } from "../utils/shallowEqual";
+import { resolveList } from "../utils/resolveList";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { createInvokable } from "../utils/createInvokable";
+import { WebOptions, ExceptionOptions } from "../types/options";
+import { Nullable } from "../types/utilityTypes";
+import { IWeb } from "@pnp/sp/webs/types";
+import { IList } from "@pnp/sp/lists/types";
+import { IChangeTokenInfo, ChangeTokenInfo } from "../types/ChangeTokenInfo";
 
 export interface ListTokenOptions extends WebOptions, ExceptionOptions
 {

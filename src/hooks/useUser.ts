@@ -1,8 +1,12 @@
 import "@pnp/sp/site-users";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { createInvokable, mergeDependencies, resolveUser } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryable } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveUser } from "../utils/resolveUser";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 

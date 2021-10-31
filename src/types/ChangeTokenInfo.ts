@@ -1,4 +1,4 @@
-import { IListInfo } from "@pnp/sp/lists";
+import { IListInfo } from "@pnp/sp/lists/types";
 
 export class ChangeTokenInfo implements IChangeTokenInfo
 {

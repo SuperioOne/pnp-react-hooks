@@ -1,10 +1,14 @@
 import "@pnp/sp/search";
-import { CacheOptions, ExceptionOptions, LoadActionMode, Nullable, RenderOptions } from "../types";
 import { CompletionObserver, from, Subscription } from "rxjs";
 import { ISearchQuery, ISearchResponse, ISearchResult } from "@pnp/sp/search/types";
 import { InternalContext } from "../context";
+import { Nullable } from "../types/utilityTypes";
+import { RenderOptions, CacheOptions, ExceptionOptions, LoadActionMode } from "../types/options";
 import { SearchResults } from "@pnp/sp/search";
-import { assert, compareTuples, errorHandler, shallowEqual } from "../utils";
+import { assert } from "../utils/assert";
+import { compareTuples } from "../utils/compareTuples";
+import { errorHandler } from "../utils/errorHandler";
+import { shallowEqual } from "../utils/shallowEqual";
 import { sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 

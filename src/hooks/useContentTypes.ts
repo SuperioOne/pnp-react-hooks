@@ -1,10 +1,14 @@
 import "@pnp/sp/content-types";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, mergeDependencies, resolveScope } from "../utils";
 import { useState, useCallback } from "react";
 import { IContentTypeInfo } from "@pnp/sp/content-types";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { Nullable } from "../types/utilityTypes";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveScope } from "../utils/resolveScope";
 
 export interface ItemCommentsOptions extends PnpHookOptions<ODataQueryableCollection>
 {

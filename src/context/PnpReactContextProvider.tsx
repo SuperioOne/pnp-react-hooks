@@ -1,6 +1,6 @@
 import * as React from "react";
-import { CacheOptions, ExceptionOptions, RenderOptions, WebOptions } from "../types";
-import { shallowEqual } from "../utils";
+import { CacheOptions, ExceptionOptions, RenderOptions, WebOptions } from "../types/options";
+import { shallowEqual } from "../utils/shallowEqual";
 
 export interface PnpHookGlobalOptions extends CacheOptions, ExceptionOptions, RenderOptions, WebOptions
 {   

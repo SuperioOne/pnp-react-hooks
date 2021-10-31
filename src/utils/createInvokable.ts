@@ -1,5 +1,5 @@
-import { SharepointQueryable } from "../types";
-import { PnpActionFunction } from "../types";
+import { PnpActionFunction } from "../types/PnpActionFunction";
+import { SharepointQueryable } from "../types/SharepointQueryable";
 
 export function createInvokable<TResult, TContext extends SharepointQueryable = SharepointQueryable>(instance: TContext, func?: PnpActionFunction<TContext, TResult>): TContext
 {

@@ -1,4 +1,4 @@
-import { ODataQueryable, ODataQueryableCollection } from "../../src/types";
+import { ODataQueryable, ODataQueryableCollection } from "../../src/types/ODataQueryable";
 import { compareODataQueryable } from "../../src/utils/deepComparisons/compareODataQueryable";
 import { compareODataQueryableCollection } from "../../src/utils/deepComparisons/compareODataQueryableCollection";
 

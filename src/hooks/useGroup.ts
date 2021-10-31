@@ -1,8 +1,12 @@
-import { useQueryEffect } from "./internal/useQueryEffect";
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, PnpHookOptions, ODataQueryable } from "../types";
-import { createInvokable, mergeDependencies, resolveGroup } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryable } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveGroup } from "../utils/resolveGroup";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export type GroupOptions = PnpHookOptions<ODataQueryable>;

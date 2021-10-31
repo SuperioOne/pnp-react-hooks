@@ -1,7 +1,12 @@
 import "@pnp/sp/appcatalog/web";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { assert, createInvokable, isUUID, mergeDependencies } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryable } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { assert } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { isUUID } from "../utils/isUUID";
+import { mergeDependencies } from "../utils/mergeDependencies";
 import { useCallback, useState } from "react";
 import { useQueryEffect } from "./internal/useQueryEffect";
 

@@ -1,11 +1,21 @@
 import { useRef } from "react";
 import { useCallback, useContext, useEffect } from "react";
+import { shallowEqual } from "../../utils/shallowEqual";
+import { resolveWeb } from "../../utils/resolveWeb";
+import { insertODataQuery } from "../../utils/insertODataQuery";
+import { insertCacheOptions } from "../../utils/insertCacheOptions";
 import { from, NextObserver, Subscription } from "rxjs";
+import { errorHandler } from "../../utils/errorHandler";
+import { deepCompareQuery } from "../../utils/deepComparisons";
+import { compareTuples } from "../../utils/compareTuples";
+import { SharepointQueryable } from "../../types/SharepointQueryable";
+import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable, ODataQueryableCollection } from "../../types/ODataQueryable";
+import { Nullable } from "../../types/utilityTypes";
 import { LoadActionMode } from "../../types/options/RenderOptions";
+import { InvokableFactory } from "../../types/Invokeable";
 import { InternalContext } from "../../context";
 import { IWeb } from "@pnp/sp/webs/types";
-import { shallowEqual, resolveWeb, insertODataQuery, insertCacheOptions, errorHandler, deepCompareQuery, compareTuples } from "../../utils";
-import { InvokableFactory, Nullable, ODataQueryable, ODataQueryableCollection, PnpHookOptions, SharepointQueryable } from "../../types";
 
 export function useQueryEffect<
     TQuery extends ODataQueryable | ODataQueryableCollection,

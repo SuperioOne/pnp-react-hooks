@@ -3,9 +3,14 @@ import "@pnp/sp/items";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { assertID, createInvokable, mergeDependencies, resolveList } from "../utils";
 import { useState, useCallback } from "react";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { Nullable } from "../types/utilityTypes";
+import { assertID } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveList } from "../utils/resolveList";
 
 export type ItemAttachmentsOptions = PnpHookOptions<ODataQueryableCollection>;
 

@@ -1,4 +1,4 @@
-export { ExceptionMode, LoadActionMode } from "./types";
+export { ExceptionMode, LoadActionMode } from "./types/options";
 export { PnpReactOptionProvider, PnpHookGlobalOptions } from "./context";
 
 export { useApp } from "./hooks/useApp";

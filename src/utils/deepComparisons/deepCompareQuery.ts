@@ -1,8 +1,9 @@
-import { ODataQueryableCollection, ODataQueryable, Nullable } from "../../types";
-import { compare } from "./compareT";
-import { compareODataQueryable } from "./compareODataQueryable";
-import { compareODataQueryableCollection } from "./compareODataQueryableCollection";
 import { isODataQueryableCollection, isODataQueryable } from "../typeGuards";
+import { compareODataQueryableCollection } from "./compareODataQueryableCollection";
+import { compareODataQueryable } from "./compareODataQueryable";
+import { compare } from "./compareT";
+import { ODataQueryable, ODataQueryableCollection } from "../../types/ODataQueryable";
+import { Nullable } from "../../types/utilityTypes";
 
 export function deepCompareQuery<T>(left: Nullable<T>, right: Nullable<T>)
 {

@@ -1,9 +1,13 @@
 import "@pnp/sp/navigation";
-import { useQueryEffect } from "./internal/useQueryEffect";
 import { INavNodeInfo } from "@pnp/sp/navigation/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { NavigationTypes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable, mergeDependencies } from "../utils";
+import { NavigationTypes } from "../types/literalTypes";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export interface NavigationOptions extends PnpHookOptions<ODataQueryableCollection>

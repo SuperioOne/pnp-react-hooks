@@ -1,11 +1,15 @@
 import "@pnp/sp/features/site";
 import "@pnp/sp/features/web";
-import { useQueryEffect } from "./internal/useQueryEffect";
-import { FeatureScopes, Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
+import { FeatureScopes } from "../types/literalTypes";
 import { IFeatureInfo, IFeatures } from "@pnp/sp/features/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable, mergeDependencies } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
 import { sp } from "@pnp/sp";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export interface FeaturesOptions extends PnpHookOptions<ODataQueryableCollection>

@@ -1,5 +1,5 @@
 import { Web } from "@pnp/sp/webs";
-import { WebOptions } from "../../src/types";
+import { WebOptions } from "../../src/types/options";
 import { resolveWeb } from "../../src/utils/resolveWeb";
 
 test('resolveWeb by web object', () =>

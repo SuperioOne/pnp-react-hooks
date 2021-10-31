@@ -1,9 +1,13 @@
-import { IListInfo } from "@pnp/sp/lists/types";
-import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { createInvokable, mergeDependencies, resolveList } from "../utils";
-import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
+import { useQueryEffect } from "./internal/useQueryEffect";
+import { resolveList } from "../utils/resolveList";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { createInvokable } from "../utils/createInvokable";
+import { PnpHookOptions } from "../types/options";
+import { ODataQueryable } from "../types/ODataQueryable";
+import { Nullable } from "../types/utilityTypes";
+import { IWeb } from "@pnp/sp/webs/types";
+import { IListInfo } from "@pnp/sp/lists/types";
 
 export type ListOptions = PnpHookOptions<ODataQueryable>;
 

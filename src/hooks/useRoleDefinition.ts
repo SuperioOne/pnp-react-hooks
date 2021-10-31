@@ -1,8 +1,12 @@
 import "@pnp/sp/security";
 import { IRoleDefinition, IRoleDefinitionInfo, RoleTypeKind } from "@pnp/sp/security/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryable, PnpHookOptions } from "../types";
-import { assertID, assertString, createInvokable, mergeDependencies } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryable } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { assertID, assertString } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback, useMemo } from "react";
 

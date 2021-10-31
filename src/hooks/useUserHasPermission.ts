@@ -1,9 +1,15 @@
 import "@pnp/sp/security";
 import "@pnp/sp/site-users";
-import { ExceptionOptions, Nullable, PnpActionFunction, RenderOptions, WebOptions } from "../types";
+import { ExceptionOptions, RenderOptions, WebOptions } from "../types/options";
 import { IWeb } from "@pnp/sp/webs/types";
+import { Nullable } from "../types/utilityTypes";
 import { PermissionKind } from "@pnp/sp/security/types";
-import { assertID, assertString, createInvokable, isEmail, mergeDependencies, resolveScope } from "../utils";
+import { PnpActionFunction } from "../types/PnpActionFunction";
+import { assertID, assertString } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { isEmail } from "../utils/isEmail";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveScope } from "../utils/resolveScope";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback, useMemo } from "react";
 

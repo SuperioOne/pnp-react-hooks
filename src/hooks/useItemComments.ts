@@ -1,10 +1,15 @@
 import "@pnp/sp/comments";
 import "@pnp/sp/items";
-import { useQueryEffect } from "./internal/useQueryEffect";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { assertID, createInvokable, mergeDependencies, resolveList } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { assertID } from "../utils/assert";
+import { createInvokable } from "../utils/createInvokable";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { resolveList } from "../utils/resolveList";
+import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
 export type ItemCommentsOptions = PnpHookOptions<ODataQueryableCollection>;

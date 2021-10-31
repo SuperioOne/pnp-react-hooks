@@ -1,10 +1,14 @@
-import { ExceptionOptions, Nullable, RenderOptions, WebOptions } from "../types";
-import { IChangeQuery } from "@pnp/sp/types";
-import { IList } from "@pnp/sp/lists/types";
-import { IWeb } from "@pnp/sp/webs/types";
-import { createInvokable, mergeDependencies, resolveScope, shallowEqual } from "../utils";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { useRequestEffect } from "./internal/useRequestEffect";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { shallowEqual } from "../utils/shallowEqual";
+import { resolveScope } from "../utils/resolveScope";
+import { mergeDependencies } from "../utils/mergeDependencies";
+import { createInvokable } from "../utils/createInvokable";
+import { RenderOptions, ExceptionOptions, WebOptions } from "../types/options";
+import { Nullable } from "../types/utilityTypes";
+import { IWeb } from "@pnp/sp/webs/types";
+import { IList } from "@pnp/sp/lists/types";
+import { IChangeQuery } from "@pnp/sp/types";
 
 export interface ChangesOptions extends RenderOptions, ExceptionOptions, WebOptions
 {

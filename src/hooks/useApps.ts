@@ -1,7 +1,9 @@
 import "@pnp/sp/appcatalog/web";
 import { IWeb } from "@pnp/sp/webs/types";
-import { Nullable, ODataQueryableCollection, PnpHookOptions } from "../types";
-import { createInvokable } from "../utils";
+import { Nullable } from "../types/utilityTypes";
+import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { PnpHookOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
 import { useCallback, useState } from "react";
 import { useQueryEffect } from "./internal/useQueryEffect";
 

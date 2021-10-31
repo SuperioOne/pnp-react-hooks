@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // react-reconciler shallowEqual implementation.
 
-import { Nullable } from "../types";
+import { Nullable } from "../types/utilityTypes";
 
 // Pollyfill https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
 function is(x: any, y: any)
