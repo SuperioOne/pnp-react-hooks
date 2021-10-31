@@ -8,7 +8,7 @@ import { PnpHookOptions } from "../types/options";
 import { assertString } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
 import { isUUID } from "../utils/isUUID";
-import { isUrl, UrlType } from "../utils/isUrl";
+import { isURL, UrlType } from "../utils/isURL";
 import { mergeDependencies } from "../utils/mergeDependencies";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
@@ -60,7 +60,7 @@ export function useFile(
         }
         else 
         {
-            if (isUrl(fileId, UrlType.Relative))
+            if (isURL(fileId, UrlType.Relative))
             {
                 queryInst = web.getFileByServerRelativeUrl(fileId);
             }

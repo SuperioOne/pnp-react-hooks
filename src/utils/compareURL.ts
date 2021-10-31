@@ -1,4 +1,14 @@
 export function compareURL(left: string, right: string)
 {
-    return encodeURI(left).toLowerCase() === encodeURI(right).toLowerCase();
+    const l = _removeTrailingSlash(left);
+    const r = _removeTrailingSlash(right);
+
+    return encodeURI(r).toLowerCase() === encodeURI(l).toLowerCase();
+}
+
+function _removeTrailingSlash(val: string)
+{
+    return val.lastIndexOf("/") === val.length - 1
+        ? val.substring(0, val.length - 1)
+        : val;
 }

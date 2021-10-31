@@ -15,7 +15,7 @@ import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
 import { insertCacheOptions } from "../utils/insertCacheOptions";
 import { insertODataQuery } from "../utils/insertODataQuery";
-import { isUrl, UrlType } from "../utils/isUrl";
+import { isURL, UrlType } from "../utils/isURL";
 import { resolveWeb } from "../utils/resolveWeb";
 import { shallowEqual } from "../utils/shallowEqual";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
@@ -101,7 +101,7 @@ export function useFolderTree(
                         path = rootFolderRelativeUrl;
                     }
 
-                    assert(typeof path === "string" && isUrl(path, UrlType.Relative), "path value is not valid");
+                    assert(typeof path === "string" && isURL(path, UrlType.Relative), "path value is not valid");
 
                     _cleanup();
 
