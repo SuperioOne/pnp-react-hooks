@@ -30,3 +30,9 @@ test('resolveGroup by whitespace only name', () =>
 {
     expect(() => resolveGroup(Web("http://test.com"), "      ")).toThrow();
 });
+
+test('resolveGroup by invalid type', () =>
+{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(() => resolveGroup(Web("http://test.com"), {} as any)).toThrow();
+});

@@ -31,7 +31,7 @@ export function resolveScope(web: IWeb, scopeInfo?: ScopeInfo): IWeb | IList | I
     {
         const scope = resolveList(web, scopeInfo.list);
 
-        if (scopeInfo.item)
+        if (scopeInfo.item !== undefined)
         {
             assertID(scopeInfo.item,
                 "Can't get item scope. ID is undefined or negative.");
@@ -40,6 +40,10 @@ export function resolveScope(web: IWeb, scopeInfo?: ScopeInfo): IWeb | IList | I
         }
 
         return scope;
+    }
+    else if (scopeInfo?.item !== undefined)
+    {
+        throw new Error("Item Id is defined but list Id isn't provided.");
     }
     else
     {

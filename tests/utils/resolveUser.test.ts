@@ -37,3 +37,9 @@ test('resolveUser by whitespace only name', () =>
 {
     expect(() => resolveUser(Web("http://test.com").siteUsers, "      ")).toThrow();
 });
+
+test('resolveUser by invalid type', () =>
+{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(() => resolveUser(Web("http://test.com").siteUsers, {} as any)).toThrow();
+});

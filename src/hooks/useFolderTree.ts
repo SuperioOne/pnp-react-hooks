@@ -10,7 +10,7 @@ import { Nullable } from "../types/utilityTypes";
 import { assert, assertString } from "../utils/assert";
 import { compareTuples } from "../utils/compareTuples";
 import { compareURL } from "../utils/compareURL";
-import { deepCompareQuery } from "../utils/deepComparisons";
+import { deepCompareQuery } from "../utils/deepCompareQuery";
 import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
 import { insertCacheOptions } from "../utils/insertCacheOptions";

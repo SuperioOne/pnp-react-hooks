@@ -1,6 +1,5 @@
 import { ODataQueryable, ODataQueryableCollection } from "../../src/types/ODataQueryable";
-import { compareODataQueryable } from "../../src/utils/deepComparisons/compareODataQueryable";
-import { compareODataQueryableCollection } from "../../src/utils/deepComparisons/compareODataQueryableCollection";
+import { deepCompareQuery } from "../../src/utils/deepCompareQuery";
 
 test("Query equal queryable", () =>
 {
@@ -14,7 +13,7 @@ test("Query equal queryable", () =>
         select: ["Value", "Text", "Title", "Id"]
     };
 
-    expect(compareODataQueryable(a, b)).toBe(true);
+    expect(deepCompareQuery(a, b)).toBe(true);
 });
 
 test("Query same reference", () =>
@@ -25,7 +24,7 @@ test("Query same reference", () =>
     };
     const b = a;
 
-    expect(compareODataQueryable(a, b)).toBe(true);
+    expect(deepCompareQuery(a, b)).toBe(true);
 });
 
 test("Query different properties", () =>
@@ -38,7 +37,7 @@ test("Query different properties", () =>
         select: ["Value", "Text", "Title", "Id"]
     };
 
-    expect(compareODataQueryable(a, b)).toBe(false);
+    expect(deepCompareQuery(a, b)).toBe(false);
 });
 
 test("Query different values", () =>
@@ -51,7 +50,7 @@ test("Query different values", () =>
         select: ["Value", "Text", "Title", "None"]
     };
 
-    expect(compareODataQueryable(a, b)).toBe(false);
+    expect(deepCompareQuery(a, b)).toBe(false);
 });
 
 test("Query undefined value", () =>
@@ -62,7 +61,7 @@ test("Query undefined value", () =>
 
     const b = undefined;
 
-    expect(compareODataQueryable(a, b)).toBe(false);
+    expect(deepCompareQuery(a, b)).toBe(false);
 });
 
 test("Query collection equal queries", () =>
@@ -85,7 +84,7 @@ test("Query collection equal queries", () =>
         skip: 0
     };
 
-    expect(compareODataQueryableCollection(a, b)).toBe(true);
+    expect(deepCompareQuery(a, b)).toBe(true);
 });
 
 test("Query collection same reference", () =>
@@ -100,7 +99,7 @@ test("Query collection same reference", () =>
     };
     const b = a;
 
-    expect(compareODataQueryableCollection(a, b)).toBe(true);
+    expect(deepCompareQuery(a, b)).toBe(true);
 });
 
 test("Query collectiond different properties", () =>
@@ -120,7 +119,7 @@ test("Query collectiond different properties", () =>
         skip: 0
     };
 
-    expect(compareODataQueryableCollection(a, b)).toBe(false);
+    expect(deepCompareQuery(a, b)).toBe(false);
 });
 
 test("Query collection different values", () =>
@@ -141,7 +140,7 @@ test("Query collection different values", () =>
         skip: 50
     };
 
-    expect(compareODataQueryableCollection(a, b)).toBe(false);
+    expect(deepCompareQuery(a, b)).toBe(false);
 });
 
 test("Query collection undefined value", () =>
@@ -153,5 +152,5 @@ test("Query collection undefined value", () =>
 
     const b = undefined;
 
-    expect(compareODataQueryableCollection(a, b)).toBe(false);
+    expect(deepCompareQuery(a, b)).toBe(false);
 });

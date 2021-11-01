@@ -1,27 +1,22 @@
-import * as React from "react";
-import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
-
-export function isODataQueryable(obj: unknown): obj is ODataQueryable
-{
-    return obj !== undefined
-        && (
-            Array.isArray((obj as ODataQueryable).select)
-            || Array.isArray((obj as ODataQueryable).expand)
-        );
-}
-
-export function isODataQueryableCollection(obj: unknown): obj is ODataQueryableCollection
-{
-    return obj !== undefined
-        && (
-            (typeof (obj as ODataQueryableCollection).orderBy) === "string"
-            || (typeof (obj as ODataQueryableCollection).orderyByAscending) === "boolean"
-            || (typeof (obj as ODataQueryableCollection).skip) === "number"
-            || (typeof (obj as ODataQueryableCollection).top) === "number"
-        );
-}
+import { _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
+import { SharepointQueryable } from "../types/SharepointQueryable";
 
 export function isReactDependencyList(obj: unknown): obj is React.DependencyList
 {
     return Array.isArray(obj);
+}
+
+export function isQueryableCollection(instance: Readonly<SharepointQueryable>): instance is _SharePointQueryableCollection
+{
+    const queryableCollection = instance as _SharePointQueryableCollection;
+
+    return typeof queryableCollection.skip === "function"
+        && typeof queryableCollection.orderBy === "function"
+        && typeof queryableCollection.top === "function";
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function isFilterable(instance: any): instance is { filter: (f: string) => unknown }
+{
+    return typeof instance.filter === "function";
 }

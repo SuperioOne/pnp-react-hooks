@@ -1,7 +1,7 @@
-import { _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
+import { Nullable } from "../types/utilityTypes";
 import { ODataQueryableCollection } from "../types/ODataQueryable";
 import { SharepointQueryable } from "../types/SharepointQueryable";
-import { Nullable } from "../types/utilityTypes";
+import { isFilterable, isQueryableCollection } from "./typeGuards";
 
 export function insertODataQuery<T extends SharepointQueryable>(instance: T, query: Nullable<ODataQueryableCollection>): T
 {
@@ -10,7 +10,7 @@ export function insertODataQuery<T extends SharepointQueryable>(instance: T, que
         return instance;
     }
 
-    if (_isQueryableCollection(instance))
+    if (isQueryableCollection(instance))
     {
         if (query.skip)
         {
@@ -28,7 +28,7 @@ export function insertODataQuery<T extends SharepointQueryable>(instance: T, que
         }
     }
 
-    if (_isFilterable(instance) && query.filter)
+    if (isFilterable(instance) && query.filter)
     {
         instance.filter(query.filter);
     }
@@ -44,20 +44,4 @@ export function insertODataQuery<T extends SharepointQueryable>(instance: T, que
     }
 
     return instance;
-}
-
-function _isQueryableCollection(instance: Readonly<SharepointQueryable>): instance is _SharePointQueryableCollection
-{
-    const queryableCollection = instance as _SharePointQueryableCollection;
-
-    return typeof queryableCollection.skip === "function"
-        && typeof queryableCollection.orderBy === "function"
-        && typeof queryableCollection.top === "function"
-        && typeof queryableCollection.filter === "function";
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function _isFilterable(instance: any): instance is { filter: (f: string) => unknown }
-{
-    return typeof instance.filter === "function";
 }

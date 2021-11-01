@@ -1,3 +1,6 @@
+/**
+ * @remarks this function does not validate URL syntax.
+ */
 export function compareURL(left: string, right: string)
 {
     const l = _removeTrailingSlash(left);

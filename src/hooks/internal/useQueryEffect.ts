@@ -6,7 +6,7 @@ import { insertODataQuery } from "../../utils/insertODataQuery";
 import { insertCacheOptions } from "../../utils/insertCacheOptions";
 import { from, NextObserver, Subscription } from "rxjs";
 import { errorHandler } from "../../utils/errorHandler";
-import { deepCompareQuery } from "../../utils/deepComparisons";
+import { deepCompareQuery } from "../../utils/deepCompareQuery";
 import { compareTuples } from "../../utils/compareTuples";
 import { SharepointQueryable } from "../../types/SharepointQueryable";
 import { PnpHookOptions } from "../../types/options";
