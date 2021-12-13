@@ -9,7 +9,7 @@ import { ODataQueryableCollection } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
 import { assert } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
-import { isURL, UrlType } from "../utils/isURL";
+import { isUrl, UrlType } from "../utils/isUrl";
 import { mergeDependencies } from "../utils/mergeDependencies";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
@@ -25,7 +25,7 @@ export function usePageComments(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        assert(isURL(pageRelativePath, UrlType.Relative),
+        assert(isUrl(pageRelativePath, UrlType.Relative),
             "pageRelativePath value is not valid.");
 
         const page = await web.loadClientsidePage(pageRelativePath);

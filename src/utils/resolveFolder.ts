@@ -1,7 +1,7 @@
 import "@pnp/sp/folders";
 import { IWeb } from "@pnp/sp/webs";
 import { isUUID } from "./isUUID";
-import { isURL, UrlType } from "./isURL";
+import { isUrl, UrlType } from "./isUrl";
 
 export function resolveFolder(web: IWeb, folderId: string)
 {
@@ -9,7 +9,7 @@ export function resolveFolder(web: IWeb, folderId: string)
     {
         return web.getFolderById(folderId);
     }
-    else if (isURL(folderId, UrlType.Relative))
+    else if (isUrl(folderId, UrlType.Relative))
     {
         return web.getFolderByServerRelativeUrl(folderId);
     }

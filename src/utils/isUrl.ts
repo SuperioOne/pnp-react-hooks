@@ -2,7 +2,7 @@
 const ABSOLUTE_URL_REGEX = /^https?:\/\/[A-Z0-9\u0080-\uffff]/i;
 const RELATIVE_URL_REGEX = /^(?:\/$|\/[A-Z0-9_.~\x2d:@%]{1})/i;
 
-export function isURL(url: string, type: UrlType = UrlType.Any): boolean
+export function isUrl(url: string, type: UrlType = UrlType.Any): boolean
 {
     switch (type)
     {

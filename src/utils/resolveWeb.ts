@@ -1,5 +1,5 @@
 import { sp } from "@pnp/sp";
-import { isURL, UrlType } from "./isURL";
+import { isUrl, UrlType } from "./isUrl";
 import { assert } from "./assert";
 import { WebOptions } from "../types/options";
 import { Nullable } from "../types/utilityTypes";
@@ -15,7 +15,7 @@ export function resolveWeb(query: Nullable<WebOptions>): IWeb
     }
     else if (typeof query?.web === "string")
     {
-        assert(isURL(query.web, UrlType.Absolute),
+        assert(isUrl(query.web, UrlType.Absolute),
             "Web parameter is not an absolute url.");
 
         web = Web(query.web);
