@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useListItems } from "../../src";
-import { ListOptions } from "../../src/types";
+import { ListOptions } from "../../src/types/options";
 
 export function ListItemsDebug()
 {
