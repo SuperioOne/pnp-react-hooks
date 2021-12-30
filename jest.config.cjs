@@ -7,7 +7,7 @@ module.exports = {
         "src/**/*.{ts,tsx}",
         "!<rootDir>/node_modules/"
     ],
-    coverageDirectory: "./temp/coverage",
+    coverageDirectory: "./.temp/coverage",
     preset: 'ts-jest/presets/js-with-babel',
     globals: {
         'ts-jest': {

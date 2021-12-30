@@ -23,7 +23,7 @@ setTimeout(async () =>
         const deletePaths = [
             ".bin",
             "node_modules",
-            "temp",
+            ".temp",
         ];
 
         for (let i = 0; i < deletePaths.length; i++)

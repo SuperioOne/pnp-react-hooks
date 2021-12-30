@@ -25,10 +25,7 @@ function InitPnp()
     sp.setup({
         sp: {
             baseUrl: config.sp.url,
-            fetchClientFactory: () =>
-            {
-                return new MsalFetchClient(config.sp.msal.init, config.sp.msal.scopes);
-            },
+            fetchClientFactory: () => new MsalFetchClient(config.sp.msal.init, config.sp.msal.scopes)
         },
     });
 }
