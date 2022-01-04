@@ -7,13 +7,14 @@ import { compareTuples } from "../utils/compareTuples";
 import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
 import { shallowEqual } from "../utils/shallowEqual";
-import { sp } from "@pnp/sp";
+import { PrincipalType, sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const DEFAULT_OPTIONS: IClientPeoplePickerQueryParameters = {
     AllowEmailAddresses: true,
     AllowMultipleEntities: true,
     MaximumEntitySuggestions: 25,
+    PrincipalType: PrincipalType.All,
     QueryString: ""
 };
 

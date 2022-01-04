@@ -1,9 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as crypto from "crypto";
 import * as fse from "fs-extra";
 import * as path from "path";
 import { Configuration } from "@azure/msal-node";
 import { IFetchOptions } from "@pnp/common";
 import { MsalFetchClient } from "@pnp/nodejs";
+import { default as fetch, Response, Headers } from "node-fetch";
+
+import
+{
+    objectDefinedNotNull,
+    assign,
+} from "@pnp/common";
+
+const HIGHWATERMARK = 1024 * 1024 * 5; // 5 MB
 
 export interface CacheOptions
 {
@@ -24,7 +35,9 @@ export class PnpCachedHttpClient extends MsalFetchClient
         this._offlineOnly = cacheOptions.offlineOnly ?? false;
     }
 
-    public override async fetch(url: string, options: IFetchOptions): Promise<Response>
+    // https://github.com/node-fetch/node-fetch#custom-highwatermark
+    // use node-fetch v3 instead of v2 to prevent highwatermark limitation when copying body streams.
+    public override async fetch(url: string, options: any): Promise<any>
     {
         const cachePath = this.getCachePath(url, options);
 
@@ -41,7 +54,31 @@ export class PnpCachedHttpClient extends MsalFetchClient
         }
         else
         {
-            const response = await super.fetch(url, options);
+            // https://github.com/pnp/pnpjs/blob/version-2/packages/nodejs/net/msalfetchclient.ts
+            // pnpjs msalfetch fetch implementation
+
+            if (!objectDefinedNotNull(options))
+            {
+                options = {
+                    headers: new Headers(),
+                };
+            } else if (!objectDefinedNotNull(options.headers))
+            {
+                options = assign(options, {
+                    headers: new Headers(),
+                });
+            }
+
+            const token = await this.acquireToken();
+
+            options.headers.set("Authorization", `${token.tokenType} ${token.accessToken}`);
+
+            const response = await fetch(
+                url,
+                {
+                    ...options,
+                    highWaterMark: HIGHWATERMARK
+                });
 
             await this.saveToCache(cachePath, response.clone());
 
@@ -70,6 +107,7 @@ export class PnpCachedHttpClient extends MsalFetchClient
     private async saveToCache(path: string, response: Response)
     {
         const body = await response.json();
+
         const headers: Record<string, string> = {};
 
         response.headers.forEach((val, key) => Reflect.set(headers, key, val));

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { JSDOM } from "jsdom";
@@ -10,22 +12,22 @@ export class ReactDOMElement
     {
         const dom = new JSDOM(`<!DOCTYPE html><div></div>`);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (global as any).window = dom.window;
         this.rootElement = dom.window.document.createElement("div");
     }
 
-    public mountTestComponent<T extends React.FunctionComponent<TestComponentProps<TReturn>>, TProp, TReturn = unknown>(
-        testName: string,
-        testComponent: T,
-        customProps?: TProp)
+    public mountTestComponent<T extends React.FunctionComponent<TestComponentProps<TReturn> & TProp>, TProp, TReturn>
+        (
+            testName: string,
+            testComponent: T,
+            customProps?: TProp): Promise<any>
     {
         return new Promise<TReturn>((resolution, rejection) =>
         {
             const successAction = (data: TReturn) => resolution(data);
             const errorAction = (err: Error) => rejection(err);
 
-            const props: TestComponentProps<TReturn> = {
+            const props: any = {
                 ...customProps,
                 success: successAction,
                 error: errorAction,
@@ -42,7 +44,7 @@ export class ReactDOMElement
     }
 }
 
-export interface TestComponentProps<TReturn = unknown>
+export interface TestComponentProps<TReturn = any>
 {
     success: (data: TReturn) => void;
     error: (err: Error) => void;

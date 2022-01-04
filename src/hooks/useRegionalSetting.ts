@@ -2,13 +2,13 @@ import "@pnp/sp/regional-settings";
 import { IRegionalSettingsInfo } from "@pnp/sp/regional-settings/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable } from "../types/utilityTypes";
-import { ODataQueryableCollection } from "../types/ODataQueryable";
+import { ODataQueryable } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
 import { createInvokable } from "../utils/createInvokable";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback } from "react";
 
-export type RegionalSettingOptions = PnpHookOptions<ODataQueryableCollection>;
+export type RegionalSettingOptions = PnpHookOptions<ODataQueryable>;
 
 export function useRegionalSetting(
     options?: RegionalSettingOptions,

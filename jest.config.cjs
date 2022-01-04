@@ -16,4 +16,5 @@ module.exports = {
     },
     testEnvironment: 'node',
     transformIgnorePatterns: ["node_modules/?(!(@pnp|tslib)/)"],
+    testTimeout: 20000
 };

@@ -97,3 +97,19 @@ test("Obj A is undefined", () =>
 
     expect(shallowEqual(a, b)).toBe(false);
 });
+
+test("String A equal String B", () =>
+{
+    const a = "*";
+    const b = "*";
+
+    expect(shallowEqual(a, b)).toBe(true);
+});
+
+test("Null not equal String B", () =>
+{
+    const a = null;
+    const b = "*";
+
+    expect(shallowEqual(a, b)).toBe(false);
+});
