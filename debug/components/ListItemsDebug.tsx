@@ -5,7 +5,7 @@ import { ListOptions } from "../../src/types/options";
 export function ListItemsDebug()
 {
     const listItems = useListItems("Test List", {
-        mode: ListOptions.Auto,
+        mode: ListOptions.All,
         query: { select: ["ID", "Title"] },
         exception: console.log,
     });

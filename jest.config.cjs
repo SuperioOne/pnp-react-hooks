@@ -16,5 +16,6 @@ module.exports = {
     },
     testEnvironment: 'node',
     transformIgnorePatterns: ["node_modules/?(!(@pnp|tslib)/)"],
-    testTimeout: 20000
+    testTimeout: 30000,
+    cacheDirectory:"./.temp/jest_rs"
 };

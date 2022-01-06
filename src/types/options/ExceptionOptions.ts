@@ -1,9 +1,9 @@
 export interface ExceptionOptions
 {
-    exception?: ExceptionOption
+    exception?: ExceptionFunc | ExceptionMode;
 }
 
-export type ExceptionOption = (err: Error) => void | ExceptionMode;
+export type ExceptionFunc = (err: Error) => void;
 
 export enum ExceptionMode
 {

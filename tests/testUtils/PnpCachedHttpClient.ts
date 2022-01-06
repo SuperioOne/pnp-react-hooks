@@ -15,6 +15,7 @@ import
 } from "@pnp/common";
 
 const HIGHWATERMARK = 1024 * 1024 * 5; // 5 MB
+const JSON_REGEX = /application\/json/i;
 
 export interface CacheOptions
 {
@@ -106,7 +107,9 @@ export class PnpCachedHttpClient extends MsalFetchClient
 
     private async saveToCache(path: string, response: Response)
     {
-        const body = await response.json();
+        const body = await (JSON_REGEX.test(response.headers["Accept"])
+            ? response.json()
+            : response.text());
 
         const headers: Record<string, string> = {};
 
@@ -130,7 +133,11 @@ export class PnpCachedHttpClient extends MsalFetchClient
     {
         const cachedRes = await fse.readJson(path);
 
-        return new Response(JSON.stringify(cachedRes.body), {
+        const body = JSON_REGEX.test(cachedRes.headers["Accept"])
+            ? JSON.stringify(cachedRes.body)
+            : cachedRes.body;
+
+        return new Response(body, {
             status: cachedRes.status,
             statusText: cachedRes.statusText,
             headers: new Headers(cachedRes.headers)

@@ -13,7 +13,7 @@
             ],
             "args": [
                 "--experimental-specifier-resolution=node",
-                "${workspaceFolder}/.bin/debug/index.js"
+                "${workspaceFolder}/.temp/bin/debug/index.js"
             ],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"

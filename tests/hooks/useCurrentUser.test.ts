@@ -12,7 +12,7 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useCurrentUser without query", async () =>
 {
     const props: CustomHookProps = {
-        useHook: useCurrentUser
+        useHook: () => useCurrentUser()
     };
 
     await act(() =>

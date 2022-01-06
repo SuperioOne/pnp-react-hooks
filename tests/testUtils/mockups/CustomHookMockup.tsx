@@ -7,7 +7,7 @@ import { TestComponentProps } from "../ReactDOMElement";
 
 export interface CustomHookProps 
 {
-    useHook: () => unknown;
+    useHook: (errCallback: (err) => void) => unknown;
     completeWhen?: (response: any) => boolean;
 }
 
@@ -22,7 +22,7 @@ export function CustomHookMockup<P extends _CustomTestComponentProps>(props: P)
     {
         try
         {
-            return props.useHook();
+            return props.useHook(props.error);
         }
         catch (err)
         {

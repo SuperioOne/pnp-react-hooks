@@ -12,7 +12,7 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useRegionalSetting get web region settings", async () =>
 {
     const props: CustomHookProps = {
-        useHook: useRegionalSetting
+        useHook: () => useRegionalSetting()
     };
 
     await act(() =>

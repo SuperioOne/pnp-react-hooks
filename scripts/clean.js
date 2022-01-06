@@ -21,7 +21,6 @@ setTimeout(async () =>
     try
     {
         const deletePaths = [
-            ".bin",
             ".temp",
         ];
 

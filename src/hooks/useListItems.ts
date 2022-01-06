@@ -22,7 +22,7 @@ export interface ListItemsOptions extends PnpHookOptions<ODataQueryableCollectio
 
 export interface PagedItemsOptions extends PnpHookOptions<FilteredODataQueryable>
 {
-    mode: ListOptions.Auto | ListOptions.All;
+    mode: ListOptions.All;
 }
 
 export function useListItems<T>(
@@ -48,14 +48,6 @@ export function useListItems<T>(
 
         switch (options?.mode)
         {
-            case ListOptions.Auto:
-                {
-                    const listInfo = await spList.select("ItemCount")();
-
-                    return listInfo.ItemCount > 100
-                        ? createInvokable(spList.items, _getAll)
-                        : createInvokable(spList.items);
-                }
             case ListOptions.All:
                 {
                     return createInvokable(spList.items, _getAll);

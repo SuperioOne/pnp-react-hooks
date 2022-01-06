@@ -8,10 +8,10 @@
   "description": "PnPJS React hooks library.",
   "main": "index.js",
   "scripts": {
-    "build": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts",
-    "build-debug": "node ./scripts/build.js -o .bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap",
-    "build-dry": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts --dry-run",
-    "pack": "node ./scripts/build.js -o .bin/release --includeDirs ['src/**/*'] --build src/index.ts && node ./scripts/omitPackageJson.js --outDir .bin/release && npm pack .bin/release --pack-destination .bin/",
+    "build": "node ./scripts/build.js -o ./.temp/bin/release --includeDirs ['src/**/*'] --build src/index.ts",
+    "build-debug": "node ./scripts/build.js -o ./.temp/bin/debug --includeDirs ['src/**/*','debug/**/*','.config/**/*'] --build debug/index.ts --sourceMap",
+    "build-dry": "node ./scripts/build.js -o ./.temp/bin/release --includeDirs ['src/**/*'] --build src/index.ts --dry-run",
+    "pack": "node ./scripts/build.js -o ./.temp/bin/release --includeDirs ['src/**/*'] --build src/index.ts && node ./scripts/omitPackageJson.js --outDir .temp/bin/release && npm pack ./.temp/bin/release --pack-destination ./.temp/bin/",
     "clean": "node ./scripts/clean.js",
     "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*",
     "test": "jest"

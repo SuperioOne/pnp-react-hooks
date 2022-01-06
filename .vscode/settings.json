@@ -3,6 +3,6 @@
     "todo-tree.filtering.excludeGlobs": [
         "**/node_modules",
         "node_modules",
-        ".bin",
+        ".temp",
     ]
 }

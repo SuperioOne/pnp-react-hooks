@@ -12,7 +12,7 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useWebProperties without query", async () =>
 {
     const props: CustomHookProps = {
-        useHook: useWebProperties
+        useHook: () => useWebProperties()
     };
 
     await act(() =>

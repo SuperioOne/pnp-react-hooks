@@ -12,7 +12,7 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useNavigation get web topNavigation nav nodes", async () =>
 {
     const props: CustomHookProps = {
-        useHook: useNavigation
+        useHook: () => useNavigation()
     };
 
     await act(() =>
