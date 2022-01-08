@@ -1,0 +1,47 @@
+export interface ISiteInfo
+{
+    AllowCreateDeclarativeWorkflow?: boolean | null;
+    AllowDesigner?: boolean | null;
+    AllowMasterPageEditing?: boolean | null;
+    AllowRevertFromTemplate?: boolean | null;
+    AllowSaveDeclarativeWorkflowAsTemplate?: boolean | null;
+    AllowSavePublishDeclarativeWorkflow?: boolean | null;
+    AllowSelfServiceUpgrade?: boolean | null;
+    AllowSelfServiceUpgradeEvaluation?: boolean | null;
+    AuditLogTrimmingRetention?: number | null;
+    ChannelGroupId?: string | null;
+    Classification?: string | null;
+    CompatibilityLevel?: number | null;
+    CurrentChangeToken?: { StringValue: string } | null;
+    DisableAppViews?: boolean | null;
+    DisableCompanyWideSharingLinks?: boolean | null;
+    DisableFlows?: boolean | null;
+    ExternalSharingTipsEnabled?: boolean | null;
+    GeoLocation?: string | null;
+    GroupId?: string | null;
+    HubSiteId?: string | null;
+    Id: string;
+    IsHubSite?: boolean | null;
+    LockIssue?: null | null;
+    MaxItemsPerThrottledOperation?: number | null;
+    MediaTranscriptionDisabled?: boolean | null;
+    NeedsB2BUpgrade?: boolean | null;
+    PrimaryUri?: string | null;
+    ReadOnly?: boolean | null;
+    RequiredDesignerVersion?: string | null;
+    ResourcePath?: { DecodedUrl: string } | null;
+    SandboxedCodeActivationCapability?: number | null;
+    SensitivityLabel?: string | null;
+    SensitivityLabelId?: null | null;
+    ServerRelativeUrl?: string | null;
+    ShareByEmailEnabled?: boolean | null;
+    ShareByLinkEnabled?: boolean | null;
+    ShowUrlStructure?: boolean | null;
+    TrimAuditLog?: boolean | null;
+    UIVersionConfigurationEnabled?: boolean | null;
+    UpgradeReminderDate?: string | null;
+    UpgradeScheduled?: boolean | null;
+    UpgradeScheduledDate?: string | null;
+    Upgrading?: boolean | null;
+    Url: string;
+}

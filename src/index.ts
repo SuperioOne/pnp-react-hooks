@@ -35,11 +35,10 @@ export { useRoleDefinition } from "./hooks/useRoleDefinition";
 export { useRoleDefinitions } from "./hooks/useRoleDefinitions";
 export { useSearch } from "./hooks/useSearch";
 export { useSearchUser } from "./hooks/useSearchUser";
+export { useSite } from "./hooks/useSite";
 export { useSiteUsers } from "./hooks/useSiteUsers";
 export { useSubWebInfos } from "./hooks/useSubWebInfos";
 export { useUser } from "./hooks/useUser";
 export { useUserHasPermission } from "./hooks/useUserHasPermission";
 export { useWebInfo } from "./hooks/useWebInfo";
 export { useWebProperties } from "./hooks/useWebProperties";
-
-// TODO: assert error message system

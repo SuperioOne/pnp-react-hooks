@@ -6,7 +6,8 @@
     "ignorePatterns": [
         "node_modules/**/*",
         "scripts/**/*",
-        ".bin/**/*"
+        ".bin/**/*",
+        "**/*.cjs"
     ],
     "extends": [
         "eslint:recommended",
