@@ -22,7 +22,6 @@ export { useGroups } from "./hooks/useGroups";
 export { useIsMemberOf } from "./hooks/useIsMemberOf";
 export { useItemComments } from "./hooks/useItemComments";
 export { useList } from "./hooks/useList";
-export { useListChangeEffect } from "./hooks/useListChangeEffect";
 export { useListChangeToken } from "./hooks/useListChangeToken";
 export { useListItem } from "./hooks/useListItem";
 export { useListItems } from "./hooks/useListItems";

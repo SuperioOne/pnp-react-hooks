@@ -4,7 +4,6 @@ export { AppsDebug } from "./AppsDebug";
 export { ChangesDebug } from "./ChangesDebug";
 export { CurrentUserDebug } from "./CurrentUserDebug";
 export { FolderTreeDebug } from "./FolderTreeDebug";
-export { ListChangeEffectDebug } from "./ListChangeEffectDebug";
 export { ListItemsDebug } from "./ListItemsDebug";
 export { ListItemsPagedDebug } from "./ListItemsPagedDebug";
 export { ListTokenDebug } from "./ListTokenDebug";

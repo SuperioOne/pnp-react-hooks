@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useListChangeEffect } from "../../src";
+import { useListChangeEffect } from "../../src/hooks/useListChangeEffect";
 
 export function ListChangeEffectDebug()
 {
