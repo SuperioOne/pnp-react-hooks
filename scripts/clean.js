@@ -1,4 +1,3 @@
-import 'colors';
 import path from "path";
 import fse from "fs-extra";
 
@@ -27,11 +26,11 @@ setTimeout(async () =>
         for (let i = 0; i < deletePaths.length; i++)
         {
             const path = normalizePath(deletePaths[i]);
-            console.log(`Removing directory : ${path}`.yellow);
+            console.log(`Removing directory : ${path}`);
             await fse.remove(path);
         }
 
-        console.log("Cleaning Completed.".green);
+        console.log("Cleaning Completed.");
     }
     catch (err)
     {

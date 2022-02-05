@@ -46,7 +46,6 @@
     "@typescript-eslint/parser": "^5.8.1",
     "args": "^5.0.1",
     "babel-jest": "^27.4.5",
-    "colors": "^1.4.0",
     "eslint": "^8.5.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",

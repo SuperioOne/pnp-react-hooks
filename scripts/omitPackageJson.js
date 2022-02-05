@@ -1,4 +1,3 @@
-import 'colors';
 import args from 'args';
 import path from "path";
 import fse from "fs-extra";

@@ -1,4 +1,3 @@
-import 'colors';
 import * as Components from "./components";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -32,7 +31,7 @@ InitEnvironment()
 
             if (input.toUpperCase() === "/EXIT")
             {
-                console.log("Debugger closing...".green);
+                console.log("Debugger closing...");
                 process.exit(0);
             }
             else if (input.toUpperCase() === "/HELP")
@@ -50,7 +49,7 @@ InitEnvironment()
             {
                 const components = Object.keys(Components);
 
-                components.forEach(e => console.log(` * ${e.toString()}`.green));
+                components.forEach(e => console.log(` * ${e.toString()}`));
             }
             else if (input.toUpperCase().startsWith("/MOUNT"))
             {
@@ -61,17 +60,17 @@ InitEnvironment()
                     ReactDOM.unmountComponentAtNode(rootElement);
                     ReactDOM.render(React.createElement(Components[options[1]]), rootElement);
 
-                    console.log(`Mounted ${options[1]} to the root. You can dispatch events with /EVENT <eventName> .`.green);
+                    console.log(`Mounted ${options[1]} to the root. You can dispatch events with /EVENT <eventName> .`);
                 }
                 else
                 {
-                    console.log("Unexpected event input.".yellow);
+                    console.log("Unexpected event input.");
                 }
             }
             else if (input.toUpperCase().startsWith("/UMOUNT"))
             {
                 const unmount = ReactDOM.unmountComponentAtNode(rootElement);
-                console.log(unmount ? "Component unmounted".green : "There is no component to unmount".yellow);
+                console.log(unmount ? "Component unmounted" : "There is no component to unmount");
             }
             else if (input.toUpperCase().startsWith("/EVENT"))
             {
@@ -83,15 +82,15 @@ InitEnvironment()
                 }
                 else
                 {
-                    console.log("Unexpected event input.".yellow);
+                    console.log("Unexpected event input.");
                 }
             }
             else
             {
-                console.log("Unknown command. See /help for more details.".yellow);
+                console.log("Unknown command. See /help for more details.");
             }
         });
 
         eventLoop();
     })
-    .catch((err: Error) => console.error(err.name.red, err.message.red, err.stack?.red));
+    .catch((err: Error) => console.error(err.name, err.message, err.stack));

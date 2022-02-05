@@ -1,4 +1,3 @@
-import 'colors';
 import * as rollup from 'rollup';
 import args from 'args';
 import commonjs from '@rollup/plugin-commonjs';
@@ -32,7 +31,7 @@ if (options.dryRun)
     options.sourceMap = false;
     options.outDir = undefined;
 
-    console.log("Dry-run started".yellow);
+    console.log("Dry-run started");
 }
 
 const root = options.build.split("/").find(e => e !== "");
@@ -47,11 +46,11 @@ const outputOptions = {
 
 function writeRollupError(err)
 {
-    console.error(err.message.red);
+    console.error(err.message);
 
     if (typeof err.loc === "object" && err.loc.file)
     {
-        console.error(`at ${err.loc.file}${err.loc.line > -1 ? `:${err.loc.line}` : ""}${err.loc.column > -1 ? `:${err.loc.column}` : ""}`.yellow.italic);
+        console.error(`at ${err.loc.file}${err.loc.line > -1 ? `:${err.loc.line}` : ""}${err.loc.column > -1 ? `:${err.loc.column}` : ""}`);
     }
 }
 
@@ -117,8 +116,8 @@ buildProject()
 
         if (!options.q)
         {
-            console.log(`Build Duration: ${PROCESS_TIME.toFixed(2)}ms`.yellow);
-            console.log("Build Successfully Completed.".green);
+            console.log(`Build Duration: ${PROCESS_TIME.toFixed(2)}ms`);
+            console.log("Build Successfully Completed.");
         }
 
         process.exit(0);
