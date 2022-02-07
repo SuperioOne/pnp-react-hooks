@@ -29,6 +29,7 @@ export { useListItemsPaged } from "./hooks/useListItemsPaged";
 export { useLists } from "./hooks/useLists";
 export { useNavigation } from "./hooks/useNavigation";
 export { usePageComments } from "./hooks/usePageComments";
+export { useProfile } from "./hooks/useProfile";
 export { useRegionalSetting } from "./hooks/useRegionalSetting";
 export { useRoleAssignments } from "./hooks/useRoleAssignments";
 export { useRoleDefinition } from "./hooks/useRoleDefinition";

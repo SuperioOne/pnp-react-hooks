@@ -21,7 +21,7 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const testUsersPromise = sp.web.siteUsers.top(1).get();
+    const testUsersPromise = sp.web.siteUsers.filter("Email ne ''").top(1).get();
     const testListPromise = sp.web.lists.filter("ItemCount gt 0").top(1).get();
 
     const [testLists, testUsers] = await Promise.all([testListPromise, testUsersPromise]);

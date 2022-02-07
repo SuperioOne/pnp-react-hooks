@@ -4,7 +4,7 @@ import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
 import { sp } from "@pnp/sp";
-import { useUser } from "../../src";
+import { useProfile, useUser } from "../../src";
 import { CustomHookMockup, CustomHookProps } from "../testUtils/mockups/CustomHookMockup";
 
 const reactDOMElement = initJSDOM();
@@ -14,7 +14,7 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const exmpUsers = await sp.web.siteUsers.top(1).get();
+    const exmpUsers = await sp.web.siteUsers.filter("Email ne ''").top(1).get();
 
     if (exmpUsers?.length < 1)
         throw new Error("Unable to find user");
@@ -66,5 +66,16 @@ test("useUser by email", async () =>
 
     await act(() =>
         expect(reactDOMElement.mountTestComponent("useUser by login email", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useProfile by login name", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useProfile(testUserInfo.LoginName)
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useProfile by login name", CustomHookMockup, props))
             .resolves.toBeTruthy());
 });
