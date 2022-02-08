@@ -1,24 +1,27 @@
 import "@pnp/sp/content-types";
-import { useQueryEffect } from "./internal/useQueryEffect";
-import { IWeb } from "@pnp/sp/webs/types";
-import { useState, useCallback } from "react";
 import { IContentTypeInfo } from "@pnp/sp/content-types";
+import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
+import { Nullable } from "../types/utilityTypes";
 import { ODataQueryableCollection } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
-import { Nullable } from "../types/utilityTypes";
 import { createInvokable } from "../utils/createInvokable";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { checkDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveScope } from "../utils/resolveScope";
+import { useQueryEffect } from "./internal/useQueryEffect";
+import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface ItemCommentsOptions extends PnpHookOptions<ODataQueryableCollection>
+export interface ItemContentTypeOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     list?: string;
 }
 
 export function useContentTypes(
-    options?: ItemCommentsOptions,
+    options?: ItemContentTypeOptions,
     deps?: React.DependencyList): Nullable<IContentTypeInfo[]>
 {
+    const globalOptions = useContext(InternalContext);
     const [contentTypes, setContentTypes] = useState<Nullable<IContentTypeInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
@@ -26,12 +29,19 @@ export function useContentTypes(
         const scope = resolveScope(web, { list: options?.list });
 
         return createInvokable(scope.contentTypes);
-
     }, [options?.list]);
 
     const _mergedDeps = mergeDependencies([options?.list], deps);
 
-    useQueryEffect(invokableFactory, setContentTypes, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled);
+
+        return opt;
+    }, [options, globalOptions]);
+
+    useQueryEffect(invokableFactory, setContentTypes, _options, _mergedDeps);
 
     return contentTypes;
 }

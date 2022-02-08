@@ -1,5 +1,6 @@
 import "@pnp/sp/files";
 import "@pnp/sp/folders";
+import { DisableOptionType, DisableOptionValueType } from "../types/options/RenderOptions";
 import { ExceptionOptions, RenderOptions, WebOptions, CacheOptions, LoadActionMode } from "../types/options";
 import { FilteredODataQueryable } from "../types/ODataQueryable";
 import { IFileInfo } from "@pnp/sp/files/types";
@@ -11,11 +12,13 @@ import { assert, assertString } from "../utils/assert";
 import { compareTuples } from "../utils/compareTuples";
 import { compareURL } from "../utils/compareURL";
 import { deepCompareQuery } from "../utils/deepCompareQuery";
+import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
 import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
 import { insertCacheOptions } from "../utils/insertCacheOptions";
 import { insertODataQuery } from "../utils/insertODataQuery";
 import { isUrl, UrlType } from "../utils/isUrl";
+import { mergeOptions } from "../utils/merge";
 import { resolveWeb } from "../utils/resolveWeb";
 import { shallowEqual } from "../utils/shallowEqual";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
@@ -25,6 +28,7 @@ export interface FolderTreeOptions extends ExceptionOptions, RenderOptions, WebO
     fileQuery?: FilteredODataQueryable;
     folderFilter?: string;
     useCache?: undefined | boolean;
+    disabled?: DisableOptionValueType | { (rootFolderRelativeUrl: string): boolean };
 }
 
 export function useFolderTree(
@@ -45,7 +49,7 @@ export function useFolderTree(
         webOptions: null
     });
 
-    const _disabled = useRef<boolean | undefined>(options?.disabled);
+    const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
     const _subscription = useRef<Nullable<Subscription>>(undefined);
 
     // dispatch proxy for disabling callbacks. Prevents any state change when hook is disabled.
@@ -71,13 +75,13 @@ export function useFolderTree(
 
     useEffect(() =>
     {
-        _disabled.current = options?.disabled;
+        const mergedOptions = mergeOptions(globalOptions, options);
+        _disabled.current = checkDisable(mergedOptions.disabled, defaultCheckDisable, rootFolderRelativeUrl);
 
         if (_disabled.current !== true)
         {
             const fileQuery = options?.fileQuery;
             const folderFilter = options?.folderFilter;
-            const webOption = options?.web ?? globalOptions?.web;
             let path = state.currentFolderUrl;
 
             const shouldUpdate = state.currentFolderUrl !== _innerState.current.folderUrl
@@ -85,14 +89,10 @@ export function useFolderTree(
                 || _innerState.current.folderFilter !== folderFilter
                 || !deepCompareQuery(_innerState.current.fileQuery, fileQuery)
                 || !compareTuples(_innerState.current.externalDependencies, deps)
-                || !shallowEqual(_innerState.current.webOptions, webOption);
+                || !shallowEqual(_innerState.current.webOptions, mergedOptions.web);
 
             if (shouldUpdate)
             {
-                const mergedOptions = options
-                    ? { ...globalOptions, ...options }
-                    : globalOptions;
-
                 try
                 {
                     // reset to the home path, if root path is still same.
@@ -198,7 +198,7 @@ export function useFolderTree(
                 folderUrl: path,
                 folderFilter: folderFilter,
                 initialRootUrl: rootFolderRelativeUrl,
-                webOptions: webOption
+                webOptions: mergedOptions.web
             };
         }
     }, [state, rootFolderRelativeUrl, options, globalOptions, deps, _cleanup, dispatch]);

@@ -12,5 +12,5 @@ export interface PnpHookOptions<T> extends ExceptionOptions, RenderOptions, WebO
 export { CacheOptions } from "./CacheOptions";
 export { ExceptionMode, ExceptionOptions } from "./ExceptionOptions";
 export { ListOptions } from "./ListOptions";
-export { LoadActionMode, RenderOptions } from "./RenderOptions";
+export { LoadActionOption as LoadActionMode, RenderOptions } from "./RenderOptions";
 export { WebOptions } from "./WebOptions";

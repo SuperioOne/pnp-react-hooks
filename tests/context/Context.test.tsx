@@ -36,7 +36,7 @@ test("PnpReactOptionProvider one layer provider", async () =>
 
 test("PnpReactOptionProvider two layer provider", async () =>
 {
-    const globalOptionsL2 = {
+    const globalOptionsL2: PnpHookGlobalOptions = {
         web: "localhost2",
         disabled: true,
         exception: ExceptionMode.Suppress,
@@ -44,9 +44,9 @@ test("PnpReactOptionProvider two layer provider", async () =>
         useCache: false
     };
 
-    const globalOptionsL1 = {
+    const globalOptionsL1: PnpHookGlobalOptions = {
         web: "localhost1",
-        disabled: false,
+        disabled: "auto",
         exception: ExceptionMode.Default,
         loadActionOption: LoadActionMode.KeepPrevious,
         useCache: true

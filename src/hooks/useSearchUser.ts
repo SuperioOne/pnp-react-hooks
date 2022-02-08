@@ -1,13 +1,16 @@
 import "@pnp/sp/profiles";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IClientPeoplePickerQueryParameters, IPeoplePickerEntity } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
+import { PrincipalType, sp } from "@pnp/sp";
 import { RenderOptions, ExceptionOptions, LoadActionMode } from "../types/options";
 import { compareTuples } from "../utils/compareTuples";
+import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
 import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
+import { mergeOptions } from "../utils/merge";
 import { shallowEqual } from "../utils/shallowEqual";
-import { PrincipalType, sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const DEFAULT_OPTIONS: IClientPeoplePickerQueryParameters = {
@@ -18,17 +21,18 @@ const DEFAULT_OPTIONS: IClientPeoplePickerQueryParameters = {
     QueryString: ""
 };
 
-interface SearchUserOptions extends RenderOptions, ExceptionOptions { }
+interface SearchUserOptions extends RenderOptions, ExceptionOptions
+{
+    disabled?: DisableOptionValueType | { (searchOptions: IClientPeoplePickerQueryParameters | string): boolean };
+}
 
 export function useSearchUser(
     searchOptions: IClientPeoplePickerQueryParameters | string,
     options?: SearchUserOptions,
     deps?: React.DependencyList): Nullable<IPeoplePickerEntity[]>
 {
-    const [profiles, setProfiles] = useState<Nullable<IPeoplePickerEntity[]>>();
-
     const globalOptions = useContext(InternalContext);
-
+    const [profiles, setProfiles] = useState<Nullable<IPeoplePickerEntity[]>>();
     const _subscription = useRef<Nullable<Subscription>>(undefined);
 
     const _innerState = useRef<TrackedState>({
@@ -46,17 +50,16 @@ export function useSearchUser(
 
     useEffect(() =>
     {
-        if (options?.disabled !== true)
+        const mergedOptions = mergeOptions(globalOptions, options);
+        const isDisabled = checkDisable(mergedOptions.disabled, defaultCheckDisable, searchOptions);
+
+        if (isDisabled !== true)
         {
-            const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
+            const searchOptChanged = !compareTuples(_innerState.current.externalDependencies, deps)
                 || !shallowEqual(_innerState.current.searchOptions, searchOptions);
 
-            if (optionsChanged)
+            if (searchOptChanged)
             {
-                const mergedOptions = options
-                    ? { ...globalOptions, ...options }
-                    : globalOptions;
-
                 _cleanup();
 
                 if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
@@ -90,7 +93,6 @@ export function useSearchUser(
                 searchOptions: searchOptions
             };
         }
-
     }, [searchOptions, options, globalOptions, deps, _cleanup]);
 
     return profiles;

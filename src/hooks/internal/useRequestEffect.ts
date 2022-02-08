@@ -1,17 +1,16 @@
-import { useRef } from "react";
-import { useCallback, useContext, useEffect } from "react";
-import { shallowEqual } from "../../utils/shallowEqual";
-import { resolveWeb } from "../../utils/resolveWeb";
-import { from, NextObserver, Subscription } from "rxjs";
-import { errorHandler } from "../../utils/errorHandler";
-import { compareTuples } from "../../utils/compareTuples";
-import { SharepointQueryable } from "../../types/SharepointQueryable";
-import { Nullable } from "../../types/utilityTypes";
-import { LoadActionMode, RenderOptions } from "../../types/options/RenderOptions";
-import { InvokableFactory } from "../../types/Invokeable";
-import { InternalContext } from "../../context";
-import { IWeb } from "@pnp/sp/webs/types";
 import { ExceptionOptions, WebOptions } from "../../types/options";
+import { IWeb } from "@pnp/sp/webs/types";
+import { InvokableFactory } from "../../types/Invokeable";
+import { LoadActionOption, RenderOptions } from "../../types/options/RenderOptions";
+import { Nullable } from "../../types/utilityTypes";
+import { SharepointQueryable } from "../../types/SharepointQueryable";
+import { compareTuples } from "../../utils/compareTuples";
+import { errorHandler } from "../../utils/errorHandler";
+import { from, NextObserver, Subscription } from "rxjs";
+import { resolveWeb } from "../../utils/resolveWeb";
+import { shallowEqual } from "../../utils/shallowEqual";
+import { useCallback, useEffect } from "react";
+import { useRef } from "react";
 
 export interface _CustomRequestOptions extends ExceptionOptions, RenderOptions, WebOptions { }
 
@@ -23,11 +22,9 @@ export function useRequestEffect<
     TContext extends SharepointQueryable = SharepointQueryable>(
         invokableFactory: InvokableFactory<TContext>,
         stateAction: (value: Nullable<TReturn>) => void,
-        options?: _CustomRequestOptions,
+        options: _CustomRequestOptions,
         deps?: React.DependencyList)
 {
-    const globalOptions = useContext(InternalContext);
-
     const _innerState = useRef<TrackedState>({
         externalDependencies: null,
         webOptions: null
@@ -47,39 +44,33 @@ export function useRequestEffect<
     {
         if (options?.disabled !== true)
         {
-            setTimeout(async () => 
+            const shouldUpdate = !compareTuples(_innerState.current.externalDependencies, deps)
+                || !shallowEqual(_innerState.current.webOptions, options.web);
+
+            if (shouldUpdate)
             {
-                const webOption = options?.web ?? globalOptions?.web;
+                _cleanup();
 
-                const shouldUpdate = !compareTuples(_innerState.current.externalDependencies, deps)
-                    || !shallowEqual(_innerState.current.webOptions, webOption);
-
-                if (shouldUpdate)
+                if (options?.loadActionOption === LoadActionOption.ClearPrevious)
                 {
-                    const mergedOptions = options
-                        ? { ...globalOptions, ...options }
-                        : globalOptions;
+                    stateAction(undefined);
+                }
 
+                setTimeout(async () => 
+                {
                     try
                     {
-                        _cleanup();
-
-                        if (mergedOptions?.loadActionOption === LoadActionMode.ClearPrevious)
-                        {
-                            stateAction(undefined);
-                        }
-
                         const observer: NextObserver<TReturn> = {
                             next: stateAction,
                             complete: _cleanup,
                             error: (err: Error) =>
                             {
                                 stateAction(null);
-                                errorHandler(err, mergedOptions);
+                                errorHandler(err, options);
                             }
                         };
 
-                        const web = resolveWeb(mergedOptions);
+                        const web = resolveWeb(options);
                         const invokeable = await invokableFactory(web);
 
                         _subscription.current = from(invokeable())
@@ -87,17 +78,17 @@ export function useRequestEffect<
                     }
                     catch (err)
                     {
-                        errorHandler(err, mergedOptions);
+                        errorHandler(err, options);
                     }
-                }
+                });
 
                 _innerState.current = {
                     externalDependencies: deps,
-                    webOptions: webOption
+                    webOptions: options.web
                 };
-            }, 0);
+            }
         }
-    }, [stateAction, options, invokableFactory, globalOptions, deps, _cleanup]);
+    }, [stateAction, options, invokableFactory, deps, _cleanup]);
 }
 
 interface TrackedState

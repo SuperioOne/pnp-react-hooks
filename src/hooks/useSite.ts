@@ -1,14 +1,16 @@
 import { CacheOptions, ExceptionOptions, RenderOptions } from "../types/options";
 import { ISite, Site } from "@pnp/sp/sites";
 import { ISiteInfo } from "../types/ISiteInfo";
+import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryable } from "../types/ODataQueryable";
 import { createInvokable } from "../utils/createInvokable";
+import { checkDisable } from "../utils/checkDisable";
 import { isUrl, UrlType } from "../utils/isUrl";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { sp } from "@pnp/sp";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 export interface SiteInfoOptions extends ExceptionOptions, RenderOptions, CacheOptions
 {
@@ -20,6 +22,7 @@ export function useSite(
     options?: SiteInfoOptions,
     deps?: React.DependencyList): Nullable<ISiteInfo>
 {
+    const globalOptions = useContext(InternalContext);
     const [siteInfo, setSiteInfo] = useState<Nullable<ISiteInfo>>();
 
     const invokableFactory = useCallback(async () =>
@@ -47,7 +50,15 @@ export function useSite(
 
     const _mergedDeps = mergeDependencies([options?.siteBaseUrl], deps);
 
-    useQueryEffect(invokableFactory, setSiteInfo, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled);
+
+        return opt;
+    }, [options, globalOptions]);
+
+    useQueryEffect(invokableFactory, setSiteInfo, _options, _mergedDeps);
 
     return siteInfo;
 }

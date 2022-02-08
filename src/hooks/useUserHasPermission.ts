@@ -1,17 +1,20 @@
 import "@pnp/sp/security";
 import "@pnp/sp/site-users";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { ExceptionOptions, RenderOptions, WebOptions } from "../types/options";
 import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { PermissionKind } from "@pnp/sp/security/types";
 import { PnpActionFunction } from "../types/PnpActionFunction";
 import { assertID, assertString } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
 import { isEmail } from "../utils/isEmail";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveScope } from "../utils/resolveScope";
 import { useRequestEffect } from "./internal/useRequestEffect";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useContext } from "react";
 
 interface Scope
 {
@@ -22,6 +25,7 @@ interface Scope
 export interface UserPermissionOptions extends ExceptionOptions, RenderOptions, WebOptions
 {
     scope?: Scope;
+    disabled?: DisableOptionValueType | { (permissionKinds: PermissionKind[] | PermissionKind, userId: string | number): boolean };
 }
 
 export function useUserHasPermission(
@@ -30,6 +34,7 @@ export function useUserHasPermission(
     options?: UserPermissionOptions,
     deps?: React.DependencyList): Nullable<boolean>
 {
+    const globalOptions = useContext(InternalContext);
     const [hasPermission, setHasPermission] = useState<Nullable<boolean>>(undefined);
 
     const _permFlag: PermissionKind = useMemo(() =>
@@ -84,7 +89,15 @@ export function useUserHasPermission(
         [userId, _permFlag, options?.scope?.list, options?.scope?.item],
         deps);
 
-    useRequestEffect(invokableFactory, setHasPermission, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, permissionKinds, userId);
+
+        return opt;
+    }, [permissionKinds, userId, options, globalOptions]);
+
+    useRequestEffect(invokableFactory, setHasPermission, _options, _mergedDeps);
 
     return hasPermission;
 }

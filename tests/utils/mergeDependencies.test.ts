@@ -1,4 +1,4 @@
-import { mergeDependencies } from "../../src/utils/mergeDependencies";
+import { mergeDependencies } from "../../src/utils/merge";
 
 test("Merge Test", () =>
 {

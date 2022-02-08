@@ -1,18 +1,24 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
-import { useQueryEffect } from "./internal/useQueryEffect";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { IWeb } from "@pnp/sp/webs/types";
-import { useState, useCallback } from "react";
+import { InternalContext } from "../context";
+import { Nullable } from "../types/utilityTypes";
 import { ODataQueryableCollection } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
-import { Nullable } from "../types/utilityTypes";
 import { assertID } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveList } from "../utils/resolveList";
+import { useQueryEffect } from "./internal/useQueryEffect";
+import { useState, useCallback, useContext, useMemo } from "react";
 
-export type ItemAttachmentsOptions = PnpHookOptions<ODataQueryableCollection>;
+export interface ItemAttachmentsOptions extends PnpHookOptions<ODataQueryableCollection>
+{
+    disabled?: DisableOptionValueType | { (itemId: number, list: string): boolean };
+}
 
 export function useAttachments(
     itemId: number,
@@ -20,6 +26,7 @@ export function useAttachments(
     options?: ItemAttachmentsOptions,
     deps?: React.DependencyList): Nullable<IAttachmentInfo[]>
 {
+    const globalOptions = useContext(InternalContext);
     const [attachments, setAttachments] = useState<Nullable<IAttachmentInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
@@ -32,12 +39,19 @@ export function useAttachments(
             .attachmentFiles;
 
         return createInvokable(queryInst);
-
     }, [itemId, list]);
 
     const _mergedDeps = mergeDependencies([itemId, list], deps);
 
-    useQueryEffect(invokableFactory, setAttachments, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, itemId, list);
+
+        return opt;
+    }, [itemId, list, options, globalOptions]);
+
+    useQueryEffect(invokableFactory, setAttachments, _options, _mergedDeps);
 
     return attachments;
 }

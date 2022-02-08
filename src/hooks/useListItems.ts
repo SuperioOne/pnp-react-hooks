@@ -1,28 +1,34 @@
 import "@pnp/sp/items";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IItems } from "@pnp/sp/items/types";
 import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryableCollection, FilteredODataQueryable } from "../types/ODataQueryable";
 import { PnpHookOptions, ListOptions } from "../types/options";
 import { createInvokable } from "../utils/createInvokable";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveList } from "../utils/resolveList";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 interface _ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     mode?: ListOptions;
+    disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
 export interface ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     mode?: ListOptions.Default;
+    disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
 export interface PagedItemsOptions extends PnpHookOptions<FilteredODataQueryable>
 {
     mode: ListOptions.All;
+    disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
 export function useListItems<T>(
@@ -40,6 +46,7 @@ export function useListItems<T>(
     options?: _ListItemsOptions,
     deps?: React.DependencyList): Nullable<T[]>
 {
+    const globalOptions = useContext(InternalContext);
     const [items, setItems] = useState<Nullable<T[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
@@ -62,7 +69,15 @@ export function useListItems<T>(
 
     const _mergedDeps = mergeDependencies([list, options?.mode], deps);
 
-    useQueryEffect(invokableFactory, setItems, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, list);
+
+        return opt;
+    }, [list, options, globalOptions]);
+
+    useQueryEffect(invokableFactory, setItems, _options, _mergedDeps);
 
     return items;
 }

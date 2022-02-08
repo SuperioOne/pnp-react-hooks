@@ -1,18 +1,21 @@
-import { useState, useCallback } from "react";
-import { useRequestEffect } from "./internal/useRequestEffect";
-import { shallowEqual } from "../utils/shallowEqual";
-import { resolveList } from "../utils/resolveList";
-import { mergeDependencies } from "../utils/mergeDependencies";
-import { createInvokable } from "../utils/createInvokable";
-import { WebOptions, ExceptionOptions } from "../types/options";
-import { Nullable } from "../types/utilityTypes";
-import { IWeb } from "@pnp/sp/webs/types";
-import { IList } from "@pnp/sp/lists/types";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IChangeTokenInfo, ChangeTokenInfo } from "../types/ChangeTokenInfo";
+import { IList } from "@pnp/sp/lists/types";
+import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
+import { Nullable } from "../types/utilityTypes";
+import { WebOptions, ExceptionOptions } from "../types/options";
+import { createInvokable } from "../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
+import { resolveList } from "../utils/resolveList";
+import { shallowEqual } from "../utils/shallowEqual";
+import { useRequestEffect } from "./internal/useRequestEffect";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 export interface ListTokenOptions extends WebOptions, ExceptionOptions
 {
-    disabled?: boolean;
+    disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
 export function useListChangeToken(
@@ -20,6 +23,7 @@ export function useListChangeToken(
     options?: ListTokenOptions,
     deps?: React.DependencyList): Nullable<IChangeTokenInfo>
 {
+    const globalOptions = useContext(InternalContext);
     const [token, setToken] = useState<Nullable<IChangeTokenInfo>>();
 
     const _setTokenProxy = useCallback((newToken: Nullable<IChangeTokenInfo>) =>
@@ -52,7 +56,15 @@ export function useListChangeToken(
 
     const _mergedDeps = mergeDependencies([list], deps);
 
-    useRequestEffect(invokableFactory, _setTokenProxy, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, list);
+
+        return opt;
+    }, [list, options, globalOptions]);
+
+    useRequestEffect(invokableFactory, _setTokenProxy, _options, _mergedDeps);
 
     return token;
 }

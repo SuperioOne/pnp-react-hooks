@@ -1,15 +1,19 @@
-import { sp } from "@pnp/sp";
 import "@pnp/sp/profiles";
+import { CacheOptions, ExceptionOptions, RenderOptions } from "../types/options";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IProfiles } from "@pnp/sp/profiles/types";
+import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { createInvokable } from "../utils/createInvokable";
-import { mergeDependencies } from "../utils/mergeDependencies";
-import { useQueryEffect } from "./internal/useQueryEffect";
-import { useState, useCallback } from "react";
-import { CacheOptions, ExceptionOptions, RenderOptions } from "../types/options";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
+import { sp } from "@pnp/sp";
+import { useRequestEffect } from "./internal/useRequestEffect";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 export interface ProfileOptions extends ExceptionOptions, RenderOptions, CacheOptions
 {
+    disabled?: DisableOptionValueType | { (loginName: string): boolean };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,6 +22,7 @@ export function useProfile<T extends Record<string, any>>(
     options?: ProfileOptions,
     deps?: React.DependencyList): Nullable<T>
 {
+    const globalOptions = useContext(InternalContext);
     const [userProfile, setUserProfile] = useState<Nullable<T>>(undefined);
 
     const invokableFactory = useCallback(async () =>
@@ -33,7 +38,15 @@ export function useProfile<T extends Record<string, any>>(
 
     const _mergedDeps = mergeDependencies([loginName], deps);
 
-    useQueryEffect(invokableFactory, setUserProfile, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, loginName);
+
+        return opt;
+    }, [loginName, options, globalOptions]);
+
+    useRequestEffect(invokableFactory, setUserProfile, _options, _mergedDeps);
 
     return userProfile;
 }

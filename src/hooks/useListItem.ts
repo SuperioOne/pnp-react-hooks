@@ -1,16 +1,22 @@
 import "@pnp/sp/items";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryable } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
 import { assertID } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveList } from "../utils/resolveList";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext, useMemo } from "react";
 
-export type ListItemOptions = PnpHookOptions<ODataQueryable>;
+export interface ListItemOptions extends PnpHookOptions<ODataQueryable>
+{
+    disabled?: DisableOptionValueType | { (itemId: number, list: string): boolean };
+}
 
 export function useListItem<T>(
     itemId: number,
@@ -18,6 +24,7 @@ export function useListItem<T>(
     options?: ListItemOptions,
     deps?: React.DependencyList): Nullable<T>
 {
+    const globalOptions = useContext(InternalContext);
     const [itemData, setItemData] = useState<Nullable<T>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
@@ -34,7 +41,15 @@ export function useListItem<T>(
 
     const _mergedDeps = mergeDependencies([itemId, list], deps);
 
-    useQueryEffect(invokableFactory, setItemData, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, itemId, list);
+
+        return opt;
+    }, [itemId, list, options, globalOptions]);
+
+    useQueryEffect(invokableFactory, setItemData, _options, _mergedDeps);
 
     return itemData;
 }

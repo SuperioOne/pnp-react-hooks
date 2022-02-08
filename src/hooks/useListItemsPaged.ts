@@ -1,4 +1,5 @@
 import "@pnp/sp/items";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { FilteredODataQueryable } from "../types/ODataQueryable";
 import { IItems, PagedItemCollection } from "@pnp/sp/items/types";
 import { IWeb } from "@pnp/sp/webs/types";
@@ -6,11 +7,12 @@ import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { PnpHookOptions } from "../types/options";
 import { createInvokable } from "../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
 import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveList } from "../utils/resolveList";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useQueryEffect } from "./internal/useQueryEffect";
 
 const DEFAULT_PAGE_SIZE = 2000;
@@ -22,6 +24,7 @@ interface ListItemsPagedOptions extends PnpHookOptions<FilteredODataQueryable>
      **/
     pageSize?: number;
     returnOnlyPageResult?: boolean;
+    disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
 export function useListItemsPaged<T>(
@@ -30,9 +33,7 @@ export function useListItemsPaged<T>(
     deps?: React.DependencyList): [Nullable<T[]>, NextPageDispatch, Nullable<boolean>]
 {
     const globalOptions = useContext(InternalContext);
-
     const [pageState, setPageState] = useState<State<T>>();
-
     const _subscription = useRef<Nullable<Subscription>>(undefined);
 
     const _cleanup = useCallback(() =>
@@ -62,7 +63,6 @@ export function useListItemsPaged<T>(
         }
 
         setPageState(newState);
-
     }, [pageState?.results, options?.returnOnlyPageResult]);
 
     const getNext: NextPageDispatch = useCallback((callback) =>
@@ -113,7 +113,15 @@ export function useListItemsPaged<T>(
         [options?.pageSize, options?.returnOnlyPageResult, list],
         deps);
 
-    useQueryEffect(invokableFactory, _insertNewPage, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, list);
+
+        return opt;
+    }, [list, options, globalOptions]);
+
+    useQueryEffect(invokableFactory, _insertNewPage, _options, _mergedDeps);
 
     return [pageState?.results, getNext, pageState?.hasNext];
 }

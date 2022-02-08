@@ -1,5 +1,6 @@
 import "@pnp/sp/search";
 import { CompletionObserver, from, Subscription } from "rxjs";
+import { DisableOptionType, DisableOptionValueType } from "../types/options/RenderOptions";
 import { ISearchQuery, ISearchResponse, ISearchResult } from "@pnp/sp/search/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
@@ -7,7 +8,9 @@ import { RenderOptions, CacheOptions, ExceptionOptions, LoadActionMode } from ".
 import { SearchResults } from "@pnp/sp/search";
 import { assert } from "../utils/assert";
 import { compareTuples } from "../utils/compareTuples";
+import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
 import { errorHandler } from "../utils/errorHandler";
+import { mergeOptions } from "../utils/merge";
 import { shallowEqual } from "../utils/shallowEqual";
 import { sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
@@ -18,6 +21,7 @@ const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
 export interface SearchOptions extends RenderOptions, CacheOptions, ExceptionOptions
 {
     useCache?: boolean;
+    disabled?: DisableOptionValueType | { (searchOptions: ISearchQuery | string): boolean };
 }
 
 export type GetPageDispatch = (pageNo: number, callback?: () => void) => void;
@@ -27,18 +31,15 @@ export function useSearch(
     options?: SearchOptions,
     deps?: React.DependencyList): [Nullable<SpSearchResult>, GetPageDispatch]
 {
-    const [searchState, dispatch] = useReducer(_reducer, INITIAL_STATE);
-
     const globalOptions = useContext(InternalContext);
-
+    const [searchState, dispatch] = useReducer(_reducer, INITIAL_STATE);
     const _innerState = useRef<TrackedState>({
         externalDependencies: null,
         page: INITIAL_PAGE_INDEX,
         searchOptions: null
     });
-
     const _subscription = useRef<Nullable<Subscription>>(undefined);
-    const _disabled = useRef<boolean | undefined>(options?.disabled);
+    const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
 
     const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number, callback?: () => void) =>
     {
@@ -66,28 +67,26 @@ export function useSearch(
 
     useEffect(() =>
     {
-        _disabled.current = options?.disabled;
+        const mergedOptions = mergeOptions(globalOptions, options);
+        _disabled.current = checkDisable(mergedOptions?.disabled, defaultCheckDisable, searchOptions);
 
         if (_disabled.current !== true)
         {
-            const optionsChanged = !compareTuples(_innerState.current.externalDependencies, deps)
+            const searchOptChanged = !compareTuples(_innerState.current.externalDependencies, deps)
                 || !shallowEqual(_innerState.current.searchOptions, searchOptions);
 
             // page change is ignored, if options are changed 
-            const pageChanged = !optionsChanged
+            const pageChanged = !searchOptChanged
                 && _innerState.current.page !== searchState.currentPage;
 
-            if (optionsChanged || pageChanged)
+            if (searchOptChanged || pageChanged)
             {
-                const mergedOptions = options
-                    ? { ...globalOptions, ...options }
-                    : globalOptions;
 
                 try
                 {
                     _cleanup();
 
-                    if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                    if (mergedOptions.loadActionOption !== LoadActionMode.KeepPrevious)
                     {
                         dispatch({
                             type: ActionTypes.NewSearchResult,

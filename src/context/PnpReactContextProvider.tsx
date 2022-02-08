@@ -6,6 +6,7 @@ export interface PnpHookGlobalOptions extends CacheOptions, ExceptionOptions, Re
 {
     // Enable cache with using Pnp global cache options
     useCache?: boolean
+    disabled?: boolean | "auto";
 }
 
 const DEFAULT_OPTIONS: PnpHookGlobalOptions = {};

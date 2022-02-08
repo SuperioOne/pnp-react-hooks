@@ -1,23 +1,27 @@
 import "@pnp/sp/files";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { FileReturnTypes } from "../types/literalTypes";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryable } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
 import { assertString } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
 import { isUUID } from "../utils/isUUID";
 import { isUrl, UrlType } from "../utils/isUrl";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 type InstanceTypes = IFileInfo | ArrayBuffer | Blob | string;
 
 export interface FileOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>
 {
     type?: T;
+    disabled?: DisableOptionValueType | { (fileId: string): boolean };
 }
 
 export function useFile(
@@ -45,6 +49,7 @@ export function useFile(
     options?: FileOptions<FileReturnTypes>,
     deps?: React.DependencyList): Nullable<InstanceTypes>
 {
+    const globalOptions = useContext(InternalContext);
     const [fileInfo, setFileInfo] = useState<Nullable<InstanceTypes>>(undefined);
 
     const invokableFactory = useCallback(async (web: IWeb) =>
@@ -77,12 +82,19 @@ export function useFile(
             case "text": return createInvokable(queryInst, queryInst.getText);
             default: return createInvokable(queryInst);
         }
-
     }, [fileId, options?.type]);
 
     const _mergedDeps = mergeDependencies([fileId, options?.type], deps);
 
-    useQueryEffect(invokableFactory, setFileInfo, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, fileId);
+
+        return opt;
+    }, [fileId, options, globalOptions]);
+
+    useQueryEffect(invokableFactory, setFileInfo, _options, _mergedDeps);
 
     return fileInfo;
 }

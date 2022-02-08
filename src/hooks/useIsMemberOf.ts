@@ -1,21 +1,25 @@
 import "@pnp/sp/site-groups";
 import "@pnp/sp/site-users";
+import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { ExceptionOptions, RenderOptions, WebOptions } from "../types/options";
 import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { PnpActionFunction } from "../types/PnpActionFunction";
 import { assertID, assertString } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveUser } from "../utils/resolveUser";
 import { useRequestEffect } from "./internal/useRequestEffect";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 export interface IsMemberOfOptions extends ExceptionOptions, RenderOptions, WebOptions
 {
     userId?: string | number;
+    disabled?: DisableOptionValueType | { (groupId: string | number): boolean };
 }
 
 type MemberInfo = [Nullable<boolean>, Nullable<ISiteGroupInfo>];
@@ -27,6 +31,7 @@ export function useIsMemberOf(
     options?: IsMemberOfOptions,
     deps?: React.DependencyList): MemberInfo
 {
+    const globalOptions = useContext(InternalContext);
     const [isMember, setIsMember] = useState<Nullable<MemberInfo>>(DEFAULT);
 
     const invokableFactory = useCallback(async (web: IWeb) =>
@@ -65,12 +70,19 @@ export function useIsMemberOf(
         };
 
         return createInvokable(web, action);
-
     }, [options?.userId, groupId]);
 
     const _mergedDeps = mergeDependencies([groupId, options?.userId], deps);
 
-    useRequestEffect(invokableFactory, setIsMember, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, groupId);
+
+        return opt;
+    }, [groupId, options, globalOptions]);
+
+    useRequestEffect(invokableFactory, setIsMember, _options, _mergedDeps);
 
     return isMember ?? DEFAULT;
 }

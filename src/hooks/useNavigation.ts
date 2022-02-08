@@ -1,14 +1,16 @@
 import "@pnp/sp/navigation";
 import { INavNodeInfo } from "@pnp/sp/navigation/types";
 import { IWeb } from "@pnp/sp/webs/types";
+import { InternalContext } from "../context";
 import { NavigationTypes } from "../types/literalTypes";
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryableCollection } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
 import { createInvokable } from "../utils/createInvokable";
-import { mergeDependencies } from "../utils/mergeDependencies";
+import { checkDisable } from "../utils/checkDisable";
+import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { useQueryEffect } from "./internal/useQueryEffect";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 export interface NavigationOptions extends PnpHookOptions<ODataQueryableCollection>
 {
@@ -19,6 +21,7 @@ export function useNavigation(
     options?: NavigationOptions,
     deps?: React.DependencyList): Nullable<INavNodeInfo[]>
 {
+    const globalOptions = useContext(InternalContext);
     const [navNodes, setNavNodes] = useState<Nullable<INavNodeInfo[]>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
@@ -39,7 +42,15 @@ export function useNavigation(
 
     const _mergedDeps = mergeDependencies([options?.type], deps);
 
-    useQueryEffect(invokableFactory, setNavNodes, options, _mergedDeps);
+    const _options = useMemo(() =>
+    {
+        const opt = mergeOptions(globalOptions, options);
+        opt.disabled = checkDisable(opt?.disabled);
+
+        return opt;
+    }, [options, globalOptions]);
+
+    useQueryEffect(invokableFactory, setNavNodes, _options, _mergedDeps);
 
     return navNodes;
 }

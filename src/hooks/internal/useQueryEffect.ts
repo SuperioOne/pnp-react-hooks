@@ -1,21 +1,20 @@
-import { useRef } from "react";
-import { useCallback, useContext, useEffect } from "react";
-import { shallowEqual } from "../../utils/shallowEqual";
-import { resolveWeb } from "../../utils/resolveWeb";
-import { insertODataQuery } from "../../utils/insertODataQuery";
-import { insertCacheOptions } from "../../utils/insertCacheOptions";
-import { from, NextObserver, Subscription } from "rxjs";
-import { errorHandler } from "../../utils/errorHandler";
-import { deepCompareQuery } from "../../utils/deepCompareQuery";
-import { compareTuples } from "../../utils/compareTuples";
-import { SharepointQueryable } from "../../types/SharepointQueryable";
-import { PnpHookOptions } from "../../types/options";
-import { ODataQueryable, ODataQueryableCollection } from "../../types/ODataQueryable";
-import { Nullable } from "../../types/utilityTypes";
-import { LoadActionMode } from "../../types/options/RenderOptions";
-import { InvokableFactory } from "../../types/Invokeable";
-import { InternalContext } from "../../context";
 import { IWeb } from "@pnp/sp/webs/types";
+import { InvokableFactory } from "../../types/Invokeable";
+import { LoadActionOption } from "../../types/options/RenderOptions";
+import { Nullable } from "../../types/utilityTypes";
+import { ODataQueryable, ODataQueryableCollection } from "../../types/ODataQueryable";
+import { PnpHookOptions } from "../../types/options";
+import { SharepointQueryable } from "../../types/SharepointQueryable";
+import { compareTuples } from "../../utils/compareTuples";
+import { deepCompareQuery } from "../../utils/deepCompareQuery";
+import { errorHandler } from "../../utils/errorHandler";
+import { from, NextObserver, Subscription } from "rxjs";
+import { insertCacheOptions } from "../../utils/insertCacheOptions";
+import { insertODataQuery } from "../../utils/insertODataQuery";
+import { resolveWeb } from "../../utils/resolveWeb";
+import { shallowEqual } from "../../utils/shallowEqual";
+import { useCallback, useEffect } from "react";
+import { useRef } from "react";
 
 export function useQueryEffect<
     TQuery extends ODataQueryable | ODataQueryableCollection,
@@ -23,11 +22,9 @@ export function useQueryEffect<
     TContext extends SharepointQueryable = SharepointQueryable>(
         invokableFactory: InvokableFactory<TContext>,
         stateAction: (value: Nullable<TReturn>) => void,
-        options?: PnpHookOptions<Nullable<TQuery>>,
+        options: PnpHookOptions<Nullable<TQuery>>,
         deps?: React.DependencyList)
 {
-    const globalOptions = useContext(InternalContext);
-
     const _innerState = useRef<TrackedState<TQuery>>({
         externalDependencies: null,
         query: undefined,
@@ -46,63 +43,58 @@ export function useQueryEffect<
 
     useEffect(() =>
     {
-        if (options?.disabled !== true)
+        if (options.disabled !== true)
         {
-            setTimeout(async () =>
+            const query = options?.query;
+
+            const shouldUpdate = !deepCompareQuery(_innerState.current.query, query)
+                || !compareTuples(_innerState.current.externalDependencies, deps)
+                || !shallowEqual(_innerState.current.webOptions, options.web);
+
+            if (shouldUpdate)
             {
-                const query = options?.query;
-                const webOption = options?.web ?? globalOptions?.web;
+                _cleanup();
 
-                const shouldUpdate = !deepCompareQuery(_innerState.current.query, query)
-                    || !compareTuples(_innerState.current.externalDependencies, deps)
-                    || !shallowEqual(_innerState.current.webOptions, webOption);
-
-                if (shouldUpdate)
+                if (options?.loadActionOption !== LoadActionOption.KeepPrevious)
                 {
-                    const mergedOptions = options
-                        ? { ...globalOptions, ...options }
-                        : globalOptions;
+                    stateAction(undefined);
+                }
 
+                setTimeout(async () =>
+                {
                     try
                     {
-                        _cleanup();
-
-                        if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
-                        {
-                            stateAction(undefined);
-                        }
-
                         const observer: NextObserver<TReturn> = {
                             next: stateAction,
                             complete: _cleanup,
                             error: (err: Error) =>
                             {
                                 stateAction(null);
-                                errorHandler(err, mergedOptions);
+                                errorHandler(err, options);
                             }
                         };
 
-                        const web = resolveWeb(mergedOptions);
+                        const web = resolveWeb(options);
                         const invokeable = await invokableFactory(web);
 
                         insertODataQuery(invokeable, query);
-                        insertCacheOptions(invokeable, mergedOptions);
+                        insertCacheOptions(invokeable, options);
 
                         _subscription.current = from(invokeable())
                             .subscribe(observer);
                     }
                     catch (err)
                     {
-                        errorHandler(err, mergedOptions);
+                        errorHandler(err, options);
                     }
-                }
+                });
+            }
 
-                _innerState.current = {
-                    externalDependencies: deps,
-                    query: query,
-                    webOptions: webOption
-                };
-            }, 0);
+            _innerState.current = {
+                externalDependencies: deps,
+                query: query,
+                webOptions: options.web
+            };
         }
     });
 }
