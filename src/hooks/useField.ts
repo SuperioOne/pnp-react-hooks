@@ -1,5 +1,5 @@
 import "@pnp/sp/fields";
-import { IFields } from "@pnp/sp/fields/types";
+import { IFieldInfo } from "@pnp/sp/fields/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryable } from "../types/ODataQueryable";
@@ -24,10 +24,10 @@ export interface FieldOptions extends PnpHookOptions<ODataQueryable>
 export function useField(
     fieldId: string,
     options?: FieldOptions,
-    deps?: React.DependencyList): Nullable<IFields>
+    deps?: React.DependencyList): Nullable<IFieldInfo>
 {
     const globalOptions = useContext(InternalContext);
-    const [field, setField] = useState<Nullable<IFields>>();
+    const [field, setField] = useState<Nullable<IFieldInfo>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {

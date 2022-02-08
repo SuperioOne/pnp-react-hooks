@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useListItemsPaged } from "../../src";
+import { useListItemsPaged } from "../../src/hooks/useListItemsPaged";
 
 export function ListItemsPagedDebug()
 {
@@ -12,7 +12,6 @@ export function ListItemsPagedDebug()
         },
         exception: console.log,
         pageSize: 200,
-        returnOnlyPageResult: getOnlyPage
     });
 
     const [counter, setCounter] = React.useState<number>(0);

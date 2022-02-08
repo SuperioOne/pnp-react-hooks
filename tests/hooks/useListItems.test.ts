@@ -5,7 +5,8 @@ import { ListOptions } from "../../src/types/options";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
 import { sp } from "@pnp/sp";
-import { useListItem, useListItems, useListItemsPaged } from "../../src";
+import { useListItem, useListItems } from "../../src";
+import { useListItemsPaged } from "../../src/hooks/useListItemsPaged";
 
 const reactDOMElement = initJSDOM();
 let testList: IListInfo;
@@ -82,43 +83,6 @@ test("useListItem get list items with getAll", async () =>
     });
 });
 
-test("useListItem get list items paged and append results", async () =>
-{
-    const props: CustomHookProps = {
-        useHook: () => useListItemsPaged(testList.Id, {
-            query: {
-                select: ["Id", "Title", "Author/Id"],
-                expand: ["Author"]
-            },
-            pageSize: 5,
-            returnOnlyPageResult: false
-        }),
-        completeWhen: (response: [unknown[], (cb?: () => void) => void, boolean]) =>
-        {
-            const [data, getNext, hasNext] = response;
-
-            if (data)
-                console.log(data);
-
-            if (hasNext === false && data?.length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                getNext?.();
-                return false;
-            }
-        }
-    };
-
-    await act(async () =>
-    {
-        const items = await reactDOMElement.mountTestComponent("useListItem get list items paged and append results", CustomHookMockup, props);
-        expect(items?.length).toBeGreaterThan(0);
-    });
-});
-
 test("useListItem get list items paged and return last page", async () =>
 {
     const props: CustomHookProps = {
@@ -128,7 +92,6 @@ test("useListItem get list items paged and return last page", async () =>
                 expand: ["Author"]
             },
             pageSize: 5,
-            returnOnlyPageResult: true
         }),
         completeWhen: (response: [unknown[], (cb?: () => void) => void, boolean]) =>
         {

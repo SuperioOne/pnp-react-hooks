@@ -25,7 +25,6 @@ export { useList } from "./hooks/useList";
 export { useListChangeToken } from "./hooks/useListChangeToken";
 export { useListItem } from "./hooks/useListItem";
 export { useListItems } from "./hooks/useListItems";
-export { useListItemsPaged } from "./hooks/useListItemsPaged";
 export { useLists } from "./hooks/useLists";
 export { useNavigation } from "./hooks/useNavigation";
 export { usePageComments } from "./hooks/usePageComments";

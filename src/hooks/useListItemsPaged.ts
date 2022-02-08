@@ -23,7 +23,6 @@ interface ListItemsPagedOptions extends PnpHookOptions<FilteredODataQueryable>
      * Default page size is 2000.
      **/
     pageSize?: number;
-    returnOnlyPageResult?: boolean;
     disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
@@ -50,10 +49,7 @@ export function useListItemsPaged<T>(
 
         if (pageResult)
         {
-            newState.results = options?.returnOnlyPageResult
-                ? pageResult.results
-                : (pageState?.results ?? Array.prototype).concat(pageResult.results);
-
+            newState.results = pageResult.results;
             newState.hasNext = pageResult.hasNext;
             newState.pagedResult = pageResult;
         }
@@ -63,7 +59,7 @@ export function useListItemsPaged<T>(
         }
 
         setPageState(newState);
-    }, [pageState?.results, options?.returnOnlyPageResult]);
+    }, []);
 
     const getNext: NextPageDispatch = useCallback((callback) =>
     {
@@ -109,9 +105,7 @@ export function useListItemsPaged<T>(
         return createInvokable(queryInst, action);
     }, [options?.pageSize, list, _cleanup]);
 
-    const _mergedDeps = mergeDependencies(
-        [options?.pageSize, options?.returnOnlyPageResult, list],
-        deps);
+    const _mergedDeps = mergeDependencies([options?.pageSize, list], deps);
 
     const _options = useMemo(() =>
     {
