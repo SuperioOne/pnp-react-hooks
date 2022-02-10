@@ -5,6 +5,11 @@ test("Valid relative path", () =>
     expect(isUrl("/sub/path/test", UrlType.Relative)).toBe(true);
 });
 
+test("Valid / relative path", () =>
+{
+    expect(isUrl("/", UrlType.Relative)).toBe(true);
+});
+
 test("Valid absolute path", () =>
 {
     expect(isUrl("https://test.com/sub/path/test", UrlType.Absolute)).toBe(true);
