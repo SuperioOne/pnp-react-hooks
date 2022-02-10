@@ -1,14 +1,14 @@
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
 import { compareArray } from "./compareArray";
-import { isNullOrEmpty } from "./isNullOrEmpty";
+import { isNull } from "./isNull";
 
 export function deepCompareQuery<T extends ODataQueryable | ODataQueryableCollection>(left: Nullable<T>, right: Nullable<T>)
 {
     return left === right
         || (
-            !isNullOrEmpty(left)
-            && !isNullOrEmpty(right)
+            !isNull(left)
+            && !isNull(right)
             && _compareODataQueryable(left, right)
         );
 }

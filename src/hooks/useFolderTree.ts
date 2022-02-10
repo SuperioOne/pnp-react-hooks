@@ -2,7 +2,7 @@ import "@pnp/sp/files";
 import "@pnp/sp/folders";
 import { DisableOptionType, DisableOptionValueType } from "../types/options/RenderOptions";
 import { ExceptionOptions, RenderOptions, WebOptions, CacheOptions, LoadActionMode } from "../types/options";
-import { FilteredODataQueryable } from "../types/ODataQueryable";
+import { FilteredODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
 import { IFileInfo } from "@pnp/sp/files/types";
 import { IFolderInfo } from "@pnp/sp/folders/types";
 import { IWeb } from "@pnp/sp/webs/types";
@@ -22,10 +22,11 @@ import { mergeOptions } from "../utils/merge";
 import { resolveWeb } from "../utils/resolveWeb";
 import { shallowEqual } from "../utils/shallowEqual";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
+import { isNull } from "../utils/isNull";
 
 export interface FolderTreeOptions extends ExceptionOptions, RenderOptions, WebOptions, CacheOptions
 {
-    fileQuery?: FilteredODataQueryable;
+    fileQuery?: ODataQueryableCollection;
     folderFilter?: string;
     useCache?: undefined | boolean;
     disabled?: DisableOptionValueType | { (rootFolderRelativeUrl: string): boolean };
@@ -89,19 +90,25 @@ export function useFolderTree(
             // reset hook state when web or root path changed 
             if (_innerState.current.initialUrl !== rootFolderRelativeUrl)
             {
-                dispatch({
-                    type: ActionTypes.ChangePath,
-                    callback: undefined,
-                    initialUrl: rootFolderRelativeUrl,
-                    currentFolderUrl: rootFolderRelativeUrl,
-                    treeContext: undefined
-                });
+                // prevent path change in case of similar urls (ex: "/EXAMPLE" and "/example/")
+                if (isNull(_innerState.current.initialUrl)
+                    || isNull(rootFolderRelativeUrl)
+                    || !compareURL(_innerState.current.initialUrl, rootFolderRelativeUrl))
+                {
+                    dispatch({
+                        type: ActionTypes.ChangePath,
+                        callback: undefined,
+                        initialUrl: rootFolderRelativeUrl,
+                        currentFolderUrl: rootFolderRelativeUrl,
+                        treeContext: undefined
+                    });
+                }
             }
             else
             {
                 const path = state.currentFolderUrl;
 
-                const shouldUpdate = path !== _innerState.current.folderUrl
+                const shouldUpdate = path?.toLowerCase() !== _innerState.current.folderUrl?.toLowerCase()
                     || _innerState.current.folderFilter !== folderFilter
                     || !deepCompareQuery(_innerState.current.fileQuery, fileQuery)
                     || !shallowEqual(_innerState.current.webOptions, mergedOptions.web)
@@ -140,6 +147,7 @@ export function useFolderTree(
                         const getFolderTree = async (): Promise<TreeContext> =>
                         {
                             assertString(path, "Path value is empty or null.");
+                            assertString(state.initialUrl, "Home path value is empty or null.");
 
                             const filesReq = insertODataQuery(rootFolder.files, fileQuery);
                             const subFolderReq = rootFolder.folders;
@@ -230,14 +238,14 @@ const _reducer = (state: FolderState, action: TreeAction): FolderState =>
             return {
                 initialUrl: state.initialUrl,
                 callback: undefined,
-                currentFolderUrl: action.currentPath?.toLowerCase(),
+                currentFolderUrl: action.currentPath,
                 treeContext: action.context
             };
         case ActionTypes.ChangePath:
             return {
                 ...state,
                 ...action,
-                currentFolderUrl: action.currentFolderUrl?.toLowerCase(),
+                currentFolderUrl: action.currentFolderUrl,
             };
         default:
             throw new Error(`useSearch: Unexpected action type received.`);
@@ -246,7 +254,7 @@ const _reducer = (state: FolderState, action: TreeAction): FolderState =>
 
 interface FolderState
 {
-    initialUrl: string;
+    initialUrl: Nullable<string>;
     currentFolderUrl: Nullable<string>;
     callback?: () => void;
     treeContext?: Nullable<TreeContext>;
