@@ -1,6 +1,6 @@
 import "@pnp/sp/folders";
 import { DisableOptionValueType } from "../types/options/RenderOptions";
-import { IFolder } from "@pnp/sp/folders";
+import { IFolder, IFolderInfo } from "@pnp/sp/folders";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
@@ -21,10 +21,10 @@ export interface FolderOptions extends PnpHookOptions<ODataQueryable>
 export function useFolder(
     folderId: string,
     options?: FolderOptions,
-    deps?: React.DependencyList): Nullable<IFolder>
+    deps?: React.DependencyList): Nullable<IFolderInfo>
 {
     const globalOptions = useContext(InternalContext);
-    const [folder, setFolder] = useState<Nullable<IFolder>>();
+    const [folder, setFolder] = useState<Nullable<IFolderInfo>>();
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {

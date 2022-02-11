@@ -82,7 +82,6 @@ async function buildProject()
             input: options.build,
             external: [
                 "jsdom",
-                "colors",
                 "tslib",
                 "react",
                 "react-dom",

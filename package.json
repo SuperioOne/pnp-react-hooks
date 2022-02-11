@@ -14,6 +14,7 @@
     "pack": "node ./scripts/build.js -o ./.temp/bin/release --includeDirs ['src/**/*'] --build src/index.ts && node ./scripts/omitPackageJson.js --outDir .temp/bin/release && npm pack ./.temp/bin/release --pack-destination ./.temp/bin/",
     "clean": "node ./scripts/clean.js",
     "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*",
+    "docs-api": "typedoc --plugin typedoc-plugin-markdown --out docs src/index.ts",
     "test": "jest"
   },
   "keywords": [
@@ -62,6 +63,8 @@
     "rollup": "^2.62.0",
     "rollup-plugin-delete": "^2.0.0",
     "ts-jest": "^27.0.7",
+    "typedoc": "^0.22.11",
+    "typedoc-plugin-markdown": "^3.11.13",
     "typescript": "^4.5.4"
   },
   "dependencies": {
