@@ -1,5 +1,5 @@
 import "@pnp/sp/folders";
-import { IWeb } from "@pnp/sp/webs";
+import { IWeb } from "@pnp/sp/webs/types";
 import { isUUID } from "./isUUID";
 import { isUrl, UrlType } from "./isUrl";
 

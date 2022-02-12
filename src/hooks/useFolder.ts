@@ -1,6 +1,6 @@
 import "@pnp/sp/folders";
 import { DisableOptionValueType } from "../types/options/RenderOptions";
-import { IFolder, IFolderInfo } from "@pnp/sp/folders";
+import { IFolderInfo } from "@pnp/sp/folders/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";

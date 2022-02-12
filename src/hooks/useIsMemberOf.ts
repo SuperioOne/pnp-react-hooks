@@ -7,7 +7,6 @@ import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
-import { PnpActionFunction } from "../types/PnpActionFunction";
 import { assertID, assertString } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
 import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
@@ -36,7 +35,7 @@ export function useIsMemberOf(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        const action: PnpActionFunction<IWeb, MemberInfo> = async function ()
+        const action = async function (this:IWeb):Promise<MemberInfo>
         {
             const user: ISiteUser = options?.userId
                 ? resolveUser(this.siteUsers, options.userId)
@@ -62,7 +61,7 @@ export function useIsMemberOf(
                     throw new TypeError("groupId type is not valid.");
             }
 
-            const response = await groups.top(1).get();
+            const response = await groups.top(1).select("Id").get();
 
             return response.length === 1
                 ? [true, response[0]]

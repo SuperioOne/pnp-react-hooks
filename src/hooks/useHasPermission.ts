@@ -6,7 +6,6 @@ import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { PermissionKind } from "@pnp/sp/security/types";
-import { PnpActionFunction } from "../types/PnpActionFunction";
 import { assertID, assertString } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
 import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
@@ -15,6 +14,7 @@ import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveScope } from "../utils/resolveScope";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback, useMemo, useContext } from "react";
+import { isNull } from "../utils/isNull";
 
 interface Scope
 {
@@ -24,13 +24,13 @@ interface Scope
 
 export interface UserPermissionOptions extends ExceptionOptions, RenderOptions, WebOptions
 {
+    userId?: string | number;
     scope?: Scope;
     disabled?: DisableOptionValueType | { (permissionKinds: PermissionKind[] | PermissionKind, userId: string | number): boolean };
 }
 
-export function useUserHasPermission(
+export function useHasPermission(
     permissionKinds: PermissionKind[] | PermissionKind,
-    userId: string | number,
     options?: UserPermissionOptions,
     deps?: React.DependencyList): Nullable<boolean>
 {
@@ -45,57 +45,65 @@ export function useUserHasPermission(
 
     const invokableFactory = useCallback(async (web: IWeb) =>
     {
-        const action: PnpActionFunction<IWeb, boolean> = async function ()
+        let userLoginName: string | undefined;
+        const userId = options?.userId;
+
+        switch (typeof userId)
         {
-            let userLoginName: string;
+            case "number":
+                {
+                    assertID(userId, "userId is not valid ID.");
 
-            switch (typeof userId)
-            {
-                case "number":
-                    {
-                        assertID(userId, "userId is not valid ID.");
+                    userLoginName = (await web.siteUsers.getById(userId).select("LoginName")()).LoginName;
+                    break;
+                }
+            case "string":
+                {
+                    assertString(userId, "userId is not valid or empty");
 
-                        userLoginName = (await web.siteUsers.getById(userId).select("LoginName")()).LoginName;
-                        break;
-                    }
-                case "string":
-                    {
-                        assertString(userId, "userId is not valid or empty");
+                    userLoginName = isEmail(userId)
+                        ? (await web.siteUsers.getByEmail(userId).select("LoginName")()).LoginName
+                        : userId;
 
-                        userLoginName = isEmail(userId)
-                            ? (await web.siteUsers.getByEmail(userId).select("LoginName")()).LoginName
-                            : userId;
+                    break;
+                }
+            case "undefined":
+                {
+                    userLoginName = undefined;
+                    break;
+                }
+            default:
+                throw new TypeError("userId value type is not string or number.");
+        }
 
-                        break;
-                    }
-                default:
-                    throw new TypeError("userId value type is not string or number.");
-            }
+        const scope = resolveScope(web, {
+            list: options?.scope?.list,
+            item: options?.scope?.item
+        });
 
-            const scope = resolveScope(web, {
-                list: options?.scope?.list,
-                item: options?.scope?.item
-            });
-
-            const basePerm = await scope.getUserEffectivePermissions(userLoginName);
+        const action = async function (this: IWeb)
+        {
+            const basePerm = await (isNull(userLoginName)
+                ? scope.getCurrentUserEffectivePermissions()
+                : scope.getUserEffectivePermissions(userLoginName));
 
             return scope.hasPermissions(basePerm, _permFlag);
         };
 
         return createInvokable(web, action);
-    }, [userId, options, _permFlag]);
+    }, [options, _permFlag]);
 
     const _mergedDeps = mergeDependencies(
-        [userId, _permFlag, options?.scope?.list, options?.scope?.item],
+        [options?.userId, _permFlag, options?.scope?.list, options?.scope?.item],
         deps);
 
     const _options = useMemo(() =>
     {
         const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, permissionKinds, userId);
+        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, permissionKinds);
 
         return opt;
-    }, [permissionKinds, userId, options, globalOptions]);
+    }, [permissionKinds, options, globalOptions]);
 
     useRequestEffect(invokableFactory, setHasPermission, _options, _mergedDeps);
 

@@ -169,3 +169,65 @@ test("useGroups get top 5 group", async () =>
         expect(reactDOMElement.mountTestComponent("useGroups get top 5 group", CustomHookMockup, props))
             .resolves.toBeTruthy());
 });
+
+test("useGroups for testUser by user Id", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useGroups({
+            query: {
+                top: 5
+            },
+            userId: testUserInfo.Id
+        })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useGroups for testUser by user Id", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useGroups for testUser by user email", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useGroups({
+            query: {
+                top: 5
+            },
+            userId: testUserInfo.Email
+        })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useGroups for testUser by user email", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useGroups for testUser by user login name", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useGroups({
+            query: {
+                top: 5
+            },
+            userId: testUserInfo.LoginName
+        })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useGroups for testUser by user login name", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useGroups for testUser by user invalid value", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useGroups({
+            userId: {} as any,
+            exception: err
+        })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useGroups for testUser by user login name", CustomHookMockup, props))
+            .rejects.toThrow("userId value type is not string or number."));
+});
