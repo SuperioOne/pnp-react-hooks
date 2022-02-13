@@ -4,20 +4,26 @@ import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
 import { sp } from "@pnp/sp";
-import { useFile } from "../../src";
+import { useFile, useFiles } from "../../src";
+import { IFolderInfo } from "@pnp/sp/folders/types";
 
 const fName = "pnp-rct-testFile.txt";
 const fContent = "Pnp React Hooks";
 let testFileInfo: IFileInfo;
+let testFolderInfo: IFolderInfo;
 const reactDOMElement = initJSDOM();
 
 beforeAll(async () =>
 {
-
     InitPnpTest();
 
-    const file = await sp.web.rootFolder.folders.getByName("SiteAssets").files.add(fName, fContent);
+    const [file, folder] = await Promise.all([
+        sp.web.rootFolder.folders.getByName("SiteAssets").files.add(fName, fContent),
+        sp.web.rootFolder.folders.getByName("SiteAssets").get()
+    ]);
+
     testFileInfo = file.data;
+    testFolderInfo = folder;
 });
 afterEach(() => reactDOMElement.unmountComponent());
 
@@ -73,4 +79,51 @@ test("useFile invalid file identifier", async () =>
     await act(async () =>
         expect(reactDOMElement.mountTestComponent("useFile invalid file identifier", CustomHookMockup, props))
             .rejects.toThrow("fileId value is neither unique id or relative url."));
+});
+//
+
+test("useFiles get root folder by relative Url", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useFiles(testFolderInfo.ServerRelativeUrl, {
+            query: {
+                top: 5
+            }
+        })
+    };
+
+    await act(async () =>
+    {
+        const data = await reactDOMElement.mountTestComponent("useFiles get root folder by relative Url", CustomHookMockup, props);
+        expect(data).toBeTruthy();
+    });
+});
+
+test("useFiles get root folder by unique Id", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useFiles(testFolderInfo.UniqueId, {
+            query: {
+                top: 5
+            }
+        })
+    };
+
+    await act(async () =>
+    {
+        const data = await reactDOMElement.mountTestComponent("useFiles get root folder by unique Id", CustomHookMockup, props);
+        expect(data).toBeTruthy();
+    });
+});
+
+
+test("useFiles invalid folder identifier", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useFiles("neither guid or relative url", { exception: err })
+    };
+
+    await act(async () =>
+        expect(reactDOMElement.mountTestComponent("useFiles invalid folder identifier", CustomHookMockup, props))
+            .rejects.toThrow("folderId is not a valid type"));
 });

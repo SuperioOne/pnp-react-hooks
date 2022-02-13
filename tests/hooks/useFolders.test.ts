@@ -4,7 +4,7 @@ import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
 import { sp } from "@pnp/sp";
-import { useFolder, useFolderTree } from "../../src";
+import { useFolder, useFolderTree, useFolders } from "../../src";
 
 const reactDOMElement = initJSDOM();
 let testFolder: IFolderInfo;
@@ -41,6 +41,53 @@ test("useFolder get folder by relative url", async () =>
     await act(() =>
         expect(reactDOMElement.mountTestComponent("useFolder get folder by relative url", CustomHookMockup, props))
             .resolves.toBeTruthy());
+});
+
+test("useFolders get from default root folder", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useFolders()
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useFolders get from default root folder", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useFolders get from root folder with unique Id", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useFolders({ folderId: testFolder.UniqueId })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useFolders get from root folder with unique Id", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useFolders get from root folder with relative url", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: () => useFolders({ folderId: testFolder.ServerRelativeUrl })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useFolders get from root folder with relative url", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useFolders incorrect folder Id", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useFolders({
+            folderId: null as any,
+            exception: err
+        })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useFolders get from root folder with relative url", CustomHookMockup, props))
+            .rejects.toThrow("folderId is not a valid type"));
 });
 
 test("useFolderTree get directory tree of given root", async () =>
