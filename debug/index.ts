@@ -6,7 +6,6 @@ import { InitEnvironment } from "./init";
 
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
 });
 
 const eventLoop = () => 

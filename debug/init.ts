@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import { sp } from "@pnp/sp";
 import { MsalFetchClient } from "@pnp/nodejs";
-import config from "../.config/msalSettings";
+import config from "../msalSettings";
 
 const ROOT_DIV_ID = "react";
 

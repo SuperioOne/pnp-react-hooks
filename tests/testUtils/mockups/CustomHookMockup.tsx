@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as React from "react";
-import testEnv from "../../../.config/test-env";
+import testEnv from "../../../test-env";
 import { formatResponse } from "../formatResponse";
 import { TestComponentProps } from "../ReactDOMElement";
 

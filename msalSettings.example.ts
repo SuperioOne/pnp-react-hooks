@@ -11,7 +11,7 @@ const msalInit = {
             privateKey: privateKey,
         },
     }
-}
+};
 
 export default
     {
@@ -28,4 +28,4 @@ export default
                 scopes: ["https://graph.microsoft.com/.default"]
             },
         }
-    }
+    };

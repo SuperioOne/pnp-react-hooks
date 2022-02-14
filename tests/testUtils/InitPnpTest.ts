@@ -1,5 +1,5 @@
-import config from "../../.config/msalSettings";
-import testEnv from "../../.config/test-env";
+import config from "../../msalSettings";
+import testEnv from "../..//test-env";
 import { IHttpClientImpl } from "@pnp/common";
 import { MsalFetchClient } from "@pnp/nodejs";
 import { sp } from "@pnp/sp";

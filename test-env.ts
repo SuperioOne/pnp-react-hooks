@@ -3,4 +3,4 @@ export default {
     cacheMode: "if-exists",
     // cacheMode: "off",
     cacheDir: "./.temp/requestCache"
-}
+};

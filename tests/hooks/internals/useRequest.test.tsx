@@ -1,4 +1,4 @@
-import config from "../../../.config/msalSettings";
+import config from "../../../msalSettings";
 import { InitPnpTest } from "../../testUtils/InitPnpTest";
 import { SharepointQueryable } from "../../../src/types/SharepointQueryable";
 import { Web } from "@pnp/sp/webs";

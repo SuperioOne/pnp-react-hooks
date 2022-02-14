@@ -8,9 +8,15 @@
         "declaration": true,
         "moduleResolution": "Node",
         "strictNullChecks": true,
-        "noEmitOnError": true
+        "sourceMap": true,
+        "noEmitOnError": true,
+        "mapRoot": ".",
     },
-    "include": ["src/**/*"],
+    "include": [
+        "src/**/*",
+        "debug/**/*",
+        "msalSettings.ts"
+    ],
     "exclude": [
         "node_modules",
         "**/node_modules/*",

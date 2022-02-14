@@ -1,4 +1,4 @@
-import config from "../../../.config/msalSettings";
+import config from "../../../msalSettings";
 import { InitPnpTest } from "../../testUtils/InitPnpTest";
 import { InternalQueryMockup } from "../../testUtils/mockups/InternalQueryMockup";
 import { Options } from "../../testUtils/mockups/InternalRequestMockup";

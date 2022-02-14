@@ -1,6 +1,6 @@
 node_modules
 stats.html
 .bin
-.config/msalSettings.ts
+msalSettings.ts
 .temp
 .cache
