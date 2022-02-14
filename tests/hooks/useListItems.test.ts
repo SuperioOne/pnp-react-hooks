@@ -6,7 +6,6 @@ import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
 import { sp } from "@pnp/sp";
 import { useListItem, useListItems } from "../../src";
-import { useListItemsPaged } from "../../src/hooks/useListItemsPaged";
 
 const reactDOMElement = initJSDOM();
 let testList: IListInfo;
@@ -79,42 +78,6 @@ test("useListItem get list items with getAll", async () =>
     await act(async () =>
     {
         const items = await reactDOMElement.mountTestComponent("useListItem get list items with getAll", CustomHookMockup, props);
-        expect(items?.length).toBeGreaterThan(0);
-    });
-});
-
-test("useListItem get list items paged and return last page", async () =>
-{
-    const props: CustomHookProps = {
-        useHook: () => useListItemsPaged(testList.Id, {
-            query: {
-                select: ["Id", "Title", "Author/Id"],
-                expand: ["Author"]
-            },
-            pageSize: 5,
-        }),
-        completeWhen: (response: [unknown[], (cb?: () => void) => void, boolean]) =>
-        {
-            const [data, getNext, hasNext] = response;
-
-            if (data)
-                console.log(data);
-
-            if (hasNext === false && data?.length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                getNext?.();
-                return false;
-            }
-        }
-    };
-
-    await act(async () =>
-    {
-        const items = await reactDOMElement.mountTestComponent("useListItem get list items paged and return last page", CustomHookMockup, props);
         expect(items?.length).toBeGreaterThan(0);
     });
 });
