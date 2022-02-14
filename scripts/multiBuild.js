@@ -24,8 +24,19 @@ async function buildStage(conf, dryRun)
 
         if (!dryRun)
         {
-            await bundle.generate(conf.output);
-            await bundle.write(conf.output);
+            if (Array.isArray(conf.output))
+            {
+                for (const outconfig of conf.output)
+                {
+                    await bundle.generate(outconfig);
+                    await bundle.write(outconfig);
+                }
+            }
+            else
+            {
+                await bundle.generate(conf.output);
+                await bundle.write(conf.output);
+            }
         }
 
         await bundle.close();

@@ -1,7 +1,6 @@
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { terser } from "rollup-plugin-terser";
 import del from 'rollup-plugin-delete';
 
 /**
@@ -14,7 +13,6 @@ const configs = {
             rollupConfig: {
                 input: "src/index.ts",
                 external: [
-                    "jsdom",
                     "tslib",
                     "react",
                     "react-dom",
@@ -38,32 +36,6 @@ const configs = {
                     preserveModulesRoot: "src",
                     sourcemap: false,
                     format: "es"
-                }
-            }
-        },
-        {
-            stageName: "CommonJS minified build",
-            rollupConfig: {
-                input: "src/index.ts",
-                external: [
-                    "jsdom",
-                    "react",
-                    "react-dom",
-                    /^@pnp\/.{1,150}$/,
-                ],
-                plugins: [
-                    typescript({
-                        declaration: false,
-                        outDir: "./.temp/bin/release/dist"
-                    }),
-                    commonjs(),
-                    nodeResolve(),
-                    terser()
-                ],
-                output: {
-                    sourcemap: false,
-                    format: "cjs",
-                    file: "./.temp/bin/release/dist/pnp-react-hooks.min.js"
                 }
             }
         }
