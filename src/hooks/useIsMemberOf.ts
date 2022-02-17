@@ -61,7 +61,7 @@ export function useIsMemberOf(
                     throw new TypeError("groupId type is not valid.");
             }
 
-            const response = await groups.top(1).select("Id").get();
+            const response = await groups.top(1).select("Id")();
 
             return response.length === 1
                 ? [true, response[0]]

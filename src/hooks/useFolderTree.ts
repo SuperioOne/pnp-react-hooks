@@ -11,7 +11,7 @@ import { Nullable } from "../types/utilityTypes";
 import { assert, assertString } from "../utils/assert";
 import { compareTuples } from "../utils/compareTuples";
 import { compareURL } from "../utils/compareURL";
-import { deepCompareQuery } from "../utils/deepCompareQuery";
+import { deepCompareQuery } from "../utils/deepCompare";
 import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
 import { errorHandler } from "../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
@@ -19,7 +19,7 @@ import { insertCacheOptions } from "../utils/insertCacheOptions";
 import { insertODataQuery } from "../utils/insertODataQuery";
 import { isUrl, UrlType } from "../utils/isUrl";
 import { mergeOptions } from "../utils/merge";
-import { resolveWeb } from "../utils/resolveWeb";
+import { resolveSP } from "../utils/resolveSP";
 import { shallowEqual } from "../utils/shallowEqual";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
 import { isNull } from "../utils/isNull";
@@ -122,7 +122,7 @@ export function useFolderTree(
 
                         _cleanup();
 
-                        if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                        if (mergedOptions?.requestActionOption !== LoadActionMode.KeepPrevious)
                         {
                             dispatch({ type: ActionTypes.Reset, resetValue: undefined });
                         }
@@ -141,7 +141,7 @@ export function useFolderTree(
                             }
                         };
 
-                        const web = resolveWeb(mergedOptions);
+                        const web = resolveSP(mergedOptions);
                         const rootFolder = web.getFolderByServerRelativePath(path);
 
                         const getFolderTree = async (): Promise<TreeContext> =>
@@ -164,10 +164,10 @@ export function useFolderTree(
 
                             const [files, subFolders, rootInfo, parentPath] = await Promise.all([
 
-                                filesReq.get(),
-                                subFolderReq.get(),
-                                rootFolder.get(),
-                                isRootCall ? undefined : rootFolder.parentFolder.serverRelativeUrl.get()
+                                filesReq(),
+                                subFolderReq(),
+                                rootFolder(),
+                                isRootCall ? undefined : rootFolder.parentFolder.select("ServerRelativeUrl")()
                             ]);
 
                             let upCallback: RootChangeCallback | undefined = undefined;
@@ -177,7 +177,7 @@ export function useFolderTree(
                                 upCallback = (c) => dispatch({
                                     type: ActionTypes.ChangePath,
                                     callback: c,
-                                    currentFolderUrl: parentPath
+                                    currentFolderUrl: parentPath?.ServerRelativeUrl
                                 });
                             }
 

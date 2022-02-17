@@ -4,21 +4,56 @@ import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
-import { RenderOptions, ExceptionOptions, WebOptions } from "../types/options";
-import { createInvokable } from "../utils/createInvokable";
+import { RenderOptions, ErrorOptions, ContextOptions } from "../types/options";
+import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
+import { createInvokable } from "../utils/createInvokable";
 import { mergeDependencies, mergeOptions } from "../utils/merge";
 import { resolveScope } from "../utils/resolveScope";
 import { shallowEqual } from "../utils/shallowEqual";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { useRequestEffect } from "./internal/useRequestEffect";
+import { useQueryEffect } from "./internal/useQueryEffect";
 
-export interface ChangesOptions extends RenderOptions, ExceptionOptions, WebOptions
+export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOptions
 {
+    /**
+     * List GUID Id or title for getting list changes. Keep undefined for web changes. 
+     * Changing this value resends request.
+     */
     list?: string;
     disabled?: DisableOptionValueType | { (changeQuery: IChangeQuery): boolean };
 }
 
+/**
+ * Returns web or list changes. Use {@link ChangesOptions.list} property 
+ * to get list changes instead of web changes.
+ * @param changeQuery Change query. Hook resends request if **shallow comparison** returns false. 
+ * @param options PnP hook options
+ * @param deps useChanges will resend request when one of the dependencies changed.
+ * @returns Changes info array.
+ * @example
+ * ```
+ * // Be cautious when using ChangeTokenEnd and ChangeTokenStart. Its values
+ * // wrapped in an object and can result infinite rendering loop due to shallow comparison.
+ * 
+ * // make sure token references are not changing every render.
+ * const myQuery = useMemo(() => {
+ *     Add:true
+ *     Alert:true,
+ *     ChangeTokenEnd: { StringValue: "some end token" },
+ *     ChangeTokenStart: { StringValue: "some start token"}
+ * },[]);
+ * 
+ * const changes = useChanges(myQuery);
+ * 
+ * // It's safe to use directly when you only use boolean query values.
+ * const changes = useChanges({
+ *     Add:true
+ *     Alert:true,
+ *     GroupMembershipDelete:true
+ * });
+ * ```
+ */
 export function useChanges<T>(
     changeQuery: IChangeQuery,
     options?: ChangesOptions,
@@ -36,9 +71,9 @@ export function useChanges<T>(
         }
     }, [changeQuery]);
 
-    const invokableFactory = useCallback(async (web: IWeb) =>
+    const invokableFactory = useCallback(async (sp: SPFI) =>
     {
-        const scope = resolveScope(web, {
+        const scope = resolveScope(sp.web, {
             list: options?.list
         });
 
@@ -46,6 +81,7 @@ export function useChanges<T>(
         {
             return this.getChanges(_changeQery.current) as Promise<T>;
         };
+
         return createInvokable(scope, action);
     }, [options?.list]);
 
@@ -53,13 +89,13 @@ export function useChanges<T>(
 
     const _options = useMemo(() =>
     {
-        const opt = mergeOptions(globalOptions, options);
+        const opt = mergeOptions<undefined>(globalOptions, options);
         opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, changeQuery);
 
         return opt;
     }, [changeQuery, globalOptions, options]);
 
-    useRequestEffect(invokableFactory, setChanges, _options, _mergedDeps);
+    useQueryEffect(invokableFactory, setChanges, _options, _mergedDeps);
 
     return changes;
 }

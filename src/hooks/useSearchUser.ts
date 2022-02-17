@@ -3,7 +3,7 @@ import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IClientPeoplePickerQueryParameters, IPeoplePickerEntity } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
-import { PrincipalType, sp } from "@pnp/sp";
+import { PrincipalType, spfi as sp } from "@pnp/sp";
 import { RenderOptions, ExceptionOptions, LoadActionMode } from "../types/options";
 import { compareTuples } from "../utils/compareTuples";
 import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
@@ -62,7 +62,7 @@ export function useSearchUser(
             {
                 _cleanup();
 
-                if (mergedOptions?.loadActionOption !== LoadActionMode.KeepPrevious)
+                if (mergedOptions?.requestActionOption !== LoadActionMode.KeepPrevious)
                 {
                     setProfiles(undefined);
                 }
@@ -84,7 +84,7 @@ export function useSearchUser(
                     }
                     : searchOptions;
 
-                _subscription.current = from(sp.profiles.clientPeoplePickerSearchUser(opt))
+                _subscription.current = from(sp().profiles.clientPeoplePickerSearchUser(opt))
                     .subscribe(observer);
             }
 

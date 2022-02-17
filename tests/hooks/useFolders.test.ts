@@ -3,7 +3,7 @@ import { IFolderInfo } from "@pnp/sp/folders/types";
 import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useFolder, useFolderTree, useFolders } from "../../src";
 
 const reactDOMElement = initJSDOM();
@@ -14,10 +14,10 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const rInfo = await sp.web.rootFolder.get();
+    const rInfo = await sp().web.rootFolder();
     rootFolderUrl = rInfo.ServerRelativeUrl;
 
-    testFolder = await sp.web.rootFolder.folders.getByName("SiteAssets").get();
+    testFolder = await sp().web.rootFolder.folders.getByUrl("SiteAssets")();
 });
 afterEach(() => reactDOMElement.unmountComponent());
 

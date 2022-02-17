@@ -3,7 +3,7 @@ import { IFileInfo } from "@pnp/sp/files/types";
 import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useFile, useFiles } from "../../src";
 import { IFolderInfo } from "@pnp/sp/folders/types";
 
@@ -18,8 +18,8 @@ beforeAll(async () =>
     InitPnpTest();
 
     const [file, folder] = await Promise.all([
-        sp.web.rootFolder.folders.getByName("SiteAssets").files.add(fName, fContent),
-        sp.web.rootFolder.folders.getByName("SiteAssets").get()
+        sp().web.rootFolder.folders.getByUrl("SiteAssets").files.addUsingPath(fName, fContent),
+        sp().web.rootFolder.folders.getByUrl("SiteAssets")()
     ]);
 
     testFileInfo = file.data;

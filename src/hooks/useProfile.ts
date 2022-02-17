@@ -7,7 +7,7 @@ import { Nullable } from "../types/utilityTypes";
 import { createInvokable } from "../utils/createInvokable";
 import { checkDisable, defaultCheckDisable } from "../utils/checkDisable";
 import { mergeDependencies, mergeOptions } from "../utils/merge";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useRequestEffect } from "./internal/useRequestEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -32,7 +32,7 @@ export function useProfile<T extends Record<string, any>>(
             return this.getPropertiesFor(loginName);
         };
 
-        return createInvokable(sp.profiles, action);
+        return createInvokable(sp().profiles, action);
 
     }, [loginName]);
 

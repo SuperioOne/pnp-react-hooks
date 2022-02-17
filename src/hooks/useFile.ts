@@ -67,7 +67,7 @@ export function useFile(
         {
             if (isUrl(fileId, UrlType.Relative))
             {
-                queryInst = web.getFileByServerRelativeUrl(fileId);
+                queryInst = web.getFileByServerRelativePath(fileId);
             }
             else
             {

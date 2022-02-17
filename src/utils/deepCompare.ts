@@ -2,6 +2,19 @@ import { Nullable } from "../types/utilityTypes";
 import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
 import { compareArray } from "./compareArray";
 import { isNull } from "./isNull";
+import { _PnpHookOptions } from "../types/options";
+import { compareURL } from "./compareURL";
+import { shallowEqual } from "./shallowEqual";
+
+export function deepCompareOptions(prev: Nullable<_PnpHookOptions>, current: Nullable<_PnpHookOptions>)
+{
+    return prev === current
+        || (
+            deepCompareQuery(prev?.query, current?.query)
+            && (prev?.web === current?.web || (typeof prev?.web === "string" && typeof current?.web === "string" && compareURL(prev.web, current.web)))
+            && shallowEqual(prev?.sp, current?.web)
+        );
+}
 
 export function deepCompareQuery<T extends ODataQueryable | ODataQueryableCollection>(left: Nullable<T>, right: Nullable<T>)
 {

@@ -4,7 +4,7 @@ import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useGroup, useGroups, useGroupUser, useGroupUsers, useIsMemberOf } from "../../src";
 
 const reactDOMElement = initJSDOM();
@@ -15,19 +15,19 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const currentUserGroups = await sp.web.currentUser.groups.select("Id").get();
+    const currentUserGroups = await sp().web.currentUser.groups.select("Id")();
 
     const filter = currentUserGroups.map(e => `Id ne ${e.Id}`).join(" AND ");
 
     // get a group current user not in
-    const groups = await sp.web.siteGroups.filter(filter).top(1).get();
+    const groups = await sp().web.siteGroups.filter(filter).top(1)();
 
     if (groups?.length < 1)
         throw new Error("Unable to find group");
 
     testGroupInfo = groups[0];
 
-    const users = await sp.web.siteGroups.getById(testGroupInfo.Id).users.top(1).get();
+    const users = await sp().web.siteGroups.getById(testGroupInfo.Id).users.top(1)();
 
     if (users?.length < 1)
         throw new Error("Unable to find group user");

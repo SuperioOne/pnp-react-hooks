@@ -2,9 +2,6 @@ import { IListInfo } from "@pnp/sp/lists/types";
 
 export class ChangeTokenInfo implements IChangeTokenInfo
 {
-    /**
-     *
-     */
     constructor(listInfo?: IListInfo)
     {
         if (typeof listInfo === "object")

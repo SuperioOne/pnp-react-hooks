@@ -1,4 +1,4 @@
-import { _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
+import { _SPCollection } from "@pnp/sp";
 import { SharepointQueryable } from "../types/SharepointQueryable";
 
 export function isReactDependencyList(obj: unknown): obj is React.DependencyList
@@ -6,9 +6,9 @@ export function isReactDependencyList(obj: unknown): obj is React.DependencyList
     return Array.isArray(obj);
 }
 
-export function isQueryableCollection(instance: Readonly<SharepointQueryable>): instance is _SharePointQueryableCollection
+export function isQueryableCollection(instance: Readonly<SharepointQueryable>): instance is _SPCollection
 {
-    const queryableCollection = instance as _SharePointQueryableCollection;
+    const queryableCollection = instance as _SPCollection;
 
     return typeof queryableCollection.skip === "function"
         && typeof queryableCollection.orderBy === "function"

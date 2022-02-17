@@ -1,12 +1,12 @@
-import { ExceptionOptions } from "../types/options";
+import { ErrorOptions } from "../types/options";
 
-export function errorHandler(err: Error, options: ExceptionOptions)
+export function errorHandler(err: Error, options: ErrorOptions)
 {
-    if (typeof options.exception === "function")
+    if (typeof options.error === "function")
     {
-        options.exception(err);
+        options.error(err);
     }
-    else if (!options.exception)
+    else if (!options.error)
     {
         throw err;
     }

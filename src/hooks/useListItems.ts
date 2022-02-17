@@ -1,4 +1,5 @@
 import "@pnp/sp/items";
+import "@pnp/sp/items/get-all";
 import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IItems } from "@pnp/sp/items/types";
 import { IWeb } from "@pnp/sp/webs/types";

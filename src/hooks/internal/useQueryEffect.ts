@@ -1,34 +1,35 @@
-import { IWeb } from "@pnp/sp/webs/types";
+import { InitPnpHookOptions } from "../../behaviors/InitPnpHookOptions";
 import { InvokableFactory } from "../../types/Invokeable";
-import { LoadActionOption } from "../../types/options/RenderOptions";
 import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable, ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
 import { SharepointQueryable } from "../../types/SharepointQueryable";
+import { _PnpHookOptions } from "../../types/options";
 import { compareTuples } from "../../utils/compareTuples";
-import { deepCompareQuery } from "../../utils/deepCompareQuery";
+import { deepCompareOptions } from "../../utils/deepCompare";
 import { errorHandler } from "../../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
-import { insertCacheOptions } from "../../utils/insertCacheOptions";
-import { insertODataQuery } from "../../utils/insertODataQuery";
-import { resolveWeb } from "../../utils/resolveWeb";
-import { shallowEqual } from "../../utils/shallowEqual";
+import { resolveSP } from "../../utils/resolveSP";
 import { useCallback, useEffect } from "react";
 import { useRef } from "react";
 
+/**
+ * Internal hook for OData queryable actions. 
+ * @param invokableFactory Creates a proxy Query instance
+ * @param stateAction Callback function to update state
+ * @param options PnpHook options.
+ * @param deps User and hook defined dependecy list.
+ * @internal
+ */
 export function useQueryEffect<
-    TQuery extends ODataQueryable | ODataQueryableCollection,
     TReturn,
     TContext extends SharepointQueryable = SharepointQueryable>(
         invokableFactory: InvokableFactory<TContext>,
         stateAction: (value: Nullable<TReturn>) => void,
-        options: PnpHookOptions<Nullable<TQuery>>,
+        options: _PnpHookOptions,
         deps?: React.DependencyList)
 {
-    const _innerState = useRef<TrackedState<TQuery>>({
+    const _innerState = useRef<_TrackedState>({
         externalDependencies: null,
-        query: undefined,
-        webOptions: null
+        options: null
     });
 
     const _subscription = useRef<Nullable<Subscription>>(undefined);
@@ -39,23 +40,21 @@ export function useQueryEffect<
         _subscription.current = undefined;
     }, []);
 
+    // make sure callbacks cancelled when DOM unloads
     useEffect(() => _cleanup, [_cleanup]);
 
     useEffect(() =>
     {
         if (options.disabled !== true)
         {
-            const query = options?.query;
-
-            const shouldUpdate = !deepCompareQuery(_innerState.current.query, query)
-                || !compareTuples(_innerState.current.externalDependencies, deps)
-                || !shallowEqual(_innerState.current.webOptions, options.web);
+            const shouldUpdate = !deepCompareOptions(_innerState.current.options, options)
+                || !compareTuples(_innerState.current.externalDependencies, deps);
 
             if (shouldUpdate)
             {
                 _cleanup();
 
-                if (options?.loadActionOption !== LoadActionOption.KeepPrevious)
+                if (options?.keepPreviousState !== true)
                 {
                     stateAction(undefined);
                 }
@@ -74,13 +73,10 @@ export function useQueryEffect<
                             }
                         };
 
-                        const web = resolveWeb(options);
-                        const invokeable = await invokableFactory(web);
+                        const sp = resolveSP(options);
+                        const invokeable = await invokableFactory(sp);
 
-                        insertODataQuery(invokeable, query);
-                        insertCacheOptions(invokeable, options);
-
-                        _subscription.current = from(invokeable())
+                        _subscription.current = from(invokeable.using(InitPnpHookOptions(options))())
                             .subscribe(observer);
                     }
                     catch (err)
@@ -92,16 +88,14 @@ export function useQueryEffect<
 
             _innerState.current = {
                 externalDependencies: deps,
-                query: query,
-                webOptions: options.web
+                options: options
             };
         }
     });
 }
 
-interface TrackedState<T>
+interface _TrackedState
 {
-    webOptions: Nullable<IWeb | string>;
+    options: Nullable<_PnpHookOptions>;
     externalDependencies: Nullable<React.DependencyList>
-    query: Nullable<T>;
 }

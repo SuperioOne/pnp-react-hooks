@@ -5,7 +5,7 @@ import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { PermissionKind } from "@pnp/sp/security";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useHasPermission } from "../../src";
 
 const reactDOMElement = initJSDOM();
@@ -21,8 +21,8 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const testUsersPromise = sp.web.siteUsers.filter("Email ne ''").top(1).get();
-    const testListPromise = sp.web.lists.filter("ItemCount gt 0").top(1).get();
+    const testUsersPromise = sp().web.siteUsers.filter("Email ne ''").top(1)();
+    const testListPromise = sp().web.lists.filter("ItemCount gt 0").top(1)();
 
     const [testLists, testUsers] = await Promise.all([testListPromise, testUsersPromise]);
 
@@ -34,14 +34,14 @@ beforeAll(async () =>
 
     testList = testLists[0];
     testUserInfo = testUsers[0];
-    testListItem = (await sp.web.lists.getById(testList.Id).items.top(1).get())[0];
+    testListItem = (await sp().web.lists.getById(testList.Id).items.top(1)())[0];
 
     const [webPerm, listPerm, itemPerm, webPermMulti] = await Promise.all(
         [
-            sp.web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
-            sp.web.lists.getById(testList.Id).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
-            sp.web.lists.getById(testList.Id).items.getById(testListItem.ID).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
-            sp.web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems | PermissionKind.ViewPages)
+            sp().web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
+            sp().web.lists.getById(testList.Id).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
+            sp().web.lists.getById(testList.Id).items.getById(testListItem.ID).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
+            sp().web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems | PermissionKind.ViewPages)
         ]);
 
     userWebPermission = webPerm;

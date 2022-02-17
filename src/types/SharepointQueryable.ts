@@ -1,4 +1,4 @@
-import { _SharePointQueryable, _SharePointQueryableCollection } from "@pnp/sp/sharepointqueryable";
+import { _SPCollection, _SPQueryable } from "@pnp/sp";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SharepointQueryable<T = any> = _SharePointQueryableCollection<T> | _SharePointQueryable<T>;
+export type SharepointQueryable<T = any> = _SPCollection<T> | _SPQueryable<T>;

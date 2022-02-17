@@ -2,7 +2,7 @@ import { CustomHookMockup, CustomHookProps } from "../testUtils/mockups/CustomHo
 import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useApp, useApps } from "../../src";
 
 const reactDOMElement = initJSDOM();
@@ -12,7 +12,7 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const apps = await sp.web.getAppCatalog().top(1).get();
+    const apps = await sp().web.appcatalog.top(1)();
 
     if (apps?.length < 1)
         throw new Error("Unable to find test app");

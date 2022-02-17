@@ -3,7 +3,7 @@ import { IListInfo } from "@pnp/sp/lists/types";
 import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useContentTypes } from "../../src";
 
 const reactDOMElement = initJSDOM();
@@ -13,7 +13,7 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const listInfos = await sp.web.lists.top(1).get();
+    const listInfos = await sp().web.lists.top(1)();
 
     if (listInfos?.length < 1)
         throw new Error("Unable to find list");

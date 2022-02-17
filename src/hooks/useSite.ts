@@ -8,7 +8,7 @@ import { createInvokable } from "../utils/createInvokable";
 import { checkDisable } from "../utils/checkDisable";
 import { isUrl, UrlType } from "../utils/isUrl";
 import { mergeDependencies, mergeOptions } from "../utils/merge";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useQueryEffect } from "./internal/useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -42,7 +42,7 @@ export function useSite(
         }
         else
         {
-            site = sp.site;
+            site = sp().site;
         }
 
         return createInvokable(site);

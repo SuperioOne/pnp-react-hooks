@@ -2,11 +2,11 @@ import "@pnp/sp/attachments";
 import "@pnp/sp/items";
 import { DisableOptionValueType } from "../types/options/RenderOptions";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
-import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../context";
 import { Nullable } from "../types/utilityTypes";
 import { ODataQueryableCollection } from "../types/ODataQueryable";
 import { PnpHookOptions } from "../types/options";
+import { SPFI } from "@pnp/sp";
 import { assertID } from "../utils/assert";
 import { createInvokable } from "../utils/createInvokable";
 import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
@@ -20,6 +20,14 @@ export interface ItemAttachmentsOptions extends PnpHookOptions<ODataQueryableCol
     disabled?: DisableOptionValueType | { (itemId: number, list: string): boolean };
 }
 
+/**
+ * Returns all attachments of the item.
+ * @param itemId List item numeric Id. Changing this value resends request.
+ * @param list List title or Id GUID string. Changing this value resends request.
+ * @param options PnP hook options
+ * @param deps useAttachments will resend request when one of the dependencies changed.
+ * @returns array of {@link IAttachmentInfo}.
+ */
 export function useAttachments(
     itemId: number,
     list: string,
@@ -29,11 +37,10 @@ export function useAttachments(
     const globalOptions = useContext(InternalContext);
     const [attachments, setAttachments] = useState<Nullable<IAttachmentInfo[]>>();
 
-    const invokableFactory = useCallback(async (web: IWeb) =>
+    const invokableFactory = useCallback(async (sp: SPFI) =>
     {
         assertID(itemId, "itemId value is not valid.");
-
-        const queryInst = resolveList(web, list)
+        const queryInst = resolveList(sp.web, list)
             .items
             .getById(itemId)
             .attachmentFiles;

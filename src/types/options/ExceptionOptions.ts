@@ -1,12 +1,27 @@
-export interface ExceptionOptions
+export interface ErrorOptions
 {
-    exception?: ExceptionFunc | ExceptionMode;
+    /**
+     * Error handling
+     * @default {@link ErrorMode.Default}
+     */
+    error?: ErrorFunc | ErrorMode;
 }
 
-export type ExceptionFunc = (err: Error) => void;
+/**
+ * Custom error handling callback.
+ * @param err Error object
+ */
+export type ErrorFunc = (err: Error) => void;
 
-export enum ExceptionMode
+export enum ErrorMode
 {
+    /**
+     * Throws error to upper level without any handling
+     */
     Default = 0,
+
+    /**
+     * Do not emit any error
+     */
     Suppress = 1
 }

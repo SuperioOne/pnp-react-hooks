@@ -11,7 +11,7 @@ export function resolveFolder(web: IWeb, folderId: string)
     }
     else if (isUrl(folderId, UrlType.Relative))
     {
-        return web.getFolderByServerRelativeUrl(folderId);
+        return web.getFolderByServerRelativePath(folderId);
     }
     else
     {

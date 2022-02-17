@@ -4,7 +4,7 @@ import { InitPnpTest } from "../testUtils/InitPnpTest";
 import { ListOptions } from "../../src/types/options";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM } from "../testUtils/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useListItem, useListItems } from "../../src";
 
 const reactDOMElement = initJSDOM();
@@ -15,17 +15,16 @@ beforeAll(async () =>
 {
     InitPnpTest();
 
-    const testLists = await sp.web.lists
+    const testLists = await sp().web.lists
         .filter("ItemCount gt 5 and ItemCount lt 5000")
         .select("Id")
-        .top(1)
-        .get();
+        .top(1)();
 
     if (testLists?.length < 1)
         throw new Error("Unable to find list with minimum 1 item");
 
     testList = testLists[0];
-    testListItem = (await sp.web.lists.getById(testList.Id).items.top(1).get())[0];
+    testListItem = (await sp().web.lists.getById(testList.Id).items.top(1)())[0];
 });
 afterEach(() => reactDOMElement.unmountComponent());
 

@@ -12,7 +12,7 @@ import { defaultCheckDisable, checkDisable } from "../utils/checkDisable";
 import { errorHandler } from "../utils/errorHandler";
 import { mergeOptions } from "../utils/merge";
 import { shallowEqual } from "../utils/shallowEqual";
-import { sp } from "@pnp/sp";
+import { spfi as sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 
 const INITIAL_PAGE_INDEX = 1;
@@ -86,7 +86,7 @@ export function useSearch(
                 {
                     _cleanup();
 
-                    if (mergedOptions.loadActionOption !== LoadActionMode.KeepPrevious)
+                    if (mergedOptions.requestActionOption !== LoadActionMode.KeepPrevious)
                     {
                         dispatch({
                             type: ActionTypes.NewSearchResult,
@@ -133,8 +133,8 @@ export function useSearch(
                         });
 
                         resultPromise = mergedOptions?.useCache === true
-                            ? sp.searchWithCaching(searchOptions)
-                            : sp.search(searchOptions);
+                            ? sp().search(searchOptions)
+                            : sp().search(searchOptions);
                     }
 
                     _subscription.current = from(resultPromise)

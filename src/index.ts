@@ -1,6 +1,6 @@
 export { ChangeTokenInfo } from "./types/ChangeTokenInfo";
-export { ExceptionMode, LoadActionMode, ListOptions } from "./types/options";
-export { PnpReactOptionProvider, PnpHookGlobalOptions } from "./context";
+export { ErrorMode, ListOptions, PnpHookGlobalOptions } from "./types/options";
+export { PnpHookOptionProvider } from "./context";
 
 export { useApp } from "./hooks/useApp";
 export { useApps } from "./hooks/useApps";
@@ -13,10 +13,10 @@ export { useFeatures } from "./hooks/useFeatures";
 export { useField } from "./hooks/useField";
 export { useFields } from "./hooks/useFields";
 export { useFile } from "./hooks/useFile";
-export { useFiles} from "./hooks/useFiles";
+export { useFiles } from "./hooks/useFiles";
 export { useFolder } from "./hooks/useFolder";
 export { useFolderTree } from "./hooks/useFolderTree";
-export { useFolders} from "./hooks/useFolders";
+export { useFolders } from "./hooks/useFolders";
 export { useGroup } from "./hooks/useGroup";
 export { useGroupUser } from "./hooks/useGroupUser";
 export { useGroupUsers } from "./hooks/useGroupUsers";
