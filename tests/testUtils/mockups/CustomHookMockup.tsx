@@ -22,11 +22,11 @@ export function CustomHookMockup<P extends _CustomTestComponentProps>(props: P)
     {
         try
         {
-            return props.useHook(props.error);
+            return props.useHook(props.reject);
         }
         catch (err)
         {
-            props.error(err);
+            props.reject(err);
         }
     };
 

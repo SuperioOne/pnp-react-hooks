@@ -3,18 +3,28 @@ import { ContextOptions } from "../types/options";
 import { SPFI, spfi } from "@pnp/sp";
 import { assert } from "./assert";
 import { isUrl, UrlType } from "./isUrl";
+import { BehaviourOptions } from "../types/options/BehaviourOptions";
 
-export function resolveSP(query: ContextOptions): SPFI
+export function resolveSP(options: ContextOptions & BehaviourOptions): SPFI
 {
-    if (query.web === undefined)
+    let sp: SPFI;
+
+    if (options.web === undefined)
     {
-        return query.sp;
+        sp = options.sp;
     }
     else
     {
-        assert(isUrl(query.web, UrlType.Absolute),
+        assert(isUrl(options.web, UrlType.Absolute),
             "Web parameter is not an absolute url.");
 
-        return spfi(query.web).using(AssignFrom(query.sp.web));
+        sp = spfi(options.web).using(AssignFrom(options.sp.web));
     }
+
+    if(options.behaviors)
+    {
+        sp = sp.using(...options.behaviors);
+    }
+
+    return sp;
 }

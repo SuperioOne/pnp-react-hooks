@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useContext } from "react";
-import { InternalContext, PnpHookGlobalOptions } from "../../../src/context";
+import { InternalContext } from "../../../src/context";
+import { PnpHookGlobalOptions } from "../../../src/types/options";
 import { TestComponentProps } from "../ReactDOMElement";
 
 export function GlobalContextMockup(props: TestComponentProps<PnpHookGlobalOptions>)
