@@ -1,7 +1,7 @@
-import { CustomHookMockup, CustomHookProps } from "../../testUtils/mockups/CustomHookMockup";
-import { InitPnpTest } from "../../testUtils/InitPnpTest";
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../testUtils/ReactDOMElement";
+import { initJSDOM } from "../../tools/ReactDOMElement";
 import { useCurrentUser } from "../../../src";
 
 const reactDOMElement = initJSDOM();

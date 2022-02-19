@@ -1,45 +1,55 @@
 import "@pnp/sp/files";
 import "@pnp/sp/folders";
-import { DisableOptionType, DisableOptionValueType } from "../../types/options/RenderOptions";
+import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 import { ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
+import { DisableOptionType, DisableOptionValueType } from "../../types/options/RenderOptions";
 import { FilteredODataQueryable, ODataQueryableCollection } from "../../types/ODataQueryable";
 import { IFileInfo } from "@pnp/sp/files/types";
 import { IFolderInfo } from "@pnp/sp/folders/types";
-import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { assert, assertString } from "../../utils/assert";
 import { compareTuples } from "../../utils/compareTuples";
 import { compareURL } from "../../utils/compareURL";
-import { deepCompareQuery } from "../../utils/deepCompare";
+import { deepCompareContext, deepCompareQuery } from "../../utils/deepCompare";
 import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { errorHandler } from "../../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
 import { insertODataQuery } from "../../utils/insertODataQuery";
+import { isNull } from "../../utils/isNull";
 import { isUrl, UrlType } from "../../utils/isUrl";
 import { mergeOptions } from "../../utils/merge";
 import { resolveSP } from "../../utils/resolveSP";
-import { shallowEqual } from "../../utils/shallowEqual";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
-import { isNull } from "../../utils/isNull";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 
 export interface FolderTreeOptions extends ErrorOptions, RenderOptions, ContextOptions, BehaviourOptions
 {
+    /**
+     * OData query options for files. Changing the value resends request.
+     */
     fileQuery?: ODataQueryableCollection;
+
+    /**
+     * Folder filter query. Changing the value resends request.
+     */
     folderFilter?: string;
-    useCache?: undefined | boolean;
     disabled?: DisableOptionValueType | { (rootFolderRelativeUrl: string): boolean };
 }
 
+/**
+ * Returns a tree like structure from specified root folder.
+ * @param rootFolderRelativePath Root folder server relative path
+ * @param options PnP hook paths
+ * @param deps useFolderTree will resend request when one of the dependencies changed.
+ */
 export function useFolderTree(
-    rootFolderRelativeUrl: string,
+    rootFolderRelativePath: string,
     options?: FolderTreeOptions,
     deps?: React.DependencyList): Nullable<TreeContext>
 {
     const [state, _dispatch] = useReducer(_reducer, {
-        currentFolderUrl: rootFolderRelativeUrl,
-        initialUrl: rootFolderRelativeUrl
+        currentFolderPath: rootFolderRelativePath,
+        initialUrl: rootFolderRelativePath
     });
 
     const globalOptions = useContext(InternalContext);
@@ -47,10 +57,10 @@ export function useFolderTree(
     const _innerState = useRef<TrackedState>({
         externalDependencies: null,
         fileQuery: null,
-        folderUrl: null,
+        folderPath: null,
         folderFilter: null,
-        initialUrl: rootFolderRelativeUrl,
-        webOptions: null
+        initialPath: rootFolderRelativePath,
+        options: null
     });
 
     const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
@@ -80,7 +90,7 @@ export function useFolderTree(
     useEffect(() =>
     {
         const mergedOptions = mergeOptions(globalOptions, options);
-        _disabled.current = checkDisable(mergedOptions.disabled, defaultCheckDisable, rootFolderRelativeUrl);
+        _disabled.current = checkDisable(mergedOptions.disabled, defaultCheckDisable, rootFolderRelativePath);
 
         if (_disabled.current !== true)
         {
@@ -88,30 +98,30 @@ export function useFolderTree(
             const folderFilter = options?.folderFilter;
 
             // reset hook state when web or root path changed 
-            if (_innerState.current.initialUrl !== rootFolderRelativeUrl)
+            if (_innerState.current.initialPath !== rootFolderRelativePath)
             {
                 // prevent path change in case of similar urls (ex: "/EXAMPLE" and "/example/")
-                if (isNull(_innerState.current.initialUrl)
-                    || isNull(rootFolderRelativeUrl)
-                    || !compareURL(_innerState.current.initialUrl, rootFolderRelativeUrl))
+                if (isNull(_innerState.current.initialPath)
+                    || isNull(rootFolderRelativePath)
+                    || !compareURL(_innerState.current.initialPath, rootFolderRelativePath))
                 {
                     dispatch({
                         type: ActionTypes.ChangePath,
                         callback: undefined,
-                        initialUrl: rootFolderRelativeUrl,
-                        currentFolderUrl: rootFolderRelativeUrl,
+                        initialUrl: rootFolderRelativePath,
+                        currentFolderPath: rootFolderRelativePath,
                         treeContext: undefined
                     });
                 }
             }
             else
             {
-                const path = state.currentFolderUrl;
+                const path = state.currentFolderPath;
 
-                const shouldUpdate = path?.toLowerCase() !== _innerState.current.folderUrl?.toLowerCase()
+                const shouldUpdate = path?.toLowerCase() !== _innerState.current.folderPath?.toLowerCase()
                     || _innerState.current.folderFilter !== folderFilter
                     || !deepCompareQuery(_innerState.current.fileQuery, fileQuery)
-                    || !shallowEqual(_innerState.current.webOptions, mergedOptions.web)
+                    || !deepCompareContext(_innerState.current.options, mergedOptions)
                     || !compareTuples(_innerState.current.externalDependencies, deps);
 
                 if (shouldUpdate)
@@ -158,10 +168,6 @@ export function useFolderTree(
                                 subFolderReq.filter(folderFilter);
                             }
 
-                            insertCacheOptions(filesReq, mergedOptions);
-                            insertCacheOptions(subFolderReq, mergedOptions);
-                            insertCacheOptions(rootFolder, mergedOptions);
-
                             const [files, subFolders, rootInfo, parentPath] = await Promise.all([
 
                                 filesReq(),
@@ -177,7 +183,7 @@ export function useFolderTree(
                                 upCallback = (c) => dispatch({
                                     type: ActionTypes.ChangePath,
                                     callback: c,
-                                    currentFolderUrl: parentPath?.ServerRelativeUrl
+                                    currentFolderPath: parentPath?.ServerRelativeUrl
                                 });
                             }
 
@@ -187,7 +193,7 @@ export function useFolderTree(
                                     ...f,
                                     setAsRoot: (c) => dispatch({
                                         type: ActionTypes.ChangePath,
-                                        currentFolderUrl: f.ServerRelativeUrl,
+                                        currentFolderPath: f.ServerRelativeUrl,
                                         callback: c
                                     })
                                 })),
@@ -195,7 +201,7 @@ export function useFolderTree(
                                 home: (c) => dispatch({
                                     type: ActionTypes.ChangePath,
                                     callback: c,
-                                    currentFolderUrl: state.initialUrl
+                                    currentFolderPath: state.initialUrl
                                 }),
                                 up: upCallback,
                             };
@@ -214,13 +220,13 @@ export function useFolderTree(
             _innerState.current = {
                 externalDependencies: deps,
                 fileQuery: fileQuery,
-                folderUrl: state.currentFolderUrl,
+                folderPath: state.currentFolderPath,
                 folderFilter: folderFilter,
-                initialUrl: rootFolderRelativeUrl,
-                webOptions: mergedOptions.web
+                initialPath: rootFolderRelativePath,
+                options: mergedOptions
             };
         }
-    }, [state, rootFolderRelativeUrl, options, globalOptions, deps, _cleanup, dispatch]);
+    }, [state, rootFolderRelativePath, options, globalOptions, deps, _cleanup, dispatch]);
 
     return state.treeContext;
 }
@@ -238,14 +244,14 @@ const _reducer = (state: FolderState, action: TreeAction): FolderState =>
             return {
                 initialUrl: state.initialUrl,
                 callback: undefined,
-                currentFolderUrl: action.currentPath,
+                currentFolderPath: action.currentPath,
                 treeContext: action.context
             };
         case ActionTypes.ChangePath:
             return {
                 ...state,
                 ...action,
-                currentFolderUrl: action.currentFolderUrl,
+                currentFolderPath: action.currentFolderPath,
             };
         default:
             throw new Error(`useSearch: Unexpected action type received.`);
@@ -255,32 +261,54 @@ const _reducer = (state: FolderState, action: TreeAction): FolderState =>
 interface FolderState
 {
     initialUrl: Nullable<string>;
-    currentFolderUrl: Nullable<string>;
+    currentFolderPath: Nullable<string>;
     callback?: () => void;
     treeContext?: Nullable<TreeContext>;
 }
 
 interface TrackedState
 {
-    folderUrl: Nullable<string>,
-    webOptions: Nullable<IWeb | string>;
+    folderPath: Nullable<string>,
+    options: Nullable<ContextOptions>;
     externalDependencies: Nullable<React.DependencyList>
     folderFilter: Nullable<string>;
     fileQuery: Nullable<FilteredODataQueryable>;
-    initialUrl: Nullable<string>;
+    initialPath: Nullable<string>;
 }
 
-interface IFolderNode extends IFolderInfo
+export interface IFolderNode extends IFolderInfo
 {
+    /**
+     * Set folder as current folder.
+     */
     setAsRoot: RootChangeCallback;
 }
 
-interface TreeContext
+export interface TreeContext
 {
+    /**
+     * Folder info collection for the current folder.
+     */
     folders: IFolderNode[];
+
+    /**
+     * File info collection for the current folder.
+     */
     files: IFileInfo[];
+
+    /**
+     * Current folder information.
+     */
     root?: IFolderInfo;
+
+    /**
+     * Set current path to the parent folder's path.
+     */
     up?: RootChangeCallback;
+
+    /**
+     * Set current path to home.
+     */
     home: RootChangeCallback;
 }
 
@@ -311,7 +339,7 @@ interface NewTreeResultAction extends Action<ActionTypes.NewTreeResult>
 
 interface ChangePathAction extends Action<ActionTypes.ChangePath>, Partial<FolderState>
 {
-    currentFolderUrl: Nullable<string>;
+    currentFolderPath: Nullable<string>;
 }
 
 type TreeAction = ResetAction | ChangePathAction | NewTreeResultAction;

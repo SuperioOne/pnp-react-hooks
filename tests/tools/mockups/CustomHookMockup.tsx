@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as React from "react";
-import testEnv from "../../../test-env";
+import testEnv from "../../../test.config";
 import { formatResponse } from "../formatResponse";
 import { TestComponentProps } from "../ReactDOMElement";
 
@@ -40,7 +40,7 @@ export function CustomHookMockup<P extends _CustomTestComponentProps>(props: P)
 
         if (isCompleted)
         {
-            if (testEnv.logOut)
+            if (testEnv.logResponse)
                 console.log(formatResponse(props.testName, response));
 
             props.success(response);

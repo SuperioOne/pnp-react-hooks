@@ -1,10 +1,10 @@
-import { CustomHookMockup, CustomHookProps } from "../../testUtils/mockups/CustomHookMockup";
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IListInfo } from "@pnp/sp/lists";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import { InitPnpTest } from "../../testUtils/InitPnpTest";
+import { InitPnpTest } from "../../tools/InitPnpTest";
 import { PermissionKind } from "@pnp/sp/security";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../testUtils/ReactDOMElement";
+import { initJSDOM } from "../../tools/ReactDOMElement";
 import { spfi as sp } from "@pnp/sp";
 import { useHasPermission } from "../../../src";
 

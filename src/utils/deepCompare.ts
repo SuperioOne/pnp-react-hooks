@@ -2,18 +2,14 @@ import { Nullable } from "../types/utilityTypes";
 import { ODataQueryable, ODataQueryableCollection } from "../types/ODataQueryable";
 import { compareArray } from "./compareArray";
 import { isNull } from "./isNull";
-import { _PnpHookOptions } from "../types/options";
+import { ContextOptions, _PnpHookOptions } from "../types/options";
 import { compareURL } from "./compareURL";
 import { shallowEqual } from "./shallowEqual";
 
-export function deepCompareOptions(prev: Nullable<_PnpHookOptions>, current: Nullable<_PnpHookOptions>)
+export function deepCompareOptions(left: Nullable<_PnpHookOptions>, right: Nullable<_PnpHookOptions>)
 {
-    return prev === current
-        || (
-            deepCompareQuery(prev?.query, current?.query)
-            && (prev?.web === current?.web || (typeof prev?.web === "string" && typeof current?.web === "string" && compareURL(prev.web, current.web)))
-            && shallowEqual(prev?.sp, current?.web)
-        );
+    return left === right 
+    || (deepCompareQuery(left?.query, right?.query) && deepCompareContext(left, right));
 }
 
 export function deepCompareQuery<T extends ODataQueryable | ODataQueryableCollection>(left: Nullable<T>, right: Nullable<T>)
@@ -22,13 +18,13 @@ export function deepCompareQuery<T extends ODataQueryable | ODataQueryableCollec
         || (
             !isNull(left)
             && !isNull(right)
-            && _compareODataQueryable(left, right)
+            && deepCompareODataQueryable(left, right)
         );
 }
 
 type _ODataQuery = ODataQueryable & ODataQueryableCollection;
 
-function _compareODataQueryable(left: _ODataQuery, right: _ODataQuery)
+export function deepCompareODataQueryable(left: _ODataQuery, right: _ODataQuery)
 {
     return left.filter === right.filter
         && left.top === right.top
@@ -37,4 +33,10 @@ function _compareODataQueryable(left: _ODataQuery, right: _ODataQuery)
         && left.skip === right.skip
         && compareArray(left.select, right.select)
         && compareArray(left.expand, right.expand);
+}
+
+export function deepCompareContext(left: Nullable<ContextOptions>, right: Nullable<ContextOptions>)
+{
+    return (left?.web === right?.web || (left?.web === "string" && typeof right?.web === "string" && compareURL(left.web, right.web)))
+        && shallowEqual(left?.sp, right?.sp);
 }

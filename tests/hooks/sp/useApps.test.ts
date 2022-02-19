@@ -1,18 +1,20 @@
-import { CustomHookMockup, CustomHookProps } from "../../testUtils/mockups/CustomHookMockup";
-import { InitPnpTest } from "../../testUtils/InitPnpTest";
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../testUtils/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useApp, useApps } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testApp;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const apps = await sp().web.appcatalog.top(1)();
+    const apps = await spTest.web.appcatalog.top(1)();
 
     if (apps?.length < 1)
         throw new Error("Unable to find test app");
@@ -25,6 +27,7 @@ test("useApps get top 5 apps", async () =>
 {
     const props: CustomHookProps = {
         useHook: () => useApps({
+            sp: spTest,
             query: {
                 top: 5,
                 select: ["Title", "ID"]
@@ -40,7 +43,9 @@ test("useApps get top 5 apps", async () =>
 test("useApp get app by Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useApp(testApp.ID)
+        useHook: () => useApp(testApp.ID, {
+            sp: spTest
+        })
     };
 
     await act(() =>

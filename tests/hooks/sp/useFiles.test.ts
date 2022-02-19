@@ -1,8 +1,8 @@
-import { CustomHookMockup, CustomHookProps } from "../../testUtils/mockups/CustomHookMockup";
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IFileInfo } from "@pnp/sp/files/types";
-import { InitPnpTest } from "../../testUtils/InitPnpTest";
+import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../testUtils/ReactDOMElement";
+import { initJSDOM } from "../../tools/ReactDOMElement";
 import { spfi as sp } from "@pnp/sp";
 import { useFile, useFiles } from "../../../src";
 import { IFolderInfo } from "@pnp/sp/folders/types";

@@ -1,5 +1,5 @@
 import { ODataQueryable, ODataQueryableCollection } from "../../src/types/ODataQueryable";
-import { deepCompareQuery } from "../../src/utils/deepCompareQuery";
+import { deepCompareQuery } from "../../src/utils/deepCompare";
 
 test("Query equal queryable", () =>
 {

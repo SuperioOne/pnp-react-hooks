@@ -25,10 +25,10 @@ const configs = {
                     }),
                     typescript({
                         outDir: "./.temp/bin/release",
-                        declaration: true,
+                        declaration: true
                     }),
                     commonjs(),
-                    nodeResolve(),
+                    nodeResolve()
                 ],
                 output: {
                     dir: "./.temp/bin/release",

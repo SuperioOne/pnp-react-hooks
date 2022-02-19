@@ -1,30 +1,39 @@
-import { initJSDOM, TestComponentProps } from "../testUtils/ReactDOMElement";
-import { ExceptionMode, LoadActionMode, PnpHookGlobalOptions, PnpReactOptionProvider } from "../../src";
 import * as React from "react";
-import { GlobalContextMockup } from "../testUtils/mockups/GlobalContextMockup";
+import { ErrorMode, PnpHookGlobalOptions, PnpHookOptionProvider } from "../../src";
+import { GlobalContextMockup } from "../tools/mockups/GlobalContextMockup";
+import { InitPnpTest } from "../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from "react-dom/test-utils";
+import { initJSDOM, ReactDOMElement, TestComponentProps } from "../tools/ReactDOMElement";
 import { shallowEqual } from "../../src/utils/shallowEqual";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
+
+beforeAll(() =>
+{
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
+});
 
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("PnpReactOptionProvider one layer provider", async () =>
 {
-    const globalOptions = {
+    const globalOptions: PnpHookGlobalOptions = {
         web: "localhost",
         disabled: false,
-        exception: ExceptionMode.Default,
-        loadActionOption: LoadActionMode.KeepPrevious,
-        useCache: true
+        error: ErrorMode.Default,
+        keepPreviousState: true,
+        sp: spTest
     };
 
     const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
     {
         return (
-            <PnpReactOptionProvider value={globalOptions}>
+            <PnpHookOptionProvider value={globalOptions}>
                 <GlobalContextMockup {...props} />
-            </PnpReactOptionProvider>);
+            </PnpHookOptionProvider>);
     };
 
     await act(async () =>
@@ -39,27 +48,26 @@ test("PnpReactOptionProvider two layer provider", async () =>
     const globalOptionsL2: PnpHookGlobalOptions = {
         web: "localhost2",
         disabled: true,
-        exception: ExceptionMode.Suppress,
-        loadActionOption: LoadActionMode.ClearPrevious,
-        useCache: false
+        error: ErrorMode.Suppress,
+        sp: spTest
     };
 
     const globalOptionsL1: PnpHookGlobalOptions = {
         web: "localhost1",
         disabled: "auto",
-        exception: ExceptionMode.Default,
-        loadActionOption: LoadActionMode.KeepPrevious,
-        useCache: true
+        error: ErrorMode.Suppress,
+        keepPreviousState: true,
+        sp: spTest
     };
 
     const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
     {
         return (
-            <PnpReactOptionProvider value={globalOptionsL1}>
-                <PnpReactOptionProvider value={globalOptionsL2}>
+            <PnpHookOptionProvider value={globalOptionsL1}>
+                <PnpHookOptionProvider value={globalOptionsL2}>
                     <GlobalContextMockup {...props} />
-                </PnpReactOptionProvider>
-            </PnpReactOptionProvider>);
+                </PnpHookOptionProvider>
+            </PnpHookOptionProvider>);
     };
 
     await act(async () =>
@@ -71,22 +79,21 @@ test("PnpReactOptionProvider two layer provider", async () =>
 
 test("PnpReactOptionProvider provider value change", async () =>
 {
-    const globalOptionsInit = {
+    const globalOptionsInit: PnpHookGlobalOptions = {
         web: "localhost2",
         disabled: true,
-        exception: ExceptionMode.Suppress,
-        loadActionOption: LoadActionMode.ClearPrevious,
-        useCache: false
+        error: ErrorMode.Suppress,
+        keepPreviousState: true,
+        sp: spTest
     };
 
-    const globalOptionsNext = {
+    const globalOptionsNext: PnpHookGlobalOptions = {
         web: "localhost",
         disabled: false,
-        exception: console.error,
-        loadActionOption: LoadActionMode.KeepPrevious,
-        useCache: true
+        error: console.error,
+        keepPreviousState: false,
+        sp: spTest
     };
-
 
     const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
     {
@@ -99,9 +106,9 @@ test("PnpReactOptionProvider provider value change", async () =>
         }, []);
 
         return (
-            <PnpReactOptionProvider value={context}>
+            <PnpHookOptionProvider value={context}>
                 <GlobalContextMockup {...{ ...props, success: context === globalOptionsNext ? props.success : () => { return; } }} />
-            </PnpReactOptionProvider>);
+            </PnpHookOptionProvider>);
     };
 
     await act(async () =>

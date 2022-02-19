@@ -1,11 +1,11 @@
 import "@pnp/sp/site-users";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import { InitPnpTest } from "../../testUtils/InitPnpTest";
+import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../testUtils/ReactDOMElement";
+import { initJSDOM } from "../../tools/ReactDOMElement";
 import { sp } from "@pnp/sp";
 import { useProfile, useUser } from "../../../src";
-import { CustomHookMockup, CustomHookProps } from "../../testUtils/mockups/CustomHookMockup";
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 
 const reactDOMElement = initJSDOM();
 let testUserInfo: ISiteUserInfo;

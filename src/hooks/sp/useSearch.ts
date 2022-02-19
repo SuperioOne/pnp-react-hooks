@@ -1,31 +1,38 @@
 import "@pnp/sp/search";
+import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 import { CompletionObserver, from, Subscription } from "rxjs";
 import { DisableOptionType, DisableOptionValueType } from "../../types/options/RenderOptions";
 import { ISearchQuery, ISearchResponse, ISearchResult } from "@pnp/sp/search/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
-import { RenderOptions, CacheOptions, ExceptionOptions, LoadActionMode } from "../../types/options";
+import { RenderOptions, ErrorOptions, _PnpHookOptions } from "../../types/options";
 import { SearchResults } from "@pnp/sp/search";
 import { assert } from "../../utils/assert";
 import { compareTuples } from "../../utils/compareTuples";
+import { deepCompareContext } from "../../utils/deepCompare";
 import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { errorHandler } from "../../utils/errorHandler";
 import { mergeOptions } from "../../utils/merge";
+import { resolveSP } from "../../utils/resolveSP";
 import { shallowEqual } from "../../utils/shallowEqual";
-import { spfi as sp } from "@pnp/sp";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 
 const INITIAL_PAGE_INDEX = 1;
 const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
 
-export interface SearchOptions extends RenderOptions, CacheOptions, ExceptionOptions
+export interface SearchOptions extends RenderOptions, ErrorOptions, BehaviourOptions
 {
-    useCache?: boolean;
     disabled?: DisableOptionValueType | { (searchOptions: ISearchQuery | string): boolean };
 }
 
 export type GetPageDispatch = (pageNo: number, callback?: () => void) => void;
 
+/**
+ * Search
+ * @param searchOptions {@link ISearchQuery} query or search text. Changing the value resends request.
+ * @param options PnP hook options.
+ * @param deps useSearch will resend request when one of the dependencies changed.
+ */
 export function useSearch(
     searchOptions: ISearchQuery | string,
     options?: SearchOptions,
@@ -36,7 +43,8 @@ export function useSearch(
     const _innerState = useRef<TrackedState>({
         externalDependencies: null,
         page: INITIAL_PAGE_INDEX,
-        searchOptions: null
+        searchOptions: null,
+        options: null
     });
     const _subscription = useRef<Nullable<Subscription>>(undefined);
     const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
@@ -73,7 +81,8 @@ export function useSearch(
         if (_disabled.current !== true)
         {
             const searchOptChanged = !compareTuples(_innerState.current.externalDependencies, deps)
-                || !shallowEqual(_innerState.current.searchOptions, searchOptions);
+                || !shallowEqual(_innerState.current.searchOptions, searchOptions)
+                || !deepCompareContext(_innerState.current.options, mergedOptions);
 
             // page change is ignored, if options are changed 
             const pageChanged = !searchOptChanged
@@ -81,12 +90,11 @@ export function useSearch(
 
             if (searchOptChanged || pageChanged)
             {
-
                 try
                 {
                     _cleanup();
 
-                    if (mergedOptions.requestActionOption !== LoadActionMode.KeepPrevious)
+                    if (mergedOptions.keepPreviousState !== true)
                     {
                         dispatch({
                             type: ActionTypes.NewSearchResult,
@@ -132,9 +140,9 @@ export function useSearch(
                             pageNo: INITIAL_PAGE_INDEX
                         });
 
-                        resultPromise = mergedOptions?.useCache === true
-                            ? sp().search(searchOptions)
-                            : sp().search(searchOptions);
+                        const sp = resolveSP(mergedOptions);
+
+                        resultPromise = sp.search(searchOptions);
                     }
 
                     _subscription.current = from(resultPromise)
@@ -149,7 +157,8 @@ export function useSearch(
             _innerState.current = {
                 externalDependencies: deps,
                 page: searchState.currentPage,
-                searchOptions: searchOptions
+                searchOptions: searchOptions,
+                options: mergedOptions
             };
         }
     }, [searchState, searchOptions, options, globalOptions, deps, _cleanup]);
@@ -236,7 +245,7 @@ interface NewResultsAction extends Action<ActionTypes.NewSearchResult>
 
 type SearchAction = ResetAction | ChangePageNoAction | NewResultsAction;
 
-interface SpSearchResult
+export interface SpSearchResult
 {
     CurrentPage: number;
     ElapsedTime: number;
@@ -252,4 +261,5 @@ interface TrackedState
     searchOptions: Nullable<ISearchQuery | string>;
     externalDependencies: Nullable<React.DependencyList>
     page: number;
+    options: Nullable<_PnpHookOptions<unknown>>
 }
