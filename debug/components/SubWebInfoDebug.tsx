@@ -1,9 +1,9 @@
 import * as React from "react";
-import { LoadActionMode, useSubWebInfos } from "../../src";
+import { useSubWebInfos } from "../../src";
 
 export function SubWebInfosDebug()
 {
-    const webs = useSubWebInfos({ query: { select: ["*"], orderBy: "Title" }, loadActionOption: LoadActionMode.KeepPrevious });
+    const webs = useSubWebInfos({ query: { select: ["*"], orderBy: "Title" }, keepPreviousState: true });
 
     const [counter, setCounter] = React.useState<number>(0);
 

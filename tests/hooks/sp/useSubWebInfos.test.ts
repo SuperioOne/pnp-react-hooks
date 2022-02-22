@@ -1,19 +1,28 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useSubWebInfos } from "../../../src";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
-beforeAll(() => InitPnpTest());
+beforeAll(() =>
+{
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
+});
 
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useSubWebInfos all sub sites", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useSubWebInfos()
+        useHook: (err) => useSubWebInfos({
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -24,11 +33,13 @@ test("useSubWebInfos all sub sites", async () =>
 test("useSubWebInfos select top 1 subsite with Id and Title", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useSubWebInfos({
+        useHook: (err) => useSubWebInfos({
             query: {
                 top: 1,
                 select: ["Id", "Title"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 

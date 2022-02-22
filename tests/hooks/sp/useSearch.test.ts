@@ -2,12 +2,18 @@ import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHoo
 import { ISearchQuery } from "@pnp/sp/search/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useSearch } from "../../../src";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
-beforeAll(() => InitPnpTest());
+beforeAll(() =>
+{
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
+});
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useSearch search by search query", async () =>
@@ -20,7 +26,10 @@ test("useSearch search by search query", async () =>
     };
 
     const props: CustomHookProps = {
-        useHook: () => useSearch(searchQuery),
+        useHook: (err) => useSearch(searchQuery, {
+            sp: spTest,
+            error: err
+        }),
         completeWhen: (data) => data[0] !== undefined
     };
 
@@ -34,7 +43,10 @@ test("useSearch search by search query", async () =>
 test("useSearch search by search text", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useSearch("*"),
+        useHook: (err) => useSearch("*", {
+            sp: spTest,
+            error: err
+        }),
         completeWhen: (data) => data[0] !== undefined
     };
 
@@ -48,7 +60,10 @@ test("useSearch search by search text", async () =>
 test("useSearch get second page", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useSearch("*"),
+        useHook: (err) => useSearch("*", {
+            sp: spTest,
+            error: err
+        }),
         completeWhen: (data) =>
         {
             if (data[0]?.CurrentPage === 1)

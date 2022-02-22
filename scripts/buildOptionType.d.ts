@@ -3,7 +3,7 @@ import { RollupOptions } from "rollup";
 export interface StageOption
 {
     rollupConfig: RollupOptions;
-    stageName:string;
+    stageName: string;
 }
 
 export interface BuildOption

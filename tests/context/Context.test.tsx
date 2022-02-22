@@ -21,11 +21,10 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("PnpReactOptionProvider one layer provider", async () =>
 {
     const globalOptions: PnpHookGlobalOptions = {
-        web: "localhost",
         disabled: false,
         error: ErrorMode.Default,
         keepPreviousState: true,
-        sp: spTest
+        sp: spTest,
     };
 
     const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
@@ -46,18 +45,16 @@ test("PnpReactOptionProvider one layer provider", async () =>
 test("PnpReactOptionProvider two layer provider", async () =>
 {
     const globalOptionsL2: PnpHookGlobalOptions = {
-        web: "localhost2",
         disabled: true,
         error: ErrorMode.Suppress,
-        sp: spTest
+        sp: spTest,
     };
 
     const globalOptionsL1: PnpHookGlobalOptions = {
-        web: "localhost1",
         disabled: "auto",
         error: ErrorMode.Suppress,
         keepPreviousState: true,
-        sp: spTest
+        sp: spTest,
     };
 
     const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
@@ -80,19 +77,17 @@ test("PnpReactOptionProvider two layer provider", async () =>
 test("PnpReactOptionProvider provider value change", async () =>
 {
     const globalOptionsInit: PnpHookGlobalOptions = {
-        web: "localhost2",
         disabled: true,
         error: ErrorMode.Suppress,
         keepPreviousState: true,
-        sp: spTest
+        sp: spTest,
     };
 
     const globalOptionsNext: PnpHookGlobalOptions = {
-        web: "localhost",
         disabled: false,
         error: console.error,
         keepPreviousState: false,
-        sp: spTest
+        sp: spTest,
     };
 
     const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>

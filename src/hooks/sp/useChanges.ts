@@ -18,7 +18,7 @@ import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOptions, BehaviourOptions
 {
     /**
-     * List GUID Id or title for getting list changes. Keep undefined for web changes. 
+     * List GUID Id or title for getting list changes. Keep undefined for web changes.
      * Changing list value resends request.
      */
     list?: string;
@@ -26,9 +26,9 @@ export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOpti
 }
 
 /**
- * Returns web or list change collection. Use {@link ChangesOptions.list} property 
+ * Returns web or list change collection. Use {@link ChangesOptions.list} property
  * to get list changes instead of web changes.
- * @param changeQuery Change query. Hook resends request if **shallow comparison** returns false. 
+ * @param changeQuery Change query. Hook resends request if **shallow comparison** returns false.
  * @param options PnP hook options
  * @param deps useChanges will resend request when one of the dependencies changed.
  * @returns Changes info array.
@@ -36,7 +36,7 @@ export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOpti
  * ```
  * // Be cautious when using ChangeTokenEnd and ChangeTokenStart. Its values
  * // wrapped in an object and can result infinite rendering loop due to shallow comparison.
- * 
+ *
  * // make sure token references are not changing every render.
  * const myQuery = useMemo(() => {
  *     Add:true
@@ -44,9 +44,9 @@ export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOpti
  *     ChangeTokenEnd: { StringValue: "some end token" },
  *     ChangeTokenStart: { StringValue: "some start token"}
  * },[]);
- * 
+ *
  * const changes = useChanges(myQuery);
- * 
+ *
  * // It's safe to use directly when you only use boolean query values.
  * const changes = useChanges({
  *     Add:true

@@ -11,7 +11,7 @@ const DEFAULT_OPTIONS: PnpHookGlobalOptions = {
 
 export const InternalContext = React.createContext<Readonly<PnpHookGlobalOptions>>(DEFAULT_OPTIONS);
 
-export function PnpHookOptionProvider(props: { value: PnpHookGlobalOptions, children: any })
+export function PnpHookOptionProvider(props: { value: PnpHookGlobalOptions, children: any; })
 {
     const previousValue = React.useRef<PnpHookGlobalOptions>(props.value);
 

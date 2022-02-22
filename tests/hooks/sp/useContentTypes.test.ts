@@ -2,18 +2,20 @@ import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHoo
 import { IListInfo } from "@pnp/sp/lists/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useContentTypes } from "../../../src";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let listInfo: IListInfo;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const listInfos = await sp().web.lists.top(1)();
+    const listInfos = await spTest.web.lists.top(1)();
 
     if (listInfos?.length < 1)
         throw new Error("Unable to find list");
@@ -25,10 +27,12 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useContentTypes get web content types", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useContentTypes({
+        useHook: (err) => useContentTypes({
             query: {
                 top: 2
             },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -40,11 +44,13 @@ test("useContentTypes get web content types", async () =>
 test("useContentTypes get list content types", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useContentTypes({
+        useHook: (err) => useContentTypes({
             query: {
                 top: 2
             },
-            list: listInfo.Id
+            list: listInfo.Id,
+            sp: spTest,
+            error: err
         })
     };
 

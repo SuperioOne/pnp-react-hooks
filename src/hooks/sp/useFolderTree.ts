@@ -11,7 +11,7 @@ import { Nullable } from "../../types/utilityTypes";
 import { assert, assertString } from "../../utils/assert";
 import { compareTuples } from "../../utils/compareTuples";
 import { compareURL } from "../../utils/compareURL";
-import { deepCompareContext, deepCompareQuery } from "../../utils/deepCompare";
+import { deepCompareQuery } from "../../utils/deepCompare";
 import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { errorHandler } from "../../utils/errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
@@ -21,6 +21,7 @@ import { isUrl, UrlType } from "../../utils/isUrl";
 import { mergeOptions } from "../../utils/merge";
 import { resolveSP } from "../../utils/resolveSP";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
+import { shallowEqual } from "../../utils/shallowEqual";
 
 export interface FolderTreeOptions extends ErrorOptions, RenderOptions, ContextOptions, BehaviourOptions
 {
@@ -121,7 +122,7 @@ export function useFolderTree(
                 const shouldUpdate = path?.toLowerCase() !== _innerState.current.folderPath?.toLowerCase()
                     || _innerState.current.folderFilter !== folderFilter
                     || !deepCompareQuery(_innerState.current.fileQuery, fileQuery)
-                    || !deepCompareContext(_innerState.current.options, mergedOptions)
+                    || !shallowEqual(_innerState.current.options?.sp, mergedOptions?.sp)
                     || !compareTuples(_innerState.current.externalDependencies, deps);
 
                 if (shouldUpdate)
@@ -161,7 +162,7 @@ export function useFolderTree(
 
                             const filesReq = insertODataQuery(rootFolder.files, fileQuery);
                             const subFolderReq = rootFolder.folders;
-                            const isRootCall = compareURL(path, state.initialUrl);
+                            const isRoot = compareURL(path, state.initialUrl);
 
                             if (folderFilter)
                             {
@@ -173,12 +174,12 @@ export function useFolderTree(
                                 filesReq(),
                                 subFolderReq(),
                                 rootFolder(),
-                                isRootCall ? undefined : rootFolder.parentFolder.select("ServerRelativeUrl")()
+                                isRoot ? undefined : rootFolder.parentFolder.select("ServerRelativeUrl")()
                             ]);
 
                             let upCallback: RootChangeCallback | undefined = undefined;
 
-                            if (!isRootCall)
+                            if (!isRoot)
                             {
                                 upCallback = (c) => dispatch({
                                     type: ActionTypes.ChangePath,

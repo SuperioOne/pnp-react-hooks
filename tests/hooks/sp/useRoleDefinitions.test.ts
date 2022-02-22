@@ -2,18 +2,20 @@ import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHoo
 import { IRoleDefinitionInfo } from "@pnp/sp/security/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useRoleDefinition, useRoleDefinitions } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testRoleDefinition: IRoleDefinitionInfo;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const exmpRoleDefs = await sp.web.roleDefinitions.top(1).get();
+    const exmpRoleDefs = await spTest.web.roleDefinitions.top(1)();
 
     if (exmpRoleDefs?.length < 1)
         throw new Error("Unable to find role definition");
@@ -26,7 +28,10 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useRoleDefinition get role definition by numeric Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useRoleDefinition(testRoleDefinition.Id)
+        useHook: (err) => useRoleDefinition(testRoleDefinition.Id, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -37,7 +42,10 @@ test("useRoleDefinition get role definition by numeric Id", async () =>
 test("useRoleDefinition get role definition by name", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useRoleDefinition(testRoleDefinition.Name)
+        useHook: (err) => useRoleDefinition(testRoleDefinition.Name, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -48,7 +56,10 @@ test("useRoleDefinition get role definition by name", async () =>
 test("useRoleDefinition get role definition by role type", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useRoleDefinition({ roleType: testRoleDefinition.RoleTypeKind })
+        useHook: (err) => useRoleDefinition({ roleType: testRoleDefinition.RoleTypeKind }, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -59,10 +70,12 @@ test("useRoleDefinition get role definition by role type", async () =>
 test("useRoleDefinitions get top 5 role definition", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useRoleDefinitions({
+        useHook: (err) => useRoleDefinitions({
             query: {
                 top: 5
             },
+            sp: spTest,
+            error: err
         })
     };
 

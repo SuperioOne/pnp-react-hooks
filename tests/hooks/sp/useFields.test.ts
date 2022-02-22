@@ -2,21 +2,23 @@ import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHoo
 import { IListInfo } from "@pnp/sp/lists/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useField, useFields } from "../../../src";
 import { IFieldInfo } from "@pnp/sp/fields";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let listInfo: IListInfo;
 let listFieldInfo: IFieldInfo;
 let webFieldInfo: IFieldInfo;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const listInfos = await sp().web.lists.top(1)();
+    const listInfos = await spTest.web.lists.top(1)();
 
     if (listInfos?.length < 1)
         throw new Error("Unable to find list");
@@ -24,8 +26,8 @@ beforeAll(async () =>
     listInfo = listInfos[0];
 
     const [listFields, webFields] = await Promise.all([
-        sp().web.lists.getById(listInfo.Id).fields.top(1)(),
-        sp().web.fields.top(1)()
+        spTest.web.lists.getById(listInfo.Id).fields.top(1)(),
+        spTest.web.fields.top(1)()
     ]);
 
     if (listFields?.length < 1 || webFields?.length < 1)
@@ -39,10 +41,12 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useFields get web fields", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFields({
+        useHook: (err) => useFields({
             query: {
                 top: 2
             },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -54,11 +58,13 @@ test("useFields get web fields", async () =>
 test("useFields get list fields", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFields({
+        useHook: (err) => useFields({
             query: {
                 top: 2
             },
-            list: listInfo.Id
+            list: listInfo.Id,
+            sp: spTest,
+            error: err
         })
     };
 
@@ -70,7 +76,10 @@ test("useFields get list fields", async () =>
 test("useFields get web field by Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useField(webFieldInfo.Id)
+        useHook: (err) => useField(webFieldInfo.Id, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -81,8 +90,10 @@ test("useFields get web field by Id", async () =>
 test("useField get list field by internal name", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useField(listFieldInfo.InternalName, {
-            list: listInfo.Id
+        useHook: (err) => useField(listFieldInfo.InternalName, {
+            list: listInfo.Id,
+            sp: spTest,
+            error: err
         })
     };
 

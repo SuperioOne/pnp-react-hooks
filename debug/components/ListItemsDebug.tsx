@@ -7,7 +7,7 @@ export function ListItemsDebug()
     const listItems = useListItems("Test List", {
         mode: ListOptions.All,
         query: { select: ["ID", "Title"] },
-        exception: console.log,
+        error: console.log,
     });
     const [counter, setCounter] = React.useState<number>(0);
 

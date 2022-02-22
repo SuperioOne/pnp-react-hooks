@@ -1,9 +1,9 @@
 import * as React from "react";
-import { LoadActionMode, useWebInfo } from "../../src";
+import { useWebInfo } from "../../src";
 
 export function WebInfoDebug()
 {
-    const webInfo = useWebInfo({ query: { select: ["*"] }, loadActionOption: LoadActionMode.KeepPrevious });
+    const webInfo = useWebInfo({ query: { select: ["*"] }, keepPreviousState: true });
 
     const [counter, setCounter] = React.useState<number>(0);
 

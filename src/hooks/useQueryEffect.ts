@@ -12,7 +12,7 @@ import { useCallback, useEffect } from "react";
 import { useRef } from "react";
 
 /**
- * Internal hook for OData queryable actions. 
+ * Internal hook for OData queryable actions.
  * @param invokableFactory Creates a proxy Query instance
  * @param stateAction Callback function to update state
  * @param options PnpHook options.
@@ -98,5 +98,5 @@ export function useQueryEffect<
 interface _TrackedState
 {
     options: Nullable<_PnpHookOptions>;
-    externalDependencies: Nullable<React.DependencyList>
+    externalDependencies: Nullable<React.DependencyList>;
 }

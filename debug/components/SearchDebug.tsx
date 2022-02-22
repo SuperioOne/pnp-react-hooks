@@ -1,10 +1,13 @@
+import { ISearchQuery } from "@pnp/sp/search";
 import * as React from "react";
 import { useSearch } from "../../src";
 
 export function SearchDebug()
 {
 
-    const [term, setTerm] = React.useState("*");
+    const [term, setTerm] = React.useState<ISearchQuery | string>({
+        Querytext: "*"
+    });
 
     const [result, setPage] = useSearch(term);
 

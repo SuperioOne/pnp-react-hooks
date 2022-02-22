@@ -1,20 +1,22 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useSearchUser } from "../../../src";
 import { IClientPeoplePickerQueryParameters } from "@pnp/sp/profiles/types";
-import { sp } from "@pnp/sp";
+import { SPFI } from "@pnp/sp";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testUserInfo: ISiteUserInfo;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const exmpUsers = await sp.web.siteUsers.filter("Email ne '' and Email ne null").top(1).get();
+    const exmpUsers = await spTest.web.siteUsers.filter("Email ne '' and Email ne null").top(1)();
 
     if (exmpUsers?.length < 1)
         throw new Error("Unable to find user");
@@ -32,7 +34,10 @@ test("useSearchUser search user by people picker query", async () =>
     };
 
     const props: CustomHookProps = {
-        useHook: () => useSearchUser(searchQuery)
+        useHook: (err) => useSearchUser(searchQuery, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -44,7 +49,10 @@ test("useSearchUser search user by people picker query", async () =>
 test("useSearchUser search user by query text", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useSearchUser(testUserInfo.Email)
+        useHook: (err) => useSearchUser(testUserInfo.Email, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>

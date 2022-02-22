@@ -2,8 +2,8 @@ import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHoo
 import { IFileInfo } from "@pnp/sp/files/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useFile, useFiles } from "../../../src";
 import { IFolderInfo } from "@pnp/sp/folders/types";
 
@@ -11,15 +11,17 @@ const fName = "pnp-rct-testFile.txt";
 const fContent = "Pnp React Hooks";
 let testFileInfo: IFileInfo;
 let testFolderInfo: IFolderInfo;
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
     const [file, folder] = await Promise.all([
-        sp().web.rootFolder.folders.getByUrl("SiteAssets").files.addUsingPath(fName, fContent),
-        sp().web.rootFolder.folders.getByUrl("SiteAssets")()
+        spTest.web.rootFolder.folders.getByUrl("SiteAssets").files.addUsingPath(fName, fContent, { Overwrite: true }),
+        spTest.web.rootFolder.folders.getByUrl("SiteAssets")()
     ]);
 
     testFileInfo = file.data;
@@ -30,7 +32,10 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useFile get file info by server relative url", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFile(testFileInfo.ServerRelativeUrl)
+        useHook: (err) => useFile(testFileInfo.ServerRelativeUrl, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -41,8 +46,10 @@ test("useFile get file info by server relative url", async () =>
 test("useFile get file content as buffer", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFile(testFileInfo.UniqueId, {
-            type: "buffer"
+        useHook: (err) => useFile(testFileInfo.UniqueId, {
+            type: "buffer",
+            sp: spTest,
+            error: err
         })
     };
 
@@ -57,8 +64,10 @@ test("useFile get file content as buffer", async () =>
 test("useFile get file content as text", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFile(testFileInfo.UniqueId, {
-            type: "text"
+        useHook: (err) => useFile(testFileInfo.UniqueId, {
+            type: "text",
+            sp: spTest,
+            error: err
         })
     };
 
@@ -73,7 +82,10 @@ test("useFile get file content as text", async () =>
 test("useFile invalid file identifier", async () =>
 {
     const props: CustomHookProps = {
-        useHook: (err) => useFile("neither guid or relative url", { exception: err })
+        useHook: (err) => useFile("neither guid or relative url", {
+            error: err,
+            sp: spTest,
+        })
     };
 
     await act(async () =>
@@ -85,10 +97,12 @@ test("useFile invalid file identifier", async () =>
 test("useFiles get root folder by relative Url", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFiles(testFolderInfo.ServerRelativeUrl, {
+        useHook: (err) => useFiles(testFolderInfo.ServerRelativeUrl, {
             query: {
                 top: 5
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -102,10 +116,12 @@ test("useFiles get root folder by relative Url", async () =>
 test("useFiles get root folder by unique Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFiles(testFolderInfo.UniqueId, {
+        useHook: (err) => useFiles(testFolderInfo.UniqueId, {
             query: {
                 top: 5
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -120,7 +136,10 @@ test("useFiles get root folder by unique Id", async () =>
 test("useFiles invalid folder identifier", async () =>
 {
     const props: CustomHookProps = {
-        useHook: (err) => useFiles("neither guid or relative url", { exception: err })
+        useHook: (err) => useFiles("neither guid or relative url", {
+            error: err,
+            sp: spTest,
+        })
     };
 
     await act(async () =>

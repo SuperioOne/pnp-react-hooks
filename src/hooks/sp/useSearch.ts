@@ -5,11 +5,10 @@ import { DisableOptionType, DisableOptionValueType } from "../../types/options/R
 import { ISearchQuery, ISearchResponse, ISearchResult } from "@pnp/sp/search/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
-import { RenderOptions, ErrorOptions, _PnpHookOptions } from "../../types/options";
+import { RenderOptions, ErrorOptions, _PnpHookOptions, ContextOptions } from "../../types/options";
 import { SearchResults } from "@pnp/sp/search";
 import { assert } from "../../utils/assert";
 import { compareTuples } from "../../utils/compareTuples";
-import { deepCompareContext } from "../../utils/deepCompare";
 import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { errorHandler } from "../../utils/errorHandler";
 import { mergeOptions } from "../../utils/merge";
@@ -20,9 +19,9 @@ import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 const INITIAL_PAGE_INDEX = 1;
 const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
 
-export interface SearchOptions extends RenderOptions, ErrorOptions, BehaviourOptions
+export interface SearchOptions extends RenderOptions, ErrorOptions, BehaviourOptions, ContextOptions
 {
-    disabled?: DisableOptionValueType | { (searchOptions: ISearchQuery | string): boolean };
+    disabled?: DisableOptionValueType | { (searchOptions: ISearchQuery | string): boolean; };
 }
 
 export type GetPageDispatch = (pageNo: number, callback?: () => void) => void;
@@ -82,9 +81,9 @@ export function useSearch(
         {
             const searchOptChanged = !compareTuples(_innerState.current.externalDependencies, deps)
                 || !shallowEqual(_innerState.current.searchOptions, searchOptions)
-                || !deepCompareContext(_innerState.current.options, mergedOptions);
+                || !shallowEqual(_innerState.current.options?.sp, mergedOptions?.sp);
 
-            // page change is ignored, if options are changed 
+            // page change is ignored, if options are changed
             const pageChanged = !searchOptChanged
                 && _innerState.current.page !== searchState.currentPage;
 
@@ -142,6 +141,18 @@ export function useSearch(
 
                         const sp = resolveSP(mergedOptions);
 
+                        sp.search({
+                            Querytext: "test",
+
+                        })
+                            .then(e =>
+                            {
+                                console.log(e);
+                            }).catch(err =>
+                            {
+                                console.error(err);
+                            });
+
                         resultPromise = sp.search(searchOptions);
                     }
 
@@ -166,7 +177,7 @@ export function useSearch(
     return [searchState.userResult, _getPageDispatch];
 }
 
-const _reducer = (state: SearchState, action: SearchAction): SearchState => 
+const _reducer = (state: SearchState, action: SearchAction): SearchState =>
 {
     switch (action.type)
     {
@@ -259,7 +270,7 @@ export interface SpSearchResult
 interface TrackedState
 {
     searchOptions: Nullable<ISearchQuery | string>;
-    externalDependencies: Nullable<React.DependencyList>
+    externalDependencies: Nullable<React.DependencyList>;
     page: number;
-    options: Nullable<_PnpHookOptions<unknown>>
+    options: Nullable<_PnpHookOptions<unknown>>;
 }

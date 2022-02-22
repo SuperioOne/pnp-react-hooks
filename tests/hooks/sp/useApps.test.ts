@@ -26,12 +26,13 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useApps get top 5 apps", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useApps({
+        useHook: (err) => useApps({
             sp: spTest,
+            error: err,
             query: {
                 top: 5,
                 select: ["Title", "ID"]
-            }
+            },
         })
     };
 
@@ -43,8 +44,9 @@ test("useApps get top 5 apps", async () =>
 test("useApp get app by Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useApp(testApp.ID, {
-            sp: spTest
+        useHook: (err) => useApp(testApp.ID, {
+            sp: spTest,
+            error: err
         })
     };
 

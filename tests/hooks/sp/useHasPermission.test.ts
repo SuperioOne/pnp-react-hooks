@@ -4,11 +4,12 @@ import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { PermissionKind } from "@pnp/sp/security";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useHasPermission } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testUserInfo: ISiteUserInfo;
 let testList: IListInfo;
 let testListItem: { ID: number; };
@@ -19,10 +20,11 @@ let userItemPermission: boolean = false;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const testUsersPromise = sp().web.siteUsers.filter("Email ne ''").top(1)();
-    const testListPromise = sp().web.lists.filter("ItemCount gt 0").top(1)();
+    const testUsersPromise = spTest.web.siteUsers.filter("Email ne ''").top(1)();
+    const testListPromise = spTest.web.lists.filter("ItemCount gt 0").top(1)();
 
     const [testLists, testUsers] = await Promise.all([testListPromise, testUsersPromise]);
 
@@ -34,14 +36,14 @@ beforeAll(async () =>
 
     testList = testLists[0];
     testUserInfo = testUsers[0];
-    testListItem = (await sp().web.lists.getById(testList.Id).items.top(1)())[0];
+    testListItem = (await spTest.web.lists.getById(testList.Id).items.top(1)())[0];
 
     const [webPerm, listPerm, itemPerm, webPermMulti] = await Promise.all(
         [
-            sp().web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
-            sp().web.lists.getById(testList.Id).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
-            sp().web.lists.getById(testList.Id).items.getById(testListItem.ID).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
-            sp().web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems | PermissionKind.ViewPages)
+            spTest.web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
+            spTest.web.lists.getById(testList.Id).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
+            spTest.web.lists.getById(testList.Id).items.getById(testListItem.ID).userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems),
+            spTest.web.userHasPermissions(testUserInfo.LoginName, PermissionKind.ViewListItems | PermissionKind.ViewPages)
         ]);
 
     userWebPermission = webPerm;
@@ -54,7 +56,10 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useHasPermission current user has 'PermissionKind.ViewListItems' on web", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission(PermissionKind.ViewListItems)
+        useHook: (err) => useHasPermission(PermissionKind.ViewListItems, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -65,7 +70,10 @@ test("useHasPermission current user has 'PermissionKind.ViewListItems' on web", 
 test("useHasPermission current user has 'PermissionKind.ViewListItems and PermissionKind.ViewVersions' on web", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission([PermissionKind.ViewListItems, PermissionKind.ViewVersions])
+        useHook: (err) => useHasPermission([PermissionKind.ViewListItems, PermissionKind.ViewVersions], {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -76,10 +84,12 @@ test("useHasPermission current user has 'PermissionKind.ViewListItems and Permis
 test("useHasPermission current user has 'PermissionKind.ViewListItems' on list", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission(PermissionKind.ViewListItems, {
+        useHook: (err) => useHasPermission(PermissionKind.ViewListItems, {
             scope: {
                 list: testList.Id
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -91,11 +101,13 @@ test("useHasPermission current user has 'PermissionKind.ViewListItems' on list",
 test("useHasPermission current user has 'PermissionKind.ViewListItems' on list item", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission(PermissionKind.ViewListItems, {
+        useHook: (err) => useHasPermission(PermissionKind.ViewListItems, {
             scope: {
                 list: testList.Id,
                 item: testListItem.ID
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -107,8 +119,10 @@ test("useHasPermission current user has 'PermissionKind.ViewListItems' on list i
 test(`useHasPermission user 'PermissionKind.ViewListItems' on web is ${userWebPermission}`, async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission(PermissionKind.ViewListItems, {
-            userId: testUserInfo.Email
+        useHook: (err) => useHasPermission(PermissionKind.ViewListItems, {
+            userId: testUserInfo.Email,
+            sp: spTest,
+            error: err
         })
     };
 
@@ -120,11 +134,13 @@ test(`useHasPermission user 'PermissionKind.ViewListItems' on web is ${userWebPe
 test(`useHasPermission user 'PermissionKind.ViewListItems' on list is ${userListPermission}`, async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission(PermissionKind.ViewListItems, {
+        useHook: (err) => useHasPermission(PermissionKind.ViewListItems, {
             userId: testUserInfo.Id,
             scope: {
                 list: testList.Id
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -136,12 +152,14 @@ test(`useHasPermission user 'PermissionKind.ViewListItems' on list is ${userList
 test(`useHasPermission user 'PermissionKind.ViewListItems' on item is ${userItemPermission}`, async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission(PermissionKind.ViewListItems, {
+        useHook: (err) => useHasPermission(PermissionKind.ViewListItems, {
             scope: {
                 list: testList.Id,
                 item: testListItem.ID
             },
-            userId: testUserInfo.LoginName
+            userId: testUserInfo.LoginName,
+            sp: spTest,
+            error: err
         })
     };
 
@@ -153,8 +171,10 @@ test(`useHasPermission user 'PermissionKind.ViewListItems' on item is ${userItem
 test(`useHasPermission user 'PermissionKind.ViewListItems and PermissionKind.ViewPages' on web is ${userWebMultiPermission}`, async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useHasPermission([PermissionKind.ViewListItems, PermissionKind.ViewPages], {
-            userId: testUserInfo.LoginName
+        useHook: (err) => useHasPermission([PermissionKind.ViewListItems, PermissionKind.ViewPages], {
+            userId: testUserInfo.LoginName,
+            sp: spTest,
+            error: err
         })
     };
 
@@ -169,7 +189,8 @@ test(`useHasPermission invalid user Id type`, async () =>
         useHook: (err) => useHasPermission(
             [PermissionKind.ViewListItems, PermissionKind.ViewPages],
             {
-                exception: err,
+                sp: spTest,
+                error: err,
                 userId: {} as any
             })
     };

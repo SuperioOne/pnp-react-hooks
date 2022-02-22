@@ -1,19 +1,17 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useSite } from "../../../src";
-import { ISiteInfo } from "../../../src/types/ISiteInfo";
-import { sp } from "@pnp/sp";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
-let siteInfo: ISiteInfo;
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
-beforeAll(async () =>
+beforeAll(() =>
 {
-    InitPnpTest();
-
-    siteInfo = await sp.site();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 });
 afterEach(() => reactDOMElement.unmountComponent());
 
@@ -24,47 +22,12 @@ test("useSite get current site info", async () =>
             query: {
                 select: ["Id", "Url", "CurrentChangeToken"]
             },
-            exception: err
+            sp: spTest,
+            error: err
         })
     };
 
     await act(() =>
         expect(reactDOMElement.mountTestComponent("useSite get current site info", CustomHookMockup, props))
             .resolves.toBeTruthy());
-});
-
-test("useSite get site info by url", async () =>
-{
-    const props: CustomHookProps = {
-        useHook: (err) => useSite({
-            query: {
-                select: ["Id", "Url", "CurrentChangeToken"]
-            },
-            siteBaseUrl: siteInfo.Url,
-            exception: err
-        })
-    };
-
-    await act(async () =>
-    {
-        const info: ISiteInfo = await reactDOMElement.mountTestComponent("useSite get site info by url", CustomHookMockup, props);
-        expect(info.Url.toLowerCase()).toBe(siteInfo.Url.toLowerCase());
-    });
-});
-
-test("useSite invalid Url", async () =>
-{
-    const props: CustomHookProps = {
-        useHook: (err) => useSite({
-            query: {
-                select: ["Id", "Url", "CurrentChangeToken"]
-            },
-            siteBaseUrl: "httppp://ssss",
-            exception: err
-        })
-    };
-
-    await act(() =>
-        expect(reactDOMElement.mountTestComponent("useSite invalid Url", CustomHookMockup, props))
-            .rejects.toThrow("Site url is not valid."));
 });

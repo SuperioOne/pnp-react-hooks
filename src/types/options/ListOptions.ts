@@ -7,7 +7,7 @@ export enum ListOptions
     Default = 0,
 
     /**
-     * Fetches data in multiple calls and merges the results on the client side. 
+     * Fetches data in multiple calls and merges the results on the client side.
      */
     All = 1,
 }

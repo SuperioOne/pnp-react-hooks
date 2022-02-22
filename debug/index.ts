@@ -2,7 +2,9 @@ import * as Components from "./components";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as readline from "readline";
+import { DebugApp } from "./DebugApp";
 import { InitEnvironment } from "./init";
+import { helpText, MOUNT_EVENT } from "./constants";
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -15,12 +17,14 @@ const eventLoop = () =>
 
 // TODO: Its the lowest priority but a better cli code with similar functionality would be nice.
 InitEnvironment()
-    .then(rootElement =>
+    .then(config =>
     {
-        if (!rootElement)
+        if (config.root === null)
         {
-            throw new Error("Initialization failed. Root object is not valid.");
+            throw Error("JSDOM root is not loaded.");
         }
+
+        ReactDOM.render(React.createElement(DebugApp, { sp: config.sp }), config.root);
 
         console.log("Debugger started. see /help for options.");
 
@@ -31,18 +35,12 @@ InitEnvironment()
             if (input.toUpperCase() === "/EXIT")
             {
                 console.log("Debugger closing...");
+                ReactDOM.unmountComponentAtNode(config.root);
                 process.exit(0);
             }
             else if (input.toUpperCase() === "/HELP")
             {
-                console.log("");
-                console.log("/EXIT".padEnd(20, " "), "- Exit from debugging.");
-                console.log("/HELP".padEnd(20, " "), "- Show help menu.");
-                console.log("/LIST".padEnd(20, " "), "- List mountable components");
-                console.log("/MOUNT [Name]".padEnd(20, " "), "- Mount component. Automatically unmounts if a component is already mounted.");
-                console.log("/UMOUNT".padEnd(20, " "), "- Unmount currently loaded component.");
-                console.log("/EVENT".padEnd(20, " "), "- Trigger a global event.");
-                console.log("");
+                console.log(helpText);
             }
             else if (input.toUpperCase() === "/LIST")
             {
@@ -56,20 +54,12 @@ InitEnvironment()
 
                 if (options.length === 2 && Reflect.has(Components, options[1]))
                 {
-                    ReactDOM.unmountComponentAtNode(rootElement);
-                    ReactDOM.render(React.createElement(Components[options[1]]), rootElement);
-
-                    console.log(`Mounted ${options[1]} to the root. You can dispatch events with /EVENT <eventName> .`);
+                    window.dispatchEvent(new window.CustomEvent(MOUNT_EVENT, { detail: options[1] }));
                 }
                 else
                 {
                     console.log("Unexpected event input.");
                 }
-            }
-            else if (input.toUpperCase().startsWith("/UMOUNT"))
-            {
-                const unmount = ReactDOM.unmountComponentAtNode(rootElement);
-                console.log(unmount ? "Component unmounted" : "There is no component to unmount");
             }
             else if (input.toUpperCase().startsWith("/EVENT"))
             {

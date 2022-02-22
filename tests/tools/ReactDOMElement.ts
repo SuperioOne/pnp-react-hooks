@@ -47,7 +47,7 @@ export class ReactDOMElement
 export interface TestComponentProps<TReturn = any>
 {
     success: (data: TReturn) => void;
-    reject: (err: Error) => void;
+    error: (err: Error) => void;
     testName: string;
 }
 

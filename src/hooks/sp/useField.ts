@@ -18,7 +18,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
 export interface FieldOptions extends PnpHookOptions<ODataQueryable>
 {
     /**
-     * List GUID Id or title for getting list field. Keep undefined for web field. 
+     * List GUID Id or title for getting list field. Keep undefined for web field.
      * Changing list value resends request.
      */
     list?: string;

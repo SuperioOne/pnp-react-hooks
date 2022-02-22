@@ -1,9 +1,9 @@
 import * as React from "react";
-import { LoadActionMode, useWebProperties } from "../../src";
+import { useWebProperties } from "../../src";
 
 export function WebPropertiesDebug()
 {
-    const properties = useWebProperties({ query: { select: ["FollowLinkEnabled"] }, loadActionOption: LoadActionMode.KeepPrevious });
+    const properties = useWebProperties({ query: { select: ["FollowLinkEnabled"] }, keepPreviousState: true });
 
     const [counter, setCounter] = React.useState<number>(0);
 

@@ -7,7 +7,6 @@
         "strictFunctionTypes": true,
         "declaration": true,
         "moduleResolution": "Node",
-        "strictNullChecks": true,
         "sourceMap": true,
         "noEmitOnError": true,
         "mapRoot": ".",

@@ -2,18 +2,20 @@ import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHoo
 import { IListInfo } from "@pnp/sp/lists/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useChanges } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let listInfo: IListInfo;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const listInfos = await sp().web.lists.top(1)();
+    const listInfos = await spTest.web.lists.top(1)();
 
     if (listInfos?.length < 1)
         throw new Error("Unable to find list");
@@ -25,7 +27,7 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useChanges get web changes", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useChanges({
+        useHook: (err) => useChanges({
             Item: true,
             File: true,
             List: true,
@@ -33,6 +35,9 @@ test("useChanges get web changes", async () =>
             Web: true,
             SystemUpdate: true,
             DeleteObject: true
+        }, {
+            sp: spTest,
+            error: err
         })
     };
 
@@ -44,7 +49,7 @@ test("useChanges get web changes", async () =>
 test("useChanges get list changes by list Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useChanges(
+        useHook: (err) => useChanges(
             {
                 Item: true,
                 File: true,
@@ -55,7 +60,9 @@ test("useChanges get list changes by list Id", async () =>
                 DeleteObject: true
             },
             {
-                list: listInfo.Id
+                list: listInfo.Id,
+                sp: spTest,
+                error: err
             })
     };
 
@@ -67,7 +74,7 @@ test("useChanges get list changes by list Id", async () =>
 test("useChanges get list changes by list title", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useChanges(
+        useHook: (err) => useChanges(
             {
                 Item: true,
                 File: true,
@@ -78,7 +85,9 @@ test("useChanges get list changes by list title", async () =>
                 DeleteObject: true
             },
             {
-                list: listInfo.Title
+                list: listInfo.Title,
+                sp: spTest,
+                error: err
             })
     };
 

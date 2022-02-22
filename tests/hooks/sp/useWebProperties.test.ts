@@ -1,18 +1,27 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useWebProperties } from "../../../src";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
-beforeAll(() => InitPnpTest());
+beforeAll(() =>
+{
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
+});
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useWebProperties without query", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useWebProperties()
+        useHook: (err) => useWebProperties({
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -23,10 +32,12 @@ test("useWebProperties without query", async () =>
 test("useWebProperties with query", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useWebProperties({
+        useHook: (err) => useWebProperties({
             query: {
                 select: ["ThemePrimary", "RectSiteLogoUrl"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 

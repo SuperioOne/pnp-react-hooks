@@ -1,18 +1,27 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { useWebInfo } from "../../src/hooks/useWebInfo";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { useWebInfo } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
-beforeAll(() => InitPnpTest());
+beforeAll(() =>
+{
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
+});
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useWebInfo without query", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useWebInfo()
+        useHook: (err) => useWebInfo({
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -23,10 +32,12 @@ test("useWebInfo without query", async () =>
 test("useWebInfo with query", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useWebInfo({
+        useHook: (err) => useWebInfo({
             query: {
                 select: ["ID", "Title"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 

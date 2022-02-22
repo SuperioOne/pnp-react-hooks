@@ -1,7 +1,7 @@
 import "@pnp/sp/webs";
 import * as React from "react";
 import { BehaviourOptions } from "../../../src/types/options/BehaviourOptions";
-import { ContextOptions, ErrorOptions, RenderOptions } from "../../../src/types/options";
+import { ContextOptions, RenderOptions } from "../../../src/types/options";
 import { Nullable } from "../../../src/types/utilityTypes";
 import { PnpActionFunction } from "../../../src/types/PnpActionFunction";
 import { SPFI } from "@pnp/sp";
@@ -22,13 +22,13 @@ export function InternalQueryMockup(props: ComponentOptions)
     }, [props]);
 
     // inject jest reject callback to exception handler
-    const _props: ComponentOptions = { ...props, reject: props.reject };
+    const _props: ComponentOptions = { ...props, error: props.error };
 
     useQueryEffect(invokableFactory, dispatch[1], _props);
 
     return (<div></div>);
 }
-export interface Options extends RenderOptions, ContextOptions, BehaviourOptions, ErrorOptions
+export interface Options extends RenderOptions, Required<ContextOptions>, BehaviourOptions
 {
     /** Override {@link MockupSharepointQueryable} get function */
     customInvoke?: (options: ComponentOptions) => PnpActionFunction<_Web, string>;

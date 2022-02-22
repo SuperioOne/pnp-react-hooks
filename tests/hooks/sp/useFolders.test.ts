@@ -2,29 +2,34 @@ import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHoo
 import { IFolderInfo } from "@pnp/sp/folders/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useFolder, useFolderTree, useFolders } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testFolder: IFolderInfo;
 let rootFolderUrl: string;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const rInfo = await sp().web.rootFolder();
+    const rInfo = await spTest.web.rootFolder();
     rootFolderUrl = rInfo.ServerRelativeUrl;
 
-    testFolder = await sp().web.rootFolder.folders.getByUrl("SiteAssets")();
+    testFolder = await spTest.web.rootFolder.folders.getByUrl("SiteAssets")();
 });
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useFolder get folder by unique Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFolder(testFolder.UniqueId)
+        useHook: (err) => useFolder(testFolder.UniqueId, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -35,7 +40,10 @@ test("useFolder get folder by unique Id", async () =>
 test("useFolder get folder by relative url", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFolder(testFolder.ServerRelativeUrl)
+        useHook: (err) => useFolder(testFolder.ServerRelativeUrl, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -46,7 +54,10 @@ test("useFolder get folder by relative url", async () =>
 test("useFolders get from default root folder", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFolders()
+        useHook: (err) => useFolders({
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -57,7 +68,11 @@ test("useFolders get from default root folder", async () =>
 test("useFolders get from root folder with unique Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFolders({ folderId: testFolder.UniqueId })
+        useHook: (err) => useFolders({
+            rootFolderId: testFolder.UniqueId,
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -68,7 +83,11 @@ test("useFolders get from root folder with unique Id", async () =>
 test("useFolders get from root folder with relative url", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFolders({ folderId: testFolder.ServerRelativeUrl })
+        useHook: (err) => useFolders({
+            rootFolderId: testFolder.ServerRelativeUrl,
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -80,8 +99,9 @@ test("useFolders incorrect folder Id", async () =>
 {
     const props: CustomHookProps = {
         useHook: (err) => useFolders({
-            folderId: null as any,
-            exception: err
+            rootFolderId: null as any,
+            error: err,
+            sp: spTest,
         })
     };
 
@@ -93,10 +113,12 @@ test("useFolders incorrect folder Id", async () =>
 test("useFolderTree get directory tree of given root", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFolderTree(rootFolderUrl, {
+        useHook: (err) => useFolderTree(rootFolderUrl, {
             fileQuery: {
                 select: ["Name", "UniqueId", "ServerRelativeUrl", "Length"],
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -108,10 +130,12 @@ test("useFolderTree get directory tree of given root", async () =>
 test("useFolderTree get directory tree of given root and open sub directory", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFolderTree(rootFolderUrl, {
+        useHook: (err) => useFolderTree(rootFolderUrl, {
             fileQuery: {
                 select: ["Name", "UniqueId", "ServerRelativeUrl", "Length"],
-            }
+            },
+            sp: spTest,
+            error: err
         }),
         completeWhen: (tree) =>
         {

@@ -15,14 +15,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
 export interface ItemContentTypeOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     /**
-     * List GUID Id or title for getting list changes. Keep undefined for web changes. 
+     * List GUID Id or title for getting list changes. Keep undefined for web changes.
      * Changing list value resends request.
      */
     list?: string;
 }
 
 /**
- * Returns content types of web or list. Use {@link ItemContentTypeOptions.list} property to get list content 
+ * Returns content types of web or list. Use {@link ItemContentTypeOptions.list} property to get list content
  * types instead of web content types.
  * @param options PnP hook options.
  * @param deps useContentTypes will resend request when one of the dependencies changed.

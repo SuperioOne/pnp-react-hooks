@@ -1,19 +1,21 @@
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useList, useListChangeToken, useLists } from "../../../src";
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IListInfo } from "@pnp/sp/lists/types";
-import { sp } from "@pnp/sp";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testListInfo: IListInfo;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const listInfos = await sp.web.lists.top(1).get();
+    const listInfos = await spTest.web.lists.top(1)();
 
     if (listInfos?.length < 1)
         throw new Error("Unable to find list");
@@ -25,10 +27,12 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useList get by Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useList(testListInfo.Id, {
+        useHook: (err) => useList(testListInfo.Id, {
             query: {
                 select: ["Title", "Id", "ItemCount"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -40,10 +44,12 @@ test("useList get by Id", async () =>
 test("useList get by title", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useList(testListInfo.Title, {
+        useHook: (err) => useList(testListInfo.Title, {
             query: {
                 select: ["Title", "Id", "ItemCount"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -55,7 +61,10 @@ test("useList get by title", async () =>
 test("useListChangeToken get change token by list Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useListChangeToken(testListInfo.Id)
+        useHook: (err) => useListChangeToken(testListInfo.Id, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -66,7 +75,10 @@ test("useListChangeToken get change token by list Id", async () =>
 test("useListChangeToken get change token by list title", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useListChangeToken(testListInfo.Title)
+        useHook: (err) => useListChangeToken(testListInfo.Title, {
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -78,10 +90,12 @@ test("useListChangeToken get change token by list title", async () =>
 test("useLists get web list infos", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useLists({
+        useHook: (err) => useLists({
             query: {
                 select: ["Title", "Id", "ItemCount"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -93,11 +107,13 @@ test("useLists get web list infos", async () =>
 test("useLists get top 1 list info", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useLists({
+        useHook: (err) => useLists({
             query: {
                 top: 1,
                 select: ["Title", "Id", "ItemCount"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 

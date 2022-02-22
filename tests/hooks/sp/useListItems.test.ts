@@ -3,19 +3,21 @@ import { IListInfo } from "@pnp/sp/lists";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { ListOptions } from "../../../src/types/options";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useListItem, useListItems } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testList: IListInfo;
 let testListItem: { Id: number; };
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const testLists = await sp().web.lists
+    const testLists = await spTest.web.lists
         .filter("ItemCount gt 5 and ItemCount lt 5000")
         .select("Id")
         .top(1)();
@@ -24,18 +26,20 @@ beforeAll(async () =>
         throw new Error("Unable to find list with minimum 1 item");
 
     testList = testLists[0];
-    testListItem = (await sp().web.lists.getById(testList.Id).items.top(1)())[0];
+    testListItem = (await spTest.web.lists.getById(testList.Id).items.top(1)())[0];
 });
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useListItem get list item", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useListItem(testListItem.Id, testList.Id, {
+        useHook: (err) => useListItem(testListItem.Id, testList.Id, {
             query: {
                 select: ["Id", "Title", "Author/Id"],
                 expand: ["Author"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -47,11 +51,13 @@ test("useListItem get list item", async () =>
 test("useListItem get list items", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useListItems(testList.Id, {
+        useHook: (err) => useListItems(testList.Id, {
             query: {
                 select: ["Id", "Title", "Author/Id"],
                 expand: ["Author"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -65,12 +71,14 @@ test("useListItem get list items", async () =>
 test("useListItem get list items with getAll", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useListItems(testList.Id, {
+        useHook: (err) => useListItems(testList.Id, {
             query: {
                 select: ["Id", "Title", "Author/Id"],
                 expand: ["Author"],
             },
-            mode: ListOptions.All
+            mode: ListOptions.All,
+            sp: spTest,
+            error: err
         })
     };
 

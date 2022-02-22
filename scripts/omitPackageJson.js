@@ -18,7 +18,7 @@ function normalizePath(pathVal)
 
 args
     .option("outDir", "Set output directory", "./package")
-    .option("packagejson", "Source package json file", "package.json")
+    .option("packagejson", "Source package json file", "package.json");
 
 const options = args.parse(process.argv);
 

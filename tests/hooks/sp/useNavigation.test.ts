@@ -1,18 +1,27 @@
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useNavigation } from "../../../src";
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
-beforeAll(() => InitPnpTest());
+beforeAll(() =>
+{
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
+});
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useNavigation get web topNavigation nav nodes", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useNavigation()
+        useHook: (err) => useNavigation({
+            sp: spTest,
+            error: err
+        })
     };
 
     await act(() =>
@@ -23,10 +32,12 @@ test("useNavigation get web topNavigation nav nodes", async () =>
 test("useNavigation get top 1 web topNavigation nav node", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useNavigation({
+        useHook: (err) => useNavigation({
             query: {
                 top: 1
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -38,8 +49,10 @@ test("useNavigation get top 1 web topNavigation nav node", async () =>
 test("useNavigation get web quickLaunch nav nodes", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useNavigation({
-            type: "quickLaunch"
+        useHook: (err) => useNavigation({
+            type: "quickLaunch",
+            sp: spTest,
+            error: err
         })
     };
 
@@ -51,11 +64,13 @@ test("useNavigation get web quickLaunch nav nodes", async () =>
 test("useNavigation get top 1 web quickLaunch nav node", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useNavigation({
+        useHook: (err) => useNavigation({
             type: "quickLaunch",
             query: {
                 top: 1
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 

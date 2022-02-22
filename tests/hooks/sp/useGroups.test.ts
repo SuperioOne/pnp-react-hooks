@@ -3,31 +3,33 @@ import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
-import { spfi as sp } from "@pnp/sp";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
+import { SPFI } from "@pnp/sp";
 import { useGroup, useGroups, useGroupUser, useGroupUsers, useIsMemberOf } from "../../../src";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 let testGroupInfo: ISiteGroupInfo;
 let testUserInfo: ISiteUserInfo;
 
 beforeAll(async () =>
 {
-    InitPnpTest();
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
 
-    const currentUserGroups = await sp().web.currentUser.groups.select("Id")();
+    const currentUserGroups = await spTest.web.currentUser.groups.select("Id")();
 
     const filter = currentUserGroups.map(e => `Id ne ${e.Id}`).join(" AND ");
 
     // get a group current user not in
-    const groups = await sp().web.siteGroups.filter(filter).top(1)();
+    const groups = await spTest.web.siteGroups.filter(filter).top(1)();
 
     if (groups?.length < 1)
         throw new Error("Unable to find group");
 
     testGroupInfo = groups[0];
 
-    const users = await sp().web.siteGroups.getById(testGroupInfo.Id).users.top(1)();
+    const users = await spTest.web.siteGroups.getById(testGroupInfo.Id).users.top(1)();
 
     if (users?.length < 1)
         throw new Error("Unable to find group user");
@@ -39,10 +41,12 @@ afterEach(() => reactDOMElement.unmountComponent());
 test("useGroup get by Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroup(testGroupInfo.Id, {
+        useHook: (err) => useGroup(testGroupInfo.Id, {
             query: {
                 select: ["Id", "Title"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -54,10 +58,12 @@ test("useGroup get by Id", async () =>
 test("useGroup get by Name", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroup(testGroupInfo.Title, {
+        useHook: (err) => useGroup(testGroupInfo.Title, {
             query: {
                 select: ["Id", "Title"]
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -69,11 +75,13 @@ test("useGroup get by Name", async () =>
 test("useGroupUsers get group users", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroupUsers(testGroupInfo.Title, {
+        useHook: (err) => useGroupUsers(testGroupInfo.Title, {
             query: {
                 select: ["Id", "Title"],
                 top: 3
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -85,10 +93,12 @@ test("useGroupUsers get group users", async () =>
 test("useGroupUsers get group user by Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroupUser(testGroupInfo.Title, testUserInfo.Id, {
+        useHook: (err) => useGroupUser(testGroupInfo.Title, testUserInfo.Id, {
             query: {
                 select: ["Id", "Title"],
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -100,8 +110,10 @@ test("useGroupUsers get group user by Id", async () =>
 test("useIsMemberOf user is member of group", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useIsMemberOf(testGroupInfo.Title, {
-            userId: testUserInfo.Id
+        useHook: (err) => useIsMemberOf(testGroupInfo.Title, {
+            userId: testUserInfo.Id,
+            sp: spTest,
+            error: err
         }),
         completeWhen: (response: [boolean, ISiteGroupInfo]) => response[0] !== undefined
     };
@@ -116,8 +128,10 @@ test("useIsMemberOf user is member of group", async () =>
 test("useIsMemberOf user is member of group", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useIsMemberOf(testGroupInfo.Id, {
-            userId: testUserInfo.Id
+        useHook: (err) => useIsMemberOf(testGroupInfo.Id, {
+            userId: testUserInfo.Id,
+            sp: spTest,
+            error: err
         }),
         completeWhen: (response: [boolean, ISiteGroupInfo]) => response[0] !== undefined
     };
@@ -132,7 +146,10 @@ test("useIsMemberOf user is member of group", async () =>
 test("useIsMemberOf current user isn't member of group", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useIsMemberOf(testGroupInfo.Title),
+        useHook: (err) => useIsMemberOf(testGroupInfo.Title, {
+            sp: spTest,
+            error: err
+        }),
         completeWhen: (response: [boolean, ISiteGroupInfo]) => response[0] !== undefined
     };
 
@@ -146,7 +163,10 @@ test("useIsMemberOf current user isn't member of group", async () =>
 test("useIsMemberOf invalid group Id type", async () =>
 {
     const props: CustomHookProps = {
-        useHook: (err) => useIsMemberOf({ invalid: "invalid" } as any, { exception: err }),
+        useHook: (err) => useIsMemberOf({ invalid: "invalid" } as any, {
+            error: err,
+            sp: spTest,
+        }),
         completeWhen: (response: [boolean, ISiteGroupInfo]) => response[0] !== undefined
     };
 
@@ -158,10 +178,12 @@ test("useIsMemberOf invalid group Id type", async () =>
 test("useGroups get top 5 group", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroups({
+        useHook: (err) => useGroups({
             query: {
                 top: 5
-            }
+            },
+            sp: spTest,
+            error: err
         })
     };
 
@@ -173,11 +195,13 @@ test("useGroups get top 5 group", async () =>
 test("useGroups for testUser by user Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroups({
+        useHook: (err) => useGroups({
             query: {
                 top: 5
             },
-            userId: testUserInfo.Id
+            userId: testUserInfo.Id,
+            sp: spTest,
+            error: err
         })
     };
 
@@ -189,11 +213,13 @@ test("useGroups for testUser by user Id", async () =>
 test("useGroups for testUser by user email", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroups({
+        useHook: (err) => useGroups({
             query: {
                 top: 5
             },
-            userId: testUserInfo.Email
+            userId: testUserInfo.Email,
+            sp: spTest,
+            error: err
         })
     };
 
@@ -205,11 +231,13 @@ test("useGroups for testUser by user email", async () =>
 test("useGroups for testUser by user login name", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useGroups({
+        useHook: (err) => useGroups({
             query: {
                 top: 5
             },
-            userId: testUserInfo.LoginName
+            userId: testUserInfo.LoginName,
+            sp: spTest,
+            error: err
         })
     };
 
@@ -223,7 +251,8 @@ test("useGroups for testUser by user invalid value", async () =>
     const props: CustomHookProps = {
         useHook: (err) => useGroups({
             userId: {} as any,
-            exception: err
+            error: err,
+            sp: spTest,
         })
     };
 

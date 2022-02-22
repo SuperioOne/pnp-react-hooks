@@ -1,14 +1,16 @@
+import { spfi } from "@pnp/sp";
 import { JSDOM } from "jsdom";
-import { sp } from "@pnp/sp";
-import { MsalFetchClient } from "@pnp/nodejs";
-import config from "../msalSettings";
+import msalSettings from "../msalSettings";
+import { MsalDebugDefault } from "./behaviors/MsalDebugDefault";
 
 const ROOT_DIV_ID = "react";
 
 export async function InitEnvironment()
 {
-    InitPnp();
-    return InitJSDOM();
+    const jsDomRoot = InitJSDOM();
+    const spDebug = InitPnp();
+
+    return { root: jsDomRoot, sp: spDebug };
 }
 
 function InitJSDOM()
@@ -22,10 +24,11 @@ function InitJSDOM()
 
 function InitPnp()
 {
-    sp.setup({
-        sp: {
-            baseUrl: config.sp.url,
-            fetchClientFactory: () => new MsalFetchClient(config.sp.msal.init, config.sp.msal.scopes)
+    return spfi().using(MsalDebugDefault({
+        msal: {
+            config: msalSettings.sp.msal.init,
+            scopes: msalSettings.sp.msal.scopes
         },
-    });
+        baseUrl: msalSettings.sp.url
+    }));
 }

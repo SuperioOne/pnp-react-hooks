@@ -1,23 +1,31 @@
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { act } from 'react-dom/test-utils';
-import { initJSDOM } from "../../tools/ReactDOMElement";
+import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useFeatures } from "../../../src";
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { SPFI } from "@pnp/sp";
 
-const reactDOMElement = initJSDOM();
+let reactDOMElement: ReactDOMElement;
+let spTest: SPFI;
 
-beforeAll(() => InitPnpTest());
+beforeAll(() =>
+{
+    reactDOMElement = initJSDOM();
+    spTest = InitPnpTest();
+});
 afterEach(() => reactDOMElement.unmountComponent());
 
 test("useFeatures get site features", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFeatures({
+        useHook: (err) => useFeatures({
             query: {
                 top: 5,
                 select: ["*"]
             },
-            scope: "site"
+            scope: "site",
+            sp: spTest,
+            error: err
         })
     };
 
@@ -29,12 +37,14 @@ test("useFeatures get site features", async () =>
 test("useFeatures get web features", async () =>
 {
     const props: CustomHookProps = {
-        useHook: () => useFeatures({
+        useHook: (err) => useFeatures({
             query: {
                 top: 5,
                 select: ["*"]
             },
-            scope: "web"
+            scope: "web",
+            sp: spTest,
+            error: err
         })
     };
 
