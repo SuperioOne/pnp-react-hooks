@@ -43,24 +43,6 @@ test("useFile get file info by server relative url", async () =>
             .resolves.toBeTruthy());
 });
 
-test("useFile get file content as buffer", async () =>
-{
-    const props: CustomHookProps = {
-        useHook: (err) => useFile(testFileInfo.UniqueId, {
-            type: "buffer",
-            sp: spTest,
-            error: err
-        })
-    };
-
-    await act(async () =>
-    {
-        const data = await reactDOMElement.mountTestComponent("useFile get file content as buffer", CustomHookMockup, props);
-
-        expect(data && data instanceof ArrayBuffer).toBe(true);
-    });
-});
-
 test("useFile get file content as text", async () =>
 {
     const props: CustomHookProps = {
@@ -74,7 +56,6 @@ test("useFile get file content as text", async () =>
     await act(async () =>
     {
         const data = await reactDOMElement.mountTestComponent("useFile get file content as text", CustomHookMockup, props);
-
         expect(data).toBe(fContent);
     });
 });
@@ -131,7 +112,6 @@ test("useFiles get root folder by unique Id", async () =>
         expect(data).toBeTruthy();
     });
 });
-
 
 test("useFiles invalid folder identifier", async () =>
 {

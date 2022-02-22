@@ -3,6 +3,7 @@ export { BaseExample } from "./Example";
 export { AppsDebug } from "./AppsDebug";
 export { ChangesDebug } from "./ChangesDebug";
 export { CurrentUserDebug } from "./CurrentUserDebug";
+export { FileDebug } from "./FileDebug";
 export { FolderTreeDebug } from "./FolderTreeDebug";
 export { ListItemsDebug } from "./ListItemsDebug";
 export { ListTokenDebug } from "./ListTokenDebug";

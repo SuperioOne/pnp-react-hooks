@@ -19,6 +19,7 @@ export class FileCacheStorage
         sha256.update(url);
         sha256.update(init.method ?? "GET");
         sha256.update(JSON.stringify(init.body) ?? "undefined");
+        sha256.update(init.headers?.["Accept"] ?? "undefined");
 
         const hash = sha256.digest("hex");
 
