@@ -18,13 +18,33 @@ import { SPFI } from "@pnp/sp";
 
 type InstanceTypes = IFileInfo | ArrayBuffer | Blob | string;
 
-export interface FileOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>
+export interface _BaseFileOptions extends PnpHookOptions<ODataQueryable>
 {
     /**
      * Return type. Changing type resends request.
      */
-    type?: T;
+    type?: FileReturnTypes;
     disabled?: DisableOptionValueType | { (fileId: string): boolean };
+}
+
+export interface FileInfoOptions extends _BaseFileOptions
+{
+    type?: "info" | undefined;
+}
+
+export interface FileTextOptions extends Omit<_BaseFileOptions, "query">
+{
+    type: "text";
+}
+
+export interface FileBufferOptions extends Omit<_BaseFileOptions, "query">
+{
+    type: "buffer";
+}
+
+export interface FileBlobOptions extends Omit<_BaseFileOptions, "query">
+{
+    type: "blob";
 }
 
 /**
@@ -35,7 +55,7 @@ export interface FileOptions<T extends FileReturnTypes = "info"> extends PnpHook
  */
 export function useFile(
     fileId: string,
-    options?: FileOptions,
+    options?: FileInfoOptions,
     deps?: React.DependencyList): Nullable<IFileInfo>;
 
 /**
@@ -46,7 +66,7 @@ export function useFile(
 */
 export function useFile(
     fileId: string,
-    options?: FileOptions<"blob">,
+    options?: FileBlobOptions,
     deps?: React.DependencyList): Nullable<Blob>;
 
 /**
@@ -57,7 +77,7 @@ export function useFile(
 */
 export function useFile(
     fileId: string,
-    options?: FileOptions<"buffer">,
+    options?: FileBufferOptions,
     deps?: React.DependencyList): Nullable<ArrayBuffer>;
 
 /**
@@ -68,12 +88,12 @@ export function useFile(
 */
 export function useFile(
     fileId: string,
-    options?: FileOptions<"text">,
+    options?: FileTextOptions,
     deps?: React.DependencyList): Nullable<string>;
 
 export function useFile(
     fileId: string,
-    options?: FileOptions<FileReturnTypes>,
+    options?: _BaseFileOptions,
     deps?: React.DependencyList): Nullable<InstanceTypes>
 {
     const globalOptions = useContext(InternalContext);

@@ -13,7 +13,7 @@
     "pack": "node ./scripts/multiBuild.js -c Release && node ./scripts/omitPackageJson.js --outDir .temp/bin/release && npm pack ./.temp/bin/release --pack-destination ./.temp/bin/",
     "clean": "node ./scripts/clean.js",
     "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*",
-    "docs-api": "typedoc --plugin typedoc-plugin-markdown --out docs src/index.ts",
+    "docs-api": "typedoc --plugin typedoc-plugin-markdown --out ./docs/temp src/hooks/sp/*.ts src/context/index.ts src/types/**/*.ts",
     "test": "jest"
   },
   "keywords": [
@@ -70,7 +70,7 @@
     "tslib": "^2.3.1"
   },
   "peerDependencies": {
-    "@pnp/sp": "^3.0.1",
+    "@pnp/sp": "^3.0.3",
     "react": ">=16.9.0 <18.0.0"
   }
 }

@@ -1,0 +1,41 @@
+[API](API/index.md) / [Sp](API/index.md#sp) / useIsMemberOf
+
+## Definition
+
+▸ **useIsMemberOf**(`groupId`, `options?`, `deps?`): \[`Nullable<boolean>`, `Nullable<ISiteGroupInfo>`\]
+
+Returns `true`, if user is member of group. If not returns `false`. Use [`IsMemberOfOptions.userId`](IsMemberOfOptions.md#userid) property for another user. Default is current user.
+
+## Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `groupId` | `string` \| `number` | Group name or Id. Changing the value resends request. |
+| `options?` | [`IsMemberOfOptions`](IsMemberOfOptions.md) | Pnp hook options. |
+| `deps?` | `DependencyList` | useIsMemberOf will resend request when one of the dependencies changed. |
+
+## Returns
+
+\[`Nullable<boolean>`, `Nullable<ISiteGroupInfo>`\]
+
+## Examples
+
+```typescript
+// get current user membership info for group
+const [isMember, groupInfo] = useIsMemberOf(10);
+
+// get user membership info for group
+const [isMember, groupInfo] = useIsMemberOf("My SharePoint Group", {
+	userId: "user@example.onmicrosoft.com"
+});
+
+// get user membership info for group
+const [isMember, groupInfo] = useIsMemberOf("My SharePoint Group", {
+	userId: 25
+});
+
+// get user membership info for group
+const [isMember, groupInfo] = useIsMemberOf(10, {
+	userId: "i:0#.f|membership|user@example.onmicrosoft.com"
+});
+```

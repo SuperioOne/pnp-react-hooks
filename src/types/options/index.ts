@@ -1,4 +1,4 @@
-import { ErrorOptions } from "./ExceptionOptions";
+import { ErrorOptions } from "./ErrorOptions";
 import { Nullable } from "../utilityTypes";
 import { RenderOptions } from "./RenderOptions";
 import { ContextOptions } from "./ContextOptions";
@@ -44,7 +44,7 @@ export interface PnpHookGlobalOptions extends ErrorOptions, RenderOptions, Requi
     disabled?: boolean | "auto";
 }
 
-export { ErrorMode, ErrorOptions } from "./ExceptionOptions";
+export { ErrorMode, ErrorOptions } from "./ErrorOptions";
 export { ListOptions } from "./ListOptions";
 export { RenderOptions } from "./RenderOptions";
 export { ContextOptions } from "./ContextOptions";

@@ -10,7 +10,9 @@
         "strictNullChecks": true,
         "noEmitOnError": true
     },
-    "include": ["src/**/*"],
+    "include": [
+        "src/**/*"
+    ],
     "exclude": [
         "node_modules",
         "**/node_modules/*",

@@ -16,16 +16,34 @@ import { resolveList } from "../../utils/resolveList";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-/**
- * @inheritDoc
- */
-export interface AttachmentOptions<T extends FileReturnTypes = "info"> extends PnpHookOptions<ODataQueryable>
+
+interface _BaseAttachmentOptions extends PnpHookOptions<ODataQueryable>
 {
     /**
      * Return type
      */
-    type?: T;
+    type?: FileReturnTypes;
     disabled?: DisableOptionValueType | { (attachmentName: string, itemId: number, list: string): boolean };
+}
+
+export interface AttachmentInfoOptions extends _BaseAttachmentOptions
+{
+    type?: "info" | undefined;
+}
+
+export interface AttachmentTextOptions extends Omit<_BaseAttachmentOptions, "query">
+{
+    type: "text";
+}
+
+export interface AttachmentBufferOptions extends Omit<_BaseAttachmentOptions, "query">
+{
+    type: "buffer";
+}
+
+export interface AttachmentBlobOptions extends Omit<_BaseAttachmentOptions, "query">
+{
+    type: "blob";
 }
 
 type InstanceTypes = IAttachmentInfo | ArrayBuffer | Blob | string;
@@ -43,7 +61,7 @@ export function useAttachment(
     attachmentName: string,
     itemId: number,
     list: string,
-    options?: AttachmentOptions,
+    options?: AttachmentInfoOptions,
     deps?: React.DependencyList): Nullable<IAttachmentInfo>;
 
 /**
@@ -59,7 +77,7 @@ export function useAttachment(
     attachmentName: string,
     itemId: number,
     list: string,
-    options?: AttachmentOptions<"blob">,
+    options?: AttachmentBlobOptions,
     deps?: React.DependencyList): Nullable<Blob>;
 
 /**
@@ -75,7 +93,7 @@ export function useAttachment(
     attachmentName: string,
     itemId: number,
     list: string,
-    options?: AttachmentOptions<"buffer">,
+    options?: AttachmentBufferOptions,
     deps?: React.DependencyList): Nullable<ArrayBuffer>;
 
 /**
@@ -91,14 +109,14 @@ export function useAttachment(
     attachmentName: string,
     itemId: number,
     list: string,
-    options?: AttachmentOptions<"text">,
+    options?: AttachmentTextOptions,
     deps?: React.DependencyList): Nullable<string>;
 
 export function useAttachment(
     attachmentName: string,
     itemId: number,
     list: string,
-    options?: AttachmentOptions<FileReturnTypes>,
+    options?: _BaseAttachmentOptions,
     deps?: React.DependencyList): Nullable<InstanceTypes>
 {
     const globalOptions = useContext(InternalContext);

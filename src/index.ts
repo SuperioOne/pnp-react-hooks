@@ -1,5 +1,5 @@
 export { ChangeTokenInfo } from "./types/ChangeTokenInfo";
-export { ErrorMode, ListOptions, PnpHookGlobalOptions } from "./types/options";
+export { ErrorMode, ListOptions, PnpHookGlobalOptions, ContextOptions, ErrorOptions, RenderOptions, PnpHookOptions } from "./types/options";
 export { PnpHookOptionProvider } from "./context";
 
 export { useApp } from "./hooks/sp/useApp";
