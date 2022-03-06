@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useSubWebInfos
+[API](../index.md) / [Sp](../index.md#sp) / useSubWebInfos
 
 ## Definition
 
-▸ **useSubWebInfos**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IWebInfosData`[]\>
+▸ **useSubWebInfos**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IWebInfosData`[]\>
 
 Returns web info collection of current web's subwebs.
 
@@ -10,12 +10,12 @@ Returns web info collection of current web's subwebs.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`SubWebInfosOptions`](useSubWebInfos.md#subwebinfosoptions) | PnP hook options. |
+| `options?` | [`SubWebInfosOptions`](../Interfaces/SubWebInfosOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSubWebInfos will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IWebInfosData`[]\>
+[`Nullable`](../Types/NullableT.md)<`IWebInfosData`[]\>
 
 ## Examples
 

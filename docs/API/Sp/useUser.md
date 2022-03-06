@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useUser
+[API](../index.md) / [Sp](../index.md#sp) / useUser
 
 ## Definition
 
-▸ **useUser**(`userId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`\>
+▸ **useUser**(`userId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
 
 Returns an user from site user collection.
 
@@ -11,12 +11,12 @@ Returns an user from site user collection.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `userId` | `string` \| `number` | User Id, login name, email. |
-| `options?` | [`UserOptions`](UserOptions.md) |  |
-| `deps?` | `DependencyList` |  |
+| `options?` | [`UserOptions`](../Interfaces/UserOptions.md) | PnP hook options.  |
+| `deps?` | `DependencyList` | useUser will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`\>
+[`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
 
 ## Examples
 
@@ -24,7 +24,7 @@ Returns an user from site user collection.
 // get site user by Id
 const userById = useUser(27);
 
-// get site user by email 
+// get site user by email
 const userByEmail = useUser("user@example.onmicrosoft.com");
 
 // get site user by login name

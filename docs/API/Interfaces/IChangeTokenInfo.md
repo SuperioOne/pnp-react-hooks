@@ -1,8 +1,8 @@
-[API](API/index.md) / [Interfaces](API/Interfaces/index.md) / IChangeTokenInfo
+[API](../index.md) / [Interfaces](index.md) / IChangeTokenInfo
 
 ## Implemented by
 
-- [`ChangeTokenInfo`](API/Classes/ChangeTokenInfo.md)
+- [`ChangeTokenInfo`](../Classes/ChangeTokenInfo.md)
 
 ## Properties
 
@@ -27,4 +27,3 @@ ___
 • **LastChanges**: [`Timings`](Timings.md)
 
 List last change time informations.
-

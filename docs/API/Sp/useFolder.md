@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useFolder
+[API](../index.md) / [Sp](../index.md#sp) / useFolder
 
 ## Definition
 
-▸ **useFolder**(`folderId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IFolderInfo`\>
+▸ **useFolder**(`folderId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IFolderInfo`\>
 
 Return a folder.
 
@@ -11,12 +11,12 @@ Return a folder.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `folderId` | `string` | Folder GUID Id or server relative path. Changing the value resends request. |
-| `options?` | [`FolderOptions`](FolderOptions.md) | PnP hook options. |
+| `options?` | [`FolderOptions`](../Interfaces/FolderOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useFolder will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IFolderInfo`\>
+[`Nullable`](../Types/NullableT.md)<`IFolderInfo`\>
 
 ## Examples
 

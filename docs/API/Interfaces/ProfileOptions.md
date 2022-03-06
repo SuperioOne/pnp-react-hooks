@@ -1,14 +1,14 @@
-[API](API/index.md) / [Interfaces](index.md) / ProfileOptions
+[API](../index.md) / [Interfaces](index.md) / ProfileOptions
 
 ## Hierarchy
 
-- [`ErrorOptions`](types_options_ExceptionOptions.ErrorOptions.md)
+- [`ErrorOptions`](ErrorOptions.md)
 
-- [`RenderOptions`](types_options_RenderOptions.RenderOptions.md)
+- [`RenderOptions`](RenderOptions.md)
 
-- [`BehaviourOptions`](types_options_BehaviourOptions.BehaviourOptions.md)
+- [`BehaviourOptions`](BehaviourOptions.md)
 
-- [`ContextOptions`](types_options_ContextOptions.ContextOptions.md)
+- [`ContextOptions`](ContextOptions.md)
 
   ↳ **`ProfileOptions`**
 
@@ -22,31 +22,31 @@ Additional behaviors for hooks PnP request.
 
 #### Inherited from
 
-[BehaviourOptions](types_options_BehaviourOptions.BehaviourOptions.md).[behaviors](types_options_BehaviourOptions.BehaviourOptions.md#behaviors)
+[BehaviourOptions](BehaviourOptions.md).[behaviors](BehaviourOptions.md#behaviors)
 
 ___
 
 ### disabled
 
-• `Optional` **disabled**: [`DisableOptionValueType`](types_options_RenderOptions.md#disableoptionvaluetype) \| (`loginName`: `string`) => `boolean`
+• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| (`loginName`: `string`) => `boolean`
 
 Disable hook calls and renders.
 
 #### Overrides
 
-[RenderOptions](types_options_RenderOptions.RenderOptions.md).[disabled](types_options_RenderOptions.RenderOptions.md#disabled)
+[RenderOptions](RenderOptions.md).[disabled](RenderOptions.md#disabled)
 
 ___
 
 ### error
 
-• `Optional` **error**: [`ErrorFunc`](types_options_ExceptionOptions.md#errorfunc) \| [`ErrorMode`](ErrorMode.md)
+• `Optional` **error**: [`ErrorFunc`](../Types/ErrorFunc.md#errorfunc) \| [`ErrorMode`](../Enums/ErrorMode.md)
 
-Error handling. Default is [`ErrorMode.Default`](ErrorMode.md#default).
+Error handling. Default is [`ErrorMode.Default`](../Enums/ErrorMode.md#default).
 
 #### Inherited from
 
-[ErrorOptions](types_options_ExceptionOptions.ErrorOptions.md).[error](types_options_ExceptionOptions.ErrorOptions.md#error)
+[ErrorOptions](ErrorOptions.md).[error](ErrorOptions.md#error)
 
 ___
 
@@ -58,7 +58,7 @@ Keep previous state until new request resolves rather than clearing the state as
 
 #### Inherited from
 
-[RenderOptions](types_options_RenderOptions.RenderOptions.md).[keepPreviousState](types_options_RenderOptions.RenderOptions.md#keeppreviousstate)
+[RenderOptions](RenderOptions.md).[keepPreviousState](RenderOptions.md#keeppreviousstate)
 
 ___
 
@@ -70,4 +70,4 @@ Pnp SP context.
 
 #### Inherited from
 
-[ContextOptions](types_options_ContextOptions.ContextOptions.md).[sp](types_options_ContextOptions.ContextOptions.md#sp)
+[ContextOptions](ContextOptions.md).[sp](ContextOptions.md#sp)

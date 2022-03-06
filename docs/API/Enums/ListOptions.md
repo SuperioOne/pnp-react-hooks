@@ -1,8 +1,8 @@
-[API](API/index.md) / [Enu / ListOptions
+[API](../index.md) / [Enums](index.md) / ListOptions
 
 ## Definition
 
-Defines how [`useListItems`](API/Sp/useListItems) get items from Sharepoint.
+Defines how [`useListItems`](../Sp/useListItems) get items from Sharepoint.
 modules
 ## Enumeration members
 

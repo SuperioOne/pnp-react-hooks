@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useApp
+[API](../index.md) / [Sp](../index.md#sp) / useApp
 
 ## Definition
 
-▸ **useApp**<`T`\>(`appId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`T`\>
+▸ **useApp**<`T`\>(`appId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`\>
 
 Returns an app detail of the given Id from the app catalog.
 
@@ -17,12 +17,12 @@ Returns an app detail of the given Id from the app catalog.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `appId` | `string` | App GUID Id string. Changing the appId value resends request. |
-| `options?` | [`WebAppOptions`](WebAppOptions.md) | PnP hook options |
+| `options?` | [`WebAppOptions`](../Interfaces/WebAppOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useApp will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`T`\>
+[`Nullable`](../Types/NullableT.md)<`T`\>
 
 App info object.
 

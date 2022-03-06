@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useSearchUser
+[API](../index.md) / [Sp](../index.md#sp) / useSearchUser
 
 ## Definition
 
-▸ **useSearchUser**(`searchOptions`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IPeoplePickerEntity`[]\>
+▸ **useSearchUser**(`searchOptions`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IPeoplePickerEntity`[]\>
 
 Searches for users or groups with specified search options.
 
@@ -11,16 +11,16 @@ Searches for users or groups with specified search options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `searchOptions` | `string` \| `IClientPeoplePickerQueryParameters` | Search text or search query parameters. Changing the value resends request. |
-| `options?` | `SearchUserOptions` | PnP hook options. |
+| `options?` | [`SearchUserOptions`](../Interfaces/SearchUserOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSearchUser will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IPeoplePickerEntity`[]\>
+[`Nullable`](../Types/NullableT.md)<`IPeoplePickerEntity`[]\>
 
 ## Examples
 
-**text search** 
+**text search**
 
 ```typescript
 // basic usage

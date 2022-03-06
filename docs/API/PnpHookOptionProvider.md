@@ -1,4 +1,4 @@
-[API](API/index.md) / PnpHookOptionProvider
+[API](index.md) / PnpHookOptionProvider
 
 ## Definition
 
@@ -12,7 +12,7 @@ React context wrapper for PnP React hooks.
 | :------ | :------ |
 | `props` | `Object` |
 | `props.children` | `any` |
-| `props.value` | [`PnpHookGlobalOptions`](types_options.PnpHookGlobalOptions.md) |
+| `props.value` | [`PnpHookGlobalOptions`](Interfaces/PnpHookGlobalOptions.md) |
 
 ## Returns
 
@@ -20,4 +20,51 @@ React context wrapper for PnP React hooks.
 
 ## Example
 
+```tsx
+import * as React from "react";
+import {useWebInfo, PnpHookOptionProvider} from "pnp-react-hooks";
+import { Caching } from "@pnp/queryable";
+import { spfi, SPFx } from "@pnp/sp";
 
+const options: PnpHookGlobalOptions = {
+	disabled: "auto",
+	keepPreviousState: true,
+	error: console.debug,
+	sp: spfi().using(SPFx(this.context))
+};
+
+const cachedOptions: PnpHookGlobalOptions = {
+	disabled: "auto",
+	keepPreviousState: true,
+	error: console.debug,
+	sp: spfi().using(SPFx(this.context), Caching())
+};
+
+export function Main
+{
+	return(
+		<>
+			<PnpHookOptionProvider value={options}>
+				<CurrentWebInfo />
+				<UserInfo />
+			</PnpHookOptionProvider>
+			<PnpHookOptionProvider value={cachedOptions}>
+				<CurrentWebInfo />
+				<UserInfo />
+			</PnpHookOptionProvider>
+		</>
+	);
+}
+
+export function CurrentWebInfo()
+{
+	const web = useWebInfo();
+	return <h1>{web?.Title}</h1>;
+}
+
+export function UserInfo()
+{
+	const user = useCurrentUser();
+	return <h2>{user?.Title}</h2>;
+}
+```

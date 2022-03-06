@@ -1,22 +1,22 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useHasPermission
+[API](../index.md) / [Sp](../index.md#sp) / useHasPermission
 
 ## Definition
 
-▸ **useHasPermission**(`permissionKinds`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`boolean`\>
+▸ **useHasPermission**(`permissionKinds`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`boolean`\>
 
-Returns `true` if user has permission on scope. If not returns `false`. Use [`UserPermissionOptions.userId`](UserPermissionOptions.md#userid) for another user and [`UserPermissionOptions.scope`](UserPermissionOptions.md#scope) for permission scope. Default is current user permission on current web scope.
+Returns `true` if user has permission on scope. If not returns `false`. Use [`UserPermissionOptions.userId`](../Interfaces/UserPermissionOptions.md#userid) for another user and [`UserPermissionOptions.scope`](../Interfaces/UserPermissionOptions.md#scope) for permission scope. Default is current user permission on current web scope.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `permissionKinds` | `PermissionKind` \| `PermissionKind`[] | SP permission kind array or permission kind value. Changing the value resends request. |
-| `options?` | [`UserPermissionOptions`](UserPermissionOptions.md) | Pnp hook options. |
+| `options?` | [`UserPermissionOptions`](../Interfaces/UserPermissionOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useHasPermission will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`boolean`\>
+[`Nullable`](../Types/NullableT.md)<`boolean`\>
 
 ## Examples
 

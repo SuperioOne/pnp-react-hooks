@@ -4,7 +4,7 @@ PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/) p
 
 **Example usage:**
 
-```typescript
+```tsx
 import * as React from "react";
 import { useListItems, useCurrentUser } from "pnp-react-hooks";
 

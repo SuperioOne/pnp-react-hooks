@@ -1,12 +1,12 @@
-[API](API/index.md) / [Interfaces](index.md) / ListTokenOptions
+[API](../index.md) / [Interfaces](index.md) / ListTokenOptions
 
 ## Hierarchy
 
-- [`ErrorOptions`](types_options_ExceptionOptions.ErrorOptions.md)
+- [`ErrorOptions`](ErrorOptions.md)
 
-- [`ContextOptions`](types_options_ContextOptions.ContextOptions.md)
+- [`ContextOptions`](ContextOptions.md)
 
-- [`BehaviourOptions`](types_options_BehaviourOptions.BehaviourOptions.md)
+- [`BehaviourOptions`](BehaviourOptions.md)
 
   ↳ **`ListTokenOptions`**
 
@@ -20,13 +20,13 @@ Additional behaviors for hooks PnP request.
 
 #### Inherited from
 
-[BehaviourOptions](types_options_BehaviourOptions.BehaviourOptions.md).[behaviors](types_options_BehaviourOptions.BehaviourOptions.md#behaviors)
+[BehaviourOptions](BehaviourOptions.md).[behaviors](BehaviourOptions.md#behaviors)
 
 ___
 
 ### disabled
 
-• `Optional` **disabled**: [`DisableOptionValueType`](types_options_RenderOptions.md#disableoptionvaluetype) \| (`list`: `string`) => `boolean`
+• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| (`list`: `string`) => `boolean`
 
 Disable hook calls and renders.
 
@@ -34,13 +34,13 @@ ___
 
 ### error
 
-• `Optional` **error**: [`ErrorFunc`](types_options_ExceptionOptions.md#errorfunc) \| [`ErrorMode`](ErrorMode.md)
+• `Optional` **error**: [`ErrorFunc`](../Types/ErrorFunc.md#errorfunc) \| [`ErrorMode`](../Enums/ErrorMode.md)
 
-Error handling. Default is [`ErrorMode.Default`](ErrorMode.md#default).
+Error handling. Default is [`ErrorMode.Default`](../Enums/ErrorMode.md#default).
 
 #### Inherited from
 
-[ErrorOptions](types_options_ExceptionOptions.ErrorOptions.md).[error](types_options_ExceptionOptions.ErrorOptions.md#error)
+[ErrorOptions](ErrorOptions.md).[error](ErrorOptions.md#error)
 
 ___
 
@@ -52,4 +52,4 @@ Pnp SP context.
 
 #### Inherited from
 
-[ContextOptions](types_options_ContextOptions.ContextOptions.md).[sp](types_options_ContextOptions.ContextOptions.md#sp)
+[ContextOptions](ContextOptions.md).[sp](ContextOptions.md#sp)

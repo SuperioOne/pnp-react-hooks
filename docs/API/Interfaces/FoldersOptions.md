@@ -1,8 +1,8 @@
-[API](API/index.md) / [Interfaces](index.md) / FoldersOptions
+[API](../index.md) / [Interfaces](index.md) / FoldersOptions
 
 ## Hierarchy
 
-- [`PnpHookOptions`](types_options.PnpHookOptions.md)<[`ODataQueryableCollection`](types_ODataQueryable.ODataQueryableCollection.md)\>
+- [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
   ↳ **`FoldersOptions`**
 
@@ -16,31 +16,31 @@ Additional behaviors for hooks PnP request.
 
 #### Inherited from
 
-[PnpHookOptions](types_options.PnpHookOptions.md).[behaviors](types_options.PnpHookOptions.md#behaviors)
+[PnpHookOptions](PnpHookOptions.md).[behaviors](PnpHookOptions.md#behaviors)
 
 ___
 
 ### disabled
 
-• `Optional` **disabled**: [`DisableOptionValueType`](types_options_RenderOptions.md#disableoptionvaluetype) \| () => `boolean`
+• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| () => `boolean`
 
 Disable hook calls and renders.
 
 #### Overrides
 
-[PnpHookOptions](types_options.PnpHookOptions.md).[disabled](types_options.PnpHookOptions.md#disabled)
+[PnpHookOptions](PnpHookOptions.md).[disabled](PnpHookOptions.md#disabled)
 
 ___
 
 ### error
 
-• `Optional` **error**: [`ErrorFunc`](types_options_ExceptionOptions.md#errorfunc) \| [`ErrorMode`](ErrorMode.md)
+• `Optional` **error**: [`ErrorFunc`](../Types/ErrorFunc.md#errorfunc) \| [`ErrorMode`](../Enums/ErrorMode.md)
 
-Error handling. Default is [`ErrorMode.Default`](ErrorMode.md#default).
+Error handling. Default is [`ErrorMode.Default`](../Enums/ErrorMode.md#default).
 
 #### Inherited from
 
-[PnpHookOptions](types_options.PnpHookOptions.md).[error](types_options.PnpHookOptions.md#error)
+[PnpHookOptions](PnpHookOptions.md).[error](PnpHookOptions.md#error)
 
 ___
 
@@ -52,17 +52,17 @@ Keep previous state until new request resolves rather than clearing the state as
 
 #### Inherited from
 
-[PnpHookOptions](types_options.PnpHookOptions.md).[keepPreviousState](types_options.PnpHookOptions.md#keeppreviousstate)
+[PnpHookOptions](PnpHookOptions.md).[keepPreviousState](PnpHookOptions.md#keeppreviousstate)
 
 ___
 
 ### query
 
-• `Optional` **query**: [`Nullable`](NullableT.md#nullable)<[`ODataQueryableCollection`](types_ODataQueryable.ODataQueryableCollection.md)\>
+• `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
 #### Inherited from
 
-[PnpHookOptions](types_options.PnpHookOptions.md).[query](types_options.PnpHookOptions.md#query)
+[PnpHookOptions](PnpHookOptions.md).[query](PnpHookOptions.md#query)
 
 ___
 
@@ -82,4 +82,4 @@ Pnp SP context.
 
 #### Inherited from
 
-[PnpHookOptions](types_options.PnpHookOptions.md).[sp](types_options.PnpHookOptions.md#sp)
+[PnpHookOptions](PnpHookOptions.md).[sp](PnpHookOptions.md#sp)

@@ -1,4 +1,4 @@
- [API](API/index.md) / [Enums](API/Enums/index.md) / ErrorMode
+ [API](../index.md) / [Enums](index.md) / ErrorMode
 
 ## Enumeration members
 

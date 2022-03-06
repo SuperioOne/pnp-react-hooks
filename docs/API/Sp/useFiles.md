@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useFiles
+[API](../index.md) / [Sp](../index.md#sp) / useFiles
 
 ## Definition
 
-▸ **useFiles**(`folderId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IFileInfo`[]\>
+▸ **useFiles**(`folderId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IFileInfo`[]\>
 
 Returns file collection from folder.
 
@@ -11,12 +11,12 @@ Returns file collection from folder.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `folderId` | `string` | Folder GUID Id or server relative path. Changing the value resends request. |
-| `options?` | [`FilesOptions`](FilesOptions.md) | PnP hook options. |
+| `options?` | [`FilesOptions`](../Interfaces/FilesOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useFiles will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IFileInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IFileInfo`[]\>
 
 ## Examples
 

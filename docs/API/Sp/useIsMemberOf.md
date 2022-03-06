@@ -1,17 +1,17 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useIsMemberOf
+[API](../index.md) / [Sp](../index.md#sp) / useIsMemberOf
 
 ## Definition
 
 ▸ **useIsMemberOf**(`groupId`, `options?`, `deps?`): \[`Nullable<boolean>`, `Nullable<ISiteGroupInfo>`\]
 
-Returns `true`, if user is member of group. If not returns `false`. Use [`IsMemberOfOptions.userId`](IsMemberOfOptions.md#userid) property for another user. Default is current user.
+Returns `true`, if user is member of group. If not returns `false`. Use [`IsMemberOfOptions.userId`](../Interfaces/IsMemberOfOptions.md#userid) property for another user. Default is current user.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `groupId` | `string` \| `number` | Group name or Id. Changing the value resends request. |
-| `options?` | [`IsMemberOfOptions`](IsMemberOfOptions.md) | Pnp hook options. |
+| `options?` | [`IsMemberOfOptions`](../Interfaces/IsMemberOfOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useIsMemberOf will resend request when one of the dependencies changed. |
 
 ## Returns

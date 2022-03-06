@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useGroupUsers
+[API](../index.md) / [Sp](../index.md#sp) / useGroupUsers
 
 ## Definition
 
-▸ **useGroupUsers**(`groupId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`[]\>
+▸ **useGroupUsers**(`groupId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`[]\>
 
 Returns user collection from specific group.
 
@@ -11,12 +11,12 @@ Returns user collection from specific group.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `groupId` | `string` \| `number` | Group name or Id. Changing the value resends request. |
-| `options?` | [`GroupUsersOptions`](GroupUsersOptions.md) | Pnp hook options. |
+| `options?` | [`GroupUsersOptions`](../Interfaces/GroupUsersOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useGroupUsers will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`[]\>
 
 ## Examples
 

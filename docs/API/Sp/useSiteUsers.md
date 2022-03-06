@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useSiteUsers
+[API](../index.md) / [Sp](../index.md#sp) / useSiteUsers
 
 ## Definition
 
-▸ **useSiteUsers**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`[]\>
+▸ **useSiteUsers**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`[]\>
 
 Returns site users.
 
@@ -10,12 +10,12 @@ Returns site users.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`SiteUsersOptions`](useSiteUsers.md#siteusersoptions) | PnP hook options. |
+| `options?` | [`SiteUsersOptions`](../Interfaces/SiteUsersOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSiteUsers will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`[]\>
 
 ## Examples
 

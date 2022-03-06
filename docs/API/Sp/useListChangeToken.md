@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useListChangeToken
+[API](../index.md) / [Sp](../index.md#sp) / useListChangeToken
 
 ## Definition
 
-▸ **useListChangeToken**(`list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<[`IChangeTokenInfo`](IChangeTokenInfo.md)\>
+▸ **useListChangeToken**(`list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<[`IChangeTokenInfo`](../Interfaces/IChangeTokenInfo.md)\>
 
 Returns list current change token and last modified dates.
 
@@ -11,12 +11,12 @@ Returns list current change token and last modified dates.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `list` | `string` | List GUID id or title. Changing the value resends request. |
-| `options?` | [`ListTokenOptions`](ListTokenOptions.md) | Pnp hook options. |
+| `options?` | [`ListTokenOptions`](../Interfaces/ListTokenOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useListChangeToken will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<[`IChangeTokenInfo`](IChangeTokenInfo.md)\>
+[`Nullable`](../Types/NullableT.md)<[`IChangeTokenInfo`](../Interfaces/IChangeTokenInfo.md)\>
 
 ## Examples
 

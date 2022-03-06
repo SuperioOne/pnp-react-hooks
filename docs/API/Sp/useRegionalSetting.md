@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useRegionalSetting
+[API](../index.md) / [Sp](../index.md#sp) / useRegionalSetting
 
 ## Definition
 
-▸ **useRegionalSetting**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IRegionalSettingsInfo`\>
+▸ **useRegionalSetting**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IRegionalSettingsInfo`\>
 
 Returns site regional settings.
 
@@ -10,12 +10,12 @@ Returns site regional settings.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`RegionalSettingOptions`](useRegionalSetting.md#regionalsettingoptions) | PnP hook options. |
+| `options?` | [`RegionalSettingOptions`](../Interfaces/RegionalSettingOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useRegionalSetting will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IRegionalSettingsInfo`\>
+[`Nullable`](../Types/NullableT.md)<`IRegionalSettingsInfo`\>
 
 ## Examples
 

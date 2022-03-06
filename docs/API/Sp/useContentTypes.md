@@ -1,21 +1,21 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useContentTypes
+[API](../index.md) / [Sp](../index.md#sp) / useContentTypes
 
 ## Definition
 
-▸ **useContentTypes**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IContentTypeInfo`[]\>
+▸ **useContentTypes**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IContentTypeInfo`[]\>
 
-Returns content types of web or list. Use [`ItemContentTypeOptions.list`](ItemContentTypeOptions.md#list) property to get list content types instead of web content types.
+Returns content types of web or list. Use [`ItemContentTypeOptions.list`](../Interfaces/ItemContentTypeOptions.md#list) property to get list content types instead of web content types.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`ItemContentTypeOptions`](ItemContentTypeOptions.md) | PnP hook options. |
+| `options?` | [`ItemContentTypeOptions`](../Interfaces/ItemContentTypeOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useContentTypes will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IContentTypeInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IContentTypeInfo`[]\>
 
 array of `IContentTypeInfo`.
 

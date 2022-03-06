@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useAttachments
+[API](../index.md) / [Sp](../index.md#sp) / useAttachments
 
 ## Definition
 
-▸ **useAttachments**(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IAttachmentInfo`[]\>
+▸ **useAttachments**(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IAttachmentInfo`[]\>
 
 Returns all attachments of the item.
 
@@ -12,12 +12,12 @@ Returns all attachments of the item.
 | :------ | :------ | :------ |
 | `itemId` | `number` | List item numeric Id. Changing the value resends request. |
 | `list` | `string` | List title or GUID Id string. Changing the value resends request. |
-| `options?` | [`ItemAttachmentsOptions`](ItemAttachmentsOptions.md) | PnP hook options |
+| `options?` | [`ItemAttachmentsOptions`](../Interfaces/ItemAttachmentsOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useAttachments will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IAttachmentInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IAttachmentInfo`[]\>
 
 array of `IAttachmentInfo`.
 

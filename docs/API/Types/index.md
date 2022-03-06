@@ -2,7 +2,9 @@
 title: Types
 ---
 
-[API](API/index.md) / Types
+[API](../index.md) / Types
 
-- [Nullable<T/>](NullableT.md)
+- [DisableOptionType](DisableOptionType.md)
+- [ErrorFunc](ErrorFunc.md)
 - [GetPageDispatch](GetPageDispatch.md)
+- [Nullable<T/>](NullableT.md)

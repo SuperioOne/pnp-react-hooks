@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useWebProperties
+[API](../index.md) / [Sp](../index.md#sp) / useWebProperties
 
 ## Definition
 
-▸ **useWebProperties**<`T`\>(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`T`\>
+▸ **useWebProperties**<`T`\>(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`\>
 
 Returns web's properties.
 
@@ -16,12 +16,12 @@ Returns web's properties.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`WebPropertiesOptions`](useWebProperties.md#webpropertiesoptions) | PnP hook options. |
+| `options?` | [`WebPropertiesOptions`](../Interfaces/WebPropertiesOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useWebProperties will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`T`\>
+[`Nullable`](../Types/NullableT.md)<`T`\>
 
 ## Examples
 

@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useRoleDefinitions
+[API](../index.md) / [Sp](../index.md#sp) / useRoleDefinitions
 
 ### Definition
 
-▸ **useRoleDefinitions**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IRoleDefinitionInfo`[]\>
+▸ **useRoleDefinitions**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IRoleDefinitionInfo`[]\>
 
 Returns role definition collection.
 
@@ -10,12 +10,12 @@ Returns role definition collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`RoleDefinitionsOptions`](useRoleDefinitions.md#roledefinitionsoptions) | PnP hook options. |
+| `options?` | [`RoleDefinitionsOptions`](../Interfaces/RoleDefinitionsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useRoleDefinitions will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IRoleDefinitionInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IRoleDefinitionInfo`[]\>
 
 ## Examples
 

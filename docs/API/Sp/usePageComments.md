@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / usePageComments
+[API](../index.md) / [Sp](../index.md#sp) / usePageComments
 
 ## Definition
 
-▸ **usePageComments**(`pageRelativePath`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ICommentInfo`[]\>
+▸ **usePageComments**(`pageRelativePath`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ICommentInfo`[]\>
 
 Returns comment collection from page.
 
@@ -11,12 +11,12 @@ Returns comment collection from page.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `pageRelativePath` | `string` | Page server relative path. Changing the value resends request. |
-| `options?` | [`PageCommentsOptions`](PageCommentsOptions.md) | PnP hook options. |
+| `options?` | [`PageCommentsOptions`](../Interfaces/PageCommentsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | usePageComments will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ICommentInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`ICommentInfo`[]\>
 
 ## Examples
 

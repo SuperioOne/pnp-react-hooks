@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useCurrentUser
+[API](../index.md) / [Sp](../index.md#sp) / useCurrentUser
 
 ## Definition
 
-▸ **useCurrentUser**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`\>
+▸ **useCurrentUser**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
 
 Returns current user information.
 
@@ -10,12 +10,12 @@ Returns current user information.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`CurrentUserInfoOptions`](useCurrentUser.md#currentuserinfooptions) | PnP hook options |
+| `options?` | [`CurrentUserInfoOptions`](../Interfaces/CurrentUserInfoOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useCurrentUser will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ISiteUserInfo`\>
+[`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
 
 ## Examples
 

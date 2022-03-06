@@ -3,7 +3,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
-[API](API/index.md) / [Sp](API/index.md#sp) / useListItems
+[API](../index.md) / [Sp](../index.md#sp) / useListItems
 
 ## Definition
 Returns all item collection from specified list.
@@ -12,7 +12,7 @@ Returns all item collection from specified list.
 
 ### useListItems `AllItemsOptions`
 
-▸ **useListItems**<`T`\>(`list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`T`[]\>
+▸ **useListItems**<`T`\>(`list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`[]\>
 
 Returns all item collection from specified list.
 
@@ -33,12 +33,12 @@ This mode allows you to fetch items over 5000 threshold but you can't use sort, 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `list` | `string` | List GUID Id or title. Changing the value resends request. |
-| `options?` | [`AllItemsOptions`](AllItemsOptions.md) | PnP hook options for all items request. |
+| `options?` | [`AllItemsOptions`](../Interfaces/AllItemsOptions.md) | PnP hook options for all items request. |
 | `deps?` | `DependencyList` | useListItems will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`T`[]\>
+[`Nullable`](../Types/NullableT.md)<`T`[]\>
 
 #### Examples
 
@@ -76,7 +76,7 @@ const myItems = useListItems<MyItem>("5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
 
 ### useListItems `ListItemsOptions`
 
-▸ **useListItems**<`T`\>(`list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`T`[]\>
+▸ **useListItems**<`T`\>(`list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`[]\>
 
 Returns item collection from specified list.
 
@@ -97,12 +97,12 @@ Returns item collection from specified list.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `list` | `string` | List GUID Id or title. Changing the value resends request. |
-| `options?` | [`ListItemsOptions`](ListItemsOptions.md) | PnP hook options. |
+| `options?` | [`ListItemsOptions`](../Interfaces/ListItemsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useListItems will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`T`[]\>
+[`Nullable`](../Types/NullableT.md)<`T`[]\>
 
 #### Examples
 

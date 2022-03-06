@@ -2,7 +2,7 @@
 title: Classes
 ---
 
-[API](API/index.md) / Classes
+[API](../index.md) / Classes
 
 - [ChangeTokenInfo](ChangeTokenInfo.md)
 

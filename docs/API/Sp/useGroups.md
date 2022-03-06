@@ -1,22 +1,22 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useGroups
+[API](../index.md) / [Sp](../index.md#sp) / useGroups
 
 ## Definition
 
-▸ **useGroups**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ISiteGroupInfo`[]\>
+▸ **useGroups**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteGroupInfo`[]\>
 
-Returns group collection. Use [`GroupsOptions.userId`](GroupsOptions.md#userid) property to get
+Returns group collection. Use [`GroupsOptions.userId`](../Interfaces/GroupsOptions.md#userid) property to get
 groups for specific user.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`GroupsOptions`](GroupsOptions.md) | Pnp hook options. |
+| `options?` | [`GroupsOptions`](../Interfaces/GroupsOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useGroups will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ISiteGroupInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`ISiteGroupInfo`[]\>
 
 ## Examples
 

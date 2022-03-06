@@ -1,4 +1,4 @@
-[API](API/index.md) / [Interfaces](index.md) / SpSearchResult
+[API](../index.md) / [Interfaces](index.md) / SpSearchResult
 
 ## Properties
 

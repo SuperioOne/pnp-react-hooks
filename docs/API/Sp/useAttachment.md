@@ -3,7 +3,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
-[API](API/index.md) / [Sp](API/index.md#sp) / useAttachment
+[API](../index.md) / [Sp](../index.md#sp) / useAttachment
 
 ## Definition
 
@@ -13,7 +13,7 @@ Returns an attachment from item.
 
 ### useAttachment `IAttachmentInfo`
 
-▸ **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IAttachmentInfo`\>
+▸ **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IAttachmentInfo`\>
 
 Returns an attachment info from item.
 
@@ -24,12 +24,12 @@ Returns an attachment info from item.
 | `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
 | `itemId` | `number` | List item numeric Id. Changing the value resends request. |
 | `list` | `string` | List title or GUID Id string. Changing the value resends request. |
-| `options?` | [`AttachmentInfoOptions`](AttachmentInfoOptions.md) | Pnp hook options. |
+| `options?` | [`AttachmentInfoOptions`](../Interfaces/AttachmentInfoOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`IAttachmentInfo`\>
+[`Nullable`](../Types/NullableT.md)<`IAttachmentInfo`\>
 
 Attachment info object.
 
@@ -53,7 +53,7 @@ const appWithQuery = useAttachment("my-attachment.txt", 12, "My List"), {
 
 ### useAttachment `Blob`
 
-▸ **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`Blob`\>
+▸ **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`Blob`\>
 
 Returns attachment content as `Blob`.
 
@@ -64,12 +64,12 @@ Returns attachment content as `Blob`.
 | `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
 | `itemId` | `number` | List item numeric Id. Changing the value resends request. |
 | `list` | `string` | List title or GUID Id string. Changing the value resends request. |
-| `options?` | [`AttachmentBlobOptions`](AttachmentBlobOptions.md) | Pnp hook options. |
+| `options?` | [`AttachmentBlobOptions`](../Interfaces/AttachmentBlobOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`Blob`\>
+[`Nullable`](../Types/NullableT.md)<`Blob`\>
 
 Attachment file content.
 
@@ -87,7 +87,7 @@ const contentAsBlob = useAttachment("my-attachment.txt", 12, "My List", {
 
 ### useAttachment `ArrayBuffer`
 
-▸ **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ArrayBuffer`\>
+▸ **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ArrayBuffer`\>
 
 Returns attachment content as `ArrayBuffer`.
 
@@ -98,12 +98,12 @@ Returns attachment content as `ArrayBuffer`.
 | `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
 | `itemId` | `number` | List item numeric Id. Changing the value resends request. |
 | `list` | `string` | List title or GUID Id string. Changing the value resends request. |
-| `options?` | [`AttachmentBufferOptions`](AttachmentBufferOptions.md) | Pnp hook options. |
+| `options?` | [`AttachmentBufferOptions`](../Interfaces/AttachmentBufferOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`ArrayBuffer`\>
+[`Nullable`](../Types/NullableT.md)<`ArrayBuffer`\>
 
 Attachment file content.
 
@@ -121,7 +121,7 @@ const contentAsBuffer = useAttachment("my-attachment.txt", 12, "My List", {
 
 ### useAttachment `string`
 
-▸  **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`string`\>
+▸  **useAttachment**(`attachmentName`, `itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`string`\>
 
 Returns attachment content as `string`.
 
@@ -132,12 +132,12 @@ Returns attachment content as `string`.
 | `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
 | `itemId` | `number` | List item numeric Id. Changing the value resends request. |
 | `list` | `string` | List title or GUID Id string. Changing the value resends request. |
-| `options?` | [`AttachmentTextOptions`](AttachmentTextOptions.md) | Pnp hook options. |
+| `options?` | [`AttachmentTextOptions`](../Interfaces/AttachmentTextOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`string`\>
+[`Nullable`](../Types/NullableT.md)<`string`\>
 
 Attachment file content.
 

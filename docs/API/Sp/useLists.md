@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useLists
+[API](../index.md) / [Sp](../index.md#sp) / useLists
 
 ## Definition
 
-▸ **useLists**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IListInfo`[]\>
+▸ **useLists**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IListInfo`[]\>
 
 Returns list collection.
 
@@ -10,12 +10,12 @@ Returns list collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`ListsOptions`](useLists.md#listsoptions) | PnP hook options. |
+| `options?` | [`ListsOptions`](../Interfaces/ListsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useLists will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IListInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IListInfo`[]\>
 
 ## Examples
 

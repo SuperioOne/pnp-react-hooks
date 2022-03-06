@@ -1,21 +1,21 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useNavigation
+[API](../index.md) / [Sp](../index.md#sp) / useNavigation
 
 ## Definition
 
-▸ **useNavigation**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`INavNodeInfo`[]\>
+▸ **useNavigation**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`INavNodeInfo`[]\>
 
-Returns web navigation nodes. Use [`NavigationOptions.type`](NavigationOptions.md#type) property to change navigation type. Default is `topNavigation`.
+Returns web navigation nodes. Use [`NavigationOptions.type`](../Interfaces/NavigationOptions.md#type) property to change navigation type. Default is `"topNavigation"`.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`NavigationOptions`](NavigationOptions.md) | PnP hook options. |
+| `options?` | [`NavigationOptions`](../Interfaces/NavigationOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useNavigation will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`INavNodeInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`INavNodeInfo`[]\>
 
 ## Examples
 

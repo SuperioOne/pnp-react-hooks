@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useRoleDefinition
+[API](../index.md) / [Sp](../index.md#sp) / useRoleDefinition
 
 ## Definition
 
-▸ **useRoleDefinition**(`roleDefId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IRoleDefinitionInfo`\>
+▸ **useRoleDefinition**(`roleDefId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IRoleDefinitionInfo`\>
 
 Returns role definition with the specified identifier.
 
@@ -10,13 +10,13 @@ Returns role definition with the specified identifier.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `roleDefId` | `string` \| `number` \| [`RoleType`](RoleType.md) | Role definition name, Id or `RoleTypeKind`. |
-| `options?` | [`RoleDefinitionOptions`](RoleDefinitionOptions.md) | PnP hook options. |
+| `roleDefId` | `string` \| `number` \| [`RoleType`](../Interfaces/RoleType.md) | Role definition name, Id or `RoleTypeKind`. |
+| `options?` | [`RoleDefinitionOptions`](../Interfaces/RoleDefinitionOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useRoleDefinition will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IRoleDefinitionInfo`\>
+[`Nullable`](../Types/NullableT.md)<`IRoleDefinitionInfo`\>
 
 ## Examples
 
@@ -28,7 +28,7 @@ const roleDefById = useRoleDefinition(1073741826);
 const roleDefByName = useRoleDefinition("Contribute");
 
 // get role definition by RoleTypeKind
-const roleDefByKind = useRoleDefinition({ 
+const roleDefByKind = useRoleDefinition({
 	roleType: RoleTypeKind.EditListItems | RoleTypeKind.ManageLists
 });
 

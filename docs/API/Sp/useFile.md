@@ -3,7 +3,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
-[API](API/index.md) / [Sp](API/index.md#sp) / useFile
+[API](../index.md) / [Sp](../index.md#sp) / useFile
 
 ## Definition
 
@@ -13,7 +13,7 @@ Returns a file from file collection.
 
 ### useFile `IFileInfo`
 
-▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IFileInfo`\>
+▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IFileInfo`\>
 
 Returns a file from file collection.
 
@@ -22,12 +22,12 @@ Returns a file from file collection.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
-| `options?` | [`FileInfoOptions`](FileInfoOptions.md) | PnP hook options |
+| `options?` | [`FileInfoOptions`](../Interfaces/FileInfoOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`IFileInfo`\>
+[`Nullable`](../Types/NullableT.md)<`IFileInfo`\>
 
 #### Examples
 
@@ -45,7 +45,7 @@ const assetInfo = useFile("/sites/mysite/SiteAssets/example.png");
 
 ### useFile `Blob`
 
-▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`Blob`\>
+▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`Blob`\>
 
 Returns file content as `Blob`.
 
@@ -54,12 +54,12 @@ Returns file content as `Blob`.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
-| `options?` | [`FileBlobOptions`](FileBlobOptions.md) | PnP hook options |
+| `options?` | [`FileBlobOptions`](../Interfaces/FileBlobOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`Blob`\>
+[`Nullable`](../Types/NullableT.md)<`Blob`\>
 
 #### Examples
 
@@ -75,7 +75,7 @@ const fileContentAsBlob = useFile("5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
 
 ### useFile `ArrayBuffer`
 
-▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ArrayBuffer`\>
+▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ArrayBuffer`\>
 
 Returns file content as {@link ArrayBuffer}.
 
@@ -84,12 +84,12 @@ Returns file content as {@link ArrayBuffer}.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
-| `options?` | [`FileBufferOptions`](FileBufferOptions.md) | PnP hook options |
+| `options?` | [`FileBufferOptions`](../Interfaces/FileBufferOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`ArrayBuffer`\>
+[`Nullable`](../Types/NullableT.md)<`ArrayBuffer`\>
 
 #### Examples
 
@@ -105,7 +105,7 @@ const fileContentAsBuffer = useFile("5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
 
 ### useFile `string`
 
-▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`string`\>
+▸ **useFile**(`fileId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`string`\>
 
 Returns file content as text.
 
@@ -114,12 +114,12 @@ Returns file content as text.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
-| `options?` | [`FileTextOptions`](FileTextOptions.md) | PnP hook options |
+| `options?` | [`FileTextOptions`](../Interfaces/FileTextOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 
 #### Returns
 
-[`Nullable`](NullableT.md#nullable)<`string`\>
+[`Nullable`](../Types/NullableT.md)<`string`\>
 
 #### Examples
 

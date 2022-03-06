@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useSite
+[API](../index.md) / [Sp](../index.md#sp) / useSite
 
 ## Definition
 
-▸ **useSite**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ISiteInfo`\>
+▸ **useSite**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteInfo`\>
 
 Returns current site info.
 
@@ -10,12 +10,12 @@ Returns current site info.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`SiteInfoOptions`](useSite.md#siteinfooptions) | PnP hook options. |
+| `options?` | [`SiteInfoOptions`](../Interfaces/SiteInfoOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSite will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ISiteInfo`\>
+[`Nullable`](../Types/NullableT.md)<`ISiteInfo`\>
 
 ## Examples
 

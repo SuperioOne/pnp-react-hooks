@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useApps
+[API](../index.md) / [Sp](../index.md#sp) / useApps
 
 ## Definition
 
-▸ **useApps**<`T`\>(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`T`[]\>
+▸ **useApps**<`T`\>(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`[]\>
 
 Returns app detail collection from the app catalog.
 
@@ -16,12 +16,12 @@ Returns app detail collection from the app catalog.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`WebAppsOptions`](useApps.md#webappsoptions) | PnP hook options |
+| `options?` | [`WebAppsOptions`](../Interfaces/WebAppsOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useApps will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`T`[]\>
+[`Nullable`](../Types/NullableT.md)<`T`[]\>
 
 App info array.
 
@@ -39,4 +39,3 @@ const filteredApps = useApp({
 	}
 });
 ```
-

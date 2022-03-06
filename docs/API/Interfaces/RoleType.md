@@ -1,4 +1,4 @@
-[API](API/index.md) / [Interfaces](index.md) / RoleType
+[API](../index.md) / [Interfaces](index.md) / RoleType
 
 ## Definition
 

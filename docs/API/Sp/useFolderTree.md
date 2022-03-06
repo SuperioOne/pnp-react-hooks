@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useFolderTree
+[API](../index.md) / [Sp](../index.md#sp) / useFolderTree
 
 ## Definition
 
-▸ **useFolderTree**(`rootFolderRelativePath`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<[`TreeContext`](TreeContext.md)\>
+▸ **useFolderTree**(`rootFolderRelativePath`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<[`TreeContext`](../Interfaces/TreeContext.md)\>
 
 Returns a tree like structure from specified root folder.
 
@@ -11,12 +11,12 @@ Returns a tree like structure from specified root folder.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `rootFolderRelativePath` | `string` | Root folder server relative path |
-| `options?` | [`FolderTreeOptions`](FolderTreeOptions.md) | PnP hook paths |
+| `options?` | [`FolderTreeOptions`](../Interfaces/FolderTreeOptions.md) | PnP hook paths |
 | `deps?` | `DependencyList` | useFolderTree will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<[`TreeContext`](TreeContext.md)\>
+[`Nullable`](../Types/NullableT.md)<[`TreeContext`](../Interfaces/TreeContext.md)\>
 
 ## Examples
 

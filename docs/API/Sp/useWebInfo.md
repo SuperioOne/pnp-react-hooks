@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useWebInfo
+[API](../index.md) / [Sp](../index.md#sp) / useWebInfo
 
 ## Definition
 
-▸ **useWebInfo**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IWebInfo`\>
+▸ **useWebInfo**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IWebInfo`\>
 
 Returns current web.
 
@@ -10,12 +10,12 @@ Returns current web.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`WebInfoOptions`](useWebInfo.md#webinfooptions) | PnP hook options. |
+| `options?` | [`WebInfoOptions`](../Interfaces/WebInfoOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useWebInfo will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IWebInfo`\>
+[`Nullable`](../Types/NullableT.md)<`IWebInfo`\>
 
 ## Examples
 

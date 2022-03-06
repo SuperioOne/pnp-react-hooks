@@ -1,10 +1,10 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useChanges
+[API](../index.md) / [Sp](../index.md#sp) / useChanges
 
 ## Definition
 
-▸ **useChanges**<`T`\>(`changeQuery`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`T`[]\>
+▸ **useChanges**<`T`\>(`changeQuery`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`[]\>
 
-Returns web or list change collection. Use [`ChangesOptions.list`](ChangesOptions.md#list) property
+Returns web or list change collection. Use [`ChangesOptions.list`](../Interfaces/ChangesOptions.md#list) property
 to get list changes instead of web changes.
 
 ### Type parameters
@@ -18,12 +18,12 @@ to get list changes instead of web changes.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `changeQuery` | `IChangeQuery` | Change query. Hook resends request if **shallow comparison** returns false. |
-| `options?` | [`ChangesOptions`](ChangesOptions.md) | PnP hook options |
+| `options?` | [`ChangesOptions`](../Interfaces/ChangesOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useChanges will resend request when one of the dependencies changed. |
 
 ### Returns
 
-[`Nullable`](NullableT.md#nullable)<`T`[]\>
+[`Nullable`](../Types/NullableT.md)<`T`[]\>
 
 Changes info array.
 

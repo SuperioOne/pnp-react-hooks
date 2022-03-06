@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useListItem
+[API](../index.md) / [Sp](../index.md#sp) / useListItem
 
 ## Definition
 
-▸ **useListItem**<`T`\>(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`T`\>
+▸ **useListItem**<`T`\>(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`\>
 
 Returns an item from specified list item collection.
 
@@ -18,12 +18,12 @@ Returns an item from specified list item collection.
 | :------ | :------ | :------ |
 | `itemId` | `number` | Item Id. Changing the value resends request. |
 | `list` | `string` | List GUID id or title. Changing the value resends request. |
-| `options?` | [`ListItemOptions`](ListItemOptions.md) | PnP hook options. |
+| `options?` | [`ListItemOptions`](../Interfaces/ListItemOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useListItem will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`T`\>
+[`Nullable`](../Types/NullableT.md)<`T`\>
 
 ## Examples
 

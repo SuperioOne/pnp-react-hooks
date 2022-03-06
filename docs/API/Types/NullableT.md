@@ -1,4 +1,4 @@
-[API](API/index.md) / [Types](API/Types/index.md) / Nullable<T\>
+[API](../index.md) / [Types](index.md) / Nullable<T\>
 
 ## Definition
 

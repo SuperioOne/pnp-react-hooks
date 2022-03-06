@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useItemComments
+[API](../index.md) / [Sp](../index.md#sp) / useItemComments
 
 ### Definition
 
-▸ **useItemComments**(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`ICommentInfo`[]\>
+▸ **useItemComments**(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ICommentInfo`[]\>
 
 Returns comment collection of specific list item.
 
@@ -12,12 +12,12 @@ Returns comment collection of specific list item.
 | :------ | :------ | :------ |
 | `itemId` | `number` | Item Id. Changing the value resends request. |
 | `list` | `string` | List GUID Id or title. Changing the value resends request. |
-| `options?` | [`ItemCommentsOptions`](ItemCommentsOptions.md) | PnP hook options. |
+| `options?` | [`ItemCommentsOptions`](../Interfaces/ItemCommentsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useItemComments will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`ICommentInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`ICommentInfo`[]\>
 
 ## Examples
 

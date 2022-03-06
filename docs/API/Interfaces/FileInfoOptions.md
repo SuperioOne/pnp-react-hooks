@@ -1,4 +1,4 @@
-[API](API/index.md) / [Interfaces](index.md) / FileInfoOptions
+[API](../index.md) / [Interfaces](index.md) / FileInfoOptions
 
 ## Properties
 
@@ -12,7 +12,7 @@ ___
 
 ### disabled
 
-• `Optional` **disabled**: [`DisableOptionValueType`](types_options_RenderOptions.md#disableoptionvaluetype) \| (`fileId`: `string`) => `boolean`
+• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| (`fileId`: `string`) => `boolean`
 
 Disable hook calls and renders.
 
@@ -20,9 +20,9 @@ ___
 
 ### error
 
-• `Optional` **error**: [`ErrorFunc`](types_options_ExceptionOptions.md#errorfunc) \| [`ErrorMode`](ErrorMode.md)
+• `Optional` **error**: [`ErrorFunc`](../Types/ErrorFunc.md#errorfunc) \| [`ErrorMode`](../Enums/ErrorMode.md)
 
-Error handling. Default is [`ErrorMode.Default`](ErrorMode.md#default).
+Error handling. Default is [`ErrorMode.Default`](../Enums/ErrorMode.md#default).
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 ### query
 
-• `Optional` **query**: [`Nullable`](NullableT.md#nullable)<[`ODataQueryable`](types_ODataQueryable.ODataQueryable.md)\>
+• `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryable`](ODataQueryable.md)\>
 
 ___
 

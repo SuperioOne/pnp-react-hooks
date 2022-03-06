@@ -1,21 +1,21 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useRoleAssignments
+[API](../index.md) / [Sp](../index.md#sp) / useRoleAssignments
 
 ## Definition
 
-▸ **useRoleAssignments**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IRoleAssignmentInfo`[]\>
+▸ **useRoleAssignments**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IRoleAssignmentInfo`[]\>
 
-Returns role assignmets of selected scope. Use [`RoleAssignmentsOptions.scope`](RoleAssignmentsOptions.md#scope) property to change scope. Default is current web.
+Returns role assignmets of selected scope. Use [`RoleAssignmentsOptions.scope`](../Interfaces/RoleAssignmentsOptions.md#scope) property to change scope. Default is current web.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`RoleAssignmentsOptions`](RoleAssignmentsOptions.md) | PnP hook options |
+| `options?` | [`RoleAssignmentsOptions`](../Interfaces/RoleAssignmentsOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useRoleAssignments will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IRoleAssignmentInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IRoleAssignmentInfo`[]\>
 
 ## Examples
 

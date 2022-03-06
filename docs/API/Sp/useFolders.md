@@ -1,21 +1,21 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useFolders
+[API](../index.md) / [Sp](../index.md#sp) / useFolders
 
 ## Definition
 
-▸ **useFolders**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IFolderInfo`[]\>
+▸ **useFolders**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IFolderInfo`[]\>
 
-Returns folders from root. Use [`FoldersOptions.rootFolderId`](FoldersOptions.md#rootfolderid) property to change root.
+Returns folders from root. Use [`FoldersOptions.rootFolderId`](../Interfaces/FoldersOptions.md#rootfolderid) property to change root.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`FoldersOptions`](FoldersOptions.md) | PnP hook options. |
+| `options?` | [`FoldersOptions`](../Interfaces/FoldersOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useFolders will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IFolderInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IFolderInfo`[]\>
 
 ## Examples
 

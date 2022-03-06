@@ -1,8 +1,8 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useSearch
+[API](../index.md) / [Sp](../index.md#sp) / useSearch
 
 ## Definition
 
-▸ **useSearch**(`searchOptions`, `options?`, `deps?`): [[`Nullable`](NullableT.md#nullable)<[`SpSearchResult`](SpSearchResult.md)\>, [`GetPageDispatch`](API/Types/GetPageDispatch.md)]
+▸ **useSearch**(`searchOptions`, `options?`, `deps?`): [[`Nullable`](../Types/NullableT.md)<[`SpSearchResult`](../Interfaces/SpSearchResult.md)\>, [`GetPageDispatch`](../Types/GetPageDispatch.md)]
 
 Conduct search on SharePoint.
 
@@ -11,12 +11,12 @@ Conduct search on SharePoint.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `searchOptions` | `string` \| `ISearchQuery` | `ISearchQuery` query or search text. Changing the value resends request. |
-| `options?` | [`SearchOptions`](SearchOptions.md) | PnP hook options. |
+| `options?` | [`SearchOptions`](../Interfaces/SearchOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSearch will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[[`Nullable`](NullableT.md#nullable)<[`SpSearchResult`](SpSearchResult.md)\>, [`GetPageDispatch`](API/Types/GetPageDispatch.md)]
+[[`Nullable`](../Types/NullableT.md)<[`SpSearchResult`](../Interfaces/SpSearchResult.md)\>, [`GetPageDispatch`](../Types/GetPageDispatch.md)]
 
 ## Examples
 

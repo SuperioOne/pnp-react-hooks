@@ -1,22 +1,22 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useField
+[API](../index.md) / [Sp](../index.md#sp) / useField
 
 ## Definition
 
-▸ **useField**(`fieldId`, `options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IFieldInfo`\>
+▸ **useField**(`fieldId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IFieldInfo`\>
 
-Returns a field from web or list. List option can be defined in [`FieldOptions.list`](FieldOptions.md#list) property.
+Returns a field from web or list. List option can be defined in [`FieldOptions.list`](../Interfaces/FieldOptions.md#list) property.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `fieldId` | `string` | Field internal name or Id. Changing the value resends request. |
-| `options?` | [`FieldOptions`](FieldOptions.md) | PnP hook options. |
+| `options?` | [`FieldOptions`](../Interfaces/FieldOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useField will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IFieldInfo`\>
+[`Nullable`](../Types/NullableT.md)<`IFieldInfo`\>
 
 ## Examples
 

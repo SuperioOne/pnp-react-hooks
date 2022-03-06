@@ -1,21 +1,21 @@
-[API](API/index.md) / [Sp](API/index.md#sp) / useFeatures
+[API](../index.md) / [Sp](../index.md#sp) / useFeatures
 
 ## Definition
 
-▸ **useFeatures**(`options?`, `deps?`): [`Nullable`](NullableT.md#nullable)<`IFeatureInfo`[]\>
+▸ **useFeatures**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IFeatureInfo`[]\>
 
-Returns site or web feature collection. Scope type can be defined in [`FeaturesOptions.scope`](FeaturesOptions.md#scope) property.
+Returns site or web feature collection. Scope type can be defined in [`FeaturesOptions.scope`](../Interfaces/FeaturesOptions.md#scope) property.
 
 ## Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`FeaturesOptions`](FeaturesOptions.md) | PnP hook options |
+| `options?` | [`FeaturesOptions`](../Interfaces/FeaturesOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFeatures will resend request when one of the dependencies changed. |
 
 ## Returns
 
-[`Nullable`](NullableT.md#nullable)<`IFeatureInfo`[]\>
+[`Nullable`](../Types/NullableT.md)<`IFeatureInfo`[]\>
 
 ## Examples
 
