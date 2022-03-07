@@ -9,8 +9,9 @@ import { RenderOptions, ErrorOptions, ContextOptions } from "../../types/options
 import { createInvokable } from "../../utils/createInvokable";
 import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
+import { shallowEqual } from "../../utils/shallowEqual";
 
 const DEFAULT_OPTIONS: IClientPeoplePickerQueryParameters = {
     AllowEmailAddresses: true,
@@ -20,9 +21,9 @@ const DEFAULT_OPTIONS: IClientPeoplePickerQueryParameters = {
     QueryString: ""
 };
 
-interface SearchUserOptions extends RenderOptions, ErrorOptions, BehaviourOptions, ContextOptions
+export interface SearchUserOptions extends RenderOptions, ErrorOptions, BehaviourOptions, ContextOptions
 {
-    disabled?: DisableOptionValueType | { (searchOptions: IClientPeoplePickerQueryParameters | string): boolean };
+    disabled?: DisableOptionValueType | { (searchOptions: IClientPeoplePickerQueryParameters | string): boolean; };
 }
 
 /**
@@ -37,29 +38,32 @@ export function useSearchUser(
     deps?: React.DependencyList): Nullable<IPeoplePickerEntity[]>
 {
     const globalOptions = useContext(InternalContext);
-    const [profiles, setProfiles] = useState<Nullable<IPeoplePickerEntity[]>>();
+    const [people, setPeople] = useState<Nullable<IPeoplePickerEntity[]>>();
+    const _searchQuery = useRef<IClientPeoplePickerQueryParameters>(DEFAULT_OPTIONS);
 
-    const _searchQuery = useMemo(() =>
+    const searchOpt = typeof searchOptions === "string"
+        ? {
+            ...DEFAULT_OPTIONS,
+            QueryString: searchOptions
+        }
+        : searchOptions;
+
+    if (!shallowEqual(searchOpt, _searchQuery.current))
     {
-        return typeof searchOptions === "string"
-            ? {
-                ...DEFAULT_OPTIONS,
-                QueryString: searchOptions
-            }
-            : searchOptions;
-    }, [searchOptions]);
+        _searchQuery.current = searchOpt;
+    }
 
     const invokableFactory = useCallback(async (sp: SPFI) =>
     {
         const action = function (this: IProfiles)
         {
-            return this.clientPeoplePickerSearchUser(_searchQuery);
+            return this.clientPeoplePickerSearchUser(_searchQuery.current);
         };
 
         return createInvokable(sp.profiles, action);
     }, [_searchQuery]);
 
-    const _mergedDeps = mergeDependencies([_searchQuery], deps);
+    const _mergedDeps = mergeDependencies([_searchQuery.current], deps);
 
     const _options = useMemo(() =>
     {
@@ -69,7 +73,7 @@ export function useSearchUser(
         return opt;
     }, [searchOptions, options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setProfiles, _options, _mergedDeps);
+    useQueryEffect(invokableFactory, setPeople, _options, _mergedDeps);
 
-    return profiles;
+    return people;
 }

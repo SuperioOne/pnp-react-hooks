@@ -3,6 +3,7 @@ title: API
 ---
 
 - [PnpHookOptionProvider](PnpHookOptionProvider.md)
+- [usePnpHookOptions](usePnpHookOptions.md)
 
 ## Sp
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ErrorMode, PnpHookGlobalOptions, PnpHookOptionProvider } from "../../src";
+import { ErrorMode, PnpHookGlobalOptions, PnpHookOptionProvider, usePnpHookOptions } from "../../src";
 import { GlobalContextMockup } from "../tools/mockups/GlobalContextMockup";
 import { InitPnpTest } from "../tools/InitPnpTest";
 import { SPFI } from "@pnp/sp";
@@ -110,5 +110,37 @@ test("PnpReactOptionProvider provider value change", async () =>
     {
         const options = await reactDOMElement.mountTestComponent("PnpReactOptionProvider provider value change", TestComponent);
         expect(shallowEqual(options, globalOptionsNext)).toBe(true);
+    });
+});
+
+test("usePnpHookOptions hook", async () =>
+{
+    const globalOptions: PnpHookGlobalOptions = {
+        disabled: false,
+        error: ErrorMode.Default,
+        keepPreviousState: true,
+        sp: spTest,
+    };
+
+    const InnerComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
+    {
+        const context = usePnpHookOptions();
+        props.success?.(context);
+
+        return (<></>);
+    };
+
+    const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
+    {
+        return (
+            <PnpHookOptionProvider value={globalOptions}>
+                <InnerComponent {...props} />
+            </PnpHookOptionProvider>);
+    };
+
+    await act(async () =>
+    {
+        const options = await reactDOMElement.mountTestComponent("usePnpHookOptions hook", TestComponent);
+        expect(shallowEqual(options, globalOptions)).toBe(true);
     });
 });

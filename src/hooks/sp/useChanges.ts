@@ -11,7 +11,7 @@ import { createInvokable } from "../../utils/createInvokable";
 import { mergeDependencies, mergeOptions } from "../../utils/merge";
 import { resolveScope } from "../../utils/resolveScope";
 import { shallowEqual } from "../../utils/shallowEqual";
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
 import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 
@@ -22,7 +22,7 @@ export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOpti
      * Changing list value resends request.
      */
     list?: string;
-    disabled?: DisableOptionValueType | { (changeQuery: IChangeQuery): boolean };
+    disabled?: DisableOptionValueType | { (changeQuery: IChangeQuery): boolean; };
 }
 
 /**
@@ -62,15 +62,12 @@ export function useChanges<T>(
 {
     const globalOptions = useContext(InternalContext);
     const [changes, setChanges] = useState<Nullable<T[]>>();
-    const _changeQery = useRef<IChangeQuery>(changeQuery);
+    const _changeQuery = useRef<IChangeQuery>(changeQuery);
 
-    useEffect(() =>
+    if (!shallowEqual(changeQuery, _changeQuery.current))
     {
-        if (!shallowEqual(changeQuery, _changeQery.current))
-        {
-            _changeQery.current = changeQuery;
-        }
-    }, [changeQuery]);
+        _changeQuery.current = changeQuery;
+    }
 
     const invokableFactory = useCallback(async (sp: SPFI) =>
     {
@@ -80,13 +77,13 @@ export function useChanges<T>(
 
         const action = function (this: IList | IWeb)
         {
-            return this.getChanges(_changeQery.current) as Promise<T>;
+            return this.getChanges(_changeQuery.current) as Promise<T>;
         };
 
         return createInvokable(scope, action);
     }, [options?.list]);
 
-    const _mergedDeps = mergeDependencies([options?.list, _changeQery], deps);
+    const _mergedDeps = mergeDependencies([options?.list, _changeQuery.current], deps);
 
     const _options = useMemo(() =>
     {
