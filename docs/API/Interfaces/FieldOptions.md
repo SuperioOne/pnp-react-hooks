@@ -1,5 +1,3 @@
-[API](../index.md) / [Interfaces](index.md) / FieldOptions
-
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryable`](ODataQueryable.md)\>

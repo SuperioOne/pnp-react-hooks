@@ -3,7 +3,6 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
-[API](../index.md) / [Sp](../index.md#sp) / useListItems
 
 ## Definition
 Returns all item collection from specified list.

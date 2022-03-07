@@ -1,4 +1,3 @@
-[API](../index.md) / [Interfaces](index.md)  / WebPropertiesOptions
 
 ## Hierarchy
 

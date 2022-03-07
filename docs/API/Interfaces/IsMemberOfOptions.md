@@ -1,5 +1,3 @@
-[API](../index.md) / [Interfaces](index.md)  / IsMemberOfOptions
-
 ## Hierarchy
 
 - [`ErrorOptions`](ErrorOptions.md)

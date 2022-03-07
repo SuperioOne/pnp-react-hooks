@@ -2,8 +2,6 @@
 title: Interfaces
 ---
 
-[API](../index.md) / Interfaces
-
 # Interfaces
 
 - [AllItemsOptions](AllItemsOptions.md)

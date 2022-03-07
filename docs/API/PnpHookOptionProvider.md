@@ -1,5 +1,3 @@
-[API](index.md) / PnpHookOptionProvider
-
 ## Definition
 
 ▸ **PnpHookOptionProvider**(`props`): `Element`
@@ -40,7 +38,7 @@ const cachedOptions: PnpHookGlobalOptions = {
 	sp: spfi().using(SPFx(this.context), Caching())
 };
 
-export function Main
+export function Main()
 {
 	return(
 		<>

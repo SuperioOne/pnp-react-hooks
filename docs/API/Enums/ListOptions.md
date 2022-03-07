@@ -1,5 +1,3 @@
-[API](../index.md) / [Enums](index.md) / ListOptions
-
 ## Definition
 
 Defines how [`useListItems`](../Sp/useListItems) get items from Sharepoint.

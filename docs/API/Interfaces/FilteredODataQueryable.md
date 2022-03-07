@@ -1,5 +1,3 @@
-[API](../index.md)  / [Interfaces](index.md) / FilteredODataQueryable
-
 ## Hierarchy
 
 - [`ODataQueryable`](ODataQueryable.md)

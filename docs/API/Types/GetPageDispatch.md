@@ -1,4 +1,3 @@
-[API](../index.md) / [Types](index.md) / GetPageDispatch
 
 ## Definition
 

@@ -1,6 +1,4 @@
- [API](../index.md) / [Enums](index.md) / ErrorMode
-
-## Enumeration members
+ ## Enumeration members
 
 ### Default
 

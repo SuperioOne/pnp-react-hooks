@@ -1,5 +1,3 @@
-[API](../index.md) / [Interfaces](index.md) / ListItemsOptions
-
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>

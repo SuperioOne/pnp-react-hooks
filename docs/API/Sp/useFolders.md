@@ -1,4 +1,3 @@
-[API](../index.md) / [Sp](../index.md#sp) / useFolders
 
 ## Definition
 

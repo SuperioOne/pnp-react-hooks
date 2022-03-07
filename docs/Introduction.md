@@ -1,6 +1,13 @@
+---
+id: home-page
+sidebar_position: 1
+title: Introduction
+slug: /
+---
+
 # PnP React Hooks
 
-PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/) providing configurable custom React hooks for Sharepoint Rest API. 
+PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/) providing configurable custom React hooks for Sharepoint Rest API.
 
 **Example usage:**
 
@@ -22,12 +29,12 @@ export const ExampleComponent = () => {
 	});
 
 	return (<ul>
-			{ items?.map(item => (<li key={item.Id}>{item.Title}</li>)) } 
+			{ items?.map(item => (<li key={item.Id}>{item.Title}</li>)) }
 			</ul>);
 };
 ```
 
-## Quick Install 
+## Quick Install
 
 ### Npm  v7+
 
@@ -53,5 +60,5 @@ npm install pnp-react-hooks @pnp/sp react
 - Supports [PnPjs V3 behaviors](https://pnp.github.io/pnpjs/core/behaviors/).
 
 ## Questions and Suggestions
- 
+
  If you find any issue or have a suggestion on how project can be improved feel free to create an issue on [Github](https://github.com/SuperioOne/pnp-react-hooks/issues).

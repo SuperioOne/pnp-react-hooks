@@ -1,5 +1,3 @@
-[API](../index.md) / [Interfaces](index.md) / IChangeTokenInfo
-
 ## Implemented by
 
 - [`ChangeTokenInfo`](../Classes/ChangeTokenInfo.md)

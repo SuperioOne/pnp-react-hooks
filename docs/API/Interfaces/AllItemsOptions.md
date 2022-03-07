@@ -1,5 +1,3 @@
-[API](../index.md) / [Interfaces](index.md) / AllItemsOptions
-
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`FilteredODataQueryable`](FilteredODataQueryable.md)\>

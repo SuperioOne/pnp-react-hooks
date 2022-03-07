@@ -1,5 +1,3 @@
-[API](../index.md) / [Classes](index.md) / ChangeTokenInfo
-
 ## Implements
 
 - [`IChangeTokenInfo`](../Interfaces/IChangeTokenInfo.md)
@@ -37,4 +35,3 @@ ___
 • **LastChanges**: [`Timings`](../Interfaces/Timings.md)
 
 List last change time informations.
-

@@ -2,10 +2,6 @@
 title: API
 ---
 
-API
-
-## Global
-
 - [PnpHookOptionProvider](PnpHookOptionProvider.md)
 
 ## Sp

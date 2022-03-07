@@ -1,4 +1,3 @@
-[API](../index.md) / [Types](index.md) / Nullable<T\>
 
 ## Definition
 
