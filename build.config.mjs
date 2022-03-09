@@ -2,9 +2,13 @@ import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import del from 'rollup-plugin-delete';
+import copy from 'rollup-plugin-copy';
+
+const DIR_RELEASE = "./.temp/bin/release";
+const DIR_DEBUG = "./.temp/bin/debug";
 
 /**
- * @type {import('./scripts/buildOptionType'.BuildOption)}    
+ * @type {import('./scripts/buildOptionType'.BuildOption)}
  */
 const configs = {
     Release: [
@@ -21,17 +25,23 @@ const configs = {
                 ],
                 plugins: [
                     del({
-                        targets: ["./.temp/bin/release/*"]
+                        targets: [`${DIR_RELEASE}/*`]
                     }),
                     typescript({
-                        outDir: "./.temp/bin/release",
+                        outDir: DIR_RELEASE,
                         declaration: true
                     }),
                     commonjs(),
-                    nodeResolve()
+                    nodeResolve(),
+                    copy({
+                        targets:[
+                            {src: "README.md", dest: DIR_RELEASE},
+                            {src: "LICENSE", dest: DIR_RELEASE},
+                        ]
+                    })
                 ],
                 output: {
-                    dir: "./.temp/bin/release",
+                    dir: DIR_RELEASE,
                     preserveModules: true,
                     preserveModulesRoot: "src",
                     sourcemap: false,
@@ -55,17 +65,17 @@ const configs = {
                 ],
                 plugins: [
                     del({
-                        targets: ["./.temp/bin/debug/*"]
+                        targets: [`${DIR_DEBUG}/*`]
                     }),
                     typescript({
                         tsconfig: "tsconfig.debug.json",
-                        outDir: "./.temp/bin/debug",
+                        outDir: DIR_DEBUG,
                     }),
                     commonjs(),
                     nodeResolve(),
                 ],
                 output: {
-                    dir: "./.temp/bin/debug",
+                    dir: DIR_DEBUG,
                     preserveModules: true,
                     preserveModulesRoot: "debug",
                     sourcemap: true,

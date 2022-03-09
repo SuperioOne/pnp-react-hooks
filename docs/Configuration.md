@@ -4,15 +4,15 @@ sidebar_position: 2
 
 # Configuration
 
-PnP React hooks only require PnPjs `spfi` to work. You can easily configure all hooks globally with [`PnpHookOptionProvider`](API/PnPHookOptionProvider.md) component that uses React context under the hood. Each hook can be configured individually and global configuration can be overridden individually if needed. 
+PnP React hooks only require PnPjs `spfi` to work. You can easily configure all hooks globally with [`PnpHookOptionProvider`](API/PnPHookOptionProvider.md) component that uses React context under the hood. Each hook can be configured individually and global configuration can be overridden if needed. 
 
-See [`PnpHookGlobalOptions`](API/Interfaces/PnpHookGlobalOptions) for other options.
+See [`PnpHookGlobalOptions`](API/Interfaces/PnpHookGlobalOptions) for all options.
 
 ## SPFx
 
 Install pnp-react-hooks with required peer dependencies to your SPFx project and initialize `spfi` in your main entry point for the web part. 
 
-This example shows how to pass options in a component properties.
+This example shows how to initialize options with component properties.
 
 **PnpReactHookExamplesWebPart.ts**
 ```typescript
@@ -73,7 +73,7 @@ const PnpReactHookExamples = (props: IPnpReactHookExamplesProps) =>
   // load options to provider
   return (
     <PnpHookOptionProvider value={props.options}>
-     { // your web part components }
+     {/* your web part components */}
     </PnpHookOptionProvider>
   );
 };
@@ -88,7 +88,7 @@ All hooks supports custom dependency array similar to React's built-in hooks, bu
 ```typescript
 let title = "My List";
 
-// request repeated when `title` value changes.
+// request repeated when `title` and query changes.
 const myList = useList(title, {
 	query: {
 		select: ["Title"]
@@ -99,7 +99,7 @@ const unnecessary = useList(title, {
 	query: {
 		select: ["Title"]
 	}
-}, [title]); // passing title and query is not required. They are already tracked internally.
+}, [title]); // passing title and query is not required. They are already tracking internally.
 
 let refresh = {};
 
@@ -167,7 +167,7 @@ export default function useWhoAmI()
 
 :::
 
-## Accessing another site
+## Configure for multiple sites
 
 Multiple [`PnpHookOptionProvider`](API/PnPHookOptionProvider.md) can be initialized with different `spfi` configurations for accessing multiple sites or different options.
 
@@ -199,8 +199,6 @@ export default function WebPart()
 }
 ```
 
-
-![sad](assets/MultiSite.png)
 ## Accessing options
 
 Global options can be accessed with [`usePnpHookOptions`](API/usePnpHookOptions.md) helper; This can be useful when deriving options or accessing to  `spfi`.
@@ -210,4 +208,3 @@ Global options can be accessed with [`usePnpHookOptions`](API/usePnpHookOptions.
 PnP React hooks only provides functions for read data but you can access and use `spfi` to add, update, delete entities.
 
 :::
-

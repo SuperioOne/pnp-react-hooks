@@ -34,7 +34,7 @@ export const ExampleComponent = () => {
 };
 ```
 
-## Quick Install
+## Installation
 
 ### Npm  v7+
 
@@ -52,11 +52,11 @@ npm install pnp-react-hooks @pnp/sp react
 
 ## Features
 
-- Quickly build simple webparts with less code.
-- Written in Typescript. No additional type package required.
+- Quickly build simple web parts with less code.
+- Written in TypeScript. No additional type package required.
 - Automatically tracks variable changes and re-fetch data when needed.
-- Easy to treeshake unused code with modern bundlers.
-- Can be configured for multiple sites via context provider.
+- Easy to treeshake unused code with modern Js bundlers.
+- Can be configured for multiple sites with option provider.
 - Supports [PnPjs V3 behaviors](https://pnp.github.io/pnpjs/core/behaviors/).
 
 ## Questions and Suggestions
