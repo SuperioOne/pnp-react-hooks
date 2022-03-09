@@ -18,7 +18,7 @@ import { useQueryEffect } from "../useQueryEffect";
  */
 export interface WebAppOptions extends PnpHookOptions<ODataQueryable>
 {
-    disabled?: DisableOptionValueType | { (appId: string): boolean };
+    disabled?: DisableOptionValueType | { (appId: string): boolean; };
 }
 
 /**

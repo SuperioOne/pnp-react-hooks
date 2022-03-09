@@ -16,7 +16,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
 export interface FoldersOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     /**
-     * Root folder GUID Id or server relative path. 
+     * Root folder GUID Id or server relative path.
      * Changing root folder resends request.
      */
     rootFolderId?: string;

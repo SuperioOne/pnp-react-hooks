@@ -41,7 +41,7 @@ export { useSearch } from "./hooks/sp/useSearch";
 export { useSearchUser } from "./hooks/sp/useSearchUser";
 export { useSite } from "./hooks/sp/useSite";
 export { useSiteUsers } from "./hooks/sp/useSiteUsers";
-export { useSubWebInfos } from "./hooks/sp/useSubWebInfos";
+export { useSubWebs } from "./hooks/sp/useSubWebs";
 export { useUser } from "./hooks/sp/useUser";
 export { useWebInfo } from "./hooks/sp/useWebInfo";
 export { useWebProperties } from "./hooks/sp/useWebProperties";

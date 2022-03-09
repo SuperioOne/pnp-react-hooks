@@ -10,15 +10,15 @@ import { mergeOptions } from "../../utils/merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export type SubWebInfosOptions = PnpHookOptions<ODataQueryableCollection>;
+export type SubWebsOptions = PnpHookOptions<ODataQueryableCollection>;
 
 /**
  * Returns web info collection of current web's subwebs.
  * @param options PnP hook options.
  * @param deps useSubWebInfos will resend request when one of the dependencies changed.
  */
-export function useSubWebInfos(
-    options?: SubWebInfosOptions,
+export function useSubWebs(
+    options?: SubWebsOptions,
     deps?: React.DependencyList): Nullable<IWebInfosData[]>
 {
     const globalOptions = useContext(InternalContext);
