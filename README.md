@@ -21,9 +21,7 @@ export const ExampleComponent = () => {
 		disabled: !currentUser
 	});
 
-	return (<ul>
-			{ items?.map(item => (<li key={item.Id}>{item.Title}</li>)) }
-			</ul>);
+	return (<ul> { items?.map(item => (<li key={item.Id}>{item.Title}</li>)) } </ul>);
 };
 ```
 
