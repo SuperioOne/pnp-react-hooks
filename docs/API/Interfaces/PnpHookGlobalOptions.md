@@ -53,4 +53,4 @@ ___
 
 • **sp**: `SPFI`
 
-Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
+Pnp SP context.
