@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Definition
 
 PnPjs spfi instance.
@@ -8,7 +10,7 @@ PnPjs spfi instance.
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 :::info
 

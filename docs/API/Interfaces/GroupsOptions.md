@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
@@ -58,6 +60,8 @@ ___
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
+
 #### Inherited from
 
 [PnpHookOptions](PnpHookOptions.md).[query](PnpHookOptions.md#query)
@@ -68,7 +72,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 
@@ -80,4 +84,4 @@ ___
 
 • `Optional` **userId**: `string` \| `number`
 
-User email, login name or Id. Default is web site groups. Changing userId resends request.
+User email, login name or Id. Default is web site groups. <ToolTip text="Changing userId repeats request">🚩</ToolTip>

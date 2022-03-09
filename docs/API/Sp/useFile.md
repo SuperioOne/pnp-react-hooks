@@ -3,6 +3,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -20,7 +21,7 @@ Returns a file from file collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
+| `fileId` | `string` | File GUID Id or server relative path. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`FileInfoOptions`](../Interfaces/FileInfoOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 
@@ -52,7 +53,7 @@ Returns file content as `Blob`.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
+| `fileId` | `string` | File GUID Id or server relative path. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`FileBlobOptions`](../Interfaces/FileBlobOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 
@@ -82,7 +83,7 @@ Returns file content as {@link ArrayBuffer}.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
+| `fileId` | `string` | File GUID Id or server relative path. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`FileBufferOptions`](../Interfaces/FileBufferOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 
@@ -112,7 +113,7 @@ Returns file content as text.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `fileId` | `string` | File GUID Id or server relative path. Changing the value resends request. |
+| `fileId` | `string` | File GUID Id or server relative path. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`FileTextOptions`](../Interfaces/FileTextOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useFile will resend request when one of the dependencies changed. |
 

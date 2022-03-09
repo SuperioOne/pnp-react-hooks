@@ -3,6 +3,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 Returns all item collection from specified list.
@@ -31,7 +32,7 @@ This mode allows you to fetch items over 5000 threshold but you can't use sort, 
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `list` | `string` | List GUID Id or title. Changing the value resends request. |
+| `list` | `string` | List GUID Id or title. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`AllItemsOptions`](../Interfaces/AllItemsOptions.md) | PnP hook options for all items request. |
 | `deps?` | `DependencyList` | useListItems will resend request when one of the dependencies changed. |
 
@@ -95,7 +96,7 @@ Returns item collection from specified list.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `list` | `string` | List GUID Id or title. Changing the value resends request. |
+| `list` | `string` | List GUID Id or title. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`ListItemsOptions`](../Interfaces/ListItemsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useListItems will resend request when one of the dependencies changed. |
 

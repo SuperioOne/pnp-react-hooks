@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Properties
 
 ### behaviors
@@ -36,17 +38,19 @@ ___
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryable`](ODataQueryable.md)\>
 
-
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
 ___
 
 ### sp
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 ___
 
 ### type
 
 • `Optional` **type**: ``"info"``
+
+Request type. <ToolTip text="Changing the type repeats request">🚩</ToolTip>

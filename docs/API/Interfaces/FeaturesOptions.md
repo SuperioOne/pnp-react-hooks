@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
@@ -58,9 +60,12 @@ ___
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
+
 #### Inherited from
 
 [PnpHookOptions](PnpHookOptions.md).[query](PnpHookOptions.md#query)
+
 
 ___
 
@@ -68,7 +73,7 @@ ___
 
 • `Optional` **scope**: ``"web"`` \| ``"site"``
 
-Feature scope. Available options are `"site"` and `"web".` Changing scope type resends request. Default is `"web"`.
+Feature scope. Available options are `"site"` and `"web".` Default is `"web"`. <ToolTip text="Changing scope type repeats request">🚩</ToolTip>
 
 ___
 
@@ -76,7 +81,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

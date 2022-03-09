@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -15,7 +16,7 @@ Returns an user profile for specified login name.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `loginName` | `string` | User login name. Changing the value resends request. |
+| `loginName` | `string` | User login name. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`ProfileOptions`](../Interfaces/ProfileOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useProfile will resend request when one of the dependencies changed. |
 

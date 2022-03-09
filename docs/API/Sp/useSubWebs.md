@@ -9,7 +9,7 @@ Returns web info collection of current web's subwebs.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options?` | [`SubWebInfosOptions`](../Interfaces/SubWebInfosOptions.md) | PnP hook options. |
+| `options?` | [`SubWebsOptions`](../Interfaces/SubWebsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSubWebInfos will resend request when one of the dependencies changed. |
 
 ## Returns

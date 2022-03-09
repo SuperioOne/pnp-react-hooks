@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns `true` if user has permission on scope. If not returns `false`. Use [`Us
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `permissionKinds` | `PermissionKind` \| `PermissionKind`[] | SP permission kind array or permission kind value. Changing the value resends request. |
+| `permissionKinds` | `PermissionKind` \| `PermissionKind`[] | SP permission kind array or permission kind value. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`UserPermissionOptions`](../Interfaces/UserPermissionOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useHasPermission will resend request when one of the dependencies changed. |
 

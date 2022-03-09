@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Type parameters
 

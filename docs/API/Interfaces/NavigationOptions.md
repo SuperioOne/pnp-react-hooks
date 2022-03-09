@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
@@ -58,6 +60,8 @@ ___
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
+
 #### Inherited from
 
 [PnpHookOptions](PnpHookOptions.md).[query](PnpHookOptions.md#query)
@@ -68,7 +72,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 
@@ -80,5 +84,5 @@ ___
 
 • `Optional` **type**: ``"topNavigation"`` \| ``"quickLaunch"``
 
-Navigation type. Default is `"topNavigation"`. Changing the type
-resends request.
+Navigation type. Default is `"topNavigation"`. <ToolTip text="Changing the type
+repeats request">🚩</ToolTip>

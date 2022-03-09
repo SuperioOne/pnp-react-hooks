@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns a tree like structure from specified root folder.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `rootFolderRelativePath` | `string` | Root folder server relative path |
+| `rootFolderRelativePath` | `string` | Root folder server relative path. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`FolderTreeOptions`](../Interfaces/FolderTreeOptions.md) | PnP hook paths |
 | `deps?` | `DependencyList` | useFolderTree will resend request when one of the dependencies changed. |
 

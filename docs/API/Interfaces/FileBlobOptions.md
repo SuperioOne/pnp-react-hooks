@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Properties
 
 ### behaviors
@@ -36,10 +38,12 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 ___
 
 ### type
 
-• **type**: ``"blob"``
+• **type**: `"blob"`
+
+Request type. <ToolTip text="Changing the type repeats request">🚩</ToolTip>

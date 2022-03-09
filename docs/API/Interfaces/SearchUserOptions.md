@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Hierarchy
 
@@ -65,7 +66,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

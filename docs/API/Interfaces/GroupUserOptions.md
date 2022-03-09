@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryable`](ODataQueryable.md)\>
@@ -58,11 +60,11 @@ ___
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryable`](ODataQueryable.md)\>
 
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
+
 #### Inherited from
 
 [PnpHookOptions](PnpHookOptions.md).[query](PnpHookOptions.md#query)
-
-
 
 ___
 
@@ -70,7 +72,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

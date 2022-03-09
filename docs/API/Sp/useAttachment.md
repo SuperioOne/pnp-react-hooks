@@ -3,6 +3,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -20,9 +21,9 @@ Returns an attachment info from item.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
-| `itemId` | `number` | List item numeric Id. Changing the value resends request. |
-| `list` | `string` | List title or GUID Id string. Changing the value resends request. |
+| `attachmentName` | `string` | Attachment file name. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `itemId` | `number` | List item numeric Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `list` | `string` | List title or GUID Id string. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`AttachmentInfoOptions`](../Interfaces/AttachmentInfoOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 
@@ -60,9 +61,9 @@ Returns attachment content as `Blob`.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
-| `itemId` | `number` | List item numeric Id. Changing the value resends request. |
-| `list` | `string` | List title or GUID Id string. Changing the value resends request. |
+| `attachmentName` | `string` | Attachment file name. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `itemId` | `number` | List item numeric Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `list` | `string` | List title or GUID Id string. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`AttachmentBlobOptions`](../Interfaces/AttachmentBlobOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 
@@ -94,9 +95,9 @@ Returns attachment content as `ArrayBuffer`.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
-| `itemId` | `number` | List item numeric Id. Changing the value resends request. |
-| `list` | `string` | List title or GUID Id string. Changing the value resends request. |
+| `attachmentName` | `string` | Attachment file name. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `itemId` | `number` | List item numeric Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `list` | `string` | List title or GUID Id string. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`AttachmentBufferOptions`](../Interfaces/AttachmentBufferOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 
@@ -128,9 +129,9 @@ Returns attachment content as `string`.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attachmentName` | `string` | Attachment file name. Changing the value resends request. |
-| `itemId` | `number` | List item numeric Id. Changing the value resends request. |
-| `list` | `string` | List title or GUID Id string. Changing the value resends request. |
+| `attachmentName` | `string` | Attachment file name. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `itemId` | `number` | List item numeric Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `list` | `string` | List title or GUID Id string. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`AttachmentTextOptions`](../Interfaces/AttachmentTextOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useAttachment will resend request when one of the dependencies changed. |
 

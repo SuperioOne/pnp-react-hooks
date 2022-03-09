@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns file collection from folder.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `folderId` | `string` | Folder GUID Id or server relative path. Changing the value resends request. |
+| `folderId` | `string` | Folder GUID Id or server relative path. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`FilesOptions`](../Interfaces/FilesOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useFiles will resend request when one of the dependencies changed. |
 
