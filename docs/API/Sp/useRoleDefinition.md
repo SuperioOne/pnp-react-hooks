@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns role definition with the specified identifier.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `roleDefId` | `string` \| `number` \| [`RoleType`](../Interfaces/RoleType.md) | Role definition name, Id or `RoleTypeKind`. |
+| `roleDefId` | `string` \| `number` \| [`RoleType`](../Interfaces/RoleType.md) | Role definition name, Id or `RoleTypeKind`. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`RoleDefinitionOptions`](../Interfaces/RoleDefinitionOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useRoleDefinition will resend request when one of the dependencies changed. |
 

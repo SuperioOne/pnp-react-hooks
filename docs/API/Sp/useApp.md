@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -15,7 +16,7 @@ Returns an app detail of the given Id from the app catalog.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `appId` | `string` | App GUID Id string. Changing the appId value resends request. |
+| `appId` | `string` | App GUID Id string. <ToolTip text="Changing the appId value repeats request">🚩</ToolTip> |
 | `options?` | [`WebAppOptions`](../Interfaces/WebAppOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useApp will resend request when one of the dependencies changed. |
 

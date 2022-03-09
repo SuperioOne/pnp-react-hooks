@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns list current change token and last modified dates.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `list` | `string` | List GUID id or title. Changing the value resends request. |
+| `list` | `string` | List GUID id or title. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`ListTokenOptions`](../Interfaces/ListTokenOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useListChangeToken will resend request when one of the dependencies changed. |
 

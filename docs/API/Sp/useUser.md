@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns an user from site user collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `userId` | `string` \| `number` | User Id, login name, email. |
+| `userId` | `string` \| `number` | User Id, login name, email. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`UserOptions`](../Interfaces/UserOptions.md) | PnP hook options.  |
 | `deps?` | `DependencyList` | useUser will resend request when one of the dependencies changed. |
 

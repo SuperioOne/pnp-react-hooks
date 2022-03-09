@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,8 +10,8 @@ Returns all attachments of the item.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `itemId` | `number` | List item numeric Id. Changing the value resends request. |
-| `list` | `string` | List title or GUID Id string. Changing the value resends request. |
+| `itemId` | `number` | List item numeric Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `list` | `string` | List title or GUID Id string. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`ItemAttachmentsOptions`](../Interfaces/ItemAttachmentsOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useAttachments will resend request when one of the dependencies changed. |
 

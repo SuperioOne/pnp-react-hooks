@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`FilteredODataQueryable`](FilteredODataQueryable.md)\>
@@ -58,11 +60,15 @@ ___
 
 • **mode**: [`All`](API/Enums/ListOptions.md#all)
 
+Request mode. <ToolTip text="Changing the mode repeats request">🚩</ToolTip>
+
 ___
 
 ### query
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`FilteredODataQueryable`](FilteredODataQueryable.md)\>
+
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
 
 #### Inherited from
 
@@ -74,7 +80,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

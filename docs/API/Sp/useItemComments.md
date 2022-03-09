@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ### Definition
 
@@ -9,8 +10,8 @@ Returns comment collection of specific list item.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `itemId` | `number` | Item Id. Changing the value resends request. |
-| `list` | `string` | List GUID Id or title. Changing the value resends request. |
+| `itemId` | `number` | Item Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `list` | `string` | List GUID Id or title. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`ItemCommentsOptions`](../Interfaces/ItemCommentsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useItemComments will resend request when one of the dependencies changed. |
 

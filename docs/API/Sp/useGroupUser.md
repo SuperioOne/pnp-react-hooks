@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,8 +10,8 @@ Returns an user from specific group user collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `groupId` | `string` \| `number` | Group name or Id. Changing the value resends request. |
-| `userId` | `string` \| `number` | User email, login name or Id. Changing the value resends request. |
+| `groupId` | `string` \| `number` | Group name or Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `userId` | `string` \| `number` | User email, login name or Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`GroupUserOptions`](../Interfaces/GroupUserOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useGroupUser will resend request when one of the dependencies changed. |
 

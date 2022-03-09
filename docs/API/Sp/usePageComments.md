@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns comment collection from page.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `pageRelativePath` | `string` | Page server relative path. Changing the value resends request. |
+| `pageRelativePath` | `string` | Page server relative path. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`PageCommentsOptions`](../Interfaces/PageCommentsOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | usePageComments will resend request when one of the dependencies changed. |
 

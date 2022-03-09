@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
@@ -58,14 +60,15 @@ ___
 
 • `Optional` **list**: `string`
 
-List GUID Id or title for getting list changes. Keep undefined for web changes.
-Changing list value resends request.
+List GUID Id or title for getting list changes. Keep undefined for web changes. <ToolTip text="Changing list value repeats request">🚩</ToolTip>
 
 ___
 
 ### query
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
+
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
 
 #### Inherited from
 
@@ -77,7 +80,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

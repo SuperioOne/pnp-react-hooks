@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`ErrorOptions`](ErrorOptions.md)
@@ -64,7 +66,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 
@@ -76,4 +78,4 @@ ___
 
 • `Optional` **userId**: `string` \| `number`
 
-User email, login name or Id. Default is current user. Changing userId resends request.
+User email, login name or Id. Default is current user. <ToolTip text="Changing userId repeats request">🚩</ToolTip>

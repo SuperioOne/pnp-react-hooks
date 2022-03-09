@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Conduct search on SharePoint.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `searchOptions` | `string` \| `ISearchQuery` | `ISearchQuery` query or search text. Changing the value resends request. |
+| `searchOptions` | `string` \| `ISearchQuery` | `ISearchQuery` query or search text. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`SearchOptions`](../Interfaces/SearchOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSearch will resend request when one of the dependencies changed. |
 

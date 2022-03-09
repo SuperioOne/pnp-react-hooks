@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Return a list from list collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `list` | `string` | List GUID Id or title. Changing the value resends request. |
+| `list` | `string` | List GUID Id or title. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`ListOptions`](../Interfaces/ListOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useList will resend request when one of the dependencies changed. |
 

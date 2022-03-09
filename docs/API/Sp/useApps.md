@@ -1,4 +1,3 @@
-
 ## Definition
 
 ▸ **useApps**<`T`\>(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`[]\>

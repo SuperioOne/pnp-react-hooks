@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`ErrorOptions`](ErrorOptions.md)
@@ -52,7 +54,7 @@ ___
 
 • `Optional` **fileQuery**: [`ODataQueryableCollection`](ODataQueryableCollection.md)
 
-OData query options for files. Changing the value resends request.
+OData query options for files. <ToolTip text="Changing the value repeats request">🚩</ToolTip>
 
 ___
 
@@ -60,7 +62,7 @@ ___
 
 • `Optional` **folderFilter**: `string`
 
-Folder filter query. Changing the value resends request.
+Folder filter query. <ToolTip text="Changing the value repeats request">🚩</ToolTip>
 
 ___
 
@@ -80,7 +82,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 
 #### Inherited from

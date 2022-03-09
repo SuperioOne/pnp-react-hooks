@@ -45,7 +45,7 @@ title: API
 - [useSearchUser](Sp/useSearchUser.md)
 - [useSite](Sp/useSite.md)
 - [useSiteUsers](Sp/useSiteUsers.md)
-- [useSubWebInfos](Sp/useSubWebInfos.md)
+- [useSubWebs](Sp/useSubWebs.md)
 - [useUser](Sp/useUser.md)
 - [useWebInfo](Sp/useWebInfo.md)
 - [useWebProperties](Sp/useWebProperties.md)

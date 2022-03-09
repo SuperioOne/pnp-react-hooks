@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns a group from group collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `groupId` | `string` \| `number` | Group Id or name. Changing the value resends request. |
+| `groupId` | `string` \| `number` | Group Id or name. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`GroupOptions`](../Interfaces/GroupOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useGroup will resend request when one of the dependencies changed. |
 

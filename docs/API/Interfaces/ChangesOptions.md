@@ -1,3 +1,5 @@
+import ToolTip from '@site/src/components/tooltip';
+
 ## Hierarchy
 
 - [`RenderOptions`](RenderOptions.md)
@@ -64,8 +66,7 @@ ___
 
 • `Optional` **list**: `string`
 
-List GUID Id or title for getting list changes. Keep undefined for web changes.
-Changing list value resends request.
+List GUID Id or title for getting list changes. Keep `undefined` for web changes. <ToolTip text="Changing list value repeats request">🚩</ToolTip>
 
 ___
 
@@ -73,7 +74,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

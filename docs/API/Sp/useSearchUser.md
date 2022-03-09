@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Searches for users or groups with specified search options.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `searchOptions` | `string` \| `IClientPeoplePickerQueryParameters` | Search text or search query parameters. Changing the value resends request. |
+| `searchOptions` | `string` \| `IClientPeoplePickerQueryParameters` | Search text or search query parameters. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`SearchUserOptions`](../Interfaces/SearchUserOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSearchUser will resend request when one of the dependencies changed. |
 

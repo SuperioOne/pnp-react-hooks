@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Hierarchy
 
@@ -55,15 +56,11 @@ Keep previous state until new request resolves rather than clearing the state as
 
 ___
 
-### mode
-
-• `Optional` **mode**: [`Default`](API/Enums/ListOptions.md#default)
-
-___
-
 ### query
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
+
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
 
 #### Inherited from
 
@@ -75,7 +72,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

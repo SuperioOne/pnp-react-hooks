@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Hierarchy
 
@@ -59,6 +60,8 @@ ___
 
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
+OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
+
 #### Inherited from
 
 [PnpHookOptions](PnpHookOptions.md).[query](PnpHookOptions.md#query)
@@ -69,7 +72,7 @@ ___
 
 • `Optional` **scope**: [`Scope`](Scope.md)
 
-List and list item scope configuration. Default is current web scope.
+List and list item scope configuration. Default is current web scope. <ToolTip text="Changing scope values repeats request">🚩</ToolTip>
 
 ___
 
@@ -77,7 +80,7 @@ ___
 
 • `Optional` **sp**: `SPFI`
 
-Pnp SP context.
+Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
 #### Inherited from
 

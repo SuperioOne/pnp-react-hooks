@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns a field from web or list. List option can be defined in [`FieldOptions.l
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `fieldId` | `string` | Field internal name or Id. Changing the value resends request. |
+| `fieldId` | `string` | Field internal name or Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`FieldOptions`](../Interfaces/FieldOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useField will resend request when one of the dependencies changed. |
 

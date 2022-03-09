@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -15,8 +16,8 @@ Returns an item from specified list item collection.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `itemId` | `number` | Item Id. Changing the value resends request. |
-| `list` | `string` | List GUID id or title. Changing the value resends request. |
+| `itemId` | `number` | Item Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `list` | `string` | List GUID id or title. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`ListItemOptions`](../Interfaces/ListItemOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useListItem will resend request when one of the dependencies changed. |
 

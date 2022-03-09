@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -9,7 +10,7 @@ Returns `true`, if user is member of group. If not returns `false`. Use [`IsMemb
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `groupId` | `string` \| `number` | Group name or Id. Changing the value resends request. |
+| `groupId` | `string` \| `number` | Group name or Id. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`IsMemberOfOptions`](../Interfaces/IsMemberOfOptions.md) | Pnp hook options. |
 | `deps?` | `DependencyList` | useIsMemberOf will resend request when one of the dependencies changed. |
 

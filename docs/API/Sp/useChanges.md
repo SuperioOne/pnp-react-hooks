@@ -1,3 +1,4 @@
+import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
@@ -16,7 +17,7 @@ to get list changes instead of web changes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `changeQuery` | `IChangeQuery` | Change query. Hook resends request if **shallow comparison** returns false. |
+| `changeQuery` | `IChangeQuery` | Change query. <ToolTip text="Hook repeats request if shallow comparison returns false">🚩</ToolTip> |
 | `options?` | [`ChangesOptions`](../Interfaces/ChangesOptions.md) | PnP hook options |
 | `deps?` | `DependencyList` | useChanges will resend request when one of the dependencies changed. |
 
