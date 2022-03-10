@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpnp_react_hooks_docs=self.webpackChunkpnp_react_hooks_docs||[]).push([[487],{7046:function(a){a.exports=JSON.parse('{"allTagsPath":"/changelog/tags","slug":"/changelog/tags/v-1","name":"v1","count":1,"permalink":"/changelog/tags/v-1"}')}}]);
