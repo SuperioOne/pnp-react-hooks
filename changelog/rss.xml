@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>PnP React Hooks Blog</title>
+        <link>https://your-docusaurus-test-site.com/changelog</link>
+        <description>PnP React Hooks Blog</description>
+        <lastBuildDate>Wed, 09 Mar 2022 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[v1.0.0 - Initial release]]></title>
+            <link>https://your-docusaurus-test-site.com/changelog/v1.0.0</link>
+            <guid>v1.0.0</guid>
+            <pubDate>Wed, 09 Mar 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[Whats In]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_mojV" id="whats-in">Whats In<a class="hash-link" href="#whats-in" title="Direct link to heading">​</a></h2><ul><li>42 new custom hook for accessing SharePoint contents.</li><li>PnPjs v3 upgrade. <em>v2 support dropped before major release.</em></li><li>Configuration system based on React Context API.</li><li>Helper hook function for accessing options.</li></ul><h2 class="anchor anchorWithStickyNavbar_mojV" id="whats-planned-for-future-release">Whats planned for future release<a class="hash-link" href="#whats-planned-for-future-release" title="Direct link to heading">​</a></h2><ul class="contains-task-list"><li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Paged mode for <code>useListItems</code> hook.</li><li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Auto request cancellation with <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal" target="_blank" rel="noopener noreferrer"><code>AbortSignal</code></a>. Currently observers cancels execution but fetch request continues on background.</li><li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Adding a <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/subscribe-to-list-notifications" target="_blank" rel="noopener noreferrer"><em>subscription</em></a> base hook function similar to React's <code>useEffect</code> to execute custom action when list content updated.</li><li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Recursive option for <code>useFiles</code>.</li></ul>]]></content:encoded>
+            <category>pnp-react-hooks</category>
+            <category>v1</category>
+        </item>
+    </channel>
+</rss>

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpnp_react_hooks_docs=self.webpackChunkpnp_react_hooks_docs||[]).push([[8422],{1938:function(a){a.exports=JSON.parse('{"allTagsPath":"/changelog/tags","slug":"/changelog/tags/pnp-react-hooks","name":"pnp-react-hooks","count":1,"permalink":"/changelog/tags/pnp-react-hooks"}')}}]);
