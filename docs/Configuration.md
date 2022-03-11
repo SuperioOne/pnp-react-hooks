@@ -4,15 +4,15 @@ sidebar_position: 2
 
 # Configuration
 
-PnP React hooks only require PnPjs `spfi` to work. You can easily configure all hooks globally with [`PnpHookOptionProvider`](API/PnPHookOptionProvider.md) component that uses React context under the hood. Each hook can be configured individually and global configuration can be overridden if needed. 
+PnP React hooks only require PnPjs `spfi` to work. You can easily configure all hooks globally with [`PnpHookOptionProvider`](API/PnpHookOptionProvider.md) component that uses React context under the hood. Each hook can be configured individually and global configuration can be overridden if needed.
 
 See [`PnpHookGlobalOptions`](API/Interfaces/PnpHookGlobalOptions) for all options.
 
 ## SPFx
 
-Install pnp-react-hooks with required peer dependencies to your SPFx project and initialize `spfi` in your main entry point for the web part. 
+Install `pnp-react-hooks` with required peer dependencies to your SPFx project and initialize `spfi` in your main entry point for the web part.
 
-This example shows how to initialize options with component properties.
+This example shows how to initialize options by using component properties.
 
 **PnpReactHookExamplesWebPart.ts**
 ```typescript
@@ -85,6 +85,12 @@ export default PnpReactHookExamples;
 
 All hooks supports custom dependency array similar to React's built-in hooks, but unlike React some parameters tracked internally and including them in array is not required. Hooks repeat requests when dependencies are changed.
 
+:::info
+
+Tracked parameters are marked with `🚩` symbol in [docs](API/index.md).
+
+:::
+
 ```typescript
 let title = "My List";
 
@@ -110,15 +116,9 @@ const forcedRefresh = useList(title, {
 }, [refresh]); // You can force refresh with your custom variables.
 ```
 
-:::info
-
-Tracked parameters are marked with `🚩` symbol in [docs](API/index.md).
-
-:::
-
 ## Behaviors
 
-You can leverage PnPJs v3 behaviors for hooks both individually and globally. 
+You can leverage PnPJs v3 behaviors for hooks both individually and globally.
 
 **Global**
 ```typescript
@@ -149,7 +149,7 @@ export default function useWhoAmI()
 {
 	// Apply your custom behaviors to single hook with behaviors option.
     const user = useCurrentUser({
-		behaviors: [Caching(), MyCustomBehavior()] 
+		behaviors: [Caching(), MyCustomBehavior()]
 	});
 
     // useProfile not affected by Caching and MyCustomBehavior
@@ -169,7 +169,7 @@ export default function useWhoAmI()
 
 ## Configure for multiple sites
 
-Multiple [`PnpHookOptionProvider`](API/PnPHookOptionProvider.md) can be initialized with different `spfi` configurations for accessing multiple sites or different options.
+Multiple [`PnpHookOptionProvider`](API/PnpHookOptionProvider.md) can be initialized with different `spfi` configurations to access multiple sites. Also each hook function has a `sp` option to override `spfi`.
 
 ```tsx
 const sp_siteA = spfi("tenant/siteA");
@@ -199,9 +199,11 @@ export default function WebPart()
 }
 ```
 
+![Image](../../static/img/content-multi-site.png)
+
 ## Accessing options
 
-Global options can be accessed with [`usePnpHookOptions`](API/usePnpHookOptions.md) helper; This can be useful when deriving options or accessing to  `spfi`.
+Global options can be accessed by [`usePnpHookOptions`](API/usePnpHookOptions.md) helper function. This can be useful when creating derivative of options or accessing to  `spfi`.
 
 :::tip
 
