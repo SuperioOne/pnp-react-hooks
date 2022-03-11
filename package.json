@@ -28,6 +28,7 @@
     "type": "git",
     "url": "https://github.com/SuperioOne/pnp-react-hooks"
   },
+  "homepage": "https://superioone.github.io/pnp-react-hooks",
   "author": "Timur Olur",
   "license": "MIT",
   "devDependencies": {

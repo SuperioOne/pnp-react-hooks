@@ -81,3 +81,33 @@ test("useSearch get second page", async () =>
         expect(data[0]).toBeTruthy();
     });
 });
+
+test("useSearch get third page", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useSearch("*", {
+            sp: spTest,
+            error: err
+        }),
+        completeWhen: (data) =>
+        {
+            if (data[0]?.CurrentPage === 1)
+            {
+                data[1](2);
+            }
+
+            if (data[0]?.CurrentPage === 2)
+            {
+                data[1](3);
+            }
+
+            return data[0]?.CurrentPage === 3;
+        }
+    };
+
+    await act(async () =>
+    {
+        const data = await reactDOMElement.mountTestComponent("useSearch get third page", CustomHookMockup, props);
+        expect(data[0]).toBeTruthy();
+    });
+});
