@@ -122,7 +122,7 @@ export function useSearch(
                             searchState.callback?.();
                             dispatch({
                                 type: ActionTypes.NewSearchResult,
-                                pnpResult: data,
+                                pnpResult: searchState.pnpResult,
                                 userResult: _createSPSearchResult(data, searchState.currentPage),
                                 pageNo: searchState.currentPage
                             });
