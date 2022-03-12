@@ -4,7 +4,7 @@
     "node": ">= 14.0.0"
   },
   "name": "pnp-react-hooks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "PnPJS React hooks library.",
   "main": "index.js",
   "scripts": {
