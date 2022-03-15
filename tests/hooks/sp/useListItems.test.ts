@@ -1,10 +1,11 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IListInfo } from "@pnp/sp/lists";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { ListOptions } from "../../../src/types/options";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useListItem, useListItems } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
@@ -14,6 +15,7 @@ let testListItem: { Id: number; };
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 

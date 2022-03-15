@@ -1,11 +1,12 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IFileInfo } from "@pnp/sp/files/types";
+import { IFolderInfo } from "@pnp/sp/folders/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useFile, useFiles } from "../../../src";
-import { IFolderInfo } from "@pnp/sp/folders/types";
 
 const fName = "pnp-rct-testFile.txt";
 const fContent = "Pnp React Hooks";
@@ -16,6 +17,7 @@ let spTest: SPFI;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 

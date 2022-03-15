@@ -1,10 +1,11 @@
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { IListInfo } from "@pnp/sp/lists/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useList, useListChangeToken, useLists } from "../../../src";
-import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
-import { IListInfo } from "@pnp/sp/lists/types";
-import { SPFI } from "@pnp/sp";
 
 let reactDOMElement: ReactDOMElement;
 let spTest: SPFI;
@@ -12,6 +13,7 @@ let testListInfo: IListInfo;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 

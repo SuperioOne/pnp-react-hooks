@@ -10,7 +10,7 @@ const rl = readline.createInterface({
     input: process.stdin,
 });
 
-const eventLoop = () => 
+const eventLoop = () =>
 {
     setTimeout(() => eventLoop(), 500);
 };

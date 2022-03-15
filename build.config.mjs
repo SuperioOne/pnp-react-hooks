@@ -15,7 +15,7 @@ const configs = {
         {
             stageName: "ESM build",
             rollupConfig: {
-                input: "src/index.ts",
+                input: ["src/index.ts", "src/behaviors/index.ts"],
                 external: [
                     "tslib",
                     "react",
@@ -61,6 +61,7 @@ const configs = {
                     "react",
                     "react-dom",
                     "rxjs",
+                    "node-fetch",
                     /^@pnp\/.{1,150}$/,
                 ],
                 plugins: [

@@ -1,11 +1,12 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { IFieldInfo } from "@pnp/sp/fields";
 import { IListInfo } from "@pnp/sp/lists/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useField, useFields } from "../../../src";
-import { IFieldInfo } from "@pnp/sp/fields";
 
 let reactDOMElement: ReactDOMElement;
 let spTest: SPFI;
@@ -15,6 +16,7 @@ let webFieldInfo: IFieldInfo;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 

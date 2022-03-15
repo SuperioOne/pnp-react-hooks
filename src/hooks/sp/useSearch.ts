@@ -140,19 +140,6 @@ export function useSearch(
                         });
 
                         const sp = resolveSP(mergedOptions);
-
-                        sp.search({
-                            Querytext: "test",
-
-                        })
-                            .then(e =>
-                            {
-                                console.log(e);
-                            }).catch(err =>
-                            {
-                                console.error(err);
-                            });
-
                         resultPromise = sp.search(searchOptions);
                     }
 

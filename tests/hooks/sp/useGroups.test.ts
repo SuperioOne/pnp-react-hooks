@@ -1,10 +1,11 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { ISiteGroupInfo } from "@pnp/sp/site-groups/types";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useGroup, useGroups, useGroupUser, useGroupUsers, useIsMemberOf } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
@@ -14,6 +15,7 @@ let testUserInfo: ISiteUserInfo;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 
@@ -162,8 +164,10 @@ test("useIsMemberOf current user isn't member of group", async () =>
 
 test("useIsMemberOf invalid group Id type", async () =>
 {
+    const value = <any>{ invalid: "invalid" };
+
     const props: CustomHookProps = {
-        useHook: (err) => useIsMemberOf({ invalid: "invalid" } as any, {
+        useHook: (err) => useIsMemberOf(value, {
             error: err,
             sp: spTest,
         }),

@@ -1,9 +1,10 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IFolderInfo } from "@pnp/sp/folders/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useFolder, useFolderTree, useFolders } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
@@ -13,6 +14,7 @@ let rootFolderUrl: string;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 

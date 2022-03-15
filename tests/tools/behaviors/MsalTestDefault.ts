@@ -1,8 +1,8 @@
 import { DefaultHeaders } from "@pnp/sp/behaviors/defaults";
+import { FetchWithAbort } from "../../../src/behaviors";
 import { FileCaching } from "./FileCaching";
 import { ISPDefaultProps } from "@pnp/nodejs/behaviors/spdefault";
 import { MSAL } from "@pnp/nodejs/behaviors/msal";
-import { NodeFetchWithRetry } from "@pnp/nodejs/behaviors/fetch";
 import { Queryable, RejectOnError, ResolveOnData, DefaultParse } from "@pnp/queryable";
 import { TestConfig } from "../../test.config";
 import { TimelinePipe, combine } from "@pnp/core";
@@ -39,9 +39,9 @@ export function MsalTestDefault(props: MsalTestDefaultProps): TimelinePipe<Query
                 cacheDir: props.testEnv.cacheDir,
                 cacheMode: props.testEnv.cacheMode ?? "ifExists"
             }),
-            NodeFetchWithRetry({
-                interval: props.testEnv.retryInterval,
-                retries: props.testEnv.retries
+            FetchWithAbort({
+                waitTime: props.testEnv.retryInterval,
+                retry: props.testEnv.retries
             }),
             DefaultParse());
 

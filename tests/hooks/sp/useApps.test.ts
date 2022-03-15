@@ -1,8 +1,9 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useApp, useApps } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
@@ -11,6 +12,7 @@ let testApp;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 
@@ -54,4 +56,3 @@ test("useApp get app by Id", async () =>
         expect(reactDOMElement.mountTestComponent("useApp get app by Id", CustomHookMockup, props))
             .resolves.toBeTruthy());
 });
-

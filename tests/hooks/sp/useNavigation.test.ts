@@ -1,15 +1,17 @@
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
 import { useNavigation } from "../../../src";
-import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
-import { SPFI } from "@pnp/sp";
 
 let reactDOMElement: ReactDOMElement;
 let spTest: SPFI;
 
 beforeAll(() =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 });

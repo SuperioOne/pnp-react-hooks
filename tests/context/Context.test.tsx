@@ -6,12 +6,14 @@ import { SPFI } from "@pnp/sp";
 import { act } from "react-dom/test-utils";
 import { initJSDOM, ReactDOMElement, TestComponentProps } from "../tools/ReactDOMElement";
 import { shallowEqual } from "../../src/utils/shallowEqual";
+import { InitGlobalFetch } from "../tools/InitGlobalFetch";
 
 let reactDOMElement: ReactDOMElement;
 let spTest: SPFI;
 
 beforeAll(() =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 });

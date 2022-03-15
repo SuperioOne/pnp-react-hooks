@@ -1,12 +1,14 @@
-import { spfi } from "@pnp/sp";
-import { JSDOM } from "jsdom";
+import fetch from "node-fetch";
 import msalSettings from "../msalSettings";
+import { JSDOM } from "jsdom";
 import { MsalDebugDefault } from "./behaviors/MsalDebugDefault";
+import { spfi } from "@pnp/sp";
 
 const ROOT_DIV_ID = "react";
 
 export async function InitEnvironment()
 {
+    global.fetch = <any>fetch;
     const jsDomRoot = InitJSDOM();
     const spDebug = InitPnp();
 

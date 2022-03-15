@@ -1,11 +1,12 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IListInfo } from "@pnp/sp/lists";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { PermissionKind } from "@pnp/sp/security";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useHasPermission } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
@@ -20,6 +21,7 @@ let userItemPermission: boolean = false;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 

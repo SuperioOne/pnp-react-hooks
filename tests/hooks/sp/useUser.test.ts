@@ -1,11 +1,12 @@
 import "@pnp/sp/site-users";
+import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useProfile, useUser } from "../../../src";
-import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 
 let reactDOMElement: ReactDOMElement;
 let spTest: SPFI;
@@ -13,6 +14,7 @@ let testUserInfo: ISiteUserInfo;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 

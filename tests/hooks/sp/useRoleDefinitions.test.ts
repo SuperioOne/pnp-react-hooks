@@ -1,9 +1,10 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
 import { IRoleDefinitionInfo } from "@pnp/sp/security/types";
+import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
+import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { SPFI } from "@pnp/sp";
 import { useRoleDefinition, useRoleDefinitions } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
@@ -12,6 +13,7 @@ let testRoleDefinition: IRoleDefinitionInfo;
 
 beforeAll(async () =>
 {
+    InitGlobalFetch();
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 
