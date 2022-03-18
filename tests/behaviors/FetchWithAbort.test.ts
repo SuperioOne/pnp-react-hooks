@@ -1,8 +1,11 @@
-import { HTTP_ERROR_CODES } from "../../src/behaviors/types";
+import { ABORT_SUPPORT, HTTP_ERROR_CODES } from "../../src/behaviors/types";
+import { BrowserFetchWithRetry } from "@pnp/queryable";
+import { FetchWithAbort, _browserFetchRetry } from "../../src/behaviors/FetchWithAbort";
 import { HttpRequestError } from "@pnp/queryable";
 import { InitGlobalFetch } from "../tools/InitGlobalFetch";
 import { Response } from "node-fetch";
-import { _browserFetchRetry } from "../../src/behaviors/FetchWithAbort";
+import { spfi } from "@pnp/sp";
+import "@pnp/sp/webs";
 
 const originalFetch = global.fetch;
 
@@ -94,4 +97,24 @@ test('browser-fetch abort signal', async () =>
     {
         expect((<Error>err).name).toBe("AbortError");
     }
+});
+
+test('FetchWithAbort behavior abort flag check', async () =>
+{
+    const queryableWithAbort = spfi().using(FetchWithAbort()).web;
+
+    const sendObservers = queryableWithAbort.on.send.toArray();
+
+    expect(sendObservers.length).toBe(1);
+    expect(sendObservers[0][ABORT_SUPPORT]).toBe(true);
+});
+
+test('Default fetch abort flag check', async () =>
+{
+    const queryable = spfi().using(BrowserFetchWithRetry()).web;
+
+    const sendObservers = queryable.on.send.toArray();
+
+    expect(sendObservers.length).toBe(1);
+    expect(sendObservers[0][ABORT_SUPPORT]).toBeFalsy();
 });

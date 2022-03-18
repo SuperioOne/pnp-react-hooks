@@ -3,24 +3,27 @@
 import { IQueryableInternal, Queryable } from "@pnp/queryable/queryable";
 import { HttpRequestError } from "@pnp/queryable";
 import { LogLevel } from "@pnp/logging";
-import { RetryOptions, FetchInit, DEFAULT, HTTP_ERROR_CODES } from "./types";
+import { RetryOptions, FetchInit, DEFAULT, HTTP_ERROR_CODES, ABORT_SUPPORT } from "./types";
 
 export function FetchWithAbort(props?: RetryOptions)
 {
+    const customFetch = function (this: IQueryableInternal, url: URL, init: RequestInit)
+    {
+        this.log(`FetchWithAbort: ${init.method} ${url.toString()}`, LogLevel.Verbose);
+
+        return _browserFetchRetry(url.toString(), {
+            request: init,
+            waitTime: props?.waitTime,
+            retry: props?.retry
+        });
+    };
+
+    Reflect.set(customFetch, ABORT_SUPPORT, true);
+
     return (instance: Queryable) =>
     {
         instance.on.send.clear();
-
-        instance.on.send(function (this: IQueryableInternal, url: URL, init: RequestInit)
-        {
-            this.log(`Fetch: ${init.method} ${url.toString()}`, LogLevel.Verbose);
-
-            return _browserFetchRetry(url.toString(), {
-                request: init,
-                waitTime: props?.waitTime,
-                retry: props?.retry
-            });
-        });
+        instance.on.send(customFetch);
 
         return instance;
     };

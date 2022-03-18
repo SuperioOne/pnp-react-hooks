@@ -30,7 +30,10 @@ export function SearchDebug()
             setPage(Number((event as CustomEvent).detail[0]));
         };
 
-        console.debug(result);
+        console.debug(`CurrentPage : ${result?.CurrentPage}`);
+        console.debug(`RowCount : ${result?.RowCount}`);
+        console.debug(`Props : ${result?.RawSearchResults?.Properties}`);
+        console.debug(`result is completed : ${typeof result}`);
         console.debug(`reload counter :${counter}`);
 
         window.addEventListener("reload", eventHandler, false);

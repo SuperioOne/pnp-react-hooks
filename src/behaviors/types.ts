@@ -26,3 +26,5 @@ export interface FetchInit
 
 /** HTTP error codes for retry */
 export const HTTP_ERROR_CODES = [408, 429, 503, 504];
+
+export const ABORT_SUPPORT = Symbol("PRH_ABORT_SUPPORTED");

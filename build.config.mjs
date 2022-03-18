@@ -17,11 +17,7 @@ const configs = {
             rollupConfig: {
                 input: ["src/index.ts", "src/behaviors/index.ts"],
                 external: [
-                    "tslib",
-                    "react",
-                    "react-dom",
-                    "rxjs",
-                    /^@pnp\/.{1,150}$/,
+                    /node_modules/,
                 ],
                 plugins: [
                     del({
@@ -34,9 +30,9 @@ const configs = {
                     commonjs(),
                     nodeResolve(),
                     copy({
-                        targets:[
-                            {src: "README.md", dest: DIR_RELEASE},
-                            {src: "LICENSE", dest: DIR_RELEASE},
+                        targets: [
+                            { src: "README.md", dest: DIR_RELEASE },
+                            { src: "LICENSE", dest: DIR_RELEASE },
                         ]
                     })
                 ],
@@ -56,13 +52,7 @@ const configs = {
             rollupConfig: {
                 input: "debug/index.ts",
                 external: [
-                    "jsdom",
-                    "tslib",
-                    "react",
-                    "react-dom",
-                    "rxjs",
-                    "node-fetch",
-                    /^@pnp\/.{1,150}$/,
+                    /node_modules/,
                 ],
                 plugins: [
                     del({

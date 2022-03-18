@@ -4,12 +4,12 @@ import { ListOptions } from "../../src/types/options";
 
 export function ListItemsDebug()
 {
+    const [counter, setCounter] = React.useState<number>(0);
     const listItems = useListItems("Test List", {
         mode: ListOptions.All,
         query: { select: ["ID", "Title"] },
         error: console.log,
-    });
-    const [counter, setCounter] = React.useState<number>(0);
+    }, [counter]);
 
     React.useEffect(() =>
     {

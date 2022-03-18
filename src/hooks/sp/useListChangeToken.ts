@@ -54,7 +54,6 @@ export function useListChangeToken(
         const action = async function (this: IList): Promise<IChangeTokenInfo>
         {
             const listInfo = await this();
-
             return new ChangeTokenInfo(listInfo);
         };
 

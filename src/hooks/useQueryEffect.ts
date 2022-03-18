@@ -1,3 +1,4 @@
+import { InjectAbort, ManagedAbort } from "../behaviors/InjectAbort";
 import { InvokableFactory } from "../types/Invokeable";
 import { Nullable } from "../types/utilityTypes";
 import { SharepointQueryable } from "../types/SharepointQueryable";
@@ -33,10 +34,14 @@ export function useQueryEffect<
     });
 
     const _subscription = useRef<Nullable<Subscription>>(undefined);
+    const _abortController = useRef<Nullable<ManagedAbort>>(undefined);
 
     const _cleanup = useCallback(() =>
     {
         _subscription.current?.unsubscribe();
+        _abortController.current?.abort();
+
+        _abortController.current = undefined;
         _subscription.current = undefined;
     }, []);
 
@@ -68,13 +73,19 @@ export function useQueryEffect<
                             complete: _cleanup,
                             error: (err: Error) =>
                             {
-                                stateAction(null);
-                                errorHandler(err, options);
+                                if (err.name !== "AbortError")
+                                {
+                                    stateAction(null);
+                                    errorHandler(err, options);
+                                }
                             }
                         };
 
-                        const sp = resolveSP(options);
+                        _abortController.current = new ManagedAbort();
+
+                        const sp = resolveSP(options, [InjectAbort(_abortController.current)]);
                         let invokeable = await invokableFactory(sp);
+
                         invokeable = insertODataQuery(invokeable, options.query);
 
                         _subscription.current = from(invokeable())

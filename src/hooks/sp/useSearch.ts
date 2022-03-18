@@ -7,7 +7,7 @@ import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { RenderOptions, ErrorOptions, _PnpHookOptions, ContextOptions } from "../../types/options";
 import { SearchResults } from "@pnp/sp/search";
-import { assert } from "../../utils/assert";
+import { assert, assertNumber } from "../../utils/assert";
 import { compareTuples } from "../../utils/compareTuples";
 import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { errorHandler } from "../../utils/errorHandler";
@@ -15,6 +15,7 @@ import { mergeOptions } from "../../utils/merge";
 import { resolveSP } from "../../utils/resolveSP";
 import { shallowEqual } from "../../utils/shallowEqual";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
+import { InjectAbort, ManagedAbort } from "../../behaviors/InjectAbort";
 
 const INITIAL_PAGE_INDEX = 1;
 const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
@@ -46,6 +47,7 @@ export function useSearch(
         options: null
     });
     const _subscription = useRef<Nullable<Subscription>>(undefined);
+    const _abortController = useRef<ManagedAbort>(new ManagedAbort());
     const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
 
     const _getPageDispatch: GetPageDispatch = useCallback((pageNo: number, callback?: () => void) =>
@@ -67,6 +69,7 @@ export function useSearch(
     const _cleanup = useCallback(() =>
     {
         _subscription.current?.unsubscribe();
+        _abortController.current.abort();
         _subscription.current = undefined;
     }, []);
 
@@ -84,8 +87,9 @@ export function useSearch(
                 || !shallowEqual(_innerState.current.options?.sp, mergedOptions?.sp);
 
             // page change is ignored, if options are changed
+            // both page numbers can be NaN, use Object.is for comparison
             const pageChanged = !searchOptChanged
-                && _innerState.current.page !== searchState.currentPage;
+                && (!Object.is(_innerState.current.page, searchState.currentPage));
 
             if (searchOptChanged || pageChanged)
             {
@@ -106,8 +110,11 @@ export function useSearch(
                         complete: _cleanup,
                         error: (err: Error) =>
                         {
-                            dispatch({ type: ActionTypes.Reset, resetValue: null });
-                            errorHandler(err, mergedOptions);
+                            if (err.name !== "AbortError")
+                            {
+                                dispatch({ type: ActionTypes.Reset, resetValue: null });
+                                errorHandler(err, mergedOptions);
+                            }
                         }
                     };
 
@@ -116,6 +123,7 @@ export function useSearch(
                     if (pageChanged)
                     {
                         assert(searchState.pnpResult, "search result object is undefined.");
+                        assertNumber(searchState.currentPage);
 
                         observer.next = data =>
                         {
@@ -128,18 +136,24 @@ export function useSearch(
                             });
                         };
 
+                        _abortController.current.reset();
                         resultPromise = searchState.pnpResult.getPage(searchState.currentPage);
                     }
                     else
                     {
-                        observer.next = data => dispatch({
-                            type: ActionTypes.NewSearchResult,
-                            pnpResult: data,
-                            userResult: _createSPSearchResult(data, INITIAL_PAGE_INDEX),
-                            pageNo: INITIAL_PAGE_INDEX
-                        });
+                        observer.next = data =>
+                        {
+                            _innerState.current.page = INITIAL_PAGE_INDEX;
+                            dispatch({
+                                type: ActionTypes.NewSearchResult,
+                                pnpResult: data,
+                                userResult: _createSPSearchResult(data, INITIAL_PAGE_INDEX),
+                                pageNo: INITIAL_PAGE_INDEX
+                            });
+                        };
 
-                        const sp = resolveSP(mergedOptions);
+                        _abortController.current = new ManagedAbort();
+                        const sp = resolveSP(mergedOptions, [InjectAbort(_abortController.current)]);
                         resultPromise = sp.search(searchOptions);
                     }
 
@@ -183,7 +197,7 @@ const _reducer = (state: SearchState, action: SearchAction): SearchState =>
             return {
                 currentPage: action.pageNo ?? state.currentPage,
                 pnpResult: action.pnpResult,
-                userResult: action.userResult
+                userResult: action.userResult,
             };
         default:
             throw new Error(`useSearch: Unexpected action type received.`);
