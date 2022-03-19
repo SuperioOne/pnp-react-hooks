@@ -32,7 +32,7 @@ export function SearchDebug()
 
         console.debug(`CurrentPage : ${result?.CurrentPage}`);
         console.debug(`RowCount : ${result?.RowCount}`);
-        console.debug(`Props : ${result?.RawSearchResults?.Properties}`);
+        console.debug(`First Row : ${result?.PrimarySearchResults?.[0].Title}`);
         console.debug(`result is completed : ${typeof result}`);
         console.debug(`reload counter :${counter}`);
 

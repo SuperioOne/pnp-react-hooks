@@ -34,15 +34,13 @@ export function useQueryEffect<
     });
 
     const _subscription = useRef<Nullable<Subscription>>(undefined);
-    const _abortController = useRef<Nullable<ManagedAbort>>(undefined);
+    const _abortController = useRef<ManagedAbort>(new ManagedAbort());
 
     const _cleanup = useCallback(() =>
     {
         _subscription.current?.unsubscribe();
-        _abortController.current?.abort();
-
-        _abortController.current = undefined;
         _subscription.current = undefined;
+        _abortController.current?.abort();
     }, []);
 
     // make sure callbacks cancelled when DOM unloads
@@ -53,11 +51,12 @@ export function useQueryEffect<
         if (options.disabled !== true)
         {
             const shouldUpdate = !deepCompareOptions(_innerState.current.options, options)
-                || !compareTuples(_innerState.current.externalDependencies, deps);
+            || !compareTuples(_innerState.current.externalDependencies, deps);
 
             if (shouldUpdate)
             {
                 _cleanup();
+                _abortController.current = new ManagedAbort();
 
                 if (options?.keepPreviousState !== true)
                 {
@@ -80,8 +79,6 @@ export function useQueryEffect<
                                 }
                             }
                         };
-
-                        _abortController.current = new ManagedAbort();
 
                         const sp = resolveSP(options, [InjectAbort(_abortController.current)]);
                         let invokeable = await invokableFactory(sp);
