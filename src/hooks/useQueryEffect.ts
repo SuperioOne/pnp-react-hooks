@@ -13,7 +13,7 @@ import { useCallback, useEffect } from "react";
 import { useRef } from "react";
 
 /**
- * Internal hook for OData queryable actions.
+ * Reuseable internal hook for simple OData queryable actions.
  * @param invokableFactory Creates a proxy Query instance
  * @param stateAction Callback function to update state
  * @param options PnpHook options.

@@ -6,6 +6,7 @@ export { CurrentUserDebug } from "./CurrentUserDebug";
 export { FileDebug } from "./FileDebug";
 export { FolderTreeDebug } from "./FolderTreeDebug";
 export { ListItemsDebug } from "./ListItemsDebug";
+export { ListItemsPagedDebug } from "./ListItemsPagedDebug";
 export { ListTokenDebug } from "./ListTokenDebug";
 export { RoleAssignmentDebug } from "./RoleAssignmentDebug";
 export { RoleDefinitionsDebug } from "./RoleDefinitionsDebug";

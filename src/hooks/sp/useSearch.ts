@@ -18,9 +18,9 @@ import { shallowEqual } from "../../utils/shallowEqual";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
 import { isSearchQueryBuilder } from "../../utils/typeGuards";
 
+const DEFAULT_PAGE_SIZE = 10;
 const INITIAL_PAGE_INDEX = 1;
 const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
-const DEFAULT_PAGE_SIZE = 10;
 
 export interface SearchOptions extends RenderOptions, ErrorOptions, BehaviourOptions, ContextOptions
 {
@@ -45,7 +45,7 @@ export function useSearch(
     const _innerState = useRef<TrackedState>({
         externalDependencies: null,
         page: INITIAL_PAGE_INDEX,
-        searchOptions: null,
+        searchQuery: null,
         options: null
     });
     const _subscription = useRef<Nullable<Subscription>>(undefined);
@@ -87,7 +87,7 @@ export function useSearch(
             let pageNo = searchState.currentPage;
 
             const searchOptChanged = !compareTuples(_innerState.current.externalDependencies, deps)
-                || !shallowEqual(_innerState.current.searchOptions, searchQuery)
+                || !shallowEqual(_innerState.current.searchQuery, searchQuery)
                 || !shallowEqual(_innerState.current.options?.sp, mergedOptions?.sp);
 
             // page change is ignored, if options are changed
@@ -187,7 +187,7 @@ export function useSearch(
             _innerState.current = {
                 externalDependencies: deps,
                 page: pageNo,
-                searchOptions: searchQuery,
+                searchQuery: searchQuery,
                 options: mergedOptions
             };
         }
@@ -303,7 +303,7 @@ export interface SpSearchResult
 
 interface TrackedState
 {
-    searchOptions: Nullable<ISearchQuery | string>;
+    searchQuery: Nullable<ISearchQuery | string>;
     externalDependencies: Nullable<React.DependencyList>;
     page: number;
     options: Nullable<_PnpHookOptions<unknown>>;

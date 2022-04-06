@@ -1,35 +1,55 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import "@pnp/sp/items";
 import "@pnp/sp/items/get-all";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
-import { IItems } from "@pnp/sp/items/types";
+import { DisableOptionType, DisableOptionValueType } from "../../types/options/RenderOptions";
+import { IItems, Items } from "@pnp/sp/items";
+import { InjectAbort, ManagedAbort } from "../../behaviors/InjectAbort";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryableCollection, FilteredODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions, ListOptions } from "../../types/options";
-import { SPFI } from "@pnp/sp";
+import { PnpHookOptions, ListOptions, _PnpHookOptions } from "../../types/options";
 import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { compareTuples } from "../../utils/compareTuples";
+import { deepCompareOptions } from "../../utils/deepCompare";
+import { errorHandler } from "../../utils/errorHandler";
+import { from, NextObserver, Subscription } from "rxjs";
+import { insertODataQuery } from "../../utils/insertODataQuery";
+import { mergeOptions } from "../../utils/merge";
+import { parseODataJSON } from "@pnp/queryable";
 import { resolveList } from "../../utils/resolveList";
-import { useQueryEffect } from "../useQueryEffect";
-import { useState, useCallback, useContext, useMemo } from "react";
+import { resolveSP } from "../../utils/resolveSP";
+import { useState, useCallback, useContext, useEffect, useRef } from "react";
+
+export type nextPageDispatch = (callback?: () => void) => void;
 
 interface _ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     mode?: ListOptions;
-    disabled?: DisableOptionValueType | { (list: string): boolean };
+    disabled?: DisableOptionValueType | { (list: string): boolean; };
 }
 
 export interface ListItemsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     mode?: ListOptions.Default;
-    disabled?: DisableOptionValueType | { (list: string): boolean };
+    disabled?: DisableOptionValueType | { (list: string): boolean; };
 }
 
 export interface AllItemsOptions extends PnpHookOptions<FilteredODataQueryable>
 {
     mode: ListOptions.All;
-    disabled?: DisableOptionValueType | { (list: string): boolean };
+    disabled?: DisableOptionValueType | { (list: string): boolean; };
+}
+
+export interface PagedItemsOptions extends PnpHookOptions<ODataQueryableCollection>
+{
+    mode?: ListOptions.Paged;
+    disabled?: DisableOptionValueType | { (list: string): boolean; };
+}
+
+export interface PagedItemsOptions extends PnpHookOptions<ODataQueryableCollection>
+{
+    disabled?: DisableOptionValueType | { (list: string): boolean; };
 }
 
 /**
@@ -54,48 +74,243 @@ export function useListItems<T>(
     options?: ListItemsOptions,
     deps?: React.DependencyList): Nullable<T[]>;
 
+/**
+* Returns items from specified list with paging support.
+* @param list List GUID Id or title. Changing the value resends request.
+* @param options PnP hook options.
+* @param deps useListItems will resend request when one of the dependencies changed.
+*/
+export function useListItems<T>(
+    list: string,
+    options?: PagedItemsOptions,
+    deps?: React.DependencyList): [Nullable<T[]>, nextPageDispatch, boolean];
+
 export function useListItems<T>(
     list: string,
     options?: _ListItemsOptions,
-    deps?: React.DependencyList): Nullable<T[]>
+    deps?: React.DependencyList): Nullable<T[]> | [Nullable<T[]>, nextPageDispatch, boolean | undefined]
 {
     const globalOptions = useContext(InternalContext);
-    const [items, setItems] = useState<Nullable<T[]>>();
+    const [state, setState] = useState<Nullable<T[]> | [Nullable<T[]>, nextPageDispatch, boolean | undefined]>();
+    const [next, setNext] = useState<NextPageCall>();
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
+    const _innerState = useRef<_TrackedState>({
+        externalDeps: null,
+        list: null,
+        url: null,
+        options: null
+    });
+
+    const _subscription = useRef<Nullable<Subscription>>(undefined);
+    const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
+    const _abortController = useRef<ManagedAbort>(new ManagedAbort());
+
+    const _cleanup = useCallback(() =>
     {
-        const spList = resolveList(sp.web, list);
+        _subscription.current?.unsubscribe();
+        _subscription.current = undefined;
+        _abortController.current?.abort();
+    }, []);
 
-        switch (options?.mode)
+    useEffect(() => _cleanup, [_cleanup]);
+
+    const nextDispatch: nextPageDispatch = useCallback((callback?: () => void) =>
+    {
+        if (_innerState.current.url && _disabled.current !== true)
         {
-            case ListOptions.All:
-                {
-                    return createInvokable(spList.items, _getAll);
-                }
-            case ListOptions.Default:
-            default:
-                {
-                    return createInvokable(spList.items);
-                }
+            setNext({
+                url: _innerState.current.url,
+                callback: callback
+            });
         }
-    }, [list, options?.mode]);
+    }, []);
 
-    const _mergedDeps = mergeDependencies([list, options?.mode], deps);
-
-    const _options = useMemo(() =>
+    useEffect(() =>
     {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, list);
+        const mergedOptions = mergeOptions(globalOptions, options);
+        _disabled.current = checkDisable(mergedOptions?.disabled, defaultCheckDisable, list);
 
-        return opt;
-    }, [list, options, globalOptions]);
+        if (_disabled.current !== true)
+        {
+            const shouldUpdate = _innerState.current.list !== list
+                || !deepCompareOptions(_innerState.current.options, mergedOptions)
+                || !compareTuples(_innerState.current.externalDeps, deps);
 
-    useQueryEffect(invokableFactory, setItems, _options, _mergedDeps);
+            if (next || shouldUpdate)
+            {
+                _cleanup();
+                _abortController.current = new ManagedAbort();
 
-    return items;
+                if (options?.keepPreviousState !== true)
+                {
+                    setState(undefined);
+                }
+
+                // clear next on next render.
+                if (next)
+                {
+                    setNext(undefined);
+                }
+
+                setTimeout(async () =>
+                {
+                    try
+                    {
+                        let request: () => Promise<T[] | ItemsResponse>;
+                        let nextCall: (value: any) => void;
+
+                        const sp = resolveSP(mergedOptions, [InjectAbort(_abortController.current)]);
+                        const spList = resolveList(sp.web, list);
+
+                        if (next)
+                        {
+                            request = Items([spList.items, next.url], "").using(customParser());
+                            nextCall = (value: ItemsResponse) =>
+                            {
+                                _innerState.current.url = value.url;
+                                setState([value.data, nextDispatch, !!value.url]);
+                                next.callback?.();
+                            };
+                        }
+                        else
+                        {
+                            _innerState.current.url = undefined;
+
+                            const items = insertODataQuery(spList.items, mergedOptions.query);
+
+                            switch (options?.mode)
+                            {
+                                case ListOptions.Paged:
+                                    {
+                                        request = items.using(customParser());
+                                        nextCall = (value: ItemsResponse) =>
+                                        {
+                                            _innerState.current.url = value.url;
+                                            setState([value.data, nextDispatch, !!value.url]);
+                                        };
+                                        break;
+                                    }
+                                case ListOptions.All:
+                                    {
+                                        request = () => items.getAll();
+                                        nextCall = (value: T[]) => setState(value);
+                                        break;
+                                    }
+                                case ListOptions.Default:
+                                default:
+                                    {
+                                        request = items;
+                                        nextCall = (value: T[]) => setState(value);
+                                        break;
+                                    }
+                            }
+                        }
+
+                        const observer: NextObserver<T[] | ItemsResponse> = {
+                            next: nextCall,
+                            complete: _cleanup,
+                            error: (err: Error) =>
+                            {
+                                if (err.name !== "AbortError")
+                                {
+                                    setState(null);
+                                    errorHandler(err, mergedOptions);
+                                }
+                            }
+                        };
+
+                        _subscription.current = from(request())
+                            .subscribe(observer);
+                    }
+                    catch (err)
+                    {
+                        errorHandler(err, mergedOptions);
+                    }
+                });
+            }
+
+            _innerState.current.externalDeps = deps;
+            _innerState.current.list = list;
+            _innerState.current.options = mergedOptions;
+        }
+    }, [next, list, options, deps, globalOptions, _cleanup, nextDispatch]);
+
+    if (options?.mode === ListOptions.Paged)
+    {
+        /**
+         * Jest test fails with type error when this code used?
+         * ```
+         *  return state === undefined || state === null
+         *   ? [state, nextDispatch, false]
+         *   : state;
+         * ```
+         */
+
+        switch (state)
+        {
+            case undefined:
+                return [undefined, nextDispatch, undefined];
+            case null:
+                return [null, nextDispatch, undefined];
+            default:
+                return state;
+        }
+    }
+    else
+    {
+        return state;
+    }
 }
 
-async function _getAll(this: IItems)
+interface ItemsResponse
 {
-    return this.getAll();
+    url?: string;
+    data: any;
+}
+
+interface NextPageCall
+{
+    url: string;
+    callback?: () => void;
+}
+
+// Based on PageItemParser
+function customParser()
+{
+    return (instance: IItems) =>
+    {
+        instance.on.parse.clear();
+        instance.on.parse(async (url: URL, response: Response, result: ItemsResponse): Promise<[URL, Response, any]> =>
+        {
+            if (!response.ok)
+            {
+                throw new Error(`Http request failed with ${response.status}: ${url.toString()}`);
+            }
+
+            if (typeof result === "undefined")
+            {
+                const json = await response.json();
+                const nextUrl = Reflect.has(json, "d") && Reflect.has(json.d, "__next")
+                    ? json.d.__next
+                    : json["odata.nextLink"];
+
+                result = {
+                    data: parseODataJSON(json),
+                    url: nextUrl
+                };
+            }
+
+            return [url, response, result];
+        });
+
+        return instance;
+    };
+}
+
+interface _TrackedState
+{
+    url: Nullable<string>;
+    list: Nullable<string>;
+    options: Nullable<_PnpHookOptions>;
+    externalDeps: Nullable<React.DependencyList>;
 }

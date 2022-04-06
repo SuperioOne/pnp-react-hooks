@@ -21,7 +21,7 @@ beforeAll(async () =>
 
     const testLists = await spTest.web.lists
         .filter("ItemCount gt 5 and ItemCount lt 5000")
-        .select("Id")
+        .select("Id", "ItemCount")
         .top(1)();
 
     if (testLists?.length < 1)
@@ -88,5 +88,50 @@ test("useListItem get list items with getAll", async () =>
     {
         const items = await reactDOMElement.mountTestComponent("useListItem get list items with getAll", CustomHookMockup, props);
         expect(items?.length).toBeGreaterThan(0);
+    });
+});
+
+test("useListItem get list items with paged", async () =>
+{
+    let itemCount = 0;
+    const props: CustomHookProps = {
+        useHook: (err) => useListItems(testList.Id, {
+            query: {
+                select: ["Id", "Title", "Author/Id"],
+                expand: ["Author"],
+                top: Math.ceil(testList.ItemCount / 10)
+            },
+            mode: ListOptions.Paged,
+            keepPreviousState: true,
+            sp: spTest,
+            error: err
+        }),
+        completeWhen: (response: [unknown[], () => void, boolean]) =>
+        {
+            const [data, next, hasNext] = response;
+
+            itemCount += data?.length ?? 0;
+
+            if (hasNext)
+            {
+                next();
+                return false;
+            }
+            else if (hasNext === false)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    };
+
+    await act(async () =>
+    {
+        const [, , hasNext] = await reactDOMElement.mountTestComponent("useListItem get list items with paged", CustomHookMockup, props);
+        expect(itemCount).toBe(testList.ItemCount);
+        expect(hasNext).toBe(false);
     });
 });
