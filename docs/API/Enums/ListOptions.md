@@ -1,14 +1,22 @@
 ## Definition
 
 Defines how [`useListItems`](../Sp/useListItems) get items from Sharepoint.
-modules
+
 ## Enumeration members
+
+### Paged
+
+• **Paged** = `2`
+
+Fetch list items with paging support.
+
+___
 
 ### All
 
 • **All** = `1`
 
-Fetches data in multiple calls and merges the results on the client side.
+Fetch data in multiple calls and merges the results on the client side.
 
 :::caution
 

@@ -2,7 +2,7 @@ import ToolTip from '@site/src/components/tooltip';
 
 ## Definition
 
-▸ **useSearch**(`searchOptions`, `options?`, `deps?`): [[`Nullable`](../Types/NullableT.md)<[`SpSearchResult`](../Interfaces/SpSearchResult.md)\>, [`GetPageDispatch`](../Types/GetPageDispatch.md)]
+▸ **useSearch**(`searchQuery`, `options?`, `deps?`): [[`Nullable`](../Types/NullableT.md)<[`SpSearchResult`](../Interfaces/SpSearchResult.md)\>, [`GetPageDispatch`](../Types/GetPageDispatch.md)]
 
 Conduct search on SharePoint.
 
@@ -10,7 +10,7 @@ Conduct search on SharePoint.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `searchOptions` | `string` \| `ISearchQuery` | `ISearchQuery` query or search text. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `searchQuery` | `string` \| `ISearchQuery` | `ISearchQuery` query or search text. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
 | `options?` | [`SearchOptions`](../Interfaces/SearchOptions.md) | PnP hook options. |
 | `deps?` | `DependencyList` | useSearch will resend request when one of the dependencies changed. |
 

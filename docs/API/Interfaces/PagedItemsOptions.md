@@ -4,7 +4,7 @@ import ToolTip from '@site/src/components/tooltip';
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
-  ↳ **`ListItemsOptions`**
+  ↳ **`PagedItemsOptions`**
 
 ## Properties
 
@@ -58,7 +58,7 @@ ___
 
 ### mode
 
-• `Optional` **mode**: [`Default`](../Enums/ListOptions.md#default)
+• `Optional` **mode**: [`Paged`](../Enums/ListOptions.md#paged)
 
 Request mode. <ToolTip text="Changing mode repeats request">🚩</ToolTip>
 

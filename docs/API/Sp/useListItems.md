@@ -131,3 +131,74 @@ const myItems = useListItems<MyItem>("5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
 	mode: ListOptions.Default // 0
 });
 ```
+
+------------
+
+
+### useListItems `PagedItemsOptions`
+
+▸ **useListItems**<`T`\>(`list`, `options?`, `deps?`): [[`Nullable`](../Types/NullableT.md)<`T`[]\>, [`nextPageDispatch`](../Types/NextPageDispatch.md), `boolean`]
+
+Returns item collection from specified list with paging support.
+
+:::warning
+
+Paged mode only support forward iteration. Reverse paging does not supported by REST API.
+
+:::
+
+#### Type parameters
+
+| Name | Description |
+| :------ | :------ |
+| `T` | Return type |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `list` | `string` | List GUID Id or title. <ToolTip text="Changing the value repeats request">🚩</ToolTip> |
+| `options?` | [`PagedItemsOptions`](../Interfaces/PagedItemsOptions.md) | PnP hook options. |
+| `deps?` | `DependencyList` | useListItems will resend request when one of the dependencies changed. |
+
+#### Returns
+
+[ [`Nullable`](../Types/NullableT.md)<`T`[]\>, [`nextPageDispatch`](../Types/NextPageDispatch.md), `boolean` ]
+
+#### Examples
+
+```typescript
+// you can provide a type (optional)
+export interface MyItem
+{
+	Id: number;
+	Title: string;
+	Created: string;
+	Modified: string;
+	Author : {
+		Title: string;
+	}
+}
+
+const [items, nextPage, hasNext] = useListItems("My List Title", {
+	mode: ListOptions.Paged
+});
+
+// with query and type information
+const [items, nextPage, hasNext] = useListItems<MyItem>("5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
+	query: {
+		select: ["Title", "Id", "Author/Title", "Created", "Modified"],
+		expand: ["Author"]
+	},
+	mode: ListOptions.Paged // 2
+});
+
+// You can get next page with dispatch function.
+if(hasNext)
+{
+	nextPage();
+
+	// Optionally pass a callback function.
+	nextPage(() => console.debug("Next page fetched."));
+}
+```

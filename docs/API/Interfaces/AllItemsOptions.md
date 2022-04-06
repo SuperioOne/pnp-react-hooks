@@ -58,7 +58,7 @@ ___
 
 ### mode
 
-• **mode**: [`All`](API/Enums/ListOptions.md#all)
+• **mode**: [`All`](../Enums/ListOptions.md#all)
 
 Request mode. <ToolTip text="Changing the mode repeats request">🚩</ToolTip>
 
