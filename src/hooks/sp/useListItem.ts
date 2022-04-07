@@ -4,14 +4,14 @@ import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
+import { SPFI } from "@pnp/sp";
 import { assertID } from "../../utils/assert";
-import { createInvokable } from "../../utils/createInvokable";
 import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
+import { createInvokable } from "../../utils/createInvokable";
 import { mergeDependencies, mergeOptions } from "../../utils/merge";
 import { resolveList } from "../../utils/resolveList";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { SPFI } from "@pnp/sp";
 
 export interface ListItemOptions extends PnpHookOptions<ODataQueryable>
 {

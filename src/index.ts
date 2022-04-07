@@ -43,5 +43,7 @@ export { useSite } from "./hooks/sp/useSite";
 export { useSiteUsers } from "./hooks/sp/useSiteUsers";
 export { useSubWebs } from "./hooks/sp/useSubWebs";
 export { useUser } from "./hooks/sp/useUser";
+export { useView } from "./hooks/sp/useView";
+export { useViews } from "./hooks/sp/useViews";
 export { useWebInfo } from "./hooks/sp/useWebInfo";
 export { useWebProperties } from "./hooks/sp/useWebProperties";
