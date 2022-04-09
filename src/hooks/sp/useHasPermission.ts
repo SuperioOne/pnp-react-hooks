@@ -1,7 +1,6 @@
 import "@pnp/sp/security";
 import "@pnp/sp/site-users";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
-import { ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
+import { BehaviourOptions, ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";

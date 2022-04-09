@@ -1,6 +1,5 @@
 import "@pnp/sp/profiles";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
-import { ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
+import { BehaviourOptions, ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import { IProfiles } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../../context";

@@ -1,6 +1,5 @@
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
-import { ErrorOptions, ContextOptions } from "../../types/options";
+import { ErrorOptions, ContextOptions, BehaviourOptions } from "../../types/options";
 import { IChangeTokenInfo, ChangeTokenInfo } from "../../types/ChangeTokenInfo";
 import { IList } from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";

@@ -26,6 +26,7 @@ export { useHasPermission } from "./hooks/sp/useHasPermission";
 export { useIsMemberOf } from "./hooks/sp/useIsMemberOf";
 export { useItemComments } from "./hooks/sp/useItemComments";
 export { useList } from "./hooks/sp/useList";
+export { useListAsStream } from "./hooks/sp/useListAsStream";
 export { useListChangeToken } from "./hooks/sp/useListChangeToken";
 export { useListItem } from "./hooks/sp/useListItem";
 export { useListItems } from "./hooks/sp/useListItems";

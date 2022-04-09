@@ -1,7 +1,6 @@
 import "@pnp/sp/files";
 import "@pnp/sp/folders";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
-import { ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
+import { BehaviourOptions, ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
 import { DisableOptionType, DisableOptionValueType } from "../../types/options/RenderOptions";
 import { FilteredODataQueryable, ODataQueryableCollection } from "../../types/ODataQueryable";
 import { IFileInfo } from "@pnp/sp/files/types";
@@ -98,7 +97,7 @@ export function useFolderTree(
             const fileQuery = options?.fileQuery;
             const folderFilter = options?.folderFilter;
 
-            // reset hook state when web or root path changed 
+            // reset hook state when web or root path changed
             if (_innerState.current.initialPath !== rootFolderRelativePath)
             {
                 // prevent path change in case of similar urls (ex: "/EXAMPLE" and "/example/")
@@ -232,7 +231,7 @@ export function useFolderTree(
     return state.treeContext;
 }
 
-const _reducer = (state: FolderState, action: TreeAction): FolderState => 
+const _reducer = (state: FolderState, action: TreeAction): FolderState =>
 {
     switch (action.type)
     {

@@ -48,3 +48,4 @@ export { ErrorMode, ErrorOptions } from "./ErrorOptions";
 export { ListOptions } from "./ListOptions";
 export { RenderOptions } from "./RenderOptions";
 export { ContextOptions } from "./ContextOptions";
+export { BehaviourOptions } from "./BehaviourOptions";

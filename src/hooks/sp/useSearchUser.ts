@@ -1,11 +1,10 @@
 import "@pnp/sp/profiles";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import { IClientPeoplePickerQueryParameters, IPeoplePickerEntity, IProfiles } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { PrincipalType, SPFI } from "@pnp/sp";
-import { RenderOptions, ErrorOptions, ContextOptions } from "../../types/options";
+import { RenderOptions, ErrorOptions, ContextOptions, BehaviourOptions } from "../../types/options";
 import { createInvokable } from "../../utils/createInvokable";
 import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { mergeDependencies, mergeOptions } from "../../utils/merge";

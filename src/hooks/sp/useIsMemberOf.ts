@@ -1,7 +1,6 @@
 import "@pnp/sp/site-groups";
 import "@pnp/sp/site-users";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
-import { ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
+import { BehaviourOptions, ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
@@ -33,7 +32,7 @@ type MemberInfo = [Nullable<boolean>, Nullable<ISiteGroupInfo>];
 const DEFAULT: MemberInfo = [undefined, undefined];
 
 /**
- * Returns true, if user is member of group. If not returns false. 
+ * Returns true, if user is member of group. If not returns false.
  * Use {@link IsMemberOfOptions.userId} property for another user. Default is current user.
  * @param groupId Group name or Id. Changing the value resends request.
  * @param options Pnp hook options.

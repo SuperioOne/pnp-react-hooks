@@ -4,7 +4,7 @@ import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
-import { RenderOptions, ErrorOptions, ContextOptions } from "../../types/options";
+import { RenderOptions, ErrorOptions, ContextOptions, BehaviourOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
 import { createInvokable } from "../../utils/createInvokable";
@@ -13,7 +13,6 @@ import { resolveScope } from "../../utils/resolveScope";
 import { shallowEqual } from "../../utils/shallowEqual";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 
 export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOptions, BehaviourOptions
 {

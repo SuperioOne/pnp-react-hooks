@@ -1,12 +1,11 @@
 import "@pnp/sp/search";
-import { BehaviourOptions } from "../../types/options/BehaviourOptions";
 import { CompletionObserver, from, Subscription } from "rxjs";
 import { DisableOptionType, DisableOptionValueType } from "../../types/options/RenderOptions";
 import { ISearchQuery, ISearchResponse, ISearchResult, SearchQueryInit } from "@pnp/sp/search/types";
 import { InjectAbort, ManagedAbort } from "../../behaviors/InjectAbort";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
-import { RenderOptions, ErrorOptions, _PnpHookOptions, ContextOptions } from "../../types/options";
+import { RenderOptions, ErrorOptions, _PnpHookOptions, ContextOptions, BehaviourOptions } from "../../types/options";
 import { SearchResults } from "@pnp/sp/search";
 import { assert, assertNumber } from "../../utils/assert";
 import { compareTuples } from "../../utils/compareTuples";

@@ -1,11 +1,11 @@
 import { CustomHookMockup, CustomHookProps } from "../../tools/mockups/CustomHookMockup";
-import { IListInfo } from "@pnp/sp/lists/types";
+import { IListInfo, RenderListDataOptions } from "@pnp/sp/lists/types";
 import { InitGlobalFetch } from "../../tools/InitGlobalFetch";
 import { InitPnpTest } from "../../tools/InitPnpTest";
 import { SPFI } from "@pnp/sp";
 import { act } from 'react-dom/test-utils';
 import { initJSDOM, ReactDOMElement } from "../../tools/ReactDOMElement";
-import { useList, useListChangeToken, useLists } from "../../../src";
+import { useList, useListAsStream, useListChangeToken, useLists } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
 let spTest: SPFI;
@@ -17,7 +17,10 @@ beforeAll(async () =>
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 
-    const listInfos = await spTest.web.lists.top(1)();
+    const listInfos = await spTest.web.lists
+        .filter("ItemCount gt 0")
+        .orderBy("ItemCount")
+        .top(1)();
 
     if (listInfos?.length < 1)
         throw new Error("Unable to find list");
@@ -121,5 +124,77 @@ test("useLists get top 1 list info", async () =>
 
     await act(() =>
         expect(reactDOMElement.mountTestComponent("useLists get top 1 list info", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useListAsStream with override parameters on query string", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useListAsStream(testListInfo.Id,
+            {
+                dataParameters: {
+                    Paging: "TRUE",
+                    RenderOptions: RenderListDataOptions.ListData
+                },
+                dataOverrideParameters: {
+                    PageFirstRow: "1",
+                    PageLastRow: "30"
+                },
+                useQueryParameters: true
+            },
+            {
+                sp: spTest,
+                error: err
+            })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useListAsStream with override parameters on query string", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useListAsStream with override parameters", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useListAsStream(testListInfo.Id,
+            {
+                dataParameters: {
+                    Paging: "TRUE",
+                    RenderOptions: RenderListDataOptions.ListData
+                },
+                dataOverrideParameters: {
+                    PageFirstRow: "1",
+                    PageLastRow: "30",
+                },
+            },
+            {
+                sp: spTest,
+                error: err
+            })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useListAsStream with override parameters", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useListAsStream without override", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useListAsStream(testListInfo.Id,
+            {
+                dataParameters: {
+                    Paging: "TRUE",
+                    RenderOptions: RenderListDataOptions.ListData
+                }
+            },
+            {
+                sp: spTest,
+                error: err
+            })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useListAsStream without override", CustomHookMockup, props))
             .resolves.toBeTruthy());
 });
