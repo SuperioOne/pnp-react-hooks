@@ -30,6 +30,7 @@ title: API
 - [useIsMemberOf](Sp/useIsMemberOf.md)
 - [useItemComments](Sp/useItemComments.md)
 - [useList](Sp/useList.md)
+- [useListAsStream](Sp/useListAsStream.md)
 - [useListChangeToken](Sp/useListChangeToken.md)
 - [useListItem](Sp/useListItem.md)
 - [useListItems](Sp/useListItems.md)

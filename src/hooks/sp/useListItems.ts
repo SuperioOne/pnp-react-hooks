@@ -164,7 +164,7 @@ export function useListItems<T>(
 
                         if (next)
                         {
-                            request = Items([spList.items, next.url], "").using(customParser());
+                            request = Items([spList.items, next.url], "").using(_customParserBehavior());
                             nextCall = (value: ItemsResponse) =>
                             {
                                 _innerState.current.url = value.url;
@@ -182,7 +182,7 @@ export function useListItems<T>(
                             {
                                 case ListOptions.Paged:
                                     {
-                                        request = items.using(customParser());
+                                        request = items.using(_customParserBehavior());
                                         nextCall = (value: ItemsResponse) =>
                                         {
                                             _innerState.current.url = value.url;
@@ -237,15 +237,6 @@ export function useListItems<T>(
 
     if (options?.mode === ListOptions.Paged)
     {
-        /**
-         * Jest test fails with type error when this code used?
-         * ```
-         *  return state === undefined || state === null
-         *   ? [state, nextDispatch, false]
-         *   : state;
-         * ```
-         */
-
         switch (state)
         {
             case undefined:
@@ -275,7 +266,7 @@ interface NextPageCall
 }
 
 // Based on PageItemParser
-function customParser()
+function _customParserBehavior()
 {
     return (instance: IItems) =>
     {
