@@ -30,7 +30,7 @@ ___
 
 • `Optional` **keepPreviousState**: `boolean`
 
-Keep previous state until new request resolves rather than clearing the state as `undefined`. Default is `false`.
+Keep previous state until new request is resolved rather than clearing the state as `undefined`. Default is `false`.
 
 ___
 

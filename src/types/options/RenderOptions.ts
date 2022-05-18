@@ -3,7 +3,7 @@
 export interface RenderOptions
 {
     /**
-     * Keep previous state until new request resolves rather than clearing the state as 'undefined'.
+     * Keep previous state until new request is resolved rather than clearing the state as 'undefined'.
      * @remarks
      * By default hooks clear their current state when a new request started.
      * Setting state to 'undefined' causes an extra rendering on the component but,

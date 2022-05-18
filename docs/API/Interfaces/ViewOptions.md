@@ -1,5 +1,11 @@
 import ToolTip from '@site/src/components/tooltip';
 
+## Hierarchy
+
+- [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryable`](ODataQueryable.md)\>
+
+  ↳ **`ViewOptions`**
+
 ## Properties
 
 ### behaviors
@@ -8,13 +14,21 @@ import ToolTip from '@site/src/components/tooltip';
 
 Additional behaviors for hooks PnP request.
 
+#### Inherited from
+
+[PnpHookOptions](PnpHookOptions.md).[behaviors](PnpHookOptions.md#behaviors)
+
 ___
 
 ### disabled
 
-• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| (`attachmentName`: `string`, `itemId`: `number`, `list`: `string`) => `boolean`
+• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| (`listId`: `string`, `viewId?`:`string`) => `boolean`
 
 Disable hook calls and renders.
+
+#### Overrides
+
+[PnpHookOptions](PnpHookOptions.md).[disabled](PnpHookOptions.md#disabled)
 
 ___
 
@@ -24,6 +38,10 @@ ___
 
 Error handling. Default is [`ErrorMode.Default`](../Enums/ErrorMode.md#default).
 
+#### Inherited from
+
+[PnpHookOptions](PnpHookOptions.md).[error](PnpHookOptions.md#error)
+
 ___
 
 ### keepPreviousState
@@ -32,6 +50,10 @@ ___
 
 Keep previous state until new request is resolved rather than clearing the state as `undefined`. Default is `false`.
 
+#### Inherited from
+
+[PnpHookOptions](PnpHookOptions.md).[keepPreviousState](PnpHookOptions.md#keeppreviousstate)
+
 ___
 
 ### query
@@ -39,6 +61,11 @@ ___
 • `Optional` **query**: [`Nullable`](../Types/NullableT.md)<[`ODataQueryable`](ODataQueryable.md)\>
 
 OData query. <ToolTip text="Any meaningful change repeats request">🚩</ToolTip>
+
+#### Inherited from
+
+[PnpHookOptions](PnpHookOptions.md).[query](PnpHookOptions.md#query)
+
 ___
 
 ### sp
@@ -47,10 +74,6 @@ ___
 
 Pnp SP context. <ToolTip text="Changing sp value repeats request">🚩</ToolTip>
 
-___
+#### Inherited from
 
-### type
-
-• `Optional` **type**: ``"info"``
-
-Request type. <ToolTip text="Changing the type repeats request">🚩</ToolTip>
+[PnpHookOptions](PnpHookOptions.md).[sp](PnpHookOptions.md#sp)

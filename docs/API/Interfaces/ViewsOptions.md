@@ -4,7 +4,7 @@ import ToolTip from '@site/src/components/tooltip';
 
 - [`PnpHookOptions`](PnpHookOptions.md)<[`ODataQueryableCollection`](ODataQueryableCollection.md)\>
 
-  ↳ **`ListsOptions`**
+  ↳ **`ViewsOptions`**
 
 ## Properties
 
@@ -22,11 +22,11 @@ ___
 
 ### disabled
 
-• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| [`DisableOptionFuncType`](../Types/DisableOptionType.md#disableoptionfunctype)
+• `Optional` **disabled**: [`DisableOptionValueType`](../Types/DisableOptionType.md#disableoptionvaluetype) \| (`listId`: `string`) => `boolean`
 
 Disable hook calls and renders.
 
-#### Inherited from
+#### Overrides
 
 [PnpHookOptions](PnpHookOptions.md).[disabled](PnpHookOptions.md#disabled)
 

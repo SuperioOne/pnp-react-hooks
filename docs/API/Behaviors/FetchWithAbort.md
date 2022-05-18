@@ -2,11 +2,11 @@
 
 ▸ **FetchWithAbort**( `props?`)
 
-Custom fetch behavior for fetch aborting. 
+Custom fetch behavior for auto consecutive request aborting.
 
 :::warning
 
-**FetchWithAbort** behavior relies on browsers built-in [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).  Make sure your target browsers supports `AbortController` before using it.
+**FetchWithAbort** behavior relies on browsers built-in [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).  Make sure your target browsers supports `AbortController`.
 
 :::
 
