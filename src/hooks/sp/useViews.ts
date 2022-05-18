@@ -13,7 +13,7 @@ import { resolveList } from "../../utils/resolveList";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface ViewOptions extends PnpHookOptions<ODataQueryableCollection>
+export interface ViewsOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     disabled?: DisableOptionValueType | { (listId: string): boolean; };
 }
@@ -26,7 +26,7 @@ export interface ViewOptions extends PnpHookOptions<ODataQueryableCollection>
  */
 export function useViews(
     listId: string,
-    options?: ViewOptions,
+    options?: ViewsOptions,
     deps?: React.DependencyList): Nullable<IViewInfo[]>
 {
     const globalOptions = useContext(InternalContext);

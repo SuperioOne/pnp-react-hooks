@@ -146,7 +146,7 @@ export function useListItems<T>(
                     setState(undefined);
                 }
 
-                // clear next on next render.
+                // clear next on render.
                 if (next)
                 {
                     setNext(undefined);
