@@ -58,7 +58,7 @@ export function InjectAbort(abortController: ManagedAbort)
                 return [response];
             });
 
-            instance.on.dispose(() =>
+            instance.on.dispose.prepend(() =>
             {
                 // Reset internal abortSignal just in case of executing same instance more than once.
                 abortController.reset();

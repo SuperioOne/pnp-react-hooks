@@ -1,6 +1,6 @@
 import { SPFI } from "@pnp/sp";
 import * as React from "react";
-import { PnpHookOptionProvider } from "../src";
+import { PnpHookGlobalOptions, PnpHookOptionProvider } from "../src";
 import * as Components from "./components";
 import { MOUNT_EVENT } from "./constants";
 
@@ -19,6 +19,12 @@ export function DebugApp(props: DebugAppProps)
     const [Current, setCurrent] = React.useState<TestComponent>({
         Component: undefined
     });
+
+    const options: PnpHookGlobalOptions = React.useMemo(() =>
+    ({
+        ...props,
+        error: console.error
+    }), [props]);
 
     React.useEffect(() =>
     {

@@ -6,7 +6,7 @@ export function SearchDebug()
 {
 
     const [term, setTerm] = React.useState<ISearchQuery | string>({
-        Querytext: "*"
+        Querytext: "*",
     });
 
     const [result, setPage] = useSearch(term);
