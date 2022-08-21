@@ -34,6 +34,8 @@ export { useLists } from "./hooks/sp/useLists";
 export { useNavigation } from "./hooks/sp/useNavigation";
 export { usePageComments } from "./hooks/sp/usePageComments";
 export { useProfile } from "./hooks/sp/useProfile";
+export { useRecycleBinItem } from "./hooks/sp/useRecycleBinItem";
+export { useRecycleBinItems } from "./hooks/sp/useRecycleBinItems";
 export { useRegionalSetting } from "./hooks/sp/useRegionalSetting";
 export { useRoleAssignments } from "./hooks/sp/useRoleAssignments";
 export { useRoleDefinition } from "./hooks/sp/useRoleDefinition";
