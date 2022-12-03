@@ -15,7 +15,6 @@ const eventLoop = () =>
     setTimeout(() => eventLoop(), 500);
 };
 
-// TODO: Its the lowest priority but a better cli code with similar functionality would be nice.
 InitEnvironment()
     .then(config =>
     {

@@ -15,6 +15,7 @@ const configs = {
         {
             stageName: "ESM build",
             rollupConfig: {
+                strictDeprecations: true,
                 input: ["src/index.ts", "src/behaviors/index.ts"],
                 external: [
                     /node_modules/,
