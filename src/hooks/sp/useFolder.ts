@@ -22,7 +22,7 @@ export interface FolderOptions extends PnpHookOptions<ODataQueryable>
  * Return a folder.
  * @param folderId Folder GUID Id or server relative path. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useFolder will resend request when one of the dependencies changed.
+ * @param deps useFolder refreshes response data when one of the dependencies changes.
  */
 export function useFolder(
     folderId: string,

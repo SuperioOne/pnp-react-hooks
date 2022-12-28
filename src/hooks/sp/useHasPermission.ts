@@ -39,7 +39,7 @@ export interface UserPermissionOptions extends ErrorOptions, RenderOptions, Cont
  * Default is current user permission on current web scope.
  * @param permissionKinds SP permission kind array or permission kind value. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useHasPermission will resend request when one of the dependencies changed.
+ * @param deps useHasPermission refreshes response data when one of the dependencies changes.
  */
 export function useHasPermission(
     permissionKinds: PermissionKind[] | PermissionKind,

@@ -20,7 +20,7 @@ export interface ProfileOptions extends ErrorOptions, RenderOptions, BehaviourOp
  * Returns an user profile for specified login name.
  * @param loginName User login name. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useProfile will resend request when one of the dependencies changed.
+ * @param deps useProfile refreshes response data when one of the dependencies changes.
  */
 export function useProfile<T>(
     loginName: string,

@@ -18,7 +18,7 @@ export type WebAppsOptions = PnpHookOptions<ODataQueryableCollection>;
 /**
  * Returns app detail collection from the app catalog.
  * @param options PnP hook options
- * @param deps useApps will resend request when one of the dependencies changed.
+ * @param deps useApps refreshes response data when one of the dependencies changes.
  * @returns App info array.
  */
 export function useApps<T>(

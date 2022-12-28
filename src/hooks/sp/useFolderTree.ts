@@ -40,7 +40,7 @@ export interface FolderTreeOptions extends ErrorOptions, RenderOptions, ContextO
  * Returns a tree like structure from specified root folder.
  * @param rootFolderRelativePath Root folder server relative path
  * @param options PnP hook paths
- * @param deps useFolderTree will resend request when one of the dependencies changed.
+ * @param deps useFolderTree refreshes response data when one of the dependencies changes.
  */
 export function useFolderTree(
     rootFolderRelativePath: string,

@@ -16,7 +16,7 @@ export type RoleDefinitionsOptions = PnpHookOptions<ODataQueryableCollection>;
 /**
  * Returns role definition collection.
  * @param options PnP hook options.
- * @param deps useRoleDefinitions will resend request when one of the dependencies changed.
+ * @param deps useRoleDefinitions refreshes response data when one of the dependencies changes.
  */
 export function useRoleDefinitions(
     options?: RoleDefinitionsOptions,

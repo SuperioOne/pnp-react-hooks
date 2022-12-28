@@ -15,7 +15,7 @@ export type SubWebsOptions = PnpHookOptions<ODataQueryableCollection>;
 /**
  * Returns web info collection of current web's subwebs.
  * @param options PnP hook options.
- * @param deps useSubWebInfos will resend request when one of the dependencies changed.
+ * @param deps useSubWebInfos refreshes response data when one of the dependencies changes.
  */
 export function useSubWebs(
     options?: SubWebsOptions,

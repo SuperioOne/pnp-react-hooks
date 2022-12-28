@@ -29,7 +29,6 @@ test("Merge Test", () =>
             {
                 throw new Error(`Elements are not equal, merged : ${mergedDeps[index]} expected :${expected[index]}`);
             }
-
         }
     }).not.toThrowError();
 });

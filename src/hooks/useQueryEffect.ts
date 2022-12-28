@@ -51,7 +51,7 @@ export function useQueryEffect<
         if (options.disabled !== true)
         {
             const shouldUpdate = !deepCompareOptions(_innerState.current.options, options)
-            || !compareTuples(_innerState.current.externalDependencies, deps);
+                || !compareTuples(_innerState.current.externalDependencies, deps);
 
             if (shouldUpdate)
             {

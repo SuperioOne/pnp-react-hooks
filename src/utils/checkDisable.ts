@@ -19,7 +19,7 @@ export function checkDisable(disabled?: DisableOptionType, defaultAction?: Disab
             return disabled(...args);
         }
     }
-    else 
+    else
     {
         return false;
     }

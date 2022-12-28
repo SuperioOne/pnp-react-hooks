@@ -26,7 +26,7 @@ export interface RoleAssignmentsOptions extends PnpHookOptions<ODataQueryableCol
  * Returns role assignmets of selected scope. Use {@link RoleAssignmentsOptions.scope} property to change scope.
  * Default is current web.
  * @param options PnP hook options
- * @param deps useRoleAssignments will resend request when one of the dependencies changed.
+ * @param deps useRoleAssignments refreshes response data when one of the dependencies changes.
  */
 export function useRoleAssignments(
     options?: RoleAssignmentsOptions,

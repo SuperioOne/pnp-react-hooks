@@ -26,7 +26,7 @@ export interface PageCommentsOptions extends PnpHookOptions<ODataQueryableCollec
  * Returns comment collection from page.
  * @param pageRelativePath Page server relative path. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps usePageComments will resend request when one of the dependencies changed.
+ * @param deps usePageComments refreshes response data when one of the dependencies changes.
  */
 export function usePageComments(
     pageRelativePath: string,

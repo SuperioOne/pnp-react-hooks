@@ -1,6 +1,6 @@
 # PnP React Hooks
 
-PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/) providing configurable custom React hooks for Sharepoint Rest API.
+PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/), providing configurable React hooks for Sharepoint Rest API.
 
 **Usage:**
 
@@ -40,6 +40,10 @@ You have to install peer dependencies manually when using older npm versions.
 ```cmd
 npm install pnp-react-hooks @pnp/sp react
 ```
+
+## Documentation
+
+For more details see the [docs site](https://superioone.github.io/pnp-react-hooks/).
 
 ## Disclaimer
 

@@ -21,7 +21,7 @@ export interface ListOptions extends PnpHookOptions<ODataQueryable>
  * Return a list from list collection.
  * @param list List GUID Id or title. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useList will resend request when one of the dependencies changed.
+ * @param deps useList refreshes response data when one of the dependencies changes.
  */
 export function useList(
     list: string,

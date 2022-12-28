@@ -51,7 +51,7 @@ export interface FileBlobOptions extends Omit<_BaseFileOptions, "query">
  * Returns a file from file collection.
  * @param fileId File GUID Id or server relative path. Changing the value resends request.
  * @param options PnP hook options
- * @param deps useFile will resend request when one of the dependencies changed.
+ * @param deps useFile refreshes response data when one of the dependencies changes.
  */
 export function useFile(
     fileId: string,
@@ -62,7 +62,7 @@ export function useFile(
 * Returns file content as {@link Blob}.
 * @param fileId File GUID Id or server relative path. Changing the value resends request.
 * @param options PnP hook options
-* @param deps useFile will resend request when one of the dependencies changed.
+* @param deps useFile refreshes response data when one of the dependencies changes.
 */
 export function useFile(
     fileId: string,
@@ -73,7 +73,7 @@ export function useFile(
 * Returns file content as {@link ArrayBuffer}.
 * @param fileId File GUID Id or server relative path. Changing the value resends request.
 * @param options PnP hook options
-* @param deps useFile will resend request when one of the dependencies changed.
+* @param deps useFile refreshes response data when one of the dependencies changes.
 */
 export function useFile(
     fileId: string,
@@ -84,7 +84,7 @@ export function useFile(
 * Returns file content as text.
 * @param fileId File GUID Id or server relative path. Changing the value resends request.
 * @param options PnP hook options
-* @param deps useFile will resend request when one of the dependencies changed.
+* @param deps useFile refreshes response data when one of the dependencies changes.
 */
 export function useFile(
     fileId: string,

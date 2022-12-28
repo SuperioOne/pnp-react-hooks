@@ -25,7 +25,7 @@ export interface ItemContentTypeOptions extends PnpHookOptions<ODataQueryableCol
  * Returns content types of web or list. Use {@link ItemContentTypeOptions.list} property to get list content
  * types instead of web content types.
  * @param options PnP hook options.
- * @param deps useContentTypes will resend request when one of the dependencies changed.
+ * @param deps useContentTypes refreshes response data when one of the dependencies changes.
  * @returns array of {@link IContentTypeInfo}.
  */
 export function useContentTypes(

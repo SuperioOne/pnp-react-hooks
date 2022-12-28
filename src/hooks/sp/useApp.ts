@@ -25,7 +25,7 @@ export interface WebAppOptions extends PnpHookOptions<ODataQueryable>
  * Returns an app detail of the given Id from the app catalog.
  * @param appId App GUID Id string. Changing the appId value resends request.
  * @param options PnP hook options
- * @param deps useApp will resend request when one of the dependencies changed.
+ * @param deps useApp refreshes response data when one of the dependencies changes.
  * @returns App info object.
  */
 export function useApp<T>(

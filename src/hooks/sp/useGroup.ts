@@ -21,7 +21,7 @@ export interface GroupOptions extends PnpHookOptions<ODataQueryable>
  * Returns a group from group collection.
  * @param groupId Group Id or name. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useGroup will resend request when one of the dependencies changed.
+ * @param deps useGroup refreshes response data when one of the dependencies changes.
  */
 export function useGroup(
     groupId: string | number,

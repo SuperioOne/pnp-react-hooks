@@ -34,7 +34,7 @@ export interface RenderListParameters
  * @param list List GUID Id or title. Changing the value resends request.
  * @param parameters Sharepoint RenderAsStream parameters.
  * @param options PnP hook options.
- * @param deps useListAsStream will resend request when one of the dependencies changed.
+ * @param deps useListAsStream refreshes response data when one of the dependencies changes.
  */
 export function useListAsStream(
     list: string,
