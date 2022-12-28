@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://superioone.github.io/pnp-react-hooks/pnp-react-hooks/changelog</id>
+    <id>https://superioone.github.io/pnp-react-hooks/changelog</id>
     <title>PnP React Hooks Blog</title>
-    <updated>2022-05-18T00:00:00.000Z</updated>
+    <updated>2022-12-28T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://superioone.github.io/pnp-react-hooks/pnp-react-hooks/changelog"/>
+    <link rel="alternate" href="https://superioone.github.io/pnp-react-hooks/changelog"/>
     <subtitle>PnP React Hooks Blog</subtitle>
-    <icon>https://superioone.github.io/pnp-react-hooks/pnp-react-hooks/img/favicon.ico</icon>
+    <icon>https://superioone.github.io/pnp-react-hooks/img/favicon.ico</icon>
     <entry>
-        <title type="html"><![CDATA[v1.1.0 - More hooks]]></title>
-        <id>v1.1.0</id>
-        <link href="https://superioone.github.io/pnp-react-hooks/pnp-react-hooks/changelog/v1.1.0"/>
+        <title type="html"><![CDATA[v1.2.0]]></title>
+        <id>v1-2-0</id>
+        <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-2-0"/>
+        <updated>2022-12-28T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Changelog]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><ul><li><strong>Added</strong> useRecycleBinItem and useRecycleBinItems hooks.</li><li><strong>Added</strong> createProviderElement helper function for simplifying SPFx initialization.</li><li><strong>Fixed</strong> useSearch hook incorrectly overrides RowLimit when getPageDispatch called.</li></ul>]]></content>
+        <author>
+            <name>SuperiorOne</name>
+            <uri>https://github.com/SuperioOne</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[v1.1.0]]></title>
+        <id>v1-1-0</id>
+        <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-1-0"/>
         <updated>2022-05-18T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Changelog]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_mojV" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><h3 class="anchor anchorWithStickyNavbar_mojV" id="sp">Sp<a class="hash-link" href="#sp" title="Direct link to heading">​</a></h3><ul><li><strong>New</strong> useListItems paged request option.</li><li><strong>New</strong> useView and useViews hooks.</li><li><strong>New</strong> useListAsStream hook.</li><li><strong>New</strong> FetchWithAbort behavior for cancelling consecutive fetch requests automatically.</li><li><strong>Fixed:</strong> useSearch double query issue.</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><ul><li><strong>Added</strong> useListItems paged request option.</li><li><strong>Added</strong> useView and useViews hooks.</li><li><strong>Added</strong> useListAsStream hook.</li><li><strong>Added</strong> FetchWithAbort behavior for cancelling consecutive fetch requests automatically.</li><li><strong>Fixed</strong> useSearch double query issue.</li></ul>]]></content>
         <author>
             <name>SuperiorOne</name>
             <uri>https://github.com/SuperioOne</uri>
         </author>
-        <category label="pnp-react-hooks" term="pnp-react-hooks"/>
-        <category label="v1" term="v1"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[v1.0.1 - Search patch]]></title>
-        <id>v1.0.1</id>
-        <link href="https://superioone.github.io/pnp-react-hooks/pnp-react-hooks/changelog/v1.0.1"/>
+        <title type="html"><![CDATA[v1.0.1]]></title>
+        <id>v1-0-1</id>
+        <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-0-1"/>
         <updated>2022-03-11T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Changelog]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_mojV" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><h3 class="anchor anchorWithStickyNavbar_mojV" id="sp">Sp<a class="hash-link" href="#sp" title="Direct link to heading">​</a></h3><ul><li><strong>Fixed:</strong> useSearch was failing when getPageDispatch was called more than once.</li></ul><h3 class="anchor anchorWithStickyNavbar_mojV" id="dependencies">Dependencies<a class="hash-link" href="#dependencies" title="Direct link to heading">​</a></h3><ul><li><strong>Updated:</strong> All dependencies are updated to the latest version and tested for any breaking changes.</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><ul><li><strong>Fixed</strong> useSearch throwing error when getPageDispatch called more than once.</li></ul>]]></content>
         <author>
             <name>SuperiorOne</name>
             <uri>https://github.com/SuperioOne</uri>
         </author>
-        <category label="pnp-react-hooks" term="pnp-react-hooks"/>
-        <category label="v1" term="v1"/>
     </entry>
     <entry>
-        <title type="html"><![CDATA[v1.0.0 - Initial release]]></title>
-        <id>v1.0.0</id>
-        <link href="https://superioone.github.io/pnp-react-hooks/pnp-react-hooks/changelog/v1.0.0"/>
+        <title type="html"><![CDATA[v1.0.0]]></title>
+        <id>v1-0-0</id>
+        <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-0-0"/>
         <updated>2022-03-09T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[What's In]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_mojV" id="whats-in">What's In<a class="hash-link" href="#whats-in" title="Direct link to heading">​</a></h2><ul><li>42 new custom hook for accessing SharePoint contents.</li><li>PnPjs v3 upgrade. <em>v2 support dropped before major release.</em></li><li>Configuration system based on React Context API.</li><li>Helper hook function for accessing options.</li></ul><h2 class="anchor anchorWithStickyNavbar_mojV" id="whats-planned-for-future-release">What's planned for future release<a class="hash-link" href="#whats-planned-for-future-release" title="Direct link to heading">​</a></h2><ul class="contains-task-list"><li class="task-list-item"><input type="checkbox" checked="" disabled=""> <!-- -->Paged mode for <code>useListItems</code> hook.</li><li class="task-list-item"><input type="checkbox" checked="" disabled=""> <!-- -->Auto request cancellation with <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal" target="_blank" rel="noopener noreferrer"><code>AbortSignal</code></a>. Currently observers cancels execution but fetch request continues on background.</li><li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Adding a <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/subscribe-to-list-notifications" target="_blank" rel="noopener noreferrer"><em>subscription</em></a> base hook function similar to React's <code>useEffect</code> to execute custom action when list content updated.</li><li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Recursive option for <code>useFiles</code>.</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="whats-in">What's In<a class="hash-link" href="#whats-in" title="Direct link to heading">​</a></h2><ul><li>42 custom React hook for accessing SharePoint contents.</li><li>PnPjs v3 upgrade. <em>v2 support dropped before major release.</em></li><li>Configuration system based on React Context API.</li><li>Helper hook function for accessing options.</li></ul>]]></content>
         <author>
             <name>SuperiorOne</name>
             <uri>https://github.com/SuperioOne</uri>
         </author>
-        <category label="pnp-react-hooks" term="pnp-react-hooks"/>
-        <category label="v1" term="v1"/>
     </entry>
 </feed>
