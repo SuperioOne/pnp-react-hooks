@@ -16,7 +16,7 @@ export type RegionalSettingOptions = PnpHookOptions<ODataQueryable>;
 /**
  * Returns site regional settings.
  * @param options PnP hook options.
- * @param deps useRegionalSetting will resend request when one of the dependencies changed.
+ * @param deps useRegionalSetting refreshes response data when one of the dependencies changes.
  */
 export function useRegionalSetting(
     options?: RegionalSettingOptions,

@@ -23,7 +23,7 @@ export interface ListItemOptions extends PnpHookOptions<ODataQueryable>
  * @param itemId Item Id. Changing the value resends request.
  * @param list List GUID id or title. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useListItem will resend request when one of the dependencies changed.
+ * @param deps useListItem refreshes response data when one of the dependencies changes.
  */
 export function useListItem<T>(
     itemId: number,

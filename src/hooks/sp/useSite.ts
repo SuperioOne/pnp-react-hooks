@@ -16,7 +16,7 @@ export type SiteInfoOptions = PnpHookOptions<ODataQueryable>;
 /**
  * Returns current site info.
  * @param options PnP hook options.
- * @param deps useSite will resend request when one of the dependencies changed.
+ * @param deps useSite refreshes response data when one of the dependencies changes.
  */
 export function useSite(
     options?: SiteInfoOptions,

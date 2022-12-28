@@ -1,6 +1,6 @@
 export { ChangeTokenInfo } from "./types/ChangeTokenInfo";
 export { ErrorMode, ListOptions, PnpHookGlobalOptions, ContextOptions, ErrorOptions, RenderOptions, PnpHookOptions } from "./types/options";
-export { PnpHookOptionProvider } from "./context";
+export { PnpHookOptionProvider, createProviderElement } from "./context";
 export { usePnpHookOptions } from "./hooks/usePnpHookOptions";
 
 export { useApp } from "./hooks/sp/useApp";

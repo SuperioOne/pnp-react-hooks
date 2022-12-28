@@ -29,7 +29,7 @@ export interface FieldOptions extends PnpHookOptions<ODataQueryable>
  * Returns a field from web or list.
  * @param fieldId Field internal name or Id. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useField will resend request when one of the dependencies changed.
+ * @param deps useField refreshes response data when one of the dependencies changes.
  */
 export function useField(
     fieldId: string,

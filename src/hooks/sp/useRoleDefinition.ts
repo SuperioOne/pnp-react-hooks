@@ -28,7 +28,7 @@ export interface RoleType
  * Returns role definition with the specified identifier.
  * @param roleDefId Role definition name, Id or {@link RoleTypeKind}.
  * @param options PnP hook options.
- * @param deps useRoleDefinition will resend request when one of the dependencies changed.
+ * @param deps useRoleDefinition refreshes response data when one of the dependencies changes.
  */
 export function useRoleDefinition(
     roleDefId: string | number | RoleType,

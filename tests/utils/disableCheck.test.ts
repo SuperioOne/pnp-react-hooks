@@ -17,27 +17,32 @@ test('disable by undefined value', () =>
 
 test('disable by auto with valid parameters', () =>
 {
-    expect(checkDisable("auto", defaultCheckDisable, false, "string value", [], 1)).toBe(false);
+    expect(checkDisable("auto", defaultCheckDisable, false, "string value", [], 1, { randomObj: 234 })).toBe(false);
 });
 
 test('disable by auto with invalid parameters (empty string)', () =>
 {
-    expect(checkDisable("auto", defaultCheckDisable, false, "")).toBe(true);
+    expect(checkDisable("auto", defaultCheckDisable, "")).toBe(true);
 });
 
 test('disable by auto with invalid parameters (undefined)', () =>
 {
-    expect(checkDisable("auto", defaultCheckDisable, false, undefined)).toBe(true);
+    expect(checkDisable("auto", defaultCheckDisable, undefined)).toBe(true);
+});
+
+test('disable by auto with invalid parameters (null)', () =>
+{
+    expect(checkDisable("auto", defaultCheckDisable, null)).toBe(true);
 });
 
 test('disable by auto with invalid parameters (number less than 1)', () =>
 {
-    expect(checkDisable("auto", defaultCheckDisable, false, 0)).toBe(true);
+    expect(checkDisable("auto", defaultCheckDisable, 0)).toBe(true);
 });
 
 test('disable by custom function when value is even number', () =>
 {
-    // disable(true) when 
+    // disable(true) when
     const evenNumberCheck = (value: number) => value % 2 === 0;
 
     expect(checkDisable(evenNumberCheck, defaultCheckDisable, 4)).toBe(true);

@@ -4,26 +4,40 @@ import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryableCollection } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
+import { RecycleBinScopes } from "../../types/literalTypes";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
 import { createInvokable } from "../../utils/createInvokable";
-import { mergeOptions } from "../../utils/merge";
+import { mergeDependencies, mergeOptions } from "../../utils/merge";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
 
-export type RecycleBinItemsOptions = PnpHookOptions<ODataQueryableCollection>;
+export interface RecycleBinItemsOptions extends PnpHookOptions<ODataQueryableCollection>
+{
+    scope?: RecycleBinScopes;
+}
 
 /**
  * Returns all recycle bin items.
  * @param options Pnp hook options.
- * @param deps useRecycleBinItems will resend request when one of the dependencies changed.
+ * @param deps useRecycleBinItems refreshes response data when one of the dependencies changes.
  */
 export function useRecycleBinItems(options?: RecycleBinItemsOptions, deps?: React.DependencyList): Nullable<IRecycleBinItemObject[]>
 {
     const globalOptions = useContext(InternalContext);
     const [binItems, setBinItems] = useState<Nullable<IRecycleBinItemObject[]>>(undefined);
 
-    const invokableFactory = useCallback(async (sp: SPFI) => createInvokable(sp.web.recycleBin), []);
+    const invokableFactory = useCallback(async (sp: SPFI) =>
+    {
+        switch (options?.scope)
+        {
+            case "site":
+                return createInvokable(sp.site.recycleBin);
+            case "web":
+            default:
+                return createInvokable(sp.web.recycleBin);
+        }
+    }, [options?.scope]);
 
     const _options = useMemo(() =>
     {
@@ -32,7 +46,9 @@ export function useRecycleBinItems(options?: RecycleBinItemsOptions, deps?: Reac
         return opt;
     }, [options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setBinItems, _options, deps);
+    const _mergedDeps = mergeDependencies([options?.scope], deps);
+
+    useQueryEffect(invokableFactory, setBinItems, _options, _mergedDeps);
 
     return binItems;
 }

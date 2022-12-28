@@ -25,7 +25,7 @@ export interface ItemCommentsOptions extends PnpHookOptions<ODataQueryableCollec
  * @param itemId Item Id. Changing the value resends request.
  * @param list List GUID Id or title. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useItemComments will resend request when one of the dependencies changed.
+ * @param deps useItemComments refreshes response data when one of the dependencies changes.
  */
 export function useItemComments(
     itemId: number,

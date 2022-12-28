@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ErrorMode, PnpHookGlobalOptions, PnpHookOptionProvider, usePnpHookOptions } from "../../src";
+import { createProviderElement, ErrorMode, PnpHookGlobalOptions, PnpHookOptionProvider, usePnpHookOptions } from "../../src";
 import { GlobalContextMockup } from "../tools/mockups/GlobalContextMockup";
 import { InitPnpTest } from "../tools/InitPnpTest";
 import { SPFI } from "@pnp/sp";
@@ -40,6 +40,25 @@ test("PnpReactOptionProvider one layer provider", async () =>
     await act(async () =>
     {
         const options = await reactDOMElement.mountTestComponent("PnpReactOptionProvider one layer provider", TestComponent);
+        expect(shallowEqual(options, globalOptions)).toBe(true);
+    });
+});
+
+test("PnpReactOptionProvider with createProviderElement()", async () =>
+{
+    const globalOptions: PnpHookGlobalOptions = {
+        disabled: false,
+        error: ErrorMode.Default,
+        keepPreviousState: true,
+        sp: spTest,
+    };
+
+    const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
+        createProviderElement(globalOptions, React.createElement(GlobalContextMockup, { ...props }));
+
+    await act(async () =>
+    {
+        const options = await reactDOMElement.mountTestComponent("PnpReactOptionProvider with createProviderElement()", TestComponent);
         expect(shallowEqual(options, globalOptions)).toBe(true);
     });
 });

@@ -26,7 +26,7 @@ export interface FeaturesOptions extends PnpHookOptions<ODataQueryableCollection
 /**
  * Returns site or web feature collection. Scope type can be defined in {@link FeaturesOptions.scope} property.
  * @param options PnP hook options
- * @param deps useFeatures will resend request when one of the dependencies changed.
+ * @param deps useFeatures refreshes response data when one of the dependencies changes.
  */
 export function useFeatures(
     options?: FeaturesOptions,

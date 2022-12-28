@@ -29,7 +29,7 @@ export interface ChangesOptions extends RenderOptions, ContextOptions, ErrorOpti
  * to get list changes instead of web changes.
  * @param changeQuery Change query. Hook resends request if **shallow comparison** returns false.
  * @param options PnP hook options
- * @param deps useChanges will resend request when one of the dependencies changed.
+ * @param deps useChanges refreshes response data when one of the dependencies changes.
  * @returns Changes info array.
  * @example
  * ```

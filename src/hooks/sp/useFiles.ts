@@ -22,7 +22,7 @@ export interface FilesOptions extends PnpHookOptions<ODataQueryableCollection>
  * Returns file collection from folder.
  * @param folderId Folder GUID Id or server relative path. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useFiles will resend request when one of the dependencies changed.
+ * @param deps useFiles refreshes response data when one of the dependencies changes.
  */
 export function useFiles(
     folderId: string,

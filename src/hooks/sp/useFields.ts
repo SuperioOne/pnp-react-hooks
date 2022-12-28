@@ -24,7 +24,7 @@ export interface FieldsOptions extends PnpHookOptions<ODataQueryableCollection>
 /**
  * Returns field collection from web or list.
  * @param options PnP hook options.
- * @param deps useFields will resend request when one of the dependencies changed.
+ * @param deps useFields refreshes response data when one of the dependencies changes.
  */
 export function useFields(
     options?: FieldsOptions,

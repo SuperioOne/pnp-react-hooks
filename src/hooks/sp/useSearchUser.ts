@@ -29,7 +29,7 @@ export interface SearchUserOptions extends RenderOptions, ErrorOptions, Behaviou
  * Searches for users or groups with specified search options.
  * @param searchOptions Search text or search query parameters. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useSearchUser will resend request when one of the dependencies changed.
+ * @param deps useSearchUser refreshes response data when one of the dependencies changes.
  */
 export function useSearchUser(
     searchOptions: IClientPeoplePickerQueryParameters | string,

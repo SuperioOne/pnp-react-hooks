@@ -15,18 +15,18 @@ import { useState, useCallback, useContext, useMemo } from "react";
 export interface NavigationOptions extends PnpHookOptions<ODataQueryableCollection>
 {
     /**
-     * Navigation type. Default is 'topNavigation'. Changing the type 
+     * Navigation type. Default is 'topNavigation'. Changing the type
      * resends request.
      */
     type?: NavigationTypes;
 }
 
 /**
- * Returns web navigation nodes. 
+ * Returns web navigation nodes.
  * Use {@link NavigationOptions.type} property to change navigation type.
  * Default is topNavigation.
  * @param options PnP hook options.
- * @param deps useNavigation will resend request when one of the dependencies changed.
+ * @param deps useNavigation refreshes response data when one of the dependencies changes.
  */
 export function useNavigation(
     options?: NavigationOptions,

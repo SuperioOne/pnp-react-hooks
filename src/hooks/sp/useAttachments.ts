@@ -25,7 +25,7 @@ export interface ItemAttachmentsOptions extends PnpHookOptions<ODataQueryableCol
  * @param itemId List item numeric Id. Changing the value resends request.
  * @param list List title or GUID Id string. Changing the value resends request.
  * @param options PnP hook options
- * @param deps useAttachments will resend request when one of the dependencies changed.
+ * @param deps useAttachments refreshes response data when one of the dependencies changes.
  * @returns array of {@link IAttachmentInfo}.
  */
 export function useAttachments(

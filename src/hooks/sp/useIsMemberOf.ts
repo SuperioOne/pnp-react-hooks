@@ -36,7 +36,7 @@ const DEFAULT: MemberInfo = [undefined, undefined];
  * Use {@link IsMemberOfOptions.userId} property for another user. Default is current user.
  * @param groupId Group name or Id. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useIsMemberOf will resend request when one of the dependencies changed.
+ * @param deps useIsMemberOf refreshes response data when one of the dependencies changes.
  */
 export function useIsMemberOf(
     groupId: string | number,

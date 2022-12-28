@@ -26,7 +26,7 @@ export interface FoldersOptions extends PnpHookOptions<ODataQueryableCollection>
 /**
  * Returns folders from root. Use {@link FoldersOptions.rootFolderId} property to change root.
  * @param options PnP hook options.
- * @param deps useFolders will resend request when one of the dependencies changed.
+ * @param deps useFolders refreshes response data when one of the dependencies changes.
  */
 export function useFolders(
     options?: FoldersOptions,

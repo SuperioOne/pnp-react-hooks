@@ -16,7 +16,7 @@ export type SiteUsersOptions = PnpHookOptions<ODataQueryableCollection>;
 /**
  * Returns site users.
  * @param options PnP hook options.
- * @param deps useSiteUsers will resend request when one of the dependencies changed.
+ * @param deps useSiteUsers refreshes response data when one of the dependencies changes.
  */
 export function useSiteUsers(
     options?: SiteUsersOptions,

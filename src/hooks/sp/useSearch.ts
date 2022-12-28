@@ -32,7 +32,7 @@ export type GetPageDispatch = (pageNo: number, callback?: () => void) => void;
  * Search
  * @param searchQuery {@link ISearchQuery} query or search text. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useSearch will resend request when one of the dependencies changed.
+ * @param deps useSearch refreshes response data when one of the dependencies changes.
  */
 export function useSearch(
     searchQuery: ISearchQuery | string,
@@ -127,7 +127,6 @@ export function useSearch(
 
                         query = {
                             ...query,
-                            RowLimit: searchState.pnpResult.RowCount,
                             StartRow: startRow
                         };
                     }

@@ -15,7 +15,7 @@ export type ListsOptions = PnpHookOptions<ODataQueryableCollection>;
 /**
  * Returns list collection.
  * @param options PnP hook options.
- * @param deps useLists will resend request when one of the dependencies changed.
+ * @param deps useLists refreshes response data when one of the dependencies changes.
  */
 export function useLists(
     options?: ListsOptions,

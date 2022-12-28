@@ -14,7 +14,7 @@ export type WebPropertiesOptions = PnpHookOptions<ODataQueryable>;
 /**
  * Returns web's properties.
  * @param options PnP hook options.
- * @param deps useWebProperties will resend request when one of the dependencies changed.
+ * @param deps useWebProperties refreshes response data when one of the dependencies changes.
  */
 export function useWebProperties<T>(
     options?: WebPropertiesOptions,

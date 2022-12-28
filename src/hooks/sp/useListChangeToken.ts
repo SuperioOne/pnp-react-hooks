@@ -22,7 +22,7 @@ export interface ListTokenOptions extends ErrorOptions, ContextOptions, Behaviou
  * Returns list current change token and last modified dates.
  * @param list List GUID id or title. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useListChangeToken will resend request when one of the dependencies changed.
+ * @param deps useListChangeToken refreshes response data when one of the dependencies changes.
  */
 export function useListChangeToken(
     list: string,

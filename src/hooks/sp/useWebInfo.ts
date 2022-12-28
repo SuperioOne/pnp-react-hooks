@@ -15,7 +15,7 @@ export type WebInfoOptions = PnpHookOptions<ODataQueryable>;
 /**
  * Returns current web.
  * @param options PnP hook options.
- * @param deps useWebInfo will resend request when one of the dependencies changed.
+ * @param deps useWebInfo refreshes response data when one of the dependencies changes.
  */
 export function useWebInfo(
     options?: WebInfoOptions,

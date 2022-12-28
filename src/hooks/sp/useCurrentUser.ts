@@ -16,7 +16,7 @@ export type CurrentUserInfoOptions = PnpHookOptions<ODataQueryable>;
 /**
  * Returns current user information.
  * @param options PnP hook options
- * @param deps useCurrentUser will resend request when one of the dependencies changed.
+ * @param deps useCurrentUser refreshes response data when one of the dependencies changes.
  */
 export function useCurrentUser(
     options?: CurrentUserInfoOptions,

@@ -56,7 +56,7 @@ export interface PagedItemsOptions extends PnpHookOptions<ODataQueryableCollecti
  * Returns all item collection from specified list.
  * @param list List GUID Id or title. Changing the value resends request.
  * @param options PnP hook options for all items request.
- * @param deps useListItems will resend request when one of the dependencies changed.
+ * @param deps useListItems refreshes response data when one of the dependencies changes.
  */
 export function useListItems<T>(
     list: string,
@@ -67,7 +67,7 @@ export function useListItems<T>(
 * Returns item collection from specified list.
 * @param list List GUID Id or title. Changing the value resends request.
 * @param options PnP hook options.
-* @param deps useListItems will resend request when one of the dependencies changed.
+* @param deps useListItems refreshes response data when one of the dependencies changes.
 */
 export function useListItems<T>(
     list: string,
@@ -78,7 +78,7 @@ export function useListItems<T>(
 * Returns items from specified list with paging support.
 * @param list List GUID Id or title. Changing the value resends request.
 * @param options PnP hook options.
-* @param deps useListItems will resend request when one of the dependencies changed.
+* @param deps useListItems refreshes response data when one of the dependencies changes.
 */
 export function useListItems<T>(
     list: string,

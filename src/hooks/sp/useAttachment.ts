@@ -54,7 +54,7 @@ type InstanceTypes = IAttachmentInfo | ArrayBuffer | Blob | string;
  * @param itemId List item numeric Id. Changing the value resends request.
  * @param list List title or GUID Id string. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useAttachment will resend request when one of the dependencies changed.
+ * @param deps useAttachment refreshes response data when one of the dependencies changes.
  * @returns Attachment info object.
  */
 export function useAttachment(
@@ -70,7 +70,7 @@ export function useAttachment(
  * @param itemId List item numeric Id. Changing the value resends request.
  * @param list List title or GUID Id string. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useAttachment will resend request when one of the dependencies changed.
+ * @param deps useAttachment refreshes response data when one of the dependencies changes.
  * @returns Attachment file content.
  */
 export function useAttachment(
@@ -86,7 +86,7 @@ export function useAttachment(
  * @param itemId List item numeric Id. Changing the value resends request.
  * @param list List title or GUID Id string. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useAttachment will resend request when one of the dependencies changed.
+ * @param deps useAttachment refreshes response data when one of the dependencies changes.
  * @returns Attachment file content.
  */
 export function useAttachment(
@@ -102,7 +102,7 @@ export function useAttachment(
  * @param itemId List item numeric Id. Changing the value resends request.
  * @param list List title or GUID Id string. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useAttachment will resend request when one of the dependencies changed.
+ * @param deps useAttachment refreshes response data when one of the dependencies changes.
  * @returns Attachment file content.
  */
 export function useAttachment(

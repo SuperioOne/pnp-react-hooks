@@ -22,7 +22,7 @@ export interface ViewsOptions extends PnpHookOptions<ODataQueryableCollection>
  * Returns list view collection.
  * @param listId List GUID id or title. Changing the value resends request.
  * @param options PnP hook options.
- * @param deps useViews will resend request when one of the dependencies changed.
+ * @param deps useViews refreshes response data when one of the dependencies changes.
  */
 export function useViews(
     listId: string,

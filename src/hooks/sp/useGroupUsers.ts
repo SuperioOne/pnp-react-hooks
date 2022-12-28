@@ -21,7 +21,7 @@ export interface GroupUsersOptions extends PnpHookOptions<ODataQueryableCollecti
  * Returns user collection from specific group.
  * @param groupId Group name or Id. Changing the value resends request.
  * @param options Pnp hook options.
- * @param deps useGroupUsers will resend request when one of the dependencies changed.
+ * @param deps useGroupUsers refreshes response data when one of the dependencies changes.
  */
 export function useGroupUsers(
     groupId: string | number,
