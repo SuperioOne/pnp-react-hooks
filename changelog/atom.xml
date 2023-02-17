@@ -9,11 +9,11 @@
     <icon>https://superioone.github.io/pnp-react-hooks/img/favicon.ico</icon>
     <entry>
         <title type="html"><![CDATA[v1.2.0]]></title>
-        <id>v1-2-0</id>
+        <id>https://superioone.github.io/pnp-react-hooks/changelog/v1-2-0</id>
         <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-2-0"/>
         <updated>2022-12-28T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Changelog]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><ul><li><strong>Added</strong> useRecycleBinItem and useRecycleBinItems hooks.</li><li><strong>Added</strong> createProviderElement helper function for simplifying SPFx initialization.</li><li><strong>Fixed</strong> useSearch hook incorrectly overrides RowLimit when getPageDispatch called.</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><ul><li><strong>Added</strong> useRecycleBinItem and useRecycleBinItems hooks.</li><li><strong>Added</strong> createProviderElement helper function for simplifying SPFx initialization.</li><li><strong>Fixed</strong> useSearch hook incorrectly overrides RowLimit when getPageDispatch called.</li></ul>]]></content>
         <author>
             <name>SuperiorOne</name>
             <uri>https://github.com/SuperioOne</uri>
@@ -21,11 +21,11 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[v1.1.0]]></title>
-        <id>v1-1-0</id>
+        <id>https://superioone.github.io/pnp-react-hooks/changelog/v1-1-0</id>
         <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-1-0"/>
         <updated>2022-05-18T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Changelog]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><ul><li><strong>Added</strong> useListItems paged request option.</li><li><strong>Added</strong> useView and useViews hooks.</li><li><strong>Added</strong> useListAsStream hook.</li><li><strong>Added</strong> FetchWithAbort behavior for cancelling consecutive fetch requests automatically.</li><li><strong>Fixed</strong> useSearch double query issue.</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><ul><li><strong>Added</strong> useListItems paged request option.</li><li><strong>Added</strong> useView and useViews hooks.</li><li><strong>Added</strong> useListAsStream hook.</li><li><strong>Added</strong> FetchWithAbort behavior for cancelling consecutive fetch requests automatically.</li><li><strong>Fixed</strong> useSearch double query issue.</li></ul>]]></content>
         <author>
             <name>SuperiorOne</name>
             <uri>https://github.com/SuperioOne</uri>
@@ -33,11 +33,11 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[v1.0.1]]></title>
-        <id>v1-0-1</id>
+        <id>https://superioone.github.io/pnp-react-hooks/changelog/v1-0-1</id>
         <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-0-1"/>
         <updated>2022-03-11T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Changelog]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a class="hash-link" href="#changelog" title="Direct link to heading">​</a></h2><ul><li><strong>Fixed</strong> useSearch throwing error when getPageDispatch called more than once.</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><ul><li><strong>Fixed</strong> useSearch throwing error when getPageDispatch called more than once.</li></ul>]]></content>
         <author>
             <name>SuperiorOne</name>
             <uri>https://github.com/SuperioOne</uri>
@@ -45,11 +45,11 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[v1.0.0]]></title>
-        <id>v1-0-0</id>
+        <id>https://superioone.github.io/pnp-react-hooks/changelog/v1-0-0</id>
         <link href="https://superioone.github.io/pnp-react-hooks/changelog/v1-0-0"/>
         <updated>2022-03-09T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[What's In]]></summary>
-        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="whats-in">What's In<a class="hash-link" href="#whats-in" title="Direct link to heading">​</a></h2><ul><li>42 custom React hook for accessing SharePoint contents.</li><li>PnPjs v3 upgrade. <em>v2 support dropped before major release.</em></li><li>Configuration system based on React Context API.</li><li>Helper hook function for accessing options.</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="whats-in">What's In<a href="#whats-in" class="hash-link" aria-label="Direct link to What's In" title="Direct link to What's In">​</a></h2><ul><li>42 custom React hook for accessing SharePoint contents.</li><li>PnPjs v3 upgrade. <em>v2 support dropped before major release.</em></li><li>Configuration system based on React Context API.</li><li>Helper hook function for accessing options.</li></ul>]]></content>
         <author>
             <name>SuperiorOne</name>
             <uri>https://github.com/SuperioOne</uri>
