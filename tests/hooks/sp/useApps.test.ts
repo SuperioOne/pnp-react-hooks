@@ -8,7 +8,8 @@ import { useApp, useApps } from "../../../src";
 
 let reactDOMElement: ReactDOMElement;
 let spTest: SPFI;
-let testApp;
+let testSiteCollectionApp;
+let testTenantApp;
 
 beforeAll(async () =>
 {
@@ -16,12 +17,17 @@ beforeAll(async () =>
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 
-    const apps = await spTest.web.appcatalog.top(1)();
+    const siteCollectionApp = await spTest.web.appcatalog.top(1)();
+    const tenantApp = await spTest.tenantAppcatalog.top(1)();
 
-    if (apps?.length < 1)
+    if (siteCollectionApp?.length < 1)
         throw new Error("Unable to find test app");
 
-    testApp = apps[0];
+    if (tenantApp?.length < 1)
+        throw new Error("Unable to find test app");
+
+    testSiteCollectionApp = siteCollectionApp[0];
+    testTenantApp = tenantApp[0];
 });
 afterEach(() => reactDOMElement.unmountComponent());
 
@@ -46,7 +52,7 @@ test("useApps get top 5 apps", async () =>
 test("useApp get app by Id", async () =>
 {
     const props: CustomHookProps = {
-        useHook: (err) => useApp(testApp.ID, {
+        useHook: (err) => useApp(testSiteCollectionApp.ID, {
             sp: spTest,
             error: err
         })
@@ -54,5 +60,39 @@ test("useApp get app by Id", async () =>
 
     await act(() =>
         expect(reactDOMElement.mountTestComponent("useApp get app by Id", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useApps get top 5 tenant apps", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useApps({
+            sp: spTest,
+            error: err,
+            scope: "tenant",
+            query: {
+                top: 5,
+                select: ["Title", "ID"]
+            },
+        })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useApps get top 5 tenant apps", CustomHookMockup, props))
+            .resolves.toBeTruthy());
+});
+
+test("useApp get tenant app by Id", async () =>
+{
+    const props: CustomHookProps = {
+        useHook: (err) => useApp(testTenantApp.ID, {
+            sp: spTest,
+            scope: "tenant",
+            error: err
+        })
+    };
+
+    await act(() =>
+        expect(reactDOMElement.mountTestComponent("useApp get tenant app by Id", CustomHookMockup, props))
             .resolves.toBeTruthy());
 });

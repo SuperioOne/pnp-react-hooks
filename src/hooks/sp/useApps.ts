@@ -6,14 +6,18 @@ import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../../utils/checkDisable";
 import { createInvokable } from "../../utils/createInvokable";
-import { mergeOptions } from "../../utils/merge";
+import { mergeDependencies, mergeOptions } from "../../utils/merge";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
+import { AppCatalogScopes } from "../../types/literalTypes";
 
 /**
  * @inheritDoc
  */
-export type WebAppsOptions = PnpHookOptions<ODataQueryableCollection>;
+export interface WebAppsOptions extends PnpHookOptions<ODataQueryableCollection>
+{
+    scope?: AppCatalogScopes;
+}
 
 /**
  * Returns app detail collection from the app catalog.
@@ -28,7 +32,14 @@ export function useApps<T>(
     const globalOptions = useContext(InternalContext);
     const [apps, setApps] = useState<Nullable<T[]>>();
 
-    const invokableFactory = useCallback(async (sp: SPFI) => createInvokable(sp.web.appcatalog), []);
+    const invokableFactory = useCallback(async (sp: SPFI) =>
+    {
+        return options?.scope === "tenant"
+            ? createInvokable(sp.tenantAppcatalog)
+            : createInvokable(sp.web.appcatalog);
+    }, [options?.scope]);
+
+    const _mergedDeps = mergeDependencies([options?.scope], deps);
 
     const _options = useMemo(() =>
     {
@@ -38,7 +49,7 @@ export function useApps<T>(
         return opt;
     }, [globalOptions, options]);
 
-    useQueryEffect(invokableFactory, setApps, _options, deps);
+    useQueryEffect(invokableFactory, setApps, _options, _mergedDeps);
 
     return apps;
 }

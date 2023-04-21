@@ -1,16 +1,18 @@
 import "@pnp/sp/appcatalog/web";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
-import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import "@pnp/sp/appcatalog";
 import { SPFI } from "@pnp/sp";
+import { useContext, useState, useCallback, useMemo } from "react";
+import { InternalContext } from "../../context";
+import { ODataQueryable } from "../../types/ODataQueryable";
+import { AppCatalogScopes } from "../../types/literalTypes";
+import { PnpHookOptions } from "../../types/options";
+import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { Nullable } from "../../types/utilityTypes";
 import { assert } from "../../utils/assert";
+import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
 import { createInvokable } from "../../utils/createInvokable";
-import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
 import { isUUID } from "../../utils/isUUID";
 import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
 
 /**
@@ -19,6 +21,7 @@ import { useQueryEffect } from "../useQueryEffect";
 export interface WebAppOptions extends PnpHookOptions<ODataQueryable>
 {
     disabled?: DisableOptionValueType | { (appId: string): boolean; };
+    scope?: AppCatalogScopes;
 }
 
 /**
@@ -39,10 +42,18 @@ export function useApp<T>(
     const invokableFactory = useCallback(async (sp: SPFI) =>
     {
         assert(isUUID(appId), "AppId is not a valid guid string.");
-        return createInvokable(sp.web.appcatalog.getAppById(appId));
-    }, [appId]);
 
-    const _mergedDeps = mergeDependencies([appId], deps);
+        if (options?.scope === "tenant")
+        {
+            return createInvokable(sp.tenantAppcatalog.getAppById(appId));
+        }
+        else
+        {
+            return createInvokable(sp.web.appcatalog.getAppById(appId));
+        }
+    }, [appId, options?.scope]);
+
+    const _mergedDeps = mergeDependencies([appId, options?.scope], deps);
 
     const _options = useMemo(() =>
     {

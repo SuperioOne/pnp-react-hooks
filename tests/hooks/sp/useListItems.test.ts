@@ -19,16 +19,8 @@ beforeAll(async () =>
     reactDOMElement = initJSDOM();
     spTest = InitPnpTest();
 
-    const testLists = await spTest.web.lists
-        .filter("ItemCount gt 5 and ItemCount lt 5000")
-        .select("Id", "ItemCount")
-        .top(1)();
-
-    if (testLists?.length < 1)
-        throw new Error("Unable to find list with minimum 1 item");
-
-    testList = testLists[0];
-    testListItem = (await spTest.web.lists.getById(testList.Id).items.top(1)())[0];
+    testList = await spTest.web.lists.getByTitle("Test List")();
+    testListItem = (await spTest.web.lists.getByTitle("Test List").items.top(1)())[0];
 });
 afterEach(() => reactDOMElement.unmountComponent());
 
