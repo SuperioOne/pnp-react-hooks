@@ -4,17 +4,25 @@
         <title>PnP React Hooks Blog</title>
         <link>https://superioone.github.io/pnp-react-hooks/changelog</link>
         <description>PnP React Hooks Blog</description>
-        <lastBuildDate>Wed, 28 Dec 2022 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 22 Apr 2023 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[v1.3.0]]></title>
+            <link>https://superioone.github.io/pnp-react-hooks/changelog/v1-3-0</link>
+            <guid>https://superioone.github.io/pnp-react-hooks/changelog/v1-3-0</guid>
+            <pubDate>Sat, 22 Apr 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Changelog]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_Ce69" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><h3 class="anchor anchorWithStickyNavbar_Ce69" id="added">Added<a href="#added" class="hash-link" aria-label="Direct link to Added" title="Direct link to Added">​</a></h3><ul><li>Site collection and tenant scope option for <code>useApp</code>, <code>useApps</code> hooks.</li></ul><h3 class="anchor anchorWithStickyNavbar_Ce69" id="changed">Changed<a href="#changed" class="hash-link" aria-label="Direct link to Changed" title="Direct link to Changed">​</a></h3><ul><li><a href="https://www.npmjs.com/package/@pnp/sp" target="_blank" rel="noopener noreferrer"><code>@pnp/sp</code></a> peer dependency version bumped to <code>^3.14.0</code>.</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v1.2.0]]></title>
             <link>https://superioone.github.io/pnp-react-hooks/changelog/v1-2-0</link>
             <guid>https://superioone.github.io/pnp-react-hooks/changelog/v1-2-0</guid>
             <pubDate>Wed, 28 Dec 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[Changelog]]></description>
-            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><ul><li><strong>Added</strong> useRecycleBinItem and useRecycleBinItems hooks.</li><li><strong>Added</strong> createProviderElement helper function for simplifying SPFx initialization.</li><li><strong>Fixed</strong> useSearch hook incorrectly overrides RowLimit when getPageDispatch called.</li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_Ce69" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><h3 class="anchor anchorWithStickyNavbar_Ce69" id="added">Added<a href="#added" class="hash-link" aria-label="Direct link to Added" title="Direct link to Added">​</a></h3><ul><li><code>useRecycleBinItem</code> and <code>useRecycleBinItems</code> hooks.</li><li><code>createProviderElement</code> helper function for simplifying SPFx initialization.</li></ul><h3 class="anchor anchorWithStickyNavbar_Ce69" id="fixed">Fixed<a href="#fixed" class="hash-link" aria-label="Direct link to Fixed" title="Direct link to Fixed">​</a></h3><ul><li><code>useSearch</code> hook incorrectly overrides RowLimit when getPageDispatch called.</li></ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v1.1.0]]></title>
@@ -22,7 +30,7 @@
             <guid>https://superioone.github.io/pnp-react-hooks/changelog/v1-1-0</guid>
             <pubDate>Wed, 18 May 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[Changelog]]></description>
-            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><ul><li><strong>Added</strong> useListItems paged request option.</li><li><strong>Added</strong> useView and useViews hooks.</li><li><strong>Added</strong> useListAsStream hook.</li><li><strong>Added</strong> FetchWithAbort behavior for cancelling consecutive fetch requests automatically.</li><li><strong>Fixed</strong> useSearch double query issue.</li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_Ce69" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><h3 class="anchor anchorWithStickyNavbar_Ce69" id="added">Added<a href="#added" class="hash-link" aria-label="Direct link to Added" title="Direct link to Added">​</a></h3><ul><li><code>useListItems</code> paged request option.</li><li><code>useView</code> and <code>useViews</code> hooks.</li><li><code>useListAsStream</code> hook.</li><li>FetchWithAbort behavior for cancelling fetch requests automatically.</li></ul><h3 class="anchor anchorWithStickyNavbar_Ce69" id="fixed">Fixed<a href="#fixed" class="hash-link" aria-label="Direct link to Fixed" title="Direct link to Fixed">​</a></h3><ul><li><code>useSearch</code> double query issue.</li></ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v1.0.1]]></title>
@@ -30,7 +38,7 @@
             <guid>https://superioone.github.io/pnp-react-hooks/changelog/v1-0-1</guid>
             <pubDate>Fri, 11 Mar 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[Changelog]]></description>
-            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><ul><li><strong>Fixed</strong> useSearch throwing error when getPageDispatch called more than once.</li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_Ce69" id="changelog">Changelog<a href="#changelog" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h2><h3 class="anchor anchorWithStickyNavbar_Ce69" id="fixed">Fixed<a href="#fixed" class="hash-link" aria-label="Direct link to Fixed" title="Direct link to Fixed">​</a></h3><ul><li><code>useSearch</code> throwing error when getPageDispatch called more than once.</li></ul>]]></content:encoded>
         </item>
         <item>
             <title><![CDATA[v1.0.0]]></title>
@@ -38,7 +46,7 @@
             <guid>https://superioone.github.io/pnp-react-hooks/changelog/v1-0-0</guid>
             <pubDate>Wed, 09 Mar 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[What's In]]></description>
-            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="whats-in">What's In<a href="#whats-in" class="hash-link" aria-label="Direct link to What's In" title="Direct link to What's In">​</a></h2><ul><li>42 custom React hook for accessing SharePoint contents.</li><li>PnPjs v3 upgrade. <em>v2 support dropped before major release.</em></li><li>Configuration system based on React Context API.</li><li>Helper hook function for accessing options.</li></ul>]]></content:encoded>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_Ce69" id="whats-in">What's In<a href="#whats-in" class="hash-link" aria-label="Direct link to What's In" title="Direct link to What's In">​</a></h2><ul><li>42 custom React hook for accessing SharePoint contents.</li><li>PnPjs v3 upgrade. <em>v2 support dropped before major release.</em></li><li>Configuration system based on React Context API.</li><li>Helper hook function for accessing options.</li></ul>]]></content:encoded>
         </item>
     </channel>
 </rss>
