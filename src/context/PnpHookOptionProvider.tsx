@@ -2,7 +2,7 @@
 import * as React from "react";
 import { PnpHookGlobalOptions } from "../types/options";
 import { SPBrowser } from "@pnp/sp/behaviors/spbrowser";
-import { shallowEqual } from "../utils/shallowEqual";
+import { shallowEqual } from "../utils/compare";
 import { spfi } from "@pnp/sp";
 
 const DEFAULT_OPTIONS: PnpHookGlobalOptions = {
@@ -11,18 +11,14 @@ const DEFAULT_OPTIONS: PnpHookGlobalOptions = {
 
 export const InternalContext = React.createContext<Readonly<PnpHookGlobalOptions>>(DEFAULT_OPTIONS);
 
-export function PnpHookOptionProvider(props: { value: PnpHookGlobalOptions, children?: any; })
-{
+export function PnpHookOptionProvider(props: { value: PnpHookGlobalOptions, children?: any; }) {
     const previousValue = React.useRef<PnpHookGlobalOptions>(props.value);
 
-    const value = React.useMemo(() =>
-    {
-        if (shallowEqual(props.value, previousValue.current))
-        {
+    const value = React.useMemo(() => {
+        if (shallowEqual(props.value, previousValue.current)) {
             return previousValue.current;
         }
-        else
-        {
+        else {
             previousValue.current = props.value;
             return props.value;
         }

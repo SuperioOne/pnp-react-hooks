@@ -8,7 +8,7 @@
   "description": "PnPJS React hooks library.",
   "main": "index.js",
   "scripts": {
-    "build": "node ./scripts/build.js",
+    "build": "node ./scripts/build.js -c Release",
     "build-debug": "node ./scripts/build.js -c Debug",
     "pack-local": "node ./scripts/build.js -c Release && node ./scripts/omitPackageJson.js --outDir .temp/bin/release && npm pack ./.temp/bin/release --pack-destination ./.temp/bin/",
     "pack": "node ./scripts/build.js -c Release && node ./scripts/omitPackageJson.js --outDir .temp/bin/release",
@@ -71,6 +71,9 @@
   },
   "peerDependencies": {
     "@pnp/sp": "^3.14.0",
+    "@pnp/queryable": "^3.14.0",
+    "@pnp/logging": "^3.14.0",
+    "@pnp/core": "^3.14.0",
     "react": ">=16.9.0 <18.0.0"
   }
 }
