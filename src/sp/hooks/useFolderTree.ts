@@ -16,7 +16,6 @@ import { compareTuples, compareURL } from "../../utils/compare";
 import { deepCompareQuery } from "../deepCompare";
 import { defaultCheckDisable, checkDisable } from "../checkDisable";
 import { errorHandler } from "../errorHandler";
-import { from, NextObserver, Subscription } from "rxjs";
 import { insertODataQuery } from "../insertODataQuery";
 import { isNull, isUrl, UrlType } from "../../utils/is";
 import { mergeOptions } from "../merge";
@@ -71,7 +70,7 @@ export function useFolderTree(
   });
 
   const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
-  const _subscription = useRef<Subscription | null | undefined>(undefined);
+  const _timer = useRef<number | NodeJS.Timeout | undefined>(undefined);
 
   // dispatch proxy for disabling callbacks. Prevents any state change when hook is disabled.
   const dispatch = useCallback((action: TreeAction) => {
@@ -85,8 +84,10 @@ export function useFolderTree(
   }, []);
 
   const _cleanup = useCallback(() => {
-    _subscription.current?.unsubscribe();
-    _subscription.current = undefined;
+    if (_timer.current !== undefined) {
+      clearTimeout(_timer.current);
+      _timer.current = undefined;
+    }
   }, []);
 
   useEffect(() => _cleanup, [_cleanup]);
@@ -142,22 +143,6 @@ export function useFolderTree(
             if (mergedOptions?.keepPreviousState !== true) {
               dispatch({ type: ActionTypes.Reset, resetValue: undefined });
             }
-
-            const observer: NextObserver<TreeContext> = {
-              next: (tree) => {
-                dispatch({
-                  type: ActionTypes.NewTreeResult,
-                  context: tree,
-                  currentPath: path,
-                });
-                state.callback?.();
-              },
-              complete: _cleanup,
-              error: (err: Error) => {
-                dispatch({ type: ActionTypes.Reset, resetValue: null });
-                errorHandler(err, mergedOptions);
-              },
-            };
 
             const sp = resolveSP(mergedOptions);
             const rootFolder = sp.web.getFolderByServerRelativePath(path);
@@ -220,7 +205,20 @@ export function useFolderTree(
               };
             };
 
-            _subscription.current = from(getFolderTree()).subscribe(observer);
+            _timer.current = setTimeout(async () => {
+              try {
+                const tree = await getFolderTree();
+                dispatch({
+                  type: ActionTypes.NewTreeResult,
+                  context: tree,
+                  currentPath: path,
+                });
+                state.callback?.();
+              } catch (err) {
+                dispatch({ type: ActionTypes.Reset, resetValue: null });
+                errorHandler(err, mergedOptions);
+              }
+            });
           } catch (err) {
             errorHandler(err, mergedOptions);
           }

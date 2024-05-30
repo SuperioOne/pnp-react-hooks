@@ -2,7 +2,7 @@ import "@pnp/sp/items";
 import "@pnp/sp/items/get-all";
 import { DisableOptionType, DisableOptionValueType } from "../../types";
 import { IItems, Items } from "@pnp/sp/items";
-import { InjectAbort, ManagedAbort } from "../../behaviors/internals";
+import { InjectAbortSignal } from "../../behaviors/internals";
 import { InternalContext } from "../../context";
 import { ODataQueryableCollection, FilteredODataQueryable } from "../types";
 import { PnpHookOptions, _PnpHookOptions } from "../types";
@@ -10,7 +10,6 @@ import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { compareTuples } from "../../utils/compare";
 import { deepCompareOptions } from "../deepCompare";
 import { errorHandler } from "../errorHandler";
-import { from, NextObserver, Subscription } from "rxjs";
 import { insertODataQuery } from "../insertODataQuery";
 import { mergeOptions } from "../merge";
 import { parseODataJSON } from "@pnp/queryable";
@@ -123,14 +122,14 @@ export function useListItems<T>(
     options: null,
   });
 
-  const _subscription = useRef<Subscription | null | undefined>(undefined);
   const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
-  const _abortController = useRef<ManagedAbort>(new ManagedAbort());
+  const _abortController = useRef<AbortController | undefined>(
+    new AbortController(),
+  );
 
   const _cleanup = useCallback(() => {
-    _subscription.current?.unsubscribe();
-    _subscription.current = undefined;
     _abortController.current?.abort();
+    _abortController.current = undefined;
   }, []);
 
   useEffect(() => _cleanup, [_cleanup]);
@@ -163,7 +162,7 @@ export function useListItems<T>(
 
       if (next || shouldUpdate) {
         _cleanup();
-        _abortController.current = new ManagedAbort();
+        _abortController.current = new AbortController();
 
         if (options?.keepPreviousState !== true) {
           setState(undefined);
@@ -174,67 +173,61 @@ export function useListItems<T>(
           setNext(undefined);
         }
 
-        setTimeout(async () => {
-          try {
-            let request: () => Promise<T[] | ItemsResponse>;
-            let nextCall: (value: any) => void;
+        const sp = resolveSP(mergedOptions, [
+          InjectAbortSignal(_abortController.current),
+        ]);
 
-            const sp = resolveSP(mergedOptions, [
-              InjectAbort(_abortController.current),
-            ]);
-            const spList = resolveList(sp.web, list);
+        let request: () => Promise<T[] | ItemsResponse>;
+        let nextCall: (value: any) => void;
 
-            if (next) {
-              request = Items([spList.items, next.url], "").using(
-                _customParserBehavior(),
-              );
+        const spList = resolveList(sp.web, list);
+
+        if (next) {
+          request = Items([spList.items, next.url], "").using(
+            _customParserBehavior(),
+          );
+          nextCall = (value: ItemsResponse) => {
+            _innerState.current.url = value.url;
+            setState([value.data, nextDispatch, !!value.url]);
+            next.callback?.();
+          };
+        } else {
+          _innerState.current.url = undefined;
+
+          const items = insertODataQuery(spList.items, mergedOptions.query);
+
+          switch (options?.mode) {
+            case ListOptions.Paged: {
+              request = items.using(_customParserBehavior());
               nextCall = (value: ItemsResponse) => {
                 _innerState.current.url = value.url;
                 setState([value.data, nextDispatch, !!value.url]);
-                next.callback?.();
               };
-            } else {
-              _innerState.current.url = undefined;
-
-              const items = insertODataQuery(spList.items, mergedOptions.query);
-
-              switch (options?.mode) {
-                case ListOptions.Paged: {
-                  request = items.using(_customParserBehavior());
-                  nextCall = (value: ItemsResponse) => {
-                    _innerState.current.url = value.url;
-                    setState([value.data, nextDispatch, !!value.url]);
-                  };
-                  break;
-                }
-                case ListOptions.All: {
-                  request = () => items.getAll();
-                  nextCall = (value: T[]) => setState(value);
-                  break;
-                }
-                case ListOptions.Default:
-                default: {
-                  request = items;
-                  nextCall = (value: T[]) => setState(value);
-                  break;
-                }
-              }
+              break;
             }
+            case ListOptions.All: {
+              request = () => items.getAll();
+              nextCall = (value: T[]) => setState(value);
+              break;
+            }
+            case ListOptions.Default:
+            default: {
+              request = items;
+              nextCall = (value: T[]) => setState(value);
+              break;
+            }
+          }
+        }
 
-            const observer: NextObserver<T[] | ItemsResponse> = {
-              next: nextCall,
-              complete: _cleanup,
-              error: (err: Error) => {
-                if (err.name !== "AbortError") {
-                  setState(null);
-                  errorHandler(err, mergedOptions);
-                }
-              },
-            };
-
-            _subscription.current = from(request()).subscribe(observer);
+        setTimeout(async () => {
+          try {
+            const response = await request();
+            nextCall(response);
           } catch (err) {
-            errorHandler(err, mergedOptions);
+            if (err.name !== "AbortError") {
+              setState(null);
+              errorHandler(err, mergedOptions);
+            }
           }
         });
       }

@@ -1,5 +1,4 @@
 import "@pnp/sp/search";
-import { CompletionObserver, from, Subscription } from "rxjs";
 import {
   DisableOptionType,
   DisableOptionValueType,
@@ -15,7 +14,7 @@ import {
   SearchQueryInit,
   ISearchBuilder,
 } from "@pnp/sp/search/types";
-import { InjectAbort, ManagedAbort } from "../../behaviors/internals";
+import { InjectAbortSignal } from "../../behaviors/internals";
 import { InternalContext } from "../../context";
 import { _PnpHookOptions } from "../types";
 import { SearchResults } from "@pnp/sp/search";
@@ -69,8 +68,9 @@ export function useSearch(
     searchQuery: null,
     options: null,
   });
-  const _subscription = useRef<Subscription | undefined | null>(undefined);
-  const _abortController = useRef<ManagedAbort>(new ManagedAbort());
+  const _abortController = useRef<AbortController | undefined>(
+    new AbortController(),
+  );
   const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
 
   const _getPageDispatch: GetPageDispatch = useCallback(
@@ -91,9 +91,8 @@ export function useSearch(
   );
 
   const _cleanup = useCallback(() => {
-    _subscription.current?.unsubscribe();
-    _abortController.current.abort();
-    _subscription.current = undefined;
+    _abortController.current?.abort();
+    _abortController.current = undefined;
   }, []);
 
   useEffect(() => _cleanup, [_cleanup]);
@@ -123,7 +122,7 @@ export function useSearch(
       if (searchOptChanged || pageChanged) {
         try {
           _cleanup();
-          _abortController.current = new ManagedAbort();
+          _abortController.current = new AbortController();
 
           if (mergedOptions.keepPreviousState !== true) {
             dispatch({
@@ -135,7 +134,7 @@ export function useSearch(
           }
 
           const sp = resolveSP(mergedOptions, [
-            InjectAbort(_abortController.current),
+            InjectAbortSignal(_abortController.current),
           ]);
           let query = _parseQuery(searchQuery);
           let startRow: number = 0;
@@ -170,25 +169,23 @@ export function useSearch(
               pageNo: pageNo,
             });
 
-            const observer: CompletionObserver<SearchResults> = {
-              next: (data) => {
+            // TODO: track and clearTimeout
+            setTimeout(async () => {
+              try {
+                const response = await sp.search(query);
                 dispatch({
                   type: ActionTypes.NewSearchResult,
-                  pnpResult: data,
-                  userResult: _createSPSearchResult(data, pageNo),
+                  pnpResult: response,
+                  userResult: _createSPSearchResult(response, pageNo),
                   pageNo: pageNo,
                 });
-              },
-              complete: _cleanup,
-              error: (err: Error) => {
+              } catch (err) {
                 if (err.name !== "AbortError") {
                   dispatch({ type: ActionTypes.Reset, resetValue: null });
                   errorHandler(err, mergedOptions);
                 }
-              },
-            };
-
-            _subscription.current = from(sp.search(query)).subscribe(observer);
+              }
+            });
           }
         } catch (err) {
           errorHandler(err, mergedOptions);

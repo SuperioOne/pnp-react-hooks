@@ -65,10 +65,7 @@
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   },
-  "dependencies": {
-    "rxjs": "^7.8.0",
-    "tslib": "^2.5.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@pnp/sp": "^3.14.0",
     "@pnp/queryable": "^3.14.0",

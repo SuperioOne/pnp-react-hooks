@@ -74,33 +74,6 @@ export async function browserFetchRetry(input, init) {
   }
 }
 
-/**
- * Basic version of AbortController but allows reset.
- */
-export class ManagedAbort {
-  /** @type{AbortController} **/
-  #abortController;
-
-  constructor() {
-    this.#abortController = new AbortController();
-  }
-
-  /**
-   * @returns {Readonly<AbortSignal>}
-   **/
-  get signal() {
-    return this.#abortController?.signal;
-  }
-
-  abort() {
-    this.#abortController.abort();
-  }
-
-  reset() {
-    this.#abortController = new AbortController();
-  }
-}
-
 export class AbortError extends Error {
   constructor() {
     super("Fetch aborted");
@@ -110,15 +83,15 @@ export class AbortError extends Error {
 
 /**
  * Aborts fetch request and pnpjs timeline at any point.
- * @param {ManagedAbort} abortController
+ * @param {AbortController} abortController
  * @returns {(arg0:import('@pnp/queryable/queryable').Queryable<any>) => import('@pnp/queryable/queryable').Queryable<any>}
  */
-export function InjectAbort(abortController) {
+export function InjectAbortSignal(abortController) {
   return (instance) => {
     let isAbortSupported = true;
 
+    // All send observers has to support abort controller.
     for (const sendObserver of instance.on.send.toArray()) {
-      // Some fetch implementations may cause an infinite loop.
       if (!sendObserver[ABORT_SUPPORT]) {
         isAbortSupported = false;
         break;
@@ -162,14 +135,8 @@ export function InjectAbort(abortController) {
 
         return [response];
       });
-
-      instance.on.dispose.prepend(() => {
-        // Reset internal abortSignal just in case of executing same instance more than once.
-        abortController.reset();
-      });
     }
 
     return instance;
   };
 }
-
