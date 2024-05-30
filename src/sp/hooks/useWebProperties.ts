@@ -1,7 +1,6 @@
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { createInvokable } from "../createInvokable";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
@@ -19,9 +18,9 @@ export type WebPropertiesOptions = PnpHookOptions<ODataQueryable>;
 export function useWebProperties<T>(
   options?: WebPropertiesOptions,
   deps?: React.DependencyList,
-): Nullable<T> {
+): T | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [properties, setProperties] = useState<Nullable<T>>();
+  const [properties, setProperties] = useState<T | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.web.allProperties),
@@ -39,4 +38,3 @@ export function useWebProperties<T>(
 
   return properties;
 }
-

@@ -5,13 +5,12 @@ import {
   ContextOptions,
   ErrorOptions,
   RenderOptions,
-} from "../../types/options";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+} from "../../types";
+import { DisableOptionValueType } from "../../types";
 import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
 import { ISiteUser } from "@pnp/sp/site-users/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
@@ -35,7 +34,10 @@ export interface IsMemberOfOptions
   disabled?: DisableOptionValueType | { (groupId: string | number): boolean };
 }
 
-type MemberInfo = [Nullable<boolean>, Nullable<ISiteGroupInfo>];
+type MemberInfo = [
+  boolean | null | undefined,
+  ISiteGroupInfo | null | undefined,
+];
 
 const DEFAULT: MemberInfo = [undefined, undefined];
 
@@ -52,7 +54,9 @@ export function useIsMemberOf(
   deps?: React.DependencyList,
 ): MemberInfo {
   const globalOptions = useContext(InternalContext);
-  const [isMember, setIsMember] = useState<Nullable<MemberInfo>>(DEFAULT);
+  const [isMember, setIsMember] = useState<MemberInfo | null | undefined>(
+    DEFAULT,
+  );
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

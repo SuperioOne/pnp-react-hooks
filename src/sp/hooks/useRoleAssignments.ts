@@ -1,11 +1,9 @@
 import "@pnp/sp/security";
 import { IRoleAssignmentInfo } from "@pnp/sp/security/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection, Scope } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
-import { Scope } from "../../types/Scope";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -30,10 +28,11 @@ export interface RoleAssignmentsOptions
 export function useRoleAssignments(
   options?: RoleAssignmentsOptions,
   deps?: React.DependencyList,
-): Nullable<IRoleAssignmentInfo[]> {
+): IRoleAssignmentInfo[] | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [roleAssignments, setRoleAssignments] =
-    useState<Nullable<IRoleAssignmentInfo[]>>(undefined);
+  const [roleAssignments, setRoleAssignments] = useState<
+    IRoleAssignmentInfo[] | undefined | null
+  >(undefined);
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

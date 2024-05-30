@@ -1,15 +1,14 @@
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import { IChangeQuery } from "@pnp/sp/types";
 import { IList } from "@pnp/sp/lists/types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
 import {
+  DisableOptionValueType,
   RenderOptions,
   ErrorOptions,
   ContextOptions,
   BehaviourOptions,
-} from "../../types/options";
+} from "../../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -66,9 +65,9 @@ export function useChanges<T>(
   changeQuery: IChangeQuery,
   options?: ChangesOptions,
   deps?: React.DependencyList,
-): Nullable<T[]> {
+): T[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [changes, setChanges] = useState<Nullable<T[]>>();
+  const [changes, setChanges] = useState<T[] | null | undefined>();
   const _changeQuery = useRef<IChangeQuery>(changeQuery);
 
   if (!shallowEqual(changeQuery, _changeQuery.current)) {

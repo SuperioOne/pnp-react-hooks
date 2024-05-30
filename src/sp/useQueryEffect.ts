@@ -1,8 +1,5 @@
-import { InjectAbort, ManagedAbort } from "../behaviors/InjectAbort";
-import { InvokableFactory } from "../types/Invokeable";
-import { Nullable } from "../types/utilityTypes";
-import { SharepointQueryable } from "../types/SharepointQueryable";
-import { _PnpHookOptions } from "../types/options";
+import { InjectAbort, ManagedAbort } from "../behaviors/internals";
+import { _PnpHookOptions } from "./types";
 import { compareTuples } from "../utils/compare";
 import { deepCompareOptions } from "./deepCompare";
 import { errorHandler } from "./errorHandler";
@@ -11,6 +8,12 @@ import { insertODataQuery } from "./insertODataQuery";
 import { resolveSP } from "./resolveSP";
 import { useCallback, useEffect } from "react";
 import { useRef } from "react";
+import { SPFI } from "@pnp/sp";
+import { SharepointQueryable } from "./types.private";
+
+export type InvokableFactory<
+  TContext extends SharepointQueryable = SharepointQueryable,
+> = (sp: SPFI) => Promise<TContext>;
 
 /**
  * Reuseable internal hook for simple OData queryable actions.
@@ -25,7 +28,7 @@ export function useQueryEffect<
   TContext extends SharepointQueryable = SharepointQueryable,
 >(
   invokableFactory: InvokableFactory<TContext>,
-  stateAction: (value: Nullable<TReturn>) => void,
+  stateAction: (value: TReturn | null | undefined) => void,
   options: _PnpHookOptions,
   deps?: React.DependencyList,
 ) {
@@ -34,7 +37,7 @@ export function useQueryEffect<
     options: null,
   });
 
-  const _subscription = useRef<Nullable<Subscription>>(undefined);
+  const _subscription = useRef<Subscription | null | undefined>(undefined);
   const _abortController = useRef<ManagedAbort>(new ManagedAbort());
 
   const _cleanup = useCallback(() => {
@@ -96,6 +99,6 @@ export function useQueryEffect<
 }
 
 interface _TrackedState {
-  options: Nullable<_PnpHookOptions>;
-  externalDependencies: Nullable<React.DependencyList>;
+  options: _PnpHookOptions | null | undefined;
+  externalDependencies: React.DependencyList | null | undefined;
 }

@@ -1,24 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import "@pnp/sp/items";
 import "@pnp/sp/items/get-all";
-import {
-  DisableOptionType,
-  DisableOptionValueType,
-} from "../../types/options/RenderOptions";
+import { DisableOptionType, DisableOptionValueType } from "../../types";
 import { IItems, Items } from "@pnp/sp/items";
-import { InjectAbort, ManagedAbort } from "../../behaviors/InjectAbort";
+import { InjectAbort, ManagedAbort } from "../../behaviors/internals";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import {
-  ODataQueryableCollection,
-  FilteredODataQueryable,
-} from "../../types/ODataQueryable";
-import {
-  PnpHookOptions,
-  ListOptions,
-  _PnpHookOptions,
-} from "../../types/options";
+import { ODataQueryableCollection, FilteredODataQueryable } from "../types";
+import { PnpHookOptions, _PnpHookOptions } from "../types";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { compareTuples } from "../../utils/compare";
 import { deepCompareOptions } from "../deepCompare";
@@ -30,6 +17,20 @@ import { parseODataJSON } from "@pnp/queryable";
 import { resolveList } from "../resolveList";
 import { resolveSP } from "../resolveSP";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
+
+export enum ListOptions {
+  /**
+   * Fetch list items in single request. Request might fail due to threshold limit, if data is not indexed and filtered properly.
+   * see https://docs.microsoft.com/en-us/microsoft-365/community/large-lists-large-libraries-in-sharepoint
+   */
+  Default = 0,
+
+  /** Fetches list items in multiple calls and merges the results on the client side. */
+  All = 1,
+
+  /** Fetch list items with paging support. */
+  Paged = 2,
+}
 
 export type nextPageDispatch = (callback?: () => void) => void;
 
@@ -71,7 +72,7 @@ export function useListItems<T>(
   list: string,
   options?: AllItemsOptions,
   deps?: React.DependencyList,
-): Nullable<T[]>;
+): T[] | null | undefined;
 
 /**
  * Returns item collection from specified list.
@@ -83,7 +84,7 @@ export function useListItems<T>(
   list: string,
   options?: ListItemsOptions,
   deps?: React.DependencyList,
-): Nullable<T[]>;
+): T[] | null | undefined;
 
 /**
  * Returns items from specified list with paging support.
@@ -95,16 +96,23 @@ export function useListItems<T>(
   list: string,
   options?: PagedItemsOptions,
   deps?: React.DependencyList,
-): [Nullable<T[]>, nextPageDispatch, boolean];
+): [T[] | null | undefined, nextPageDispatch, boolean];
 
 export function useListItems<T>(
   list: string,
   options?: _ListItemsOptions,
   deps?: React.DependencyList,
-): Nullable<T[]> | [Nullable<T[]>, nextPageDispatch, boolean | undefined] {
+):
+  | T[]
+  | null
+  | undefined
+  | [T[] | null | undefined, nextPageDispatch, boolean | undefined] {
   const globalOptions = useContext(InternalContext);
   const [state, setState] = useState<
-    Nullable<T[]> | [Nullable<T[]>, nextPageDispatch, boolean | undefined]
+    | T[]
+    | null
+    | undefined
+    | [T[] | null | undefined, nextPageDispatch, boolean | undefined]
   >();
   const [next, setNext] = useState<NextPageCall>();
 
@@ -115,7 +123,7 @@ export function useListItems<T>(
     options: null,
   });
 
-  const _subscription = useRef<Nullable<Subscription>>(undefined);
+  const _subscription = useRef<Subscription | null | undefined>(undefined);
   const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
   const _abortController = useRef<ManagedAbort>(new ManagedAbort());
 
@@ -299,8 +307,8 @@ function _customParserBehavior() {
 }
 
 interface _TrackedState {
-  url: Nullable<string>;
-  list: Nullable<string>;
-  options: Nullable<_PnpHookOptions>;
-  externalDeps: Nullable<React.DependencyList>;
+  url: string | null | undefined;
+  list: string | null | undefined;
+  options: _PnpHookOptions | null | undefined;
+  externalDeps: React.DependencyList | null | undefined;
 }

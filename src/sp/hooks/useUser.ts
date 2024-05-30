@@ -1,14 +1,13 @@
 import "@pnp/sp/site-users";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { createInvokable } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveUser } from "../resolveUser";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { InternalContext } from "../../context";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { SPFI } from "@pnp/sp";
@@ -28,9 +27,11 @@ export function useUser(
   userId: number | string,
   options?: UserOptions,
   deps?: React.DependencyList,
-): Nullable<ISiteUserInfo> {
+): ISiteUserInfo | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [siteUser, setSiteUser] = useState<Nullable<ISiteUserInfo>>(undefined);
+  const [siteUser, setSiteUser] = useState<ISiteUserInfo | undefined | null>(
+    undefined,
+  );
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

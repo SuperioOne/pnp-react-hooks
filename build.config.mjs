@@ -16,7 +16,7 @@ const configs = {
       stageName: "ESM build",
       rollupConfig: {
         strictDeprecations: true,
-        input: ["src/index.ts", "src/behaviors/index.ts"],
+        input: ["src/index.ts", "src/behaviors/index.js"],
         external: [/node_modules/],
         plugins: [
           del({
@@ -48,4 +48,3 @@ const configs = {
 };
 
 export default configs;
-

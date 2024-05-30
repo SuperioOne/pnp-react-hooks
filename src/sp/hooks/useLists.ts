@@ -1,8 +1,7 @@
 import { IListInfo } from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -20,9 +19,9 @@ export type ListsOptions = PnpHookOptions<ODataQueryableCollection>;
 export function useLists(
   options?: ListsOptions,
   deps?: React.DependencyList,
-): Nullable<IListInfo[]> {
+): IListInfo[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [lists, setLists] = useState<Nullable<IListInfo[]>>();
+  const [lists, setLists] = useState<IListInfo[] | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.web.lists),
@@ -40,4 +39,3 @@ export function useLists(
 
   return lists;
 }
-

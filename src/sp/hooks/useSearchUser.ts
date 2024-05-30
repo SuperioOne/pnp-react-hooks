@@ -1,19 +1,18 @@
 import "@pnp/sp/profiles";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import {
   IClientPeoplePickerQueryParameters,
   IPeoplePickerEntity,
   IProfiles,
 } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
 import { PrincipalType, SPFI } from "@pnp/sp";
 import {
   RenderOptions,
   ErrorOptions,
   ContextOptions,
   BehaviourOptions,
-} from "../../types/options";
+  DisableOptionValueType,
+} from "../../types";
 import { createInvokable } from "../createInvokable";
 import { defaultCheckDisable, checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -49,9 +48,11 @@ export function useSearchUser(
   searchOptions: IClientPeoplePickerQueryParameters | string,
   options?: SearchUserOptions,
   deps?: React.DependencyList,
-): Nullable<IPeoplePickerEntity[]> {
+): IPeoplePickerEntity[] | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [people, setPeople] = useState<Nullable<IPeoplePickerEntity[]>>();
+  const [people, setPeople] = useState<
+    IPeoplePickerEntity[] | undefined | null
+  >();
   const _searchQuery =
     useRef<IClientPeoplePickerQueryParameters>(DEFAULT_OPTIONS);
 

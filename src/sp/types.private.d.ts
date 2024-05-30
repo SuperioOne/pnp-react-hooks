@@ -15,3 +15,7 @@ export type ScopeReturnType<TList, TItem> = TList extends string
       ? IWeb
       : never
     : never;
+
+export interface PnpActionFunction<TContext, TResult> {
+  (this: TContext, options?: RequestInit): Promise<TResult>;
+}

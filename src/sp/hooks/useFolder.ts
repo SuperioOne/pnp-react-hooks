@@ -1,10 +1,9 @@
 import "@pnp/sp/folders";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IFolderInfo } from "@pnp/sp/folders/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -27,9 +26,9 @@ export function useFolder(
   folderId: string,
   options?: FolderOptions,
   deps?: React.DependencyList,
-): Nullable<IFolderInfo> {
+): IFolderInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [folder, setFolder] = useState<Nullable<IFolderInfo>>();
+  const [folder, setFolder] = useState<IFolderInfo | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

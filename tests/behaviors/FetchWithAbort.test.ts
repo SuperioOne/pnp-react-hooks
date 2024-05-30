@@ -1,6 +1,9 @@
-import { ABORT_SUPPORT, HTTP_ERROR_CODES } from "../../src/behaviors/types";
+import {
+  ABORT_SUPPORT,
+  browserFetchRetry,
+} from "../../src/behaviors/internals";
 import { BrowserFetchWithRetry } from "@pnp/queryable";
-import { FetchWithAbort, _browserFetchRetry } from "../../src/behaviors/FetchWithAbort";
+import { FetchWithAbort } from "../../src/behaviors/index";
 import { HttpRequestError } from "@pnp/queryable";
 import { InitGlobalFetch } from "../tools/InitGlobalFetch";
 import { Response } from "node-fetch";
@@ -9,112 +12,103 @@ import "@pnp/sp/webs";
 
 const originalFetch = global.fetch;
 
-beforeAll(() =>
-{
-    InitGlobalFetch();
+beforeAll(() => {
+  InitGlobalFetch();
 });
 
-beforeEach(() =>
-{
-    jest.restoreAllMocks();
+beforeEach(() => {
+  jest.restoreAllMocks();
 });
 
-afterAll(() =>
-{
-    jest.restoreAllMocks();
-    global.fetch = originalFetch;
+afterAll(() => {
+  jest.restoreAllMocks();
+  global.fetch = originalFetch;
 });
 
-test('browser-fetch retry test with custom retry count', async () =>
-{
-    const mockFetch = jest.spyOn(global, "fetch");
-    const retryCount = 6;
+test("browser-fetch retry test with custom retry count", async () => {
+  const mockFetch = jest.spyOn(global, "fetch");
+  const retryCount = 6;
 
-    mockFetch.mockImplementation((): Promise<any> =>
+  mockFetch.mockImplementation(
+    (): Promise<any> =>
+      new Promise((resolve) =>
+        resolve(new Response(undefined, { status: 408 })),
+      ),
+  );
+
+  try {
+    await browserFetchRetry("/mock-api-call/request-time-out-408", {
+      retry: retryCount,
+    });
+  } catch (err) {
+    expect((<HttpRequestError>err).response.status).toBe(408);
+  }
+  expect(mockFetch).toBeCalledTimes(retryCount);
+});
+
+test("browser-fetch retry test for all codes", async () => {
+  const mockFetch = jest.spyOn(global, "fetch");
+
+  for (const code of [408, 429, 503, 504]) {
+    mockFetch.mockImplementation(
+      (): Promise<any> =>
         new Promise((resolve) =>
-            resolve(new Response(undefined, { status: 408 })))
+          resolve(new Response(undefined, { status: code })),
+        ),
     );
 
-    try
-    {
-        await _browserFetchRetry("/mock-api-call/request-time-out-408", { retry: retryCount });
+    try {
+      await browserFetchRetry(`/mock-api-call/${code}`);
+    } catch (err) {
+      expect((<HttpRequestError>err).response.status).toBe(code);
     }
-    catch (err)
-    {
-        expect((<HttpRequestError>err).response.status).toBe(408);
-    }
-    expect(mockFetch).toBeCalledTimes(retryCount);
+
+    expect(mockFetch).toBeCalledTimes(3);
+    mockFetch.mockClear();
+  }
 });
 
-test('browser-fetch retry test for all codes', async () =>
-{
-    const mockFetch = jest.spyOn(global, "fetch");
+test("browser-fetch network error", async () => {
+  const mockFetch = jest.spyOn(global, "fetch");
 
-    for (const code of HTTP_ERROR_CODES)
-    {
-        mockFetch.mockImplementation((): Promise<any> =>
-            new Promise((resolve) =>
-                resolve(new Response(undefined, { status: code })))
-        );
+  mockFetch.mockImplementation((): Promise<any> => {
+    throw new Error("NetworkError");
+  });
 
-        try
-        {
-            await _browserFetchRetry(`/mock-api-call/${code}`);
-        }
-        catch (err)
-        {
-            expect((<HttpRequestError>err).response.status).toBe(code);
-        }
-
-        expect(mockFetch).toBeCalledTimes(3);
-        mockFetch.mockClear();
-    }
+  await expect(
+    browserFetchRetry("/mock-api-call/fetch-network-error"),
+  ).rejects.toThrowError("NetworkError");
+  expect(mockFetch).toBeCalledTimes(1);
 });
 
-test('browser-fetch network error', async () =>
-{
-    const mockFetch = jest.spyOn(global, "fetch");
+test("browser-fetch abort signal", async () => {
+  const controller = new AbortController();
+  controller.abort();
 
-    mockFetch.mockImplementation((): Promise<any> =>
-    {
-        throw new Error("NetworkError");
+  try {
+    await browserFetchRetry("https://localhost/mock-api-call/fetch-aborted", {
+      request: { signal: controller.signal },
     });
-
-    await expect(_browserFetchRetry("/mock-api-call/fetch-network-error")).rejects.toThrowError("NetworkError");
-    expect(mockFetch).toBeCalledTimes(1);
+  } catch (err) {
+    expect((<Error>err).name).toBe("AbortError");
+  }
 });
 
-test('browser-fetch abort signal', async () =>
-{
-    const controller = new AbortController();
-    controller.abort();
+test("FetchWithAbort behavior abort flag check", async () => {
+  const queryableWithAbort = spfi().using(FetchWithAbort()).web;
 
-    try
-    {
-        await _browserFetchRetry("https://localhost/mock-api-call/fetch-aborted", { request: { signal: controller.signal } });
-    }
-    catch (err)
-    {
-        expect((<Error>err).name).toBe("AbortError");
-    }
+  const sendObservers = queryableWithAbort.on.send.toArray();
+
+  expect(sendObservers.length).toBe(1);
+  expect(sendObservers[0][ABORT_SUPPORT]).toBe(true);
 });
 
-test('FetchWithAbort behavior abort flag check', async () =>
-{
-    const queryableWithAbort = spfi().using(FetchWithAbort()).web;
+test("Default fetch abort flag check", async () => {
+  const queryable = spfi().using(BrowserFetchWithRetry()).web;
 
-    const sendObservers = queryableWithAbort.on.send.toArray();
+  const sendObservers = queryable.on.send.toArray();
 
-    expect(sendObservers.length).toBe(1);
-    expect(sendObservers[0][ABORT_SUPPORT]).toBe(true);
+  expect(sendObservers.length).toBe(1);
+  expect(sendObservers[0][ABORT_SUPPORT]).toBeFalsy();
 });
 
-test('Default fetch abort flag check', async () =>
-{
-    const queryable = spfi().using(BrowserFetchWithRetry()).web;
-
-    const sendObservers = queryable.on.send.toArray();
-
-    expect(sendObservers.length).toBe(1);
-    expect(sendObservers[0][ABORT_SUPPORT]).toBeFalsy();
-});

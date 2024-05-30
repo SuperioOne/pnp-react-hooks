@@ -3,7 +3,11 @@ import { CompletionObserver, from, Subscription } from "rxjs";
 import {
   DisableOptionType,
   DisableOptionValueType,
-} from "../../types/options/RenderOptions";
+  RenderOptions,
+  ErrorOptions,
+  ContextOptions,
+  BehaviourOptions,
+} from "../../types";
 import {
   ISearchQuery,
   ISearchResponse,
@@ -11,16 +15,9 @@ import {
   SearchQueryInit,
   ISearchBuilder,
 } from "@pnp/sp/search/types";
-import { InjectAbort, ManagedAbort } from "../../behaviors/InjectAbort";
+import { InjectAbort, ManagedAbort } from "../../behaviors/internals";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import {
-  RenderOptions,
-  ErrorOptions,
-  _PnpHookOptions,
-  ContextOptions,
-  BehaviourOptions,
-} from "../../types/options";
+import { _PnpHookOptions } from "../types";
 import { SearchResults } from "@pnp/sp/search";
 import { assert, assertNumber } from "../../utils/assert";
 import { compareTuples, shallowEqual } from "../../utils/compare";
@@ -63,7 +60,7 @@ export function useSearch(
   searchQuery: ISearchQuery | string,
   options?: SearchOptions,
   deps?: React.DependencyList,
-): [Nullable<SpSearchResult>, GetPageDispatch] {
+): [SpSearchResult | null | undefined, GetPageDispatch] {
   const globalOptions = useContext(InternalContext);
   const [searchState, dispatch] = useReducer(_reducer, INITIAL_STATE);
   const _innerState = useRef<TrackedState>({
@@ -72,7 +69,7 @@ export function useSearch(
     searchQuery: null,
     options: null,
   });
-  const _subscription = useRef<Nullable<Subscription>>(undefined);
+  const _subscription = useRef<Subscription | undefined | null>(undefined);
   const _abortController = useRef<ManagedAbort>(new ManagedAbort());
   const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
 
@@ -309,8 +306,8 @@ export interface SpSearchResult {
 }
 
 interface TrackedState {
-  searchQuery: Nullable<ISearchQuery | string>;
-  externalDependencies: Nullable<React.DependencyList>;
+  searchQuery: ISearchQuery | string | null | undefined;
+  externalDependencies: React.DependencyList | null | undefined;
   page: number;
-  options: Nullable<_PnpHookOptions<unknown>>;
+  options: _PnpHookOptions<unknown> | null | undefined;
 }

@@ -1,14 +1,13 @@
 import "@pnp/sp/security";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import {
   IRoleDefinition,
   IRoleDefinitionInfo,
   RoleTypeKind,
 } from "@pnp/sp/security/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
@@ -38,10 +37,11 @@ export function useRoleDefinition(
   roleDefId: string | number | RoleType,
   options?: RoleDefinitionOptions,
   deps?: React.DependencyList,
-): Nullable<IRoleDefinitionInfo> {
+): IRoleDefinitionInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [roleDefinition, setRoleDefinition] =
-    useState<Nullable<IRoleDefinitionInfo>>(undefined);
+  const [roleDefinition, setRoleDefinition] = useState<
+    IRoleDefinitionInfo | null | undefined
+  >(undefined);
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {
@@ -90,4 +90,3 @@ export function useRoleDefinition(
 
   return roleDefinition;
 }
-

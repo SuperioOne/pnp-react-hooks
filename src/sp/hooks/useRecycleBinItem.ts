@@ -1,11 +1,9 @@
 import "@pnp/sp/recycle-bin";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IRecycleBinItemObject } from "@pnp/sp/recycle-bin/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
-import { RecycleBinScopes } from "../../types/literalTypes";
+import { ODataQueryable, RecycleBinScopes } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -29,8 +27,10 @@ export function useRecycleBinItem(
   itemId: string,
   options?: RecycleBinItemOptions,
   deps?: React.DependencyList,
-): Nullable<IRecycleBinItemObject> {
-  const [binItem, setBinItem] = useState<Nullable<IRecycleBinItemObject>>();
+): IRecycleBinItemObject | null | undefined {
+  const [binItem, setBinItem] = useState<
+    IRecycleBinItemObject | null | undefined
+  >();
   const globalOptions = useContext(InternalContext);
 
   const _options = useMemo(() => {

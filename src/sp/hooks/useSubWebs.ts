@@ -1,8 +1,7 @@
 import { IWebInfosData } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -20,9 +19,9 @@ export type SubWebsOptions = PnpHookOptions<ODataQueryableCollection>;
 export function useSubWebs(
   options?: SubWebsOptions,
   deps?: React.DependencyList,
-): Nullable<IWebInfosData[]> {
+): IWebInfosData[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [subWebs, setSubWebs] = useState<Nullable<IWebInfosData[]>>();
+  const [subWebs, setSubWebs] = useState<IWebInfosData[] | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.web.webinfos),
@@ -40,4 +39,3 @@ export function useSubWebs(
 
   return subWebs;
 }
-

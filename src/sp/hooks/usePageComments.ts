@@ -1,13 +1,12 @@
 import "@pnp/sp/clientside-pages";
 import "@pnp/sp/comments";
 import "@pnp/sp/comments/clientside-page";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IClientsidePage } from "@pnp/sp/clientside-pages/types";
 import { ICommentInfo } from "@pnp/sp/comments/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assert } from "../../utils/assert";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
@@ -32,9 +31,9 @@ export function usePageComments(
   pageRelativePath: string,
   options?: PageCommentsOptions,
   deps?: React.DependencyList,
-): Nullable<ICommentInfo[]> {
+): ICommentInfo[] | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [comments, setComments] = useState<Nullable<ICommentInfo[]>>();
+  const [comments, setComments] = useState<ICommentInfo[] | undefined | null>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

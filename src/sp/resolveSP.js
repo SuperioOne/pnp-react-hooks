@@ -3,7 +3,7 @@ import { spfi, SPFI } from "@pnp/sp";
 
 /**
  * Resolves SP from configuration.
- * @param {import('../types/options')._PnpHookOptions<unknown>} options
+ * @param {import('./types')._PnpHookOptions<unknown>} options
  * @param {import('@pnp/core').TimelinePipe[]} [behaviors]
  * @throws {import('../errors/AssertError').AssertError} Throws when option.sp type is not instance of SPFI.
  * @returns {SPFI} - SP instance.

@@ -1,7 +1,4 @@
-import {
-  ODataQueryable,
-  ODataQueryableCollection,
-} from "../../src/types/ODataQueryable";
+import { ODataQueryable, ODataQueryableCollection } from "../../src/sp/types";
 import { deepCompareQuery } from "../../src/sp/deepCompare";
 
 test("Query equal queryable", () => {
@@ -147,4 +144,3 @@ test("Query collection undefined value", () => {
 
   expect(deepCompareQuery(a, b)).toBe(false);
 });
-

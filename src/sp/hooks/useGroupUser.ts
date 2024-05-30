@@ -1,10 +1,9 @@
 import "@pnp/sp/site-users";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -32,9 +31,11 @@ export function useGroupUser(
   userId: string | number,
   options?: GroupUserOptions,
   deps?: React.DependencyList,
-): Nullable<ISiteUserInfo> {
+): ISiteUserInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [groupUser, setGroupUser] = useState<Nullable<ISiteUserInfo>>();
+  const [groupUser, setGroupUser] = useState<
+    ISiteUserInfo | null | undefined
+  >();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

@@ -1,11 +1,10 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assertID } from "../../utils/assert";
 import { createInvokable } from "../createInvokable";
@@ -35,9 +34,11 @@ export function useAttachments(
   list: string,
   options?: ItemAttachmentsOptions,
   deps?: React.DependencyList,
-): Nullable<IAttachmentInfo[]> {
+): IAttachmentInfo[] | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [attachments, setAttachments] = useState<Nullable<IAttachmentInfo[]>>();
+  const [attachments, setAttachments] = useState<
+    IAttachmentInfo[] | undefined | null
+  >();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

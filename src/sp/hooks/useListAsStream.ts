@@ -3,16 +3,15 @@ import {
   ErrorOptions,
   RenderOptions,
   BehaviourOptions,
-} from "../../types/options";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+  DisableOptionValueType,
+} from "../../types";
 import {
   IList,
   IRenderListDataAsStreamResult,
   IRenderListDataParameters,
 } from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { RenderListDataOverrideParameters } from "../../types/RenderListDataOverrideParameters";
+import { RenderListDataOverrideParameters } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -73,10 +72,11 @@ export function useListAsStream(
   parameters: RenderListParameters,
   options?: ListAsStreamOptions,
   deps?: React.DependencyList,
-): Nullable<IRenderListDataAsStreamResult> {
+): IRenderListDataAsStreamResult | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [listData, setListData] =
-    useState<Nullable<IRenderListDataAsStreamResult>>();
+  const [listData, setListData] = useState<
+    IRenderListDataAsStreamResult | null | undefined
+  >();
   const _parameters = useRef<RenderListParameters>(parameters);
   let _params;
 

@@ -1,11 +1,9 @@
 import "@pnp/sp/features/site";
 import "@pnp/sp/features/web";
-import { FeatureScopes } from "../../types/literalTypes";
 import { IFeatureInfo, IFeatures } from "@pnp/sp/features/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection, FeatureScopes } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -31,9 +29,9 @@ export interface FeaturesOptions
 export function useFeatures(
   options?: FeaturesOptions,
   deps?: React.DependencyList,
-): Nullable<IFeatureInfo[]> {
+): IFeatureInfo[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [features, setFeatures] = useState<Nullable<IFeatureInfo[]>>();
+  const [features, setFeatures] = useState<IFeatureInfo[] | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {
@@ -68,4 +66,3 @@ export function useFeatures(
 
   return features;
 }
-

@@ -1,10 +1,9 @@
 import "@pnp/sp/fields";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IFieldInfo } from "@pnp/sp/fields/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assertString } from "../../utils/assert";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
@@ -34,9 +33,9 @@ export function useField(
   fieldId: string,
   options?: FieldOptions,
   deps?: React.DependencyList,
-): Nullable<IFieldInfo> {
+): IFieldInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [field, setField] = useState<Nullable<IFieldInfo>>();
+  const [field, setField] = useState<IFieldInfo | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

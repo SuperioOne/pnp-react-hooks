@@ -1,6 +1,6 @@
 /**
  * @param {Error} err
- * @param {import('../types/options').ErrorOptions} options
+ * @param {import('../types').ErrorOptions} options
  */
 export function errorHandler(err, options) {
   if (typeof options.error === "function") {
@@ -9,4 +9,3 @@ export function errorHandler(err, options) {
     throw err;
   }
 }
-

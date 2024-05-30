@@ -5,19 +5,12 @@ import {
   ContextOptions,
   ErrorOptions,
   RenderOptions,
-} from "../../types/options";
-import {
-  DisableOptionType,
-  DisableOptionValueType,
-} from "../../types/options/RenderOptions";
-import {
-  FilteredODataQueryable,
-  ODataQueryableCollection,
-} from "../../types/ODataQueryable";
+} from "../../types";
+import { DisableOptionType, DisableOptionValueType } from "../../types";
+import { FilteredODataQueryable, ODataQueryableCollection } from "../types";
 import { IFileInfo } from "@pnp/sp/files/types";
 import { IFolderInfo } from "@pnp/sp/folders/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
 import { assert, assertString } from "../../utils/assert";
 import { compareTuples, compareURL } from "../../utils/compare";
 import { deepCompareQuery } from "../deepCompare";
@@ -60,7 +53,7 @@ export function useFolderTree(
   rootFolderRelativePath: string,
   options?: FolderTreeOptions,
   deps?: React.DependencyList,
-): Nullable<TreeContext> {
+): TreeContext | null | undefined {
   const [state, _dispatch] = useReducer(_reducer, {
     currentFolderPath: rootFolderRelativePath,
     initialUrl: rootFolderRelativePath,
@@ -78,7 +71,7 @@ export function useFolderTree(
   });
 
   const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
-  const _subscription = useRef<Nullable<Subscription>>(undefined);
+  const _subscription = useRef<Subscription | null | undefined>(undefined);
 
   // dispatch proxy for disabling callbacks. Prevents any state change when hook is disabled.
   const dispatch = useCallback((action: TreeAction) => {
@@ -282,19 +275,19 @@ const _reducer = (state: FolderState, action: TreeAction): FolderState => {
 };
 
 interface FolderState {
-  initialUrl: Nullable<string>;
-  currentFolderPath: Nullable<string>;
+  initialUrl: string | null | undefined;
+  currentFolderPath: string | null | undefined;
   callback?: () => void;
-  treeContext?: Nullable<TreeContext>;
+  treeContext?: TreeContext | null | undefined;
 }
 
 interface TrackedState {
-  folderPath: Nullable<string>;
-  options: Nullable<ContextOptions>;
-  externalDependencies: Nullable<React.DependencyList>;
-  folderFilter: Nullable<string>;
-  fileQuery: Nullable<FilteredODataQueryable>;
-  initialPath: Nullable<string>;
+  folderPath: string | null | undefined;
+  options: ContextOptions | null | undefined;
+  externalDependencies: React.DependencyList | null | undefined;
+  folderFilter: string | null | undefined;
+  fileQuery: FilteredODataQueryable | null | undefined;
+  initialPath: string | null | undefined;
 }
 
 export interface IFolderNode extends IFolderInfo {
@@ -348,14 +341,14 @@ interface ResetAction extends Action<ActionTypes.Reset> {
 }
 
 interface NewTreeResultAction extends Action<ActionTypes.NewTreeResult> {
-  currentPath: Nullable<string>;
+  currentPath: string | null | undefined;
   context: TreeContext;
 }
 
 interface ChangePathAction
   extends Action<ActionTypes.ChangePath>,
     Partial<FolderState> {
-  currentFolderPath: Nullable<string>;
+  currentFolderPath: string | null | undefined;
 }
 
 type TreeAction = ResetAction | ChangePathAction | NewTreeResultAction;

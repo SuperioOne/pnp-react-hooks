@@ -1,13 +1,11 @@
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import {
   ErrorOptions,
   ContextOptions,
   BehaviourOptions,
-} from "../../types/options";
-import { IChangeTokenInfo, ChangeTokenInfo } from "../../types/ChangeTokenInfo";
+  DisableOptionValueType,
+} from "../../types";
 import { IList } from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -16,12 +14,43 @@ import { resolveList } from "../resolveList";
 import { shallowEqual } from "../../utils/compare";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
+import { IListInfo } from "@pnp/sp/lists/types";
 
 export interface ListTokenOptions
   extends ErrorOptions,
     ContextOptions,
     BehaviourOptions {
   disabled?: DisableOptionValueType | { (list: string): boolean };
+}
+
+export class ChangeTokenInfo implements IChangeTokenInfo {
+  constructor(listInfo?: IListInfo) {
+    if (typeof listInfo === "object") {
+      this.CurrentChangeToken = listInfo.CurrentChangeToken.StringValue;
+      this.Id = listInfo.Id;
+      this.LastChanges = {
+        LastItemDeletedDate: listInfo.LastItemDeletedDate,
+        LastItemModifiedDate: listInfo.LastItemModifiedDate,
+        LastItemUserModifiedDate: listInfo.LastItemUserModifiedDate,
+      };
+    }
+  }
+
+  Id: string;
+  CurrentChangeToken: string;
+  LastChanges: Timings;
+}
+
+export interface IChangeTokenInfo {
+  Id: string;
+  CurrentChangeToken: string;
+  LastChanges: Timings;
+}
+
+interface Timings {
+  LastItemDeletedDate: string;
+  LastItemModifiedDate: string;
+  LastItemUserModifiedDate: string;
 }
 
 /**
@@ -34,12 +63,12 @@ export function useListChangeToken(
   list: string,
   options?: ListTokenOptions,
   deps?: React.DependencyList,
-): Nullable<IChangeTokenInfo> {
+): IChangeTokenInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [token, setToken] = useState<Nullable<IChangeTokenInfo>>();
+  const [token, setToken] = useState<IChangeTokenInfo | null | undefined>();
 
   const _setTokenProxy = useCallback(
-    (newToken: Nullable<IChangeTokenInfo>) => {
+    (newToken: IChangeTokenInfo | null | undefined) => {
       if (!shallowEqual(newToken, token)) {
         setToken(newToken);
       }

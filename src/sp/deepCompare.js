@@ -2,8 +2,8 @@ import { compareArray, shallowEqual } from "../utils/compare";
 
 /**
  * Deeply compares options.
- * @param {import('../types/options')._PnpHookOptions | undefined | null} left
- * @param {import('../types/options')._PnpHookOptions | undefined | null} right
+ * @param {import('./types')._PnpHookOptions | undefined | null} left
+ * @param {import('./types')._PnpHookOptions | undefined | null} right
  * @returns {boolean} Returns true if both options are equal, otherwise returns false.
  **/
 export function deepCompareOptions(left, right) {
@@ -16,7 +16,7 @@ export function deepCompareOptions(left, right) {
 
 /**
  * Deep compares same type of OData queryable objects.
- * @template {import('../types/ODataQueryable').ODataQueryableCollection | import('../types/ODataQueryable').ODataQueryable} T
+ * @template {import('./types').ODataQueryableCollection | import('./types').ODataQueryable} T
  * @param {T | null | undefined} left
  * @param {T | null | undefined} right
  * @returns {boolean} Returns true if both Queryables are equal, otherwise returns false.
@@ -29,7 +29,7 @@ export function deepCompareQuery(left, right) {
 }
 
 /**
- * @typedef {import('../types/ODataQueryable').ODataQueryable & import('../types/ODataQueryable').ODataQueryableCollection} _ODataQuery
+ * @typedef {import('./types').ODataQueryable & import('./types').ODataQueryableCollection} _ODataQuery
  */
 
 /**

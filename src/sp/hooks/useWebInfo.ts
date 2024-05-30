@@ -1,8 +1,7 @@
 import { IWebInfo } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -20,9 +19,9 @@ export type WebInfoOptions = PnpHookOptions<ODataQueryable>;
 export function useWebInfo(
   options?: WebInfoOptions,
   deps?: React.DependencyList,
-): Nullable<IWebInfo> {
+): IWebInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [webInfo, setWebInfo] = useState<Nullable<IWebInfo>>();
+  const [webInfo, setWebInfo] = useState<IWebInfo | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.web),
@@ -40,4 +39,3 @@ export function useWebInfo(
 
   return webInfo;
 }
-

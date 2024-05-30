@@ -5,11 +5,10 @@ import {
   ContextOptions,
   ErrorOptions,
   RenderOptions,
-} from "../../types/options";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+  DisableOptionValueType,
+} from "../../types";
 import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
 import { PermissionKind } from "@pnp/sp/security/types";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
@@ -20,7 +19,7 @@ import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveScope } from "../resolveScope";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useMemo, useContext } from "react";
-import { Scope } from "../../types/Scope";
+import { Scope } from "../types";
 
 export interface UserPermissionOptions
   extends ErrorOptions,
@@ -59,10 +58,11 @@ export function useHasPermission(
   permissionKinds: PermissionKind[] | PermissionKind,
   options?: UserPermissionOptions,
   deps?: React.DependencyList,
-): Nullable<boolean> {
+): boolean | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [hasPermission, setHasPermission] =
-    useState<Nullable<boolean>>(undefined);
+  const [hasPermission, setHasPermission] = useState<
+    boolean | null | undefined
+  >(undefined);
 
   const _permFlag: PermissionKind = useMemo(
     () =>

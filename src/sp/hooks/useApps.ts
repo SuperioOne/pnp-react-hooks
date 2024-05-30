@@ -1,15 +1,13 @@
 import "@pnp/sp/appcatalog/web";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection, AppCatalogScopes } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
-import { AppCatalogScopes } from "../../types/literalTypes";
 
 /**
  * @inheritDoc
@@ -28,9 +26,9 @@ export interface WebAppsOptions
 export function useApps<T>(
   options?: WebAppsOptions,
   deps?: React.DependencyList,
-): Nullable<T[]> {
+): T[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [apps, setApps] = useState<Nullable<T[]>>();
+  const [apps, setApps] = useState<T[] | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {
@@ -54,4 +52,3 @@ export function useApps<T>(
 
   return apps;
 }
-

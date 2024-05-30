@@ -1,4 +1,4 @@
-import { assert } from "../utils/assert";
+import { assert } from "./assert";
 
 /**
  * Pollyfill function for Object.is()

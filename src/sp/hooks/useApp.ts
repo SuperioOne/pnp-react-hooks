@@ -3,11 +3,9 @@ import "@pnp/sp/appcatalog";
 import { SPFI } from "@pnp/sp";
 import { useContext, useState, useCallback, useMemo } from "react";
 import { InternalContext } from "../../context";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { AppCatalogScopes } from "../../types/literalTypes";
-import { PnpHookOptions } from "../../types/options";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
-import { Nullable } from "../../types/utilityTypes";
+import { ODataQueryable, AppCatalogScopes } from "../types";
+import { PnpHookOptions } from "../types";
+import { DisableOptionValueType } from "../../types";
 import { assert } from "../../utils/assert";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -34,9 +32,9 @@ export function useApp<T>(
   appId: string,
   options?: WebAppOptions,
   deps?: React.DependencyList,
-): Nullable<T> {
+): T | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [apps, setApps] = useState<Nullable<T>>();
+  const [apps, setApps] = useState<T | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

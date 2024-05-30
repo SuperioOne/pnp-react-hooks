@@ -1,9 +1,8 @@
 import "@pnp/sp/site-users";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -21,10 +20,11 @@ export type CurrentUserInfoOptions = PnpHookOptions<ODataQueryable>;
 export function useCurrentUser(
   options?: CurrentUserInfoOptions,
   deps?: React.DependencyList,
-): Nullable<ISiteUserInfo> {
+): ISiteUserInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [currentUser, setCurrentUser] =
-    useState<Nullable<ISiteUserInfo>>(undefined);
+  const [currentUser, setCurrentUser] = useState<
+    ISiteUserInfo | null | undefined
+  >(undefined);
 
   const invocableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.web.currentUser),
@@ -42,4 +42,3 @@ export function useCurrentUser(
 
   return currentUser;
 }
-

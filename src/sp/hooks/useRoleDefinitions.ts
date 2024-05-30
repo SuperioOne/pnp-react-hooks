@@ -1,9 +1,8 @@
 import "@pnp/sp/security";
 import { IRoleDefinitionInfo } from "@pnp/sp/security/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -21,10 +20,11 @@ export type RoleDefinitionsOptions = PnpHookOptions<ODataQueryableCollection>;
 export function useRoleDefinitions(
   options?: RoleDefinitionsOptions,
   deps?: React.DependencyList,
-): Nullable<IRoleDefinitionInfo[]> {
+): IRoleDefinitionInfo[] | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [roleDefinitions, setRoleDefinitions] =
-    useState<Nullable<IRoleDefinitionInfo[]>>(undefined);
+  const [roleDefinitions, setRoleDefinitions] = useState<
+    IRoleDefinitionInfo[] | undefined | null
+  >(undefined);
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.web.roleDefinitions),
@@ -42,4 +42,3 @@ export function useRoleDefinitions(
 
   return roleDefinitions;
 }
-

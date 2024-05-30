@@ -1,9 +1,8 @@
 import "@pnp/sp/content-types";
 import { IContentTypeInfo } from "@pnp/sp/content-types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -31,10 +30,11 @@ export interface ItemContentTypeOptions
 export function useContentTypes(
   options?: ItemContentTypeOptions,
   deps?: React.DependencyList,
-): Nullable<IContentTypeInfo[]> {
+): IContentTypeInfo[] | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [contentTypes, setContentTypes] =
-    useState<Nullable<IContentTypeInfo[]>>();
+  const [contentTypes, setContentTypes] = useState<
+    IContentTypeInfo[] | undefined | null
+  >();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

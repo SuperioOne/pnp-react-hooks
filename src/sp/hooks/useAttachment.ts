@@ -1,12 +1,10 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
-import { FileReturnTypes } from "../../types/literalTypes";
+import { DisableOptionValueType } from "../../types";
 import { IAttachmentInfo } from "@pnp/sp/attachments/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable, FileReturnTypes } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { createInvokable } from "../createInvokable";
@@ -62,7 +60,7 @@ export function useAttachment(
   list: string,
   options?: AttachmentInfoOptions,
   deps?: React.DependencyList,
-): Nullable<IAttachmentInfo>;
+): IAttachmentInfo | null | undefined;
 
 /**
  * Returns attachment content as {@link Blob}.
@@ -79,7 +77,7 @@ export function useAttachment(
   list: string,
   options?: AttachmentBlobOptions,
   deps?: React.DependencyList,
-): Nullable<Blob>;
+): Blob | null | undefined;
 
 /**
  * Returns attachment content as {@link ArrayBuffer}.
@@ -96,7 +94,7 @@ export function useAttachment(
   list: string,
   options?: AttachmentBufferOptions,
   deps?: React.DependencyList,
-): Nullable<ArrayBuffer>;
+): ArrayBuffer | null | undefined;
 
 /**
  * Returns attachment content as string.
@@ -113,7 +111,7 @@ export function useAttachment(
   list: string,
   options?: AttachmentTextOptions,
   deps?: React.DependencyList,
-): Nullable<string>;
+): string | null | undefined;
 
 export function useAttachment(
   attachmentName: string,
@@ -121,9 +119,11 @@ export function useAttachment(
   list: string,
   options?: _BaseAttachmentOptions,
   deps?: React.DependencyList,
-): Nullable<InstanceTypes> {
+): InstanceTypes | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [attachment, setAttachment] = useState<Nullable<InstanceTypes>>();
+  const [attachment, setAttachment] = useState<
+    InstanceTypes | null | undefined
+  >();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

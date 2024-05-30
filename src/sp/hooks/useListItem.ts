@@ -1,9 +1,8 @@
 import "@pnp/sp/items";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assertID } from "../../utils/assert";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
@@ -31,9 +30,9 @@ export function useListItem<T>(
   list: string,
   options?: ListItemOptions,
   deps?: React.DependencyList,
-): Nullable<T> {
+): T | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [itemData, setItemData] = useState<Nullable<T>>();
+  const [itemData, setItemData] = useState<T | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

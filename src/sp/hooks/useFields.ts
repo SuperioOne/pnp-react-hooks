@@ -1,9 +1,8 @@
 import "@pnp/sp/fields";
 import { IFieldInfo } from "@pnp/sp/fields/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -29,9 +28,9 @@ export interface FieldsOptions
 export function useFields(
   options?: FieldsOptions,
   deps?: React.DependencyList,
-): Nullable<IFieldInfo[]> {
+): IFieldInfo[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [fields, setFields] = useState<Nullable<IFieldInfo[]>>();
+  const [fields, setFields] = useState<IFieldInfo[] | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

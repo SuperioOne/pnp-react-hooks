@@ -1,10 +1,8 @@
 import "@pnp/sp/recycle-bin";
 import { IRecycleBinItemObject } from "@pnp/sp/recycle-bin/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
-import { RecycleBinScopes } from "../../types/literalTypes";
+import { ODataQueryableCollection, RecycleBinScopes } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -25,10 +23,11 @@ export interface RecycleBinItemsOptions
 export function useRecycleBinItems(
   options?: RecycleBinItemsOptions,
   deps?: React.DependencyList,
-): Nullable<IRecycleBinItemObject[]> {
+): IRecycleBinItemObject[] | undefined | null {
   const globalOptions = useContext(InternalContext);
-  const [binItems, setBinItems] =
-    useState<Nullable<IRecycleBinItemObject[]>>(undefined);
+  const [binItems, setBinItems] = useState<
+    IRecycleBinItemObject[] | undefined | null
+  >(undefined);
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

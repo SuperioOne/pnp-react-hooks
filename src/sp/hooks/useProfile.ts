@@ -4,11 +4,10 @@ import {
   ContextOptions,
   ErrorOptions,
   RenderOptions,
-} from "../../types/options";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+  DisableOptionValueType,
+} from "../../types";
 import { IProfiles } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -34,9 +33,11 @@ export function useProfile<T>(
   loginName: string,
   options?: ProfileOptions,
   deps?: React.DependencyList,
-): Nullable<T> {
+): T | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [userProfile, setUserProfile] = useState<Nullable<T>>(undefined);
+  const [userProfile, setUserProfile] = useState<T | null | undefined>(
+    undefined,
+  );
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {
@@ -62,4 +63,3 @@ export function useProfile<T>(
 
   return userProfile;
 }
-

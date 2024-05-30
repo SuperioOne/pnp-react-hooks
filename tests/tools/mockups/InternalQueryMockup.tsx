@@ -1,17 +1,16 @@
 import "@pnp/sp/webs";
 import * as React from "react";
-import { BehaviourOptions } from "../../../src/types/options/BehaviourOptions";
-import { ContextOptions, RenderOptions } from "../../../src/types/options";
-import { Nullable } from "../../../src/types/utilityTypes";
-import { PnpActionFunction } from "../../../src/types/PnpActionFunction";
+import { BehaviourOptions } from "../../../src/types";
+import { ContextOptions, RenderOptions } from "../../../src/types";
+import { PnpActionFunction } from "../../../src/sp/types.private";
 import { SPFI } from "@pnp/sp";
 import { TestComponentProps } from "../ReactDOMElement";
 import { _Web } from "@pnp/sp/webs/types";
-import { createInvokable } from "../../../src/utils/createInvokable";
+import { createInvokable } from "../../../src/sp/createInvokable";
 import { useQueryEffect } from "../../../src/sp/useQueryEffect";
 
 export function InternalQueryMockup(props: ComponentOptions) {
-    const dispatch = React.useState<Nullable<unknown>>();
+    const dispatch = React.useState<unknown | undefined | null>();
 
     const invokableFactory = React.useCallback(async (sp: SPFI) => {
         const customFunc = props.customInvoke?.(props);

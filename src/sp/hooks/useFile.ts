@@ -1,11 +1,9 @@
 import "@pnp/sp/files";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
-import { FileReturnTypes } from "../../types/literalTypes";
+import { DisableOptionValueType } from "../../types";
+import { FileReturnTypes, ODataQueryable } from "../types";
 import { IFile, IFileInfo } from "@pnp/sp/files/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { PnpHookOptions } from "../types";
 import { assertString } from "../../utils/assert";
 import { createInvokable } from "../createInvokable";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
@@ -51,7 +49,7 @@ export function useFile(
   fileId: string,
   options?: FileInfoOptions,
   deps?: React.DependencyList,
-): Nullable<IFileInfo>;
+): IFileInfo | null | undefined;
 
 /**
  * Returns file content as {@link Blob}.
@@ -63,7 +61,7 @@ export function useFile(
   fileId: string,
   options?: FileBlobOptions,
   deps?: React.DependencyList,
-): Nullable<Blob>;
+): Blob | null | undefined;
 
 /**
  * Returns file content as {@link ArrayBuffer}.
@@ -75,7 +73,7 @@ export function useFile(
   fileId: string,
   options?: FileBufferOptions,
   deps?: React.DependencyList,
-): Nullable<ArrayBuffer>;
+): ArrayBuffer | null | undefined;
 
 /**
  * Returns file content as text.
@@ -87,15 +85,17 @@ export function useFile(
   fileId: string,
   options?: FileTextOptions,
   deps?: React.DependencyList,
-): Nullable<string>;
+): string | null | undefined;
 
 export function useFile(
   fileId: string,
   options?: _BaseFileOptions,
   deps?: React.DependencyList,
-): Nullable<InstanceTypes> {
+): InstanceTypes | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [fileInfo, setFileInfo] = useState<Nullable<InstanceTypes>>(undefined);
+  const [fileInfo, setFileInfo] = useState<InstanceTypes | null | undefined>(
+    undefined,
+  );
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

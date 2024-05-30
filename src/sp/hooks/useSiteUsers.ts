@@ -1,9 +1,8 @@
 import "@pnp/sp/site-users";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -21,10 +20,11 @@ export type SiteUsersOptions = PnpHookOptions<ODataQueryableCollection>;
 export function useSiteUsers(
   options?: SiteUsersOptions,
   deps?: React.DependencyList,
-): Nullable<ISiteUserInfo[]> {
+): ISiteUserInfo[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [siteUser, setSiteUser] =
-    useState<Nullable<ISiteUserInfo[]>>(undefined);
+  const [siteUser, setSiteUser] = useState<ISiteUserInfo[] | null | undefined>(
+    undefined,
+  );
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.web.siteUsers),
@@ -42,4 +42,3 @@ export function useSiteUsers(
 
   return siteUser;
 }
-

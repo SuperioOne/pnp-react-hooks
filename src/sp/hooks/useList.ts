@@ -1,9 +1,8 @@
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IListInfo } from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -26,9 +25,9 @@ export function useList(
   list: string,
   options?: ListOptions,
   deps?: React.DependencyList,
-): Nullable<IListInfo> {
+): IListInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [listInfo, setListInfo] = useState<Nullable<IListInfo>>();
+  const [listInfo, setListInfo] = useState<IListInfo | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

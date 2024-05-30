@@ -1,10 +1,8 @@
 import "@pnp/sp/navigation";
 import { INavNodeInfo } from "@pnp/sp/navigation/types";
 import { InternalContext } from "../../context";
-import { NavigationTypes } from "../../types/literalTypes";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection, NavigationTypes } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -31,9 +29,9 @@ export interface NavigationOptions
 export function useNavigation(
   options?: NavigationOptions,
   deps?: React.DependencyList,
-): Nullable<INavNodeInfo[]> {
+): INavNodeInfo[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [navNodes, setNavNodes] = useState<Nullable<INavNodeInfo[]>>();
+  const [navNodes, setNavNodes] = useState<INavNodeInfo[] | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {
@@ -61,4 +59,3 @@ export function useNavigation(
 
   return navNodes;
 }
-

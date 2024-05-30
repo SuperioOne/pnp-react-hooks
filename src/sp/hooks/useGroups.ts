@@ -1,9 +1,8 @@
 import "@pnp/sp/site-groups";
 import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
@@ -31,9 +30,9 @@ export interface GroupsOptions
 export function useGroups(
   options?: GroupsOptions,
   deps?: React.DependencyList,
-): Nullable<ISiteGroupInfo[]> {
+): ISiteGroupInfo[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [groups, setGroups] = useState<Nullable<ISiteGroupInfo[]>>();
+  const [groups, setGroups] = useState<ISiteGroupInfo[] | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

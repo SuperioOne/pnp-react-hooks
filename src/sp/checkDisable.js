@@ -1,6 +1,6 @@
 /**
- * @param {import('../types/options/RenderOptions').DisableOptionType} [disabled]
- * @param {import('../types/options/RenderOptions').DisableOptionFuncType} [defaultAction]
+ * @param {import('../types').DisableOptionType} [disabled]
+ * @param {import('../types').DisableOptionFuncType} [defaultAction]
  * @param {...any} args
  * @returns {boolean}
  */

@@ -49,7 +49,7 @@ test("PnpReactOptionProvider with createProviderElement()", async () => {
     };
 
     const TestComponent = (props: TestComponentProps<PnpHookGlobalOptions>) =>
-        createProviderElement(globalOptions, React.createElement(GlobalContextMockup, { ...props }));
+        createProviderElement(globalOptions, React.createElement(GlobalContextMockup, { ...props }) as any);
 
     await act(async () => {
         const options = await reactDOMElement.mountTestComponent("PnpReactOptionProvider with createProviderElement()", TestComponent);

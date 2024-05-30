@@ -1,10 +1,9 @@
 import "@pnp/sp/views";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IViewInfo } from "@pnp/sp/views/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryable } from "../types";
+import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
@@ -32,9 +31,9 @@ export function useView(
   viewId?: string,
   options?: ViewOptions,
   deps?: React.DependencyList,
-): Nullable<IViewInfo> {
+): IViewInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [view, setView] = useState<Nullable<IViewInfo>>();
+  const [view, setView] = useState<IViewInfo | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

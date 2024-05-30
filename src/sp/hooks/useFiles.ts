@@ -1,10 +1,9 @@
 import "@pnp/sp/files";
-import { DisableOptionValueType } from "../../types/options/RenderOptions";
+import { DisableOptionValueType } from "../../types";
 import { IFileInfo } from "@pnp/sp/files/types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryableCollection } from "../../types/ODataQueryable";
-import { PnpHookOptions } from "../../types/options";
+import { ODataQueryableCollection } from "../types";
+import { PnpHookOptions } from "../types";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -27,9 +26,9 @@ export function useFiles(
   folderId: string,
   options?: FilesOptions,
   deps?: React.DependencyList,
-): Nullable<IFileInfo[]> {
+): IFileInfo[] | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [files, setFiles] = useState<Nullable<IFileInfo[]>>(undefined);
+  const [files, setFiles] = useState<IFileInfo[] | null | undefined>(undefined);
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {

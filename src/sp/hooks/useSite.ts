@@ -1,9 +1,8 @@
 import "@pnp/sp/sites";
-import { PnpHookOptions } from "../../types/options";
-import { ISiteInfo } from "../../types/ISiteInfo";
+import { PnpHookOptions } from "../types";
+import { ISiteInfo } from "../types";
 import { InternalContext } from "../../context";
-import { Nullable } from "../../types/utilityTypes";
-import { ODataQueryable } from "../../types/ODataQueryable";
+import { ODataQueryable } from "../types";
 import { createInvokable } from "../createInvokable";
 import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
@@ -21,9 +20,9 @@ export type SiteInfoOptions = PnpHookOptions<ODataQueryable>;
 export function useSite(
   options?: SiteInfoOptions,
   deps?: React.DependencyList,
-): Nullable<ISiteInfo> {
+): ISiteInfo | null | undefined {
   const globalOptions = useContext(InternalContext);
-  const [siteInfo, setSiteInfo] = useState<Nullable<ISiteInfo>>();
+  const [siteInfo, setSiteInfo] = useState<ISiteInfo | null | undefined>();
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => createInvokable(sp.site),
@@ -41,4 +40,3 @@ export function useSite(
 
   return siteInfo;
 }
-
