@@ -41,4 +41,3 @@ test("A and B are '/'", () => {
 
   expect(compareURL(a, b)).toBe(true);
 });
-

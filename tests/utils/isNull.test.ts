@@ -23,4 +23,3 @@ test("undefined value", () => {
 test("'undefined' string value", () => {
   expect(isNull("undefined")).toBe(false);
 });
-

@@ -61,4 +61,3 @@ test("undefined value", () => {
 
   expect(compareArray(a, b)).toBe(false);
 });
-

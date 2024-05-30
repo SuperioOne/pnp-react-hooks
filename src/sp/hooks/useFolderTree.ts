@@ -20,14 +20,14 @@ import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { assert, assertString } from "../../utils/assert";
 import { compareTuples, compareURL } from "../../utils/compare";
-import { deepCompareQuery } from "../../utils/deepCompare";
-import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
-import { errorHandler } from "../../utils/errorHandler";
+import { deepCompareQuery } from "../deepCompare";
+import { defaultCheckDisable, checkDisable } from "../checkDisable";
+import { errorHandler } from "../errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
-import { insertODataQuery } from "../../utils/insertODataQuery";
+import { insertODataQuery } from "../insertODataQuery";
 import { isNull, isUrl, UrlType } from "../../utils/is";
-import { mergeOptions } from "../../utils/merge";
-import { resolveSP } from "../../utils/resolveSP";
+import { mergeOptions } from "../merge";
+import { resolveSP } from "../resolveSP";
 import { useCallback, useRef, useEffect, useContext, useReducer } from "react";
 import { shallowEqual } from "../../utils/compare";
 
@@ -359,4 +359,3 @@ interface ChangePathAction
 }
 
 type TreeAction = ResetAction | ChangePathAction | NewTreeResultAction;
-

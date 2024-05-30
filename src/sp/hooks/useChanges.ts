@@ -11,10 +11,10 @@ import {
   BehaviourOptions,
 } from "../../types/options";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveScope } from "../../utils/resolveScope";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveScope } from "../resolveScope";
 import { shallowEqual } from "../../utils/compare";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
@@ -77,10 +77,7 @@ export function useChanges<T>(
 
   const invokableFactory = useCallback(
     async (sp: SPFI) => {
-      const scope = resolveScope(sp.web, {
-        list: options?.list,
-      });
-
+      const scope = resolveScope(sp.web, options?.list, undefined);
       const action = function (this: IList | IWeb) {
         return this.getChanges(_changeQuery.current) as Promise<T>;
       };
@@ -110,4 +107,3 @@ export function useChanges<T>(
 
   return changes;
 }
-

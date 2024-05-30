@@ -5,7 +5,7 @@ import { InitPnpTest } from "../tools/InitPnpTest";
 import { SPFI } from "@pnp/sp";
 import { act } from "react-dom/test-utils";
 import { initJSDOM, ReactDOMElement, TestComponentProps } from "../tools/ReactDOMElement";
-import { shallowEqual } from "../../src/utils/compare";
+import { shallowEqual } from "../../src/uti../../utils/compare";
 import { InitGlobalFetch } from "../tools/InitGlobalFetch";
 
 let reactDOMElement: ReactDOMElement;

@@ -7,10 +7,10 @@ import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { assertString } from "../../utils/assert";
-import { createInvokable } from "../../utils/createInvokable";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
+import { createInvokable } from "../createInvokable";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { isUrl, isUUID, UrlType } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 import { SPFI } from "@pnp/sp";
@@ -141,4 +141,3 @@ export function useFile(
 
   return fileInfo;
 }
-

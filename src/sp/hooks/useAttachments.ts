@@ -8,16 +8,18 @@ import { ODataQueryableCollection } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
 import { assertID } from "../../utils/assert";
-import { createInvokable } from "../../utils/createInvokable";
-import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveList } from "../../utils/resolveList";
+import { createInvokable } from "../createInvokable";
+import { defaultCheckDisable, checkDisable } from "../checkDisable";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveList } from "../resolveList";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface ItemAttachmentsOptions extends PnpHookOptions<ODataQueryableCollection>
-{
-    disabled?: DisableOptionValueType | { (itemId: number, list: string): boolean };
+export interface ItemAttachmentsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  disabled?:
+    | DisableOptionValueType
+    | { (itemId: number, list: string): boolean };
 }
 
 /**
@@ -29,36 +31,41 @@ export interface ItemAttachmentsOptions extends PnpHookOptions<ODataQueryableCol
  * @returns array of {@link IAttachmentInfo}.
  */
 export function useAttachments(
-    itemId: number,
-    list: string,
-    options?: ItemAttachmentsOptions,
-    deps?: React.DependencyList): Nullable<IAttachmentInfo[]>
-{
-    const globalOptions = useContext(InternalContext);
-    const [attachments, setAttachments] = useState<Nullable<IAttachmentInfo[]>>();
+  itemId: number,
+  list: string,
+  options?: ItemAttachmentsOptions,
+  deps?: React.DependencyList,
+): Nullable<IAttachmentInfo[]> {
+  const globalOptions = useContext(InternalContext);
+  const [attachments, setAttachments] = useState<Nullable<IAttachmentInfo[]>>();
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
-    {
-        assertID(itemId, "itemId value is not valid.");
-        const queryInst = resolveList(sp.web, list)
-            .items
-            .getById(itemId)
-            .attachmentFiles;
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => {
+      assertID(itemId, "itemId value is not valid.");
+      const queryInst = resolveList(sp.web, list).items.getById(
+        itemId,
+      ).attachmentFiles;
 
-        return createInvokable(queryInst);
-    }, [itemId, list]);
+      return createInvokable(queryInst);
+    },
+    [itemId, list],
+  );
 
-    const _mergedDeps = mergeDependencies([itemId, list], deps);
+  const _mergedDeps = mergeDependencies([itemId, list], deps);
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, itemId, list);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(
+      opt?.disabled,
+      defaultCheckDisable,
+      itemId,
+      list,
+    );
 
-        return opt;
-    }, [itemId, list, options, globalOptions]);
+    return opt;
+  }, [itemId, list, options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setAttachments, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setAttachments, _options, _mergedDeps);
 
-    return attachments;
+  return attachments;
 }

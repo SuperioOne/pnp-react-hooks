@@ -41,4 +41,3 @@ test("Email with over allowed max unicode octet", () => {
 
   expect(isEmail(email)).toBe(false);
 });
-

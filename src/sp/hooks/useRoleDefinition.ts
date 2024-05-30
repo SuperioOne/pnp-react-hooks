@@ -1,27 +1,31 @@
 import "@pnp/sp/security";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
-import { IRoleDefinition, IRoleDefinitionInfo, RoleTypeKind } from "@pnp/sp/security/types";
+import {
+  IRoleDefinition,
+  IRoleDefinitionInfo,
+  RoleTypeKind,
+} from "@pnp/sp/security/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useMemo, useContext } from "react";
 
-export interface RoleDefinitionOptions extends PnpHookOptions<ODataQueryable>
-{
-    disabled?: DisableOptionValueType | { (roleDefId: string | number | RoleType): boolean };
+export interface RoleDefinitionOptions extends PnpHookOptions<ODataQueryable> {
+  disabled?:
+    | DisableOptionValueType
+    | { (roleDefId: string | number | RoleType): boolean };
 }
 
 // used for differentiating role id and RoleTypeKind
-export interface RoleType
-{
-    roleType: RoleTypeKind;
+export interface RoleType {
+  roleType: RoleTypeKind;
 }
 
 /**
@@ -31,57 +35,59 @@ export interface RoleType
  * @param deps useRoleDefinition refreshes response data when one of the dependencies changes.
  */
 export function useRoleDefinition(
-    roleDefId: string | number | RoleType,
-    options?: RoleDefinitionOptions,
-    deps?: React.DependencyList): Nullable<IRoleDefinitionInfo>
-{
-    const globalOptions = useContext(InternalContext);
-    const [roleDefinition, setRoleDefinition] = useState<Nullable<IRoleDefinitionInfo>>(undefined);
+  roleDefId: string | number | RoleType,
+  options?: RoleDefinitionOptions,
+  deps?: React.DependencyList,
+): Nullable<IRoleDefinitionInfo> {
+  const globalOptions = useContext(InternalContext);
+  const [roleDefinition, setRoleDefinition] =
+    useState<Nullable<IRoleDefinitionInfo>>(undefined);
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
-    {
-        let queryInst: IRoleDefinition;
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => {
+      let queryInst: IRoleDefinition;
 
-        switch (typeof roleDefId)
-        {
-            case "number":
-                {
-                    assertID(roleDefId, "Role definition id is not a valid number.");
-                    queryInst = sp.web.roleDefinitions.getById(roleDefId);
-                    break;
-                }
-            case "string":
-                {
-                    assertString(roleDefId, "Role definition id is not a valid string.");
-                    queryInst = sp.web.roleDefinitions.getByName(roleDefId);
-                    break;
-                }
-            case "object":
-                queryInst = sp.web.roleDefinitions.getByType(roleDefId.roleType);
-                break;
-            default:
-                throw new TypeError("role definition id type is not valid.");
+      switch (typeof roleDefId) {
+        case "number": {
+          assertID(roleDefId, "Role definition id is not a valid number.");
+          queryInst = sp.web.roleDefinitions.getById(roleDefId);
+          break;
         }
+        case "string": {
+          assertString(roleDefId, "Role definition id is not a valid string.");
+          queryInst = sp.web.roleDefinitions.getByName(roleDefId);
+          break;
+        }
+        case "object":
+          queryInst = sp.web.roleDefinitions.getByType(roleDefId.roleType);
+          break;
+        default:
+          throw new TypeError("role definition id type is not valid.");
+      }
 
-        return createInvokable(queryInst);
-    }, [roleDefId]);
+      return createInvokable(queryInst);
+    },
+    [roleDefId],
+  );
 
-    // normalize RoleType for dependencies
-    const _normRoleId = useMemo(() =>
-        typeof roleDefId === "object" ? `RT_${roleDefId.roleType}` : roleDefId
-        , [roleDefId]);
+  // normalize RoleType for dependencies
+  const _normRoleId = useMemo(
+    () =>
+      typeof roleDefId === "object" ? `RT_${roleDefId.roleType}` : roleDefId,
+    [roleDefId],
+  );
 
-    const _mergedDeps = mergeDependencies([_normRoleId], deps);
+  const _mergedDeps = mergeDependencies([_normRoleId], deps);
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, roleDefId);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, roleDefId);
 
-        return opt;
-    }, [roleDefId, options, globalOptions]);
+    return opt;
+  }, [roleDefId, options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setRoleDefinition, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setRoleDefinition, _options, _mergedDeps);
 
-    return roleDefinition;
+  return roleDefinition;
 }
+

@@ -14,9 +14,9 @@ import {
   ContextOptions,
   BehaviourOptions,
 } from "../../types/options";
-import { createInvokable } from "../../utils/createInvokable";
-import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { createInvokable } from "../createInvokable";
+import { defaultCheckDisable, checkDisable } from "../checkDisable";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
 import { shallowEqual } from "../../utils/compare";
@@ -95,4 +95,3 @@ export function useSearchUser(
 
   return people;
 }
-

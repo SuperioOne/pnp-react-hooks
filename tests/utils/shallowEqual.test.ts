@@ -1,4 +1,4 @@
-import { shallowEqual } from "../../src/utils/compare";
+import { shallowEqual } from "../../src/uti../../utils/compare";
 
 test("Obj A is equal to B", () => {
   const a = {

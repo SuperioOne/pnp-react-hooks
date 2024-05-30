@@ -7,20 +7,20 @@ import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryableCollection } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
-import { checkDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { checkDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface FeaturesOptions extends PnpHookOptions<ODataQueryableCollection>
-{
-    /**
-     * Feature scope. Available options are 'site' and 'web'.
-     * Changing scope type resends request.
-     * @default "web"
-     */
-    scope?: FeatureScopes;
+export interface FeaturesOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  /**
+   * Feature scope. Available options are 'site' and 'web'.
+   * Changing scope type resends request.
+   * @default "web"
+   */
+  scope?: FeatureScopes;
 }
 
 /**
@@ -29,44 +29,43 @@ export interface FeaturesOptions extends PnpHookOptions<ODataQueryableCollection
  * @param deps useFeatures refreshes response data when one of the dependencies changes.
  */
 export function useFeatures(
-    options?: FeaturesOptions,
-    deps?: React.DependencyList): Nullable<IFeatureInfo[]>
-{
-    const globalOptions = useContext(InternalContext);
-    const [features, setFeatures] = useState<Nullable<IFeatureInfo[]>>();
+  options?: FeaturesOptions,
+  deps?: React.DependencyList,
+): Nullable<IFeatureInfo[]> {
+  const globalOptions = useContext(InternalContext);
+  const [features, setFeatures] = useState<Nullable<IFeatureInfo[]>>();
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
-    {
-        let queryInst: IFeatures;
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => {
+      let queryInst: IFeatures;
 
-        switch (options?.scope)
-        {
-            case "site": {
-
-                queryInst = sp.site.features;
-                break;
-            }
-            case "web":
-            default:
-                {
-                    queryInst = sp.web.features;
-                    break;
-                }
+      switch (options?.scope) {
+        case "site": {
+          queryInst = sp.site.features;
+          break;
         }
-        return createInvokable(queryInst);
-    }, [options?.scope]);
+        case "web":
+        default: {
+          queryInst = sp.web.features;
+          break;
+        }
+      }
+      return createInvokable(queryInst);
+    },
+    [options?.scope],
+  );
 
-    const _mergedDeps = mergeDependencies([options?.scope], deps);
+  const _mergedDeps = mergeDependencies([options?.scope], deps);
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled);
 
-        return opt;
-    }, [options, globalOptions]);
+    return opt;
+  }, [options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setFeatures, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setFeatures, _options, _mergedDeps);
 
-    return features;
+  return features;
 }
+

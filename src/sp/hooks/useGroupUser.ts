@@ -6,17 +6,18 @@ import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveGroup } from "../../utils/resolveGroup";
-import { resolveUser } from "../../utils/resolveUser";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveGroup } from "../resolveGroup";
+import { resolveUser } from "../resolveUser";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface GroupUserOptions extends PnpHookOptions<ODataQueryable>
-{
-    disabled?: DisableOptionValueType | { (groupId: string | number, userId: string | number): boolean };
+export interface GroupUserOptions extends PnpHookOptions<ODataQueryable> {
+  disabled?:
+    | DisableOptionValueType
+    | { (groupId: string | number, userId: string | number): boolean };
 }
 
 /**
@@ -27,33 +28,39 @@ export interface GroupUserOptions extends PnpHookOptions<ODataQueryable>
  * @param deps useGroupUser refreshes response data when one of the dependencies changes.
  */
 export function useGroupUser(
-    groupId: string | number,
-    userId: string | number,
-    options?: GroupUserOptions,
-    deps?: React.DependencyList): Nullable<ISiteUserInfo>
-{
-    const globalOptions = useContext(InternalContext);
-    const [groupUser, setGroupUser] = useState<Nullable<ISiteUserInfo>>();
+  groupId: string | number,
+  userId: string | number,
+  options?: GroupUserOptions,
+  deps?: React.DependencyList,
+): Nullable<ISiteUserInfo> {
+  const globalOptions = useContext(InternalContext);
+  const [groupUser, setGroupUser] = useState<Nullable<ISiteUserInfo>>();
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
-    {
-        const group = resolveGroup(sp.web, groupId);
-        const user = resolveUser(group.users, userId);
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => {
+      const group = resolveGroup(sp.web, groupId);
+      const user = resolveUser(group.users, userId);
 
-        return createInvokable(user);
-    }, [groupId, userId]);
+      return createInvokable(user);
+    },
+    [groupId, userId],
+  );
 
-    const _mergedDeps = mergeDependencies([groupId, userId], deps);
+  const _mergedDeps = mergeDependencies([groupId, userId], deps);
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, groupId, userId);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(
+      opt?.disabled,
+      defaultCheckDisable,
+      groupId,
+      userId,
+    );
 
-        return opt;
-    }, [groupId, userId, options, globalOptions]);
+    return opt;
+  }, [groupId, userId, options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setGroupUser, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setGroupUser, _options, _mergedDeps);
 
-    return groupUser;
+  return groupUser;
 }

@@ -6,10 +6,10 @@ import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryableCollection } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveFolder } from "../resolvers";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveFolder } from "../resolveFolder";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -64,4 +64,3 @@ export function useFolders(
 
   return folders;
 }
-

@@ -19,16 +19,16 @@ import {
   ListOptions,
   _PnpHookOptions,
 } from "../../types/options";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { compareTuples } from "../../utils/compare";
-import { deepCompareOptions } from "../../utils/deepCompare";
-import { errorHandler } from "../../utils/errorHandler";
+import { deepCompareOptions } from "../deepCompare";
+import { errorHandler } from "../errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
-import { insertODataQuery } from "../../utils/insertODataQuery";
-import { mergeOptions } from "../../utils/merge";
+import { insertODataQuery } from "../insertODataQuery";
+import { mergeOptions } from "../merge";
 import { parseODataJSON } from "@pnp/queryable";
-import { resolveList } from "../../utils/resolveList";
-import { resolveSP } from "../../utils/resolveSP";
+import { resolveList } from "../resolveList";
+import { resolveSP } from "../resolveSP";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
 
 export type nextPageDispatch = (callback?: () => void) => void;
@@ -304,4 +304,3 @@ interface _TrackedState {
   options: Nullable<_PnpHookOptions>;
   externalDeps: Nullable<React.DependencyList>;
 }
-

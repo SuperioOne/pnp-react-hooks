@@ -11,7 +11,7 @@ import {
 } from "@pnp/queryable";
 import { TestConfig } from "../../test.config";
 import { TimelinePipe, combine } from "@pnp/core";
-import { isUrl, UrlType } from "../../../src/utils/is";
+import { isUrl, UrlType } from "../../../src/uti../../utils/is";
 
 export interface MsalTestDefaultProps extends ISPDefaultProps {
   testEnv: TestConfig;
@@ -59,4 +59,3 @@ export function MsalTestDefault(
     return instance;
   };
 }
-

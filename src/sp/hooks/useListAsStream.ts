@@ -14,15 +14,34 @@ import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { RenderListDataOverrideParameters } from "../../types/RenderListDataOverrideParameters";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { convertToMap } from "../../utils/convertToMap";
-import { createInvokable } from "../../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
 import { isNull } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveList } from "../../utils/resolveList";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveList } from "../resolveList";
 import { shallowEqual } from "../../utils/compare";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo, useRef } from "react";
+
+/**
+ * Convert record to map object.
+ */
+export function convertToMap<T = any>(obj: Record<string, T>) {
+  const fields = Object.keys(obj);
+  const map = new Map<string, T>();
+
+  let key: string;
+  let value: T;
+
+  for (let index = 0; index < fields.length; index++) {
+    key = fields[index];
+    value = Reflect.get(obj, key);
+
+    map.set(key, value);
+  }
+
+  return map;
+}
 
 export interface ListAsStreamOptions
   extends ErrorOptions,

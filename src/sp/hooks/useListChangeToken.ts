@@ -9,10 +9,10 @@ import { IList } from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveList } from "../../utils/resolveList";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveList } from "../resolveList";
 import { shallowEqual } from "../../utils/compare";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
@@ -80,4 +80,3 @@ export function useListChangeToken(
 
   return token;
 }
-

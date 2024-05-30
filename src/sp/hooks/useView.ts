@@ -6,11 +6,11 @@ import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
 import { isUUID } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveList } from "../../utils/resolveList";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveList } from "../resolveList";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -73,4 +73,3 @@ export function useView(
 
   return view;
 }
-

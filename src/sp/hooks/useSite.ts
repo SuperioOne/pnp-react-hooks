@@ -4,9 +4,9 @@ import { ISiteInfo } from "../../types/ISiteInfo";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryable } from "../../types/ODataQueryable";
-import { createInvokable } from "../../utils/createInvokable";
-import { checkDisable } from "../../utils/checkDisable";
-import { mergeOptions } from "../../utils/merge";
+import { createInvokable } from "../createInvokable";
+import { checkDisable } from "../checkDisable";
+import { mergeOptions } from "../merge";
 import { SPFI } from "@pnp/sp";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
@@ -19,23 +19,26 @@ export type SiteInfoOptions = PnpHookOptions<ODataQueryable>;
  * @param deps useSite refreshes response data when one of the dependencies changes.
  */
 export function useSite(
-    options?: SiteInfoOptions,
-    deps?: React.DependencyList): Nullable<ISiteInfo>
-{
-    const globalOptions = useContext(InternalContext);
-    const [siteInfo, setSiteInfo] = useState<Nullable<ISiteInfo>>();
+  options?: SiteInfoOptions,
+  deps?: React.DependencyList,
+): Nullable<ISiteInfo> {
+  const globalOptions = useContext(InternalContext);
+  const [siteInfo, setSiteInfo] = useState<Nullable<ISiteInfo>>();
 
-    const invokableFactory = useCallback(async (sp: SPFI) => createInvokable(sp.site), []);
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => createInvokable(sp.site),
+    [],
+  );
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled);
 
-        return opt;
-    }, [options, globalOptions]);
+    return opt;
+  }, [options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setSiteInfo, _options, deps);
+  useQueryEffect(invokableFactory, setSiteInfo, _options, deps);
 
-    return siteInfo;
+  return siteInfo;
 }
+

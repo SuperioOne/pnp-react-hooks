@@ -1,19 +1,27 @@
 import "@pnp/sp/profiles";
-import { BehaviourOptions, ContextOptions, ErrorOptions, RenderOptions } from "../../types/options";
+import {
+  BehaviourOptions,
+  ContextOptions,
+  ErrorOptions,
+  RenderOptions,
+} from "../../types/options";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import { IProfiles } from "@pnp/sp/profiles/types";
 import { InternalContext } from "../../context";
 import { Nullable } from "../../types/utilityTypes";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface ProfileOptions extends ErrorOptions, RenderOptions, BehaviourOptions, ContextOptions
-{
-    disabled?: DisableOptionValueType | { (loginName: string): boolean };
+export interface ProfileOptions
+  extends ErrorOptions,
+    RenderOptions,
+    BehaviourOptions,
+    ContextOptions {
+  disabled?: DisableOptionValueType | { (loginName: string): boolean };
 }
 
 /**
@@ -23,34 +31,35 @@ export interface ProfileOptions extends ErrorOptions, RenderOptions, BehaviourOp
  * @param deps useProfile refreshes response data when one of the dependencies changes.
  */
 export function useProfile<T>(
-    loginName: string,
-    options?: ProfileOptions,
-    deps?: React.DependencyList): Nullable<T>
-{
-    const globalOptions = useContext(InternalContext);
-    const [userProfile, setUserProfile] = useState<Nullable<T>>(undefined);
+  loginName: string,
+  options?: ProfileOptions,
+  deps?: React.DependencyList,
+): Nullable<T> {
+  const globalOptions = useContext(InternalContext);
+  const [userProfile, setUserProfile] = useState<Nullable<T>>(undefined);
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
-    {
-        const action = function (this: IProfiles)
-        {
-            return this.getPropertiesFor(loginName);
-        };
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => {
+      const action = function (this: IProfiles) {
+        return this.getPropertiesFor(loginName);
+      };
 
-        return createInvokable(sp.profiles, action);
-    }, [loginName]);
+      return createInvokable(sp.profiles, action);
+    },
+    [loginName],
+  );
 
-    const _mergedDeps = mergeDependencies([loginName], deps);
+  const _mergedDeps = mergeDependencies([loginName], deps);
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions<undefined>(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, loginName);
+  const _options = useMemo(() => {
+    const opt = mergeOptions<undefined>(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, loginName);
 
-        return opt;
-    }, [loginName, options, globalOptions]);
+    return opt;
+  }, [loginName, options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setUserProfile, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setUserProfile, _options, _mergedDeps);
 
-    return userProfile;
+  return userProfile;
 }
+

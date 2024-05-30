@@ -4,11 +4,11 @@ import { Nullable } from "../types/utilityTypes";
 import { SharepointQueryable } from "../types/SharepointQueryable";
 import { _PnpHookOptions } from "../types/options";
 import { compareTuples } from "../utils/compare";
-import { deepCompareOptions } from "../utils/deepCompare";
-import { errorHandler } from "../utils/errorHandler";
+import { deepCompareOptions } from "./deepCompare";
+import { errorHandler } from "./errorHandler";
 import { from, NextObserver, Subscription } from "rxjs";
-import { insertODataQuery } from "../utils/insertODataQuery";
-import { resolveSP } from "../utils/resolveSP";
+import { insertODataQuery } from "./insertODataQuery";
+import { resolveSP } from "./resolveSP";
 import { useCallback, useEffect } from "react";
 import { useRef } from "react";
 
@@ -99,4 +99,3 @@ interface _TrackedState {
   options: Nullable<_PnpHookOptions>;
   externalDependencies: Nullable<React.DependencyList>;
 }
-

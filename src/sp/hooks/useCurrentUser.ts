@@ -5,9 +5,9 @@ import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
-import { checkDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeOptions } from "../../utils/merge";
+import { checkDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -19,23 +19,27 @@ export type CurrentUserInfoOptions = PnpHookOptions<ODataQueryable>;
  * @param deps useCurrentUser refreshes response data when one of the dependencies changes.
  */
 export function useCurrentUser(
-    options?: CurrentUserInfoOptions,
-    deps?: React.DependencyList): Nullable<ISiteUserInfo>
-{
-    const globalOptions = useContext(InternalContext);
-    const [currentUser, setCurrentUser] = useState<Nullable<ISiteUserInfo>>(undefined);
+  options?: CurrentUserInfoOptions,
+  deps?: React.DependencyList,
+): Nullable<ISiteUserInfo> {
+  const globalOptions = useContext(InternalContext);
+  const [currentUser, setCurrentUser] =
+    useState<Nullable<ISiteUserInfo>>(undefined);
 
-    const invocableFactory = useCallback(async (sp: SPFI) => createInvokable(sp.web.currentUser), []);
+  const invocableFactory = useCallback(
+    async (sp: SPFI) => createInvokable(sp.web.currentUser),
+    [],
+  );
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled);
 
-        return opt;
-    }, [options, globalOptions]);
+    return opt;
+  }, [options, globalOptions]);
 
-    useQueryEffect(invocableFactory, setCurrentUser, _options, deps);
+  useQueryEffect(invocableFactory, setCurrentUser, _options, deps);
 
-    return currentUser;
+  return currentUser;
 }
+

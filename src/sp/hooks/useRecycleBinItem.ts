@@ -7,10 +7,10 @@ import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { RecycleBinScopes } from "../../types/literalTypes";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
 import { isUUID } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
 

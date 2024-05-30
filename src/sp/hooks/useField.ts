@@ -7,11 +7,11 @@ import { ODataQueryable } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
 import { assertString } from "../../utils/assert";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
 import { isUUID } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveScope } from "../../utils/resolveScope";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveScope } from "../resolveScope";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -42,9 +42,7 @@ export function useField(
     async (sp: SPFI) => {
       assertString(fieldId, "fileId is not a valid string.");
 
-      const scope = resolveScope(sp.web, {
-        list: options?.list,
-      });
+      const scope = resolveScope(sp.web, options?.list, undefined);
 
       if (isUUID(fieldId)) {
         return createInvokable(scope.fields.getById(fieldId));
@@ -68,4 +66,3 @@ export function useField(
 
   return field;
 }
-

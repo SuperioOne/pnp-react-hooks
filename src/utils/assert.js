@@ -1,8 +1,8 @@
 import { AssertError } from "../errors/AssertError";
 
 /**
- * @param {unknown} condition
- * @param {string} [message]
+ * @param {unknown} condition - Condition expression.
+ * @param {string} [message] - Display message.
  * @throws {AssertError} Throws when conditions is evaluated as false.
  * @returns {asserts condition}
  */
@@ -13,8 +13,8 @@ export function assert(condition, message) {
 }
 
 /**
- * @param {string | null |undefined} str
- * @param {string} [message]
+ * @param {string | null |undefined} str - Input string.
+ * @param {string} [message] - Display message.
  * @throws {AssertError} Throws when value is not a string, empty or whitespace.
  * @returns {asserts str}
  */
@@ -25,8 +25,8 @@ export function assertString(str, message) {
 }
 
 /**
- * @param {number | null | undefined} num
- * @param {string} [message]
+ * @param {number | null | undefined} num - Input number.
+ * @param {string} [message] - Display message.
  * @throws {AssertError} Throws when value is not a number.
  * @returns {asserts num}
  */
@@ -37,10 +37,10 @@ export function assertNumber(num, message) {
 }
 
 /**
- * @param {number | null | undefined} num
- * @param {number } min
- * @param {number } max
- * @param {string} [message]
+ * @param {number | null | undefined} num - Input number.
+ * @param {number } min - Minimum allowed number.
+ * @param {number } max - Maximum allowed number.
+ * @param {string} [message] - Display message.
  * @throws {AssertError} Throws when value is not a number or not in range.
  * @returns {asserts num}
  */
@@ -51,9 +51,9 @@ export function assertRange(num, min, max, message) {
 }
 
 /**
- * @param {number | null | undefined} num
- * @param {number } min
- * @param {string} [message]
+ * @param {number | null | undefined} num - Input number.
+ * @param {number } min - Minimum allowed number.
+ * @param {string} [message] - Display message.
  * @throws {AssertError} Throws when value is not a number or less than min.
  * @returns {asserts num}
  */
@@ -64,19 +64,19 @@ export function assertMin(num, min, message) {
 }
 
 /**
- * @param {number | null | undefined} num
- * @param {string} [message]
+ * @param {number | null | undefined} id - Numeric identifier.
+ * @param {string} [message] - Display message.
  * @throws {AssertError} Throws when value is not a number or less than 1.
- * @returns {asserts num}
+ * @returns {asserts id}
  */
-export function assertID(num, message) {
-  assertMin(num, 1, message);
+export function assertID(id, message) {
+  assertMin(id, 1, message);
 }
 
 /**
- * @param {number | null | undefined} num
- * @param {number} max
- * @param {string} [message]
+ * @param {number | null | undefined} num - Input number.
+ * @param {number} max - Maximum allowed number.
+ * @param {string} [message] - Display message.
  * @throws {AssertError} Throws when value is not a number or greater than max.
  * @returns {asserts num}
  */

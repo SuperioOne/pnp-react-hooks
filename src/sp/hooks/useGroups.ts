@@ -6,10 +6,10 @@ import { ODataQueryableCollection } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
-import { checkDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
+import { checkDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
 import { isEmail } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -78,4 +78,3 @@ export function useGroups(
 
   return groups;
 }
-

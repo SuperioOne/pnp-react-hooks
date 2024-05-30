@@ -6,16 +6,15 @@ import { Nullable } from "../../types/utilityTypes";
 import { ODataQueryableCollection } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveList } from "../../utils/resolveList";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveList } from "../resolveList";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface ViewsOptions extends PnpHookOptions<ODataQueryableCollection>
-{
-    disabled?: DisableOptionValueType | { (listId: string): boolean; };
+export interface ViewsOptions extends PnpHookOptions<ODataQueryableCollection> {
+  disabled?: DisableOptionValueType | { (listId: string): boolean };
 }
 
 /**
@@ -25,30 +24,31 @@ export interface ViewsOptions extends PnpHookOptions<ODataQueryableCollection>
  * @param deps useViews refreshes response data when one of the dependencies changes.
  */
 export function useViews(
-    listId: string,
-    options?: ViewsOptions,
-    deps?: React.DependencyList): Nullable<IViewInfo[]>
-{
-    const globalOptions = useContext(InternalContext);
-    const [view, setView] = useState<Nullable<IViewInfo[]>>();
+  listId: string,
+  options?: ViewsOptions,
+  deps?: React.DependencyList,
+): Nullable<IViewInfo[]> {
+  const globalOptions = useContext(InternalContext);
+  const [view, setView] = useState<Nullable<IViewInfo[]>>();
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
-    {
-        const spList = resolveList(sp.web, listId);
-        return createInvokable(spList.views);
-    }, [listId]);
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => {
+      const spList = resolveList(sp.web, listId);
+      return createInvokable(spList.views);
+    },
+    [listId],
+  );
 
-    const _mergedDeps = mergeDependencies([listId], deps);
+  const _mergedDeps = mergeDependencies([listId], deps);
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, listId);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, listId);
 
-        return opt;
-    }, [listId, globalOptions, options]);
+    return opt;
+  }, [listId, globalOptions, options]);
 
-    useQueryEffect(invokableFactory, setView, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setView, _options, _mergedDeps);
 
-    return view;
+  return view;
 }

@@ -13,11 +13,11 @@ import { Nullable } from "../../types/utilityTypes";
 import { PermissionKind } from "@pnp/sp/security/types";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
-import { checkDisable, defaultCheckDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
+import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
 import { isEmail, isNull } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveScope } from "../../utils/resolveScope";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveScope } from "../resolveScope";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useMemo, useContext } from "react";
 import { Scope } from "../../types/Scope";
@@ -102,10 +102,11 @@ export function useHasPermission(
           throw new TypeError("userId value type is not string or number.");
       }
 
-      const scope = resolveScope(sp.web, {
-        list: options?.scope?.list,
-        item: options?.scope?.item,
-      });
+      const scope = resolveScope(
+        sp.web,
+        options?.scope?.list,
+        options?.scope?.item,
+      );
 
       const action = async function (this: IWeb) {
         const basePerm = await (isNull(userLoginName)
@@ -140,4 +141,3 @@ export function useHasPermission(
 
   return hasPermission;
 }
-

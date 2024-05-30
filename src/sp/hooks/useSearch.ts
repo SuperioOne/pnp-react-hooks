@@ -9,6 +9,7 @@ import {
   ISearchResponse,
   ISearchResult,
   SearchQueryInit,
+  ISearchBuilder,
 } from "@pnp/sp/search/types";
 import { InjectAbort, ManagedAbort } from "../../behaviors/InjectAbort";
 import { InternalContext } from "../../context";
@@ -23,16 +24,22 @@ import {
 import { SearchResults } from "@pnp/sp/search";
 import { assert, assertNumber } from "../../utils/assert";
 import { compareTuples, shallowEqual } from "../../utils/compare";
-import { defaultCheckDisable, checkDisable } from "../../utils/checkDisable";
-import { errorHandler } from "../../utils/errorHandler";
-import { mergeOptions } from "../../utils/merge";
-import { resolveSP } from "../../utils/resolveSP";
+import { defaultCheckDisable, checkDisable } from "../checkDisable";
+import { errorHandler } from "../errorHandler";
+import { mergeOptions } from "../merge";
+import { resolveSP } from "../resolveSP";
 import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
-import { isSearchQueryBuilder } from "../../utils/typeGuards";
 
 const DEFAULT_PAGE_SIZE = 10;
 const INITIAL_PAGE_INDEX = 1;
 const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
+
+export function isSearchQueryBuilder(
+  query: SearchQueryInit,
+): query is ISearchBuilder {
+  const builder = <ISearchBuilder>query;
+  return typeof builder?.toSearchQuery === "function";
+}
 
 export interface SearchOptions
   extends RenderOptions,
@@ -307,4 +314,3 @@ interface TrackedState {
   page: number;
   options: Nullable<_PnpHookOptions<unknown>>;
 }
-

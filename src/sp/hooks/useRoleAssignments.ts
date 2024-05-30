@@ -6,20 +6,19 @@ import { ODataQueryableCollection } from "../../types/ODataQueryable";
 import { PnpHookOptions } from "../../types/options";
 import { SPFI } from "@pnp/sp";
 import { Scope } from "../../types/Scope";
-import { checkDisable } from "../../utils/checkDisable";
-import { createInvokable } from "../../utils/createInvokable";
-import { mergeDependencies, mergeOptions } from "../../utils/merge";
-import { resolveScope } from "../../utils/resolveScope";
+import { checkDisable } from "../checkDisable";
+import { createInvokable } from "../createInvokable";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveScope } from "../resolveScope";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-
-export interface RoleAssignmentsOptions extends PnpHookOptions<ODataQueryableCollection>
-{
-    /**
-    * List and list item scope configuration. Default is current web scope.
-    */
-    scope?: Scope;
+export interface RoleAssignmentsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  /**
+   * List and list item scope configuration. Default is current web scope.
+   */
+  scope?: Scope;
 }
 
 /**
@@ -29,35 +28,39 @@ export interface RoleAssignmentsOptions extends PnpHookOptions<ODataQueryableCol
  * @param deps useRoleAssignments refreshes response data when one of the dependencies changes.
  */
 export function useRoleAssignments(
-    options?: RoleAssignmentsOptions,
-    deps?: React.DependencyList): Nullable<IRoleAssignmentInfo[]>
-{
-    const globalOptions = useContext(InternalContext);
-    const [roleAssignments, setRoleAssignments] = useState<Nullable<IRoleAssignmentInfo[]>>(undefined);
+  options?: RoleAssignmentsOptions,
+  deps?: React.DependencyList,
+): Nullable<IRoleAssignmentInfo[]> {
+  const globalOptions = useContext(InternalContext);
+  const [roleAssignments, setRoleAssignments] =
+    useState<Nullable<IRoleAssignmentInfo[]>>(undefined);
 
-    const invokableFactory = useCallback(async (sp: SPFI) =>
-    {
-        const scope = resolveScope(sp.web, {
-            list: options?.scope?.list,
-            item: options?.scope?.item
-        });
+  const invokableFactory = useCallback(
+    async (sp: SPFI) => {
+      const scope = resolveScope(
+        sp.web,
+        options?.scope?.list,
+        options?.scope?.item,
+      );
 
-        return createInvokable(scope.roleAssignments);
-    }, [options]);
+      return createInvokable(scope.roleAssignments);
+    },
+    [options],
+  );
 
-    const _mergedDeps = mergeDependencies(
-        [options?.scope?.list, options?.scope?.item],
-        deps);
+  const _mergedDeps = mergeDependencies(
+    [options?.scope?.list, options?.scope?.item],
+    deps,
+  );
 
-    const _options = useMemo(() =>
-    {
-        const opt = mergeOptions(globalOptions, options);
-        opt.disabled = checkDisable(opt?.disabled);
+  const _options = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled);
 
-        return opt;
-    }, [options, globalOptions]);
+    return opt;
+  }, [options, globalOptions]);
 
-    useQueryEffect(invokableFactory, setRoleAssignments, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setRoleAssignments, _options, _mergedDeps);
 
-    return roleAssignments;
+  return roleAssignments;
 }

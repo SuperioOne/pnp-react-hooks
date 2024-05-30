@@ -1,12 +1,7 @@
-import { assert } from "./assert";
-
-/**
- * @typedef {import('../errors/AssertError').AssertError} AssertError
- */
+import { assert } from "../utils/assert";
 
 /**
  * Pollyfill function for Object.is()
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
  * @param {any} x
  * @param {any} y
  * @returns {boolean}
@@ -122,7 +117,7 @@ export function compareArray(left, right) {
  * @param {null | undefined | readonly unknown[]} left
  * @param {null | undefined | readonly unknown[]} right
  * @returns {boolean} true if contents are equal, otherwise false.
- * @throws {AssertError} Throws when tuple lengths are not equal.
+ * @throws {import('../erro../../utils/assertError').AssertError} Throws when tuple lengths are not equal.
  * @example
  *
  * compareTuples([1,2,3,4,5], [5,4,2,1,3]) // false

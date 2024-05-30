@@ -62,4 +62,3 @@ test("A and B is undefined", () => {
 
   expect(compareTuples(a, b)).toBe(true);
 });
-

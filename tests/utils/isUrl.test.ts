@@ -31,4 +31,3 @@ test("UrlType.All relative Url check", () => {
 test("Invalid Url", () => {
   expect(isUrl("ht:://sub/path/test")).toBe(false);
 });
-

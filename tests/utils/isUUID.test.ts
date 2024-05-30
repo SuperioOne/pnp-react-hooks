@@ -19,4 +19,3 @@ test("Case insensitive valid Guid", () => {
 test("Invalid clock_seq_hi_and_reserved value", () => {
   expect(isUUID("43a7fafa-9b8b-4e07-c211-7896658d4fd0")).toBe(false);
 });
-

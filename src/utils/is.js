@@ -27,7 +27,7 @@ function getByteLen(str) {
 }
 
 /**
- * Checks if string is email.
+ * Checks if string is a valid email.
  * Notes, RFC6532 UTF-2, UTF-3, UTF-4 are enabled for internalization. This function doesn't complies fully with RFC5322.
  * Comments, quoted local address, LHD domains are not considered as valid email.
  *

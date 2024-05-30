@@ -1,5 +1,5 @@
 import { Web } from "@pnp/sp/webs";
-import { resolveFolder } from "../../src/sp/resolvers";
+import { resolveFolder } from "../../src/sp/resolveFolder";
 
 test("resolveFolder by GUID", () => {
   expect(() =>
