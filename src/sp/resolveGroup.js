@@ -1,5 +1,5 @@
 import "@pnp/sp/site-groups";
-import { assertID, assertString } from "../uti../../utils/assert";
+import { assertID, assertString } from "../utils/assert";
 
 /**
  * Resolves SP site group by either group name or group Id.

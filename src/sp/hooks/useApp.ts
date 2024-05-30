@@ -8,10 +8,10 @@ import { AppCatalogScopes } from "../../types/literalTypes";
 import { PnpHookOptions } from "../../types/options";
 import { DisableOptionValueType } from "../../types/options/RenderOptions";
 import { Nullable } from "../../types/utilityTypes";
-import { assert } from "../../uti../../utils/assert";
+import { assert } from "../../utils/assert";
 import { checkDisable, defaultCheckDisable } from "../checkDisable";
 import { createInvokable } from "../createInvokable";
-import { isUUID } from "../../uti../../utils/is";
+import { isUUID } from "../../utils/is";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 

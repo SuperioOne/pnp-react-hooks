@@ -1,4 +1,4 @@
-import { compareArray, shallowEqual } from "../uti../../utils/compare";
+import { compareArray, shallowEqual } from "../utils/compare";
 
 /**
  * Deeply compares options.

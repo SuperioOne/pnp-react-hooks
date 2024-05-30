@@ -1,5 +1,5 @@
-import { assertString, assertID } from "../uti../../utils/assert";
-import { isEmail } from "../uti../../utils/is";
+import { assertString, assertID } from "../utils/assert";
+import { isEmail } from "../utils/is";
 
 /**
  * Resolves SP user by email, user login name or user numeric Id.

@@ -2,7 +2,7 @@
 import * as React from "react";
 import { PnpHookGlobalOptions } from "../types/options";
 import { SPBrowser } from "@pnp/sp/behaviors/spbrowser";
-import { shallowEqual } from "../uti../../utils/compare";
+import { shallowEqual } from "../utils/compare";
 import { spfi } from "@pnp/sp";
 
 const DEFAULT_OPTIONS: PnpHookGlobalOptions = {

@@ -1,7 +1,7 @@
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
-import { assertID } from "../uti../../utils/assert";
+import { assertID } from "../utils/assert";
 import { resolveList } from "./resolveList";
 
 /**
@@ -10,7 +10,7 @@ import { resolveList } from "./resolveList";
  * @param {import('@pnp/sp/webs/types').IWeb} web
  * @param {TList} list
  * @param {TItem} item
- * @throws {TypeError | import('../erro../../utils/assertError').AssertError} Throws when list or item identifiers are not valid.
+ * @throws {TypeError | import('../errors/AssertError').AssertError} Throws when list or item identifiers are not valid.
  * @returns {import('./types.private').ScopeReturnType<TList, TItem>}
  */
 export function resolveScope(web, list, item) {

@@ -1,12 +1,12 @@
 import "@pnp/sp/lists";
-import { assertString } from "../uti../../utils/assert";
-import { isUUID } from "../uti../../utils/is";
+import { assertString } from "../utils/assert";
+import { isUUID } from "../utils/is";
 
 /**
  * Resolves SP list by either title or list uuid.
  * @param {import('@pnp/sp/webs/types').IWeb} web - SP web instance.
  * @param {string} listId - folder server relative path or folder uuid.
- * @throws {import('../erro../../utils/assertError').AssertError} - Throws when listId format is not valid.
+ * @throws {import('../errors/AssertError').AssertError} - Throws when listId format is not valid.
  * @returns {import('@pnp/sp/lists/types').IList} - SP Folder instance.
  */
 export function resolveList(web, listId) {

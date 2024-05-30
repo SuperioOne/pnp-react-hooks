@@ -117,7 +117,7 @@ export function compareArray(left, right) {
  * @param {null | undefined | readonly unknown[]} left
  * @param {null | undefined | readonly unknown[]} right
  * @returns {boolean} true if contents are equal, otherwise false.
- * @throws {import('../erro../../utils/assertError').AssertError} Throws when tuple lengths are not equal.
+ * @throws {import('../errors/AssertError').AssertError} Throws when tuple lengths are not equal.
  * @example
  *
  * compareTuples([1,2,3,4,5], [5,4,2,1,3]) // false
