@@ -10,7 +10,7 @@ import { SPFI } from "@pnp/sp";
 
 /**
  * @typedef TrackedState
- * @property {import("./types")._PnpHookOptions | null | undefined} options
+ * @property {import("./types.private").InternalPnpHookOptions | null | undefined} options
  * @property {import("react").DependencyList | null | undefined} externalDeps
  */
 
@@ -24,17 +24,16 @@ const DEFAULT_STATE = {
  * Reuseable internal hook for simple OData queryable actions.
  * @template {any} TReturn
  * @template {import("./types.private").SharepointQueryable} TContext=import("./types.private").SharepointQueryable
- * @param {(sp: SPFI) => Promise<TContext>} invokableFactory - Creates a proxy Query instance
+ * @param {(sp: SPFI) => TContext} requestFactory - Creates a proxy Query instance
  * @param {(value: TReturn | null | undefined) => void} stateAction - Callback function to update state
- * @param {import("./types")._PnpHookOptions} options - PnpHook options.
- * @param {import("react").DependencyList} [deps] - User and hook defined dependecy list.
+ * @param {import("./types.private").InternalPnpHookOptions} options - PnpHook options.
+ * @param {import("react").DependencyList} [deps] - User and hook defined dependency list.
  * @internal
  */
-export function useQueryEffect(invokableFactory, stateAction, options, deps) {
-  const innerState = useRef(DEFAULT_STATE);
-
+export function useQueryEffect(requestFactory, stateAction, options, deps) {
   /** @type{import("react").MutableRefObject<AbortController | undefined>} **/
-  const abortController = useRef(new AbortController());
+  const abortController = useRef(undefined);
+  const innerState = useRef(DEFAULT_STATE);
   const cleanup = useCallback(() => {
     abortController.current?.abort();
     abortController.current = undefined;
@@ -46,8 +45,8 @@ export function useQueryEffect(invokableFactory, stateAction, options, deps) {
   useEffect(() => {
     if (options.disabled !== true) {
       const shouldUpdate =
-        !deepCompareOptions(innerState.current.options, options) ||
-        !compareTuples(innerState.current.externalDeps, deps);
+        !compareTuples(innerState.current.externalDeps, deps) ||
+        !deepCompareOptions(innerState.current.options, options);
 
       if (shouldUpdate) {
         cleanup();
@@ -61,23 +60,18 @@ export function useQueryEffect(invokableFactory, stateAction, options, deps) {
           InjectAbortSignal(abortController.current),
         ]);
 
-        setTimeout(async () => {
-          try {
-            /** @type{import("./types.private").SharepointQueryable<TReturn>} **/
-            let invokeable = await invokableFactory(sp);
-            invokeable = insertODataQuery(invokeable, options.query);
-            const response = await invokeable();
+        /** @type{import("./types.private").SharepointQueryable<TReturn>} **/
+        let request = requestFactory(sp);
+        request = insertODataQuery(request, options.query);
 
-            if (abortController.current?.signal.aborted !== true) {
-              stateAction(response);
-            }
-          } catch (err) {
+        request()
+          .then(stateAction)
+          .catch((err) => {
             if (err.name !== "AbortError") {
               stateAction(null);
               errorHandler(err, options);
             }
-          }
-        });
+          });
       }
 
       innerState.current = {

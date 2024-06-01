@@ -3,7 +3,7 @@ export * from "./behaviors";
 export * from "./sp/usePnpHookOptions";
 export * from "./types";
 
-export { useApp } from "./sp/hooks/useApp";
+export * from "./sp/hooks/useApp";
 export { useApps } from "./sp/hooks/useApps";
 export { useAttachment } from "./sp/hooks/useAttachment";
 export { useAttachments } from "./sp/hooks/useAttachments";
