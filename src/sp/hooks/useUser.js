@@ -20,9 +20,7 @@ export function useUser(userId, options, deps) {
   const [siteUser, setSiteUser] = useState();
 
   const requestFactory = useCallback(
-    (/** @type{ SPFI}**/ sp) => {
-      return resolveUser(sp.web.siteUsers, userId);
-    },
+    (/** @type{ SPFI}**/ sp) => resolveUser(sp.web.siteUsers, userId),
     [userId],
   );
 

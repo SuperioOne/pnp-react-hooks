@@ -1,65 +1,44 @@
 import "@pnp/sp/security";
-import { IRoleAssignmentInfo } from "@pnp/sp/security/types";
 import { InternalContext } from "../../context";
-import { ODataQueryableCollection, Scope } from "../types";
-import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveScope } from "../resolveScope";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface RoleAssignmentsOptions
-  extends PnpHookOptions<ODataQueryableCollection> {
-  /**
-   * List and list item scope configuration. Default is current web scope.
-   */
-  scope?: Scope;
-}
-
 /**
  * Returns role assignmets of selected scope. Use {@link RoleAssignmentsOptions.scope} property to change scope.
  * Default is current web.
- * @param options PnP hook options
- * @param deps useRoleAssignments refreshes response data when one of the dependencies changes.
+ *
+ * @param {import("./options").RoleAssignmentsOptions} [options] - PnP hook options
+ * @param {import("react").DependencyList} [deps] - useRoleAssignments refreshes response data when one of the dependencies changes.
+ * @returns {import("@pnp/sp/security").IRoleAssignmentInfo[] | undefined | null }
  */
-export function useRoleAssignments(
-  options?: RoleAssignmentsOptions,
-  deps?: React.DependencyList,
-): IRoleAssignmentInfo[] | undefined | null {
+export function useRoleAssignments(options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [roleAssignments, setRoleAssignments] = useState<
-    IRoleAssignmentInfo[] | undefined | null
-  >(undefined);
+  /** @type{[import("@pnp/sp/security").IRoleAssignmentInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/security").IRoleAssignmentInfo[] | null |undefined>>]} **/
+  const [roleAssignments, setRoleAssignments] = useState();
 
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => {
-      const scope = resolveScope(
-        sp.web,
-        options?.scope?.list,
-        options?.scope?.item,
-      );
-
-      return overrideAction(scope.roleAssignments);
-    },
+  const requestFactory = useCallback(
+    (/**@type{SPFI} **/ sp) =>
+      resolveScope(sp.web, options?.scope?.list, options?.scope?.item),
     [options],
   );
 
-  const _mergedDeps = mergeDependencies(
+  const mergedDeps = mergeDependencies(
     [options?.scope?.list, options?.scope?.item],
     deps,
   );
 
-  const _options = useMemo(() => {
+  const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled);
 
     return opt;
   }, [options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setRoleAssignments, _options, _mergedDeps);
+  useQueryEffect(requestFactory, setRoleAssignments, internalOpts, mergedDeps);
 
   return roleAssignments;
 }

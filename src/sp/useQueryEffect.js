@@ -15,7 +15,7 @@ import { SPFI } from "@pnp/sp";
  */
 
 /** @type{TrackedState} **/
-const DEFAULT_STATE = {
+export const DEFAULT_STATE = {
   options: null,
   externalDeps: null,
 };

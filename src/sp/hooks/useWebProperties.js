@@ -1,40 +1,35 @@
 import { InternalContext } from "../../context";
-import { ODataQueryable } from "../types";
-import { PnpHookOptions } from "../types";
-import { overrideAction } from "../createInvokable";
-import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
-import { useState, useCallback, useContext, useMemo } from "react";
+import { useState, useContext, useMemo } from "react";
 import { SPFI } from "@pnp/sp";
 
-export type WebPropertiesOptions = PnpHookOptions<ODataQueryable>;
+/** @param {SPFI} sp **/
+function webPropertiesRequest(sp) {
+  return sp.web.allProperties;
+}
 
 /**
  * Returns web's properties.
- * @param options PnP hook options.
- * @param deps useWebProperties refreshes response data when one of the dependencies changes.
+ *
+ * @template T
+ * @param {import("./options").WebPropertiesOptions} [options] - PnP hook options.
+ * @param {import("react").DependencyList} [deps] - useWebProperties refreshes response data when one of the dependencies changes.
+ * @returns {T | null | undefined}
  */
-export function useWebProperties<T>(
-  options?: WebPropertiesOptions,
-  deps?: React.DependencyList,
-): T | undefined | null {
+export function useWebProperties(options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [properties, setProperties] = useState<T | null | undefined>();
-
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => overrideAction(sp.web.allProperties),
-    [],
-  );
-
-  const _options = useMemo(() => {
+  /** @type{[T | null | undefined, import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>]} **/
+  const [properties, setProperties] = useState();
+  const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
-    opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable);
+    opt.disabled = checkDisable(opt?.disabled);
 
     return opt;
   }, [options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setProperties, _options, deps);
+  useQueryEffect(webPropertiesRequest, setProperties, internalOpts, deps);
 
   return properties;
 }

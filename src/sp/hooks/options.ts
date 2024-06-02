@@ -7,10 +7,17 @@ import type {
   RenderOptions,
 } from "../../types";
 import type {
+  FilteredODataQueryable,
   ODataQueryable,
   ODataQueryableCollection,
   PnpHookOptions,
+  RenderListDataOverrideParameters,
+  Scope,
 } from "../types";
+import type { IClientPeoplePickerQueryParameters } from "@pnp/sp/profiles";
+import type { IRenderListDataParameters } from "@pnp/sp/lists";
+import type { PermissionKind } from "@pnp/sp/security";
+import type { RoleTypeKind } from "@pnp/sp/security/types";
 
 export type AppCatalogScopes = "tenant" | "siteCollection";
 export type FileReturnTypes = "blob" | "buffer" | "text" | "info";
@@ -199,4 +206,187 @@ export interface AttachmentBufferOptions
 export interface AttachmentBlobOptions
   extends Omit<BaseAttachmentOptions, "query"> {
   type: "blob";
+}
+
+export interface SearchUserOptions
+  extends RenderOptions,
+    ErrorOptions,
+    BehaviourOptions,
+    ContextOptions {
+  disabled?:
+    | DisableOptionValueType
+    | { (searchOptions: IClientPeoplePickerQueryParameters | string): boolean };
+}
+
+export interface GroupUsersOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  disabled?: DisableOptionValueType | { (groupId: string | number): boolean };
+}
+
+export interface NavigationOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  /**
+   * Navigation type. Default is 'topNavigation'. Changing the type
+   * resends request.
+   */
+  type?: NavigationTypes;
+}
+
+export interface IsMemberOfOptions
+  extends ErrorOptions,
+    RenderOptions,
+    ContextOptions,
+    BehaviourOptions {
+  /**
+   * User email, login name or Id. Default is current user.
+   * Changing userId resends request.
+   */
+  userId?: string | number;
+
+  disabled?: DisableOptionValueType | { (groupId: string | number): boolean };
+}
+
+export type CurrentUserInfoOptions = PnpHookOptions<ODataQueryable>;
+
+export interface ItemAttachmentsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  disabled?:
+    | DisableOptionValueType
+    | { (itemId: number, list: string): boolean };
+}
+
+export interface ItemCommentsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  disabled?:
+    | DisableOptionValueType
+    | { (itemId: number, list: string): boolean };
+}
+
+export interface RenderListParameters {
+  dataParameters: IRenderListDataParameters;
+  dataOverrideParameters?: RenderListDataOverrideParameters;
+
+  /** Pass override parameters as query string. */
+  useQueryParameters?: boolean;
+}
+
+export interface ListAsStreamOptions
+  extends ErrorOptions,
+    RenderOptions,
+    ContextOptions,
+    BehaviourOptions {
+  disabled?:
+    | DisableOptionValueType
+    | { (list: string, parameters: RenderListParameters): boolean };
+}
+
+export interface PageCommentsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  disabled?: DisableOptionValueType | { (pageRelativePath: string): boolean };
+}
+
+export interface ItemContentTypeOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  /**
+   * List GUID Id or title for getting list changes. Keep undefined for web changes.
+   * Changing list value resends request.
+   */
+  list?: string;
+}
+
+export interface UserPermissionOptions
+  extends ErrorOptions,
+    RenderOptions,
+    ContextOptions,
+    BehaviourOptions {
+  /**
+   * User email, login name or Id. Default is current user.
+   * Changing userId resends request.
+   */
+  userId?: string | number;
+
+  /**
+   * List and list item scope configuration. Default is current web scope.
+   */
+  scope?: Scope;
+  disabled?:
+    | DisableOptionValueType
+    | {
+        (
+          permissionKinds: PermissionKind[] | PermissionKind,
+          userId: string | number,
+        ): boolean;
+      };
+}
+
+export type WebPropertiesOptions = PnpHookOptions<ODataQueryable>;
+
+export interface RoleType {
+  roleType: RoleTypeKind;
+}
+
+export interface RoleDefinitionOptions extends PnpHookOptions<ODataQueryable> {
+  disabled?:
+    | DisableOptionValueType
+    | { (roleDefId: string | number | RoleType): boolean };
+}
+
+export interface RecycleBinItemOptions extends PnpHookOptions<ODataQueryable> {
+  scope?: RecycleBinScopes;
+  disabled?: DisableOptionValueType | { (itemId: string): boolean };
+}
+
+export interface RecycleBinItemsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  scope?: RecycleBinScopes;
+}
+
+export type RegionalSettingOptions = PnpHookOptions<ODataQueryable>;
+
+export interface RoleAssignmentsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  /**
+   * List and list item scope configuration. Default is current web scope.
+   */
+  scope?: Scope;
+}
+
+export type RoleDefinitionsOptions = PnpHookOptions<ODataQueryableCollection>;
+
+export interface ListTokenOptions
+  extends ErrorOptions,
+    ContextOptions,
+    BehaviourOptions {
+  disabled?: DisableOptionValueType | { (list: string): boolean };
+}
+
+export type ListOptionsType = 0 | 1 | 2;
+
+export interface BaseListItemsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  mode?: ListOptionsType;
+  disabled?: DisableOptionValueType | { (list: string): boolean };
+}
+
+export interface ListItemsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  mode?: 0;
+  disabled?: DisableOptionValueType | { (list: string): boolean };
+}
+
+export interface AllItemsOptions
+  extends PnpHookOptions<FilteredODataQueryable> {
+  mode: 1;
+  disabled?: DisableOptionValueType | { (list: string): boolean };
+}
+
+export interface PagedItemsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  mode?: 2;
+  disabled?: DisableOptionValueType | { (list: string): boolean };
+}
+
+export interface PagedItemsOptions
+  extends PnpHookOptions<ODataQueryableCollection> {
+  disabled?: DisableOptionValueType | { (list: string): boolean };
 }

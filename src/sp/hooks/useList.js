@@ -19,9 +19,7 @@ export function useList(list, options, deps) {
   const [listInfo, setListInfo] = useState();
 
   const requestFactory = useCallback(
-    (/** @type{SPFI} **/ sp) => {
-      return resolveList(sp.web, list);
-    },
+    (/** @type{SPFI} **/ sp) => resolveList(sp.web, list),
     [list],
   );
 

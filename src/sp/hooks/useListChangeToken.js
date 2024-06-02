@@ -1,83 +1,43 @@
-import {
-  ErrorOptions,
-  ContextOptions,
-  BehaviourOptions,
-  DisableOptionValueType,
-} from "../../types";
-import { IList } from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveList } from "../resolveList";
 import { shallowEqual } from "../../utils/compare";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { IListInfo } from "@pnp/sp/lists/types";
 
-export interface ListTokenOptions
-  extends ErrorOptions,
-    ContextOptions,
-    BehaviourOptions {
-  disabled?: DisableOptionValueType | { (list: string): boolean };
-}
-
-export class ChangeTokenInfo implements IChangeTokenInfo {
-  constructor(listInfo?: IListInfo) {
-    if (typeof listInfo === "object") {
-      this.CurrentChangeToken = listInfo.CurrentChangeToken.StringValue;
-      this.Id = listInfo.Id;
-      this.LastChanges = {
-        LastItemDeletedDate: listInfo.LastItemDeletedDate,
-        LastItemModifiedDate: listInfo.LastItemModifiedDate,
-        LastItemUserModifiedDate: listInfo.LastItemUserModifiedDate,
-      };
-    }
-  }
-
-  Id: string;
-  CurrentChangeToken: string;
-  LastChanges: Timings;
-}
-
-export interface IChangeTokenInfo {
-  Id: string;
-  CurrentChangeToken: string;
-  LastChanges: Timings;
-}
-
-interface Timings {
-  LastItemDeletedDate: string;
-  LastItemModifiedDate: string;
-  LastItemUserModifiedDate: string;
-}
+/**
+ * @typedef ChangeTokenInfo
+ * @property {string} currentChangeToken
+ * @property {string} id
+ * @property {string} lastItemDeletedDate
+ * @property {string} lastItemModifiedDate
+ * @property {string} lastItemUserModifiedDate
+ **/
 
 /**
  * Returns list current change token and last modified dates.
- * @param list List GUID id or title. Changing the value resends request.
- * @param options Pnp hook options.
- * @param deps useListChangeToken refreshes response data when one of the dependencies changes.
+ *
+ * @param {string} list - List GUID id or title. Changing the value resends request.
+ * @param {import("./options").ListTokenOptions} [options] - Pnp hook options.
+ * @param {import("react").DependencyList} [deps] - useListChangeToken refreshes response data when one of the dependencies changes.
+ * @returns {ChangeTokenInfo | null | undefined}
  */
-export function useListChangeToken(
-  list: string,
-  options?: ListTokenOptions,
-  deps?: React.DependencyList,
-): IChangeTokenInfo | null | undefined {
+export function useListChangeToken(list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [token, setToken] = useState<IChangeTokenInfo | null | undefined>();
+  /** @type{[ChangeTokenInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<ChangeTokenInfo | null |undefined>>]} **/
+  const [token, setToken] = useState();
 
-  const _setTokenProxy = useCallback(
-    (newToken: IChangeTokenInfo | null | undefined) => {
-      if (!shallowEqual(newToken, token)) {
-        setToken(newToken);
-      }
-    },
-    [token],
-  );
+  // This func make sures token reference doesn't change if the new token properties are exactly same as the current one.
+  // Benefit of doing this is, we can use it in another hooks to get "when list changes" functionality.
+  const setTokenProxy = useCallback((newToken) => {
+    setToken((value) => (shallowEqual(newToken, value) ? value : newToken));
+  }, []);
 
   const invokableFactory = useCallback(
-    async (sp: SPFI) => {
+    (/**@type{SPFI} **/ sp) => {
       const spList = resolveList(sp.web, list).select(
         "CurrentChangeToken",
         "ID",
@@ -86,9 +46,17 @@ export function useListChangeToken(
         "LastItemUserModifiedDate",
       );
 
-      const action = async function (this: IList): Promise<IChangeTokenInfo> {
+      /** @type{(this:import("@pnp/sp/lists").IList) => Promise<ChangeTokenInfo>} **/
+      const action = async function () {
         const listInfo = await this();
-        return new ChangeTokenInfo(listInfo);
+
+        return {
+          id: listInfo.Id,
+          currentChangeToken: listInfo.CurrentChangeToken,
+          lastItemDeletedDate: listInfo.LastItemDeletedDate,
+          lastItemModifiedDate: listInfo.LastItemModifiedDate,
+          lastItemUserModifiedDate: listInfo.LastItemUserModifiedDate,
+        };
       };
 
       return overrideAction(spList, action);
@@ -96,16 +64,15 @@ export function useListChangeToken(
     [list],
   );
 
-  const _mergedDeps = mergeDependencies([list], deps);
-
-  const _options = useMemo(() => {
-    const opt = mergeOptions<undefined>(globalOptions, options);
-    opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, list);
+  const mergedDeps = mergeDependencies([list], deps);
+  const internalOpts = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled, list);
 
     return opt;
   }, [list, options, globalOptions]);
 
-  useQueryEffect(invokableFactory, _setTokenProxy, _options, _mergedDeps);
+  useQueryEffect(invokableFactory, setTokenProxy, internalOpts, mergedDeps);
 
   return token;
 }

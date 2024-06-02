@@ -1,44 +1,35 @@
 import "@pnp/sp/site-users";
-import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { InternalContext } from "../../context";
-import { ODataQueryable } from "../types";
-import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
-import { useState, useCallback, useContext, useMemo } from "react";
+import { useState, useContext, useMemo } from "react";
 
-export type CurrentUserInfoOptions = PnpHookOptions<ODataQueryable>;
+/** @param {SPFI} sp **/
+function currentUserRequest(sp) {
+  return sp.web.currentUser;
+}
 
 /**
  * Returns current user information.
- * @param options PnP hook options
- * @param deps useCurrentUser refreshes response data when one of the dependencies changes.
+ *
+ * @param {import("./options").CurrentUserInfoOptions} [options] - PnP hook options
+ * @param {import("react").DependencyList} [deps] - useCurrentUser refreshes response data when one of the dependencies changes.
+ * @returns {import("@pnp/sp/site-users").ISiteUserInfo | null | undefined}
  */
-export function useCurrentUser(
-  options?: CurrentUserInfoOptions,
-  deps?: React.DependencyList,
-): ISiteUserInfo | null | undefined {
+export function useCurrentUser(options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [currentUser, setCurrentUser] = useState<
-    ISiteUserInfo | null | undefined
-  >(undefined);
-
-  const invocableFactory = useCallback(
-    async (sp: SPFI) => overrideAction(sp.web.currentUser),
-    [],
-  );
-
-  const _options = useMemo(() => {
+  /** @type{[import("@pnp/sp/site-users").ISiteUserInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-users").ISiteUserInfo | null |undefined>>]} **/
+  const [currentUser, setCurrentUser] = useState();
+  const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled);
 
     return opt;
   }, [options, globalOptions]);
 
-  useQueryEffect(invocableFactory, setCurrentUser, _options, deps);
+  useQueryEffect(currentUserRequest, setCurrentUser, internalOpts, deps);
 
   return currentUser;
 }

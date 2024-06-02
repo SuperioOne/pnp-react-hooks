@@ -20,7 +20,7 @@ export function useGroups(options, deps) {
   /** @type{[import("@pnp/sp/site-groups").ISiteGroupInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-groups").ISiteGroupInfo[] | null |undefined>>]} **/
   const [groups, setGroups] = useState();
 
-  const invokableFactory = useCallback(
+  const requestFactory = useCallback(
     (/**@type{SPFI} **/ sp) => {
       const userId = options?.userId;
 
@@ -53,7 +53,7 @@ export function useGroups(options, deps) {
     return opt;
   }, [options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setGroups, internalOpts, mergedDeps);
+  useQueryEffect(requestFactory, setGroups, internalOpts, mergedDeps);
 
   return groups;
 }

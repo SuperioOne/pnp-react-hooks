@@ -1,36 +1,26 @@
-import {
-  ContextOptions,
-  ErrorOptions,
-  RenderOptions,
-  BehaviourOptions,
-  DisableOptionValueType,
-} from "../../types";
-import {
-  IList,
-  IRenderListDataAsStreamResult,
-  IRenderListDataParameters,
-} from "@pnp/sp/lists/types";
 import { InternalContext } from "../../context";
-import { RenderListDataOverrideParameters } from "../types";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
-import { isNull } from "../../utils/is";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveList } from "../resolveList";
-import { shallowEqual } from "../../utils/compare";
 import { useQueryEffect } from "../useQueryEffect";
-import { useState, useCallback, useContext, useMemo, useRef } from "react";
+import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Convert record to map object.
+ * @template T
+ * @param {Record<string, T>} obj
+ * @returns {Map<string, T>}
  */
-export function convertToMap<T = any>(obj: Record<string, T>) {
+function convertToMap(obj) {
   const fields = Object.keys(obj);
-  const map = new Map<string, T>();
+  const map = new Map();
 
-  let key: string;
-  let value: T;
+  /** @type{string} **/
+  let key;
+  /** @type{T} **/
+  let value;
 
   for (let index = 0; index < fields.length; index++) {
     key = fields[index];
@@ -42,70 +32,39 @@ export function convertToMap<T = any>(obj: Record<string, T>) {
   return map;
 }
 
-export interface ListAsStreamOptions
-  extends ErrorOptions,
-    RenderOptions,
-    ContextOptions,
-    BehaviourOptions {
-  disabled?:
-    | DisableOptionValueType
-    | { (list: string, parameters: RenderListParameters): boolean };
-}
-
-export interface RenderListParameters {
-  dataParameters: IRenderListDataParameters;
-  dataOverrideParameters?: RenderListDataOverrideParameters;
-
-  /** Pass override parameters as query string. */
-  useQueryParameters?: boolean;
-}
-
 /**
  * Returns data for the specified query view
- * @param list List GUID Id or title. Changing the value resends request.
- * @param parameters Sharepoint RenderAsStream parameters.
- * @param options PnP hook options.
- * @param deps useListAsStream refreshes response data when one of the dependencies changes.
+ *
+ * @param {string} list - List GUID Id or title. Changing the value resends request.
+ * @param {import("./options").RenderListParameters} parameters - Sharepoint RenderAsStream parameters.
+ * @param {import("./options").ListAsStreamOptions} [options] - PnP hook options.
+ * @param {import("react").DependencyList} [deps] - useListAsStream refreshes response data when one of the dependencies changes.
+ * @returns {import("@pnp/sp/lists").IRenderListDataAsStreamResult | null | undefined}
  */
-export function useListAsStream(
-  list: string,
-  parameters: RenderListParameters,
-  options?: ListAsStreamOptions,
-  deps?: React.DependencyList,
-): IRenderListDataAsStreamResult | null | undefined {
+export function useListAsStream(list, parameters, options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [listData, setListData] = useState<
-    IRenderListDataAsStreamResult | null | undefined
-  >();
-  const _parameters = useRef<RenderListParameters>(parameters);
-  let _params;
-
-  if (_deepCompareParameters(_parameters.current, parameters)) {
-    _params = _parameters.current;
-  } else {
-    _params = parameters;
-    _parameters.current = parameters;
-  }
-
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => {
+  /** @type{[import("@pnp/sp/lists").IRenderListDataAsStreamResult | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/lists").IRenderListDataAsStreamResult | null |undefined>>]} **/
+  const [listData, setListData] = useState();
+  const requestFactory = useCallback(
+    (/**@type{SPFI} **/ sp) => {
       const spList = resolveList(sp.web, list);
 
       let overrideParams;
       let queryParams;
 
-      if (_params.dataOverrideParameters) {
-        if (_params.useQueryParameters) {
+      if (parameters.dataOverrideParameters) {
+        if (parameters.useQueryParameters) {
           overrideParams = null;
-          queryParams = convertToMap(_params.dataOverrideParameters);
+          queryParams = convertToMap(parameters.dataOverrideParameters);
         } else {
-          overrideParams = _params.dataOverrideParameters;
+          overrideParams = parameters.dataOverrideParameters;
         }
       }
 
-      const action = function (this: IList) {
+      /** @type{(this:import("@pnp/sp/lists").IList) => Promise<import("@pnp/sp/lists").IRenderListDataAsStreamResult>} **/
+      const action = function () {
         return this.renderListDataAsStream(
-          _params.dataParameters,
+          parameters.dataParameters,
           overrideParams,
           queryParams,
         );
@@ -113,41 +72,18 @@ export function useListAsStream(
 
       return overrideAction(spList, action);
     },
-    [list, _params],
+    [list, parameters],
   );
 
-  const _mergedDeps = mergeDependencies([list, _params], deps);
-
-  const _options = useMemo(() => {
-    const opt = mergeOptions<undefined>(globalOptions, options);
-    opt.disabled = checkDisable(
-      opt?.disabled,
-      defaultCheckDisable,
-      list,
-      _params,
-    );
+  const mergedDeps = mergeDependencies([list], deps);
+  const internalOpts = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled, list, parameters);
 
     return opt;
-  }, [list, _params, globalOptions, options]);
+  }, [list, parameters, globalOptions, options]);
 
-  useQueryEffect(invokableFactory, setListData, _options, _mergedDeps);
+  useQueryEffect(requestFactory, setListData, internalOpts, mergedDeps);
 
   return listData;
-}
-
-function _deepCompareParameters(
-  right: RenderListParameters,
-  left: RenderListParameters,
-) {
-  if (right === left) {
-    return true;
-  } else if (isNull(right) || isNull(left)) {
-    return false;
-  } else {
-    return (
-      shallowEqual(right.dataParameters, left.dataParameters) &&
-      shallowEqual(right.useQueryParameters, left.useQueryParameters) &&
-      shallowEqual(right.dataOverrideParameters, left.dataOverrideParameters)
-    );
-  }
 }

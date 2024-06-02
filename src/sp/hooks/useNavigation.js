@@ -1,61 +1,47 @@
 import "@pnp/sp/navigation";
-import { INavNodeInfo } from "@pnp/sp/navigation/types";
 import { InternalContext } from "../../context";
-import { ODataQueryableCollection, NavigationTypes } from "../types";
-import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
-
-export interface NavigationOptions
-  extends PnpHookOptions<ODataQueryableCollection> {
-  /**
-   * Navigation type. Default is 'topNavigation'. Changing the type
-   * resends request.
-   */
-  type?: NavigationTypes;
-}
 
 /**
  * Returns web navigation nodes.
  * Use {@link NavigationOptions.type} property to change navigation type.
  * Default is topNavigation.
- * @param options PnP hook options.
- * @param deps useNavigation refreshes response data when one of the dependencies changes.
+ *
+ * @param {import("./options").NavigationOptions} [options] - PnP hook options.
+ * @param {import("react").DependencyList} [deps] - useNavigation refreshes response data when one of the dependencies changes.
+ * @returns {import("@pnp/sp/navigation").INavNodeInfo[] | null | undefined}
  */
-export function useNavigation(
-  options?: NavigationOptions,
-  deps?: React.DependencyList,
-): INavNodeInfo[] | null | undefined {
+export function useNavigation(options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [navNodes, setNavNodes] = useState<INavNodeInfo[] | null | undefined>();
+  /** @type{[import("@pnp/sp/navigation").INavNodeInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/navigation").INavNodeInfo[] | null |undefined>>]} **/
+  const [navNodes, setNavNodes] = useState();
 
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => {
+  const requestFactory = useCallback(
+    (/**@type{SPFI} **/ sp) => {
       switch (options?.type) {
         case "quickLaunch":
-          return overrideAction(sp.web.navigation.quicklaunch);
+          return sp.web.navigation.quicklaunch;
         case "topNavigation":
         default:
-          return overrideAction(sp.web.navigation.topNavigationBar);
+          return sp.web.navigation.topNavigationBar;
       }
     },
     [options?.type],
   );
 
-  const _mergedDeps = mergeDependencies([options?.type], deps);
-
-  const _options = useMemo(() => {
+  const mergedDeps = mergeDependencies([options?.type], deps);
+  const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled);
 
     return opt;
   }, [options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setNavNodes, _options, _mergedDeps);
+  useQueryEffect(requestFactory, setNavNodes, internalOpts, mergedDeps);
 
   return navNodes;
 }

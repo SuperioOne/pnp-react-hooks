@@ -1,63 +1,49 @@
 import "@pnp/sp/recycle-bin";
-import { DisableOptionValueType } from "../../types";
-import { IRecycleBinItemObject } from "@pnp/sp/recycle-bin/types";
 import { InternalContext } from "../../context";
-import { ODataQueryable, RecycleBinScopes } from "../types";
-import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
-import { checkDisable, defaultCheckDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
+import { checkDisable } from "../checkDisable";
 import { isUUID } from "../../utils/is";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect";
 
-export interface RecycleBinItemOptions extends PnpHookOptions<ODataQueryable> {
-  scope?: RecycleBinScopes;
-  disabled?: DisableOptionValueType | { (itemId: string): boolean };
-}
-
 /**
  * Returns an item from recycle bin.
- * @param itemId RecycleBin item guid ID. Changing the value resends request.
- * @param options Pnp hook options.
- * @param deps useRecycleBinItem refreshes response data when one of the dependencies changes.
+ *
+ * @param {string} itemId - RecycleBin item guid ID. Changing the value resends request.
+ * @param {import("./options").RecycleBinItemOptions} [options] - Pnp hook options.
+ * @param {import("react").DependencyList} [deps] - useRecycleBinItem refreshes response data when one of the dependencies changes.
+ * @returns {import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null | undefined}
  */
-export function useRecycleBinItem(
-  itemId: string,
-  options?: RecycleBinItemOptions,
-  deps?: React.DependencyList,
-): IRecycleBinItemObject | null | undefined {
-  const [binItem, setBinItem] = useState<
-    IRecycleBinItemObject | null | undefined
-  >();
+export function useRecycleBinItem(itemId, options, deps) {
   const globalOptions = useContext(InternalContext);
+  /** @type{[import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null |undefined>>]} **/
+  const [binItem, setBinItem] = useState();
 
-  const _options = useMemo(() => {
-    const opt = mergeOptions(globalOptions, options);
-    opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, itemId);
-    return opt;
-  }, [options, globalOptions, itemId]);
-
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => {
+  const requestFactory = useCallback(
+    (/**@type{SPFI} **/ sp) => {
       if (!isUUID(itemId))
         throw new TypeError("itemId is not a valid GUID string.");
 
       switch (options?.scope) {
         case "site":
-          return overrideAction(sp.site.recycleBin.getById(itemId));
+          return sp.site.recycleBin.getById(itemId);
         case "web":
         default:
-          return overrideAction(sp.web.recycleBin.getById(itemId));
+          return sp.web.recycleBin.getById(itemId);
       }
     },
     [itemId, options?.scope],
   );
 
-  const _mergedDeps = mergeDependencies([itemId, options?.scope], deps);
+  const mergedDeps = mergeDependencies([itemId, options?.scope], deps);
+  const internalOpts = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled, itemId);
+    return opt;
+  }, [options, globalOptions, itemId]);
 
-  useQueryEffect(invokableFactory, setBinItem, _options, _mergedDeps);
+  useQueryEffect(requestFactory, setBinItem, internalOpts, mergedDeps);
 
   return binItem;
 }

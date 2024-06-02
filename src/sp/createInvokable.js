@@ -8,7 +8,7 @@
  * @template {import("./types.private").SharepointQueryable} [TContext=import("./types.private").SharepointQueryable]
  * @param {TContext} instance
  * @param {import("./types.private").PnpActionFunction<TContext, TResult>} func
- * @returns {TContext}
+ * @returns {import("./types.private").SharepointQueryable<TResult>}
  */
 export function overrideAction(instance, func) {
   return new Proxy(instance, {

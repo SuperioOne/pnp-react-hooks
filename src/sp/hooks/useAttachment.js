@@ -66,7 +66,6 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useAttachment(attachmentName, itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-
   /** @type{[AttachmentReturnTypes | null | undefined, import("react").Dispatch<import("react").SetStateAction<AttachmentReturnTypes | null |undefined>>]} **/
   const [attachment, setAttachment] = useState();
 

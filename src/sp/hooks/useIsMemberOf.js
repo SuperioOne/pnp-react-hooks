@@ -1,71 +1,46 @@
 import "@pnp/sp/site-groups";
 import "@pnp/sp/site-users";
-import {
-  BehaviourOptions,
-  ContextOptions,
-  ErrorOptions,
-  RenderOptions,
-} from "../../types";
-import { DisableOptionValueType } from "../../types";
-import { ISiteGroupInfo, ISiteGroups } from "@pnp/sp/site-groups/types";
-import { ISiteUser } from "@pnp/sp/site-users/types";
-import { IWeb } from "@pnp/sp/webs/types";
 import { InternalContext } from "../../context";
 import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
-import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveUser } from "../resolveUser";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface IsMemberOfOptions
-  extends ErrorOptions,
-    RenderOptions,
-    ContextOptions,
-    BehaviourOptions {
-  /**
-   * User email, login name or Id. Default is current user.
-   * Changing userId resends request.
-   */
-  userId?: string | number;
-
-  disabled?: DisableOptionValueType | { (groupId: string | number): boolean };
-}
-
-type MemberInfo = [
-  boolean | null | undefined,
-  ISiteGroupInfo | null | undefined,
-];
-
-const DEFAULT: MemberInfo = [undefined, undefined];
+/** @typedef{[undefined, undefined] |
+ * [null, null] |
+ * [true, import("@pnp/sp/site-groups").ISiteGroupInfo] |
+ * [false, undefined]
+ * } MemberInfo **/
 
 /**
  * Returns true, if user is member of group. If not returns false.
  * Use {@link IsMemberOfOptions.userId} property for another user. Default is current user.
- * @param groupId Group name or Id. Changing the value resends request.
- * @param options Pnp hook options.
- * @param deps useIsMemberOf refreshes response data when one of the dependencies changes.
+ *
+ * @param {string | number} groupId - Group name or Id. Changing the value resends request.
+ * @param {import("./options").IsMemberOfOptions} [options] - Pnp hook options.
+ * @param {import("react").DependencyList} [deps] - useIsMemberOf refreshes response data when one of the dependencies changes.
+ * @returns {MemberInfo}
  */
-export function useIsMemberOf(
-  groupId: string | number,
-  options?: IsMemberOfOptions,
-  deps?: React.DependencyList,
-): MemberInfo {
+export function useIsMemberOf(groupId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [isMember, setIsMember] = useState<MemberInfo | null | undefined>(
-    DEFAULT,
-  );
 
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => {
-      const action = async function (this: IWeb): Promise<MemberInfo> {
-        const user: ISiteUser = options?.userId
+  /** @type{[MemberInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<MemberInfo | null |undefined>>]} **/
+  const [isMember, setIsMember] = useState();
+
+  const requestFactory = useCallback(
+    (/**@type{SPFI} **/ sp) => {
+      /** @type{(this: import("@pnp/sp/webs").IWeb) => Promise<MemberInfo>} **/
+      const action = async function () {
+        const user = options?.userId
           ? resolveUser(this.siteUsers, options.userId)
           : this.currentUser;
 
-        let groups: ISiteGroups;
+        /** @type{import("@pnp/sp/site-groups").ISiteGroups} **/
+        let groups;
 
         switch (typeof groupId) {
           case "number": {
@@ -83,7 +58,6 @@ export function useIsMemberOf(
         }
 
         const response = await groups.top(1).select("Id")();
-
         return response.length === 1 ? [true, response[0]] : [false, undefined];
       };
 
@@ -92,16 +66,15 @@ export function useIsMemberOf(
     [options?.userId, groupId],
   );
 
-  const _mergedDeps = mergeDependencies([groupId, options?.userId], deps);
-
-  const _options = useMemo(() => {
-    const opt = mergeOptions<undefined>(globalOptions, options);
-    opt.disabled = checkDisable(opt?.disabled, defaultCheckDisable, groupId);
+  const mergedDeps = mergeDependencies([groupId, options?.userId], deps);
+  const internalOpts = useMemo(() => {
+    const opt = mergeOptions(globalOptions, options);
+    opt.disabled = checkDisable(opt?.disabled, groupId);
 
     return opt;
   }, [groupId, options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setIsMember, _options, _mergedDeps);
+  useQueryEffect(requestFactory, setIsMember, internalOpts, mergedDeps);
 
-  return isMember ?? DEFAULT;
+  return isMember ?? [undefined, undefined];
 }

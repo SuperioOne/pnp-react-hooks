@@ -1,12 +1,8 @@
 import "@pnp/sp/items";
 import "@pnp/sp/items/get-all";
-import { DisableOptionType, DisableOptionValueType } from "../../types";
-import { IItems, Items } from "@pnp/sp/items";
 import { InjectAbortSignal } from "../../behaviors/internals";
 import { InternalContext } from "../../context";
-import { ODataQueryableCollection, FilteredODataQueryable } from "../types";
-import { PnpHookOptions, _PnpHookOptions } from "../types";
-import { checkDisable, defaultCheckDisable } from "../checkDisable";
+import { checkDisable} from "../checkDisable";
 import { compareTuples } from "../../utils/compare";
 import { deepCompareOptions } from "../deepCompare";
 import { errorHandler } from "../errorHandler";
@@ -17,102 +13,64 @@ import { resolveList } from "../resolveList";
 import { resolveSP } from "../resolveSP";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
 
-export enum ListOptions {
+/** @type{{Default: 0; All: 1; Paged:2}} **/
+export const ListOptions= {
   /**
    * Fetch list items in single request. Request might fail due to threshold limit, if data is not indexed and filtered properly.
    * see https://docs.microsoft.com/en-us/microsoft-365/community/large-lists-large-libraries-in-sharepoint
    */
-  Default = 0,
+  Default : 0,
 
   /** Fetches list items in multiple calls and merges the results on the client side. */
-  All = 1,
+  All : 1,
 
   /** Fetch list items with paging support. */
-  Paged = 2,
+  Paged : 2,
 }
 
-export type nextPageDispatch = (callback?: () => void) => void;
-
-interface _ListItemsOptions extends PnpHookOptions<ODataQueryableCollection> {
-  mode?: ListOptions;
-  disabled?: DisableOptionValueType | { (list: string): boolean };
-}
-
-export interface ListItemsOptions
-  extends PnpHookOptions<ODataQueryableCollection> {
-  mode?: ListOptions.Default;
-  disabled?: DisableOptionValueType | { (list: string): boolean };
-}
-
-export interface AllItemsOptions
-  extends PnpHookOptions<FilteredODataQueryable> {
-  mode: ListOptions.All;
-  disabled?: DisableOptionValueType | { (list: string): boolean };
-}
-
-export interface PagedItemsOptions
-  extends PnpHookOptions<ODataQueryableCollection> {
-  mode?: ListOptions.Paged;
-  disabled?: DisableOptionValueType | { (list: string): boolean };
-}
-
-export interface PagedItemsOptions
-  extends PnpHookOptions<ODataQueryableCollection> {
-  disabled?: DisableOptionValueType | { (list: string): boolean };
-}
+/** @typedef {(callback?: () => void) => void} nextPageDispatch **/
 
 /**
  * Returns all item collection from specified list.
- * @param list List GUID Id or title. Changing the value resends request.
- * @param options PnP hook options for all items request.
- * @param deps useListItems refreshes response data when one of the dependencies changes.
+ *
+ * @template T
+ * @overload
+ * @param {string} list - List GUID Id or title. Changing the value resends request.
+ * @param {import("./options").AllItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
+ * @returns {T[] |null | undefined}
  */
-export function useListItems<T>(
-  list: string,
-  options?: AllItemsOptions,
-  deps?: React.DependencyList,
-): T[] | null | undefined;
-
 /**
+ *
  * Returns item collection from specified list.
- * @param list List GUID Id or title. Changing the value resends request.
- * @param options PnP hook options.
- * @param deps useListItems refreshes response data when one of the dependencies changes.
+ *
+ * @template T
+ * @overload
+ * @param {string} list - List GUID Id or title. Changing the value resends request.
+ * @param {import("./options").ListItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
+ * @returns {T[] |null | undefined}
  */
-export function useListItems<T>(
-  list: string,
-  options?: ListItemsOptions,
-  deps?: React.DependencyList,
-): T[] | null | undefined;
-
 /**
  * Returns items from specified list with paging support.
- * @param list List GUID Id or title. Changing the value resends request.
- * @param options PnP hook options.
- * @param deps useListItems refreshes response data when one of the dependencies changes.
+ *
+ * @template T
+ * @overload
+ * @param {string} list - List GUID Id or title. Changing the value resends request.
+ * @param {import("./options").PagedItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
+ * @returns {[T[] |null | undefined, nextPageDispatch, boolean]}
  */
-export function useListItems<T>(
-  list: string,
-  options?: PagedItemsOptions,
-  deps?: React.DependencyList,
-): [T[] | null | undefined, nextPageDispatch, boolean];
-
-export function useListItems<T>(
-  list: string,
-  options?: _ListItemsOptions,
-  deps?: React.DependencyList,
-):
-  | T[]
-  | null
-  | undefined
-  | [T[] | null | undefined, nextPageDispatch, boolean | undefined] {
+/**
+ * @template T
+ * @param {string} list - List GUID Id or title. Changing the value resends request.
+ * @param {import("./options").BaseListItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
+ * @returns {T[] | null | undefined | [T[] |null | undefined, nextPageDispatch, boolean]}
+ */
+export function useListItems( list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [state, setState] = useState<
-    | T[]
-    | null
-    | undefined
-    | [T[] | null | undefined, nextPageDispatch, boolean | undefined]
-  >();
+  const [state, setState] = useState< | T[] | null | undefined | [T[] | null | undefined, nextPageDispatch, boolean | undefined] >();
   const [next, setNext] = useState<NextPageCall>();
 
   const _innerState = useRef<_TrackedState>({
@@ -123,9 +81,7 @@ export function useListItems<T>(
   });
 
   const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
-  const _abortController = useRef<AbortController | undefined>(
-    new AbortController(),
-  );
+  const _abortController = useRef<AbortController | undefined>(new AbortController());
 
   const _cleanup = useCallback(() => {
     _abortController.current?.abort();
@@ -149,9 +105,7 @@ export function useListItems<T>(
   useEffect(() => {
     const mergedOptions = mergeOptions(globalOptions, options);
     _disabled.current = checkDisable(
-      mergedOptions?.disabled,
-      defaultCheckDisable,
-      list,
+      mergedOptions?.disabled, list,
     );
 
     if (_disabled.current !== true) {

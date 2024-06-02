@@ -19,10 +19,8 @@ export function useGroup(groupId, options, deps) {
   /** @type{[import("@pnp/sp/site-groups").ISiteGroupInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-groups").ISiteGroupInfo | null |undefined>>]} **/
   const [group, setGroup] = useState();
 
-  const invokableFactory = useCallback(
-    (/** @type{SPFI} **/ sp) => {
-      return resolveGroup(sp.web, groupId);
-    },
+  const requestFactory = useCallback(
+    (/** @type{SPFI} **/ sp) => resolveGroup(sp.web, groupId),
     [groupId],
   );
 
@@ -34,7 +32,7 @@ export function useGroup(groupId, options, deps) {
     return opt;
   }, [groupId, options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setGroup, internalOpts, mergedDeps);
+  useQueryEffect(requestFactory, setGroup, internalOpts, mergedDeps);
 
   return group;
 }

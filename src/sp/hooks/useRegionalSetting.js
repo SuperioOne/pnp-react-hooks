@@ -1,44 +1,40 @@
 import "@pnp/sp/regional-settings";
-import { IRegionalSettingsInfo } from "@pnp/sp/regional-settings/types";
 import { InternalContext } from "../../context";
-import { ODataQueryable } from "../types";
-import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
-import { useState, useCallback, useContext, useMemo } from "react";
+import { useState, useContext, useMemo } from "react";
 
-export type RegionalSettingOptions = PnpHookOptions<ODataQueryable>;
+/** @param {SPFI} sp **/
+function regionalSettingsRequest(sp) {
+  return sp.web.regionalSettings;
+}
 
 /**
  * Returns site regional settings.
- * @param options PnP hook options.
- * @param deps useRegionalSetting refreshes response data when one of the dependencies changes.
+ *
+ * @param {import("./options").RegionalSettingOptions} [options] - PnP hook options.
+ * @param {import("react").DependencyList} [deps] - useRegionalSetting refreshes response data when one of the dependencies changes.
+ * @returns {import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null | undefined}
  */
-export function useRegionalSetting(
-  options?: RegionalSettingOptions,
-  deps?: React.DependencyList,
-): IRegionalSettingsInfo | null | undefined {
+export function useRegionalSetting(options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [regionalSetting, setRegionalSetting] = useState<
-    IRegionalSettingsInfo | null | undefined
-  >(undefined);
-
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => overrideAction(sp.web.regionalSettings),
-    [],
-  );
-
-  const _options = useMemo(() => {
+  /** @type{[import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null |undefined>>]} **/
+  const [regionalSetting, setRegionalSetting] = useState();
+  const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled);
 
     return opt;
   }, [options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setRegionalSetting, _options, deps);
+  useQueryEffect(
+    regionalSettingsRequest,
+    setRegionalSetting,
+    internalOpts,
+    deps,
+  );
 
   return regionalSetting;
 }

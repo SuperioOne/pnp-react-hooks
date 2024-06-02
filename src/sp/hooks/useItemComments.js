@@ -1,70 +1,45 @@
 import "@pnp/sp/comments";
 import "@pnp/sp/items";
-import { DisableOptionValueType } from "../../types";
-import { ICommentInfo } from "@pnp/sp/comments/types";
 import { InternalContext } from "../../context";
-import { ODataQueryableCollection } from "../types";
-import { PnpHookOptions } from "../types";
 import { SPFI } from "@pnp/sp";
 import { assertID } from "../../utils/assert";
-import { checkDisable, defaultCheckDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
+import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveList } from "../resolveList";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-export interface ItemCommentsOptions
-  extends PnpHookOptions<ODataQueryableCollection> {
-  disabled?:
-    | DisableOptionValueType
-    | { (itemId: number, list: string): boolean };
-}
-
 /**
  * Returns comment collection of specific list item.
- * @param itemId Item Id. Changing the value resends request.
- * @param list List GUID Id or title. Changing the value resends request.
- * @param options PnP hook options.
- * @param deps useItemComments refreshes response data when one of the dependencies changes.
+ *
+ * @param {number} itemId - Item Id. Changing the value resends request.
+ * @param {string} list - List GUID Id or title. Changing the value resends request.
+ * @param {import("./options").ItemCommentsOptions} [options] - PnP hook options.
+ * @param {import("react").DependencyList} [deps] - useItemComments refreshes response data when one of the dependencies changes.
+ * @returns {import("@pnp/sp/comments").ICommentInfo[] | null | undefined}
  */
-export function useItemComments(
-  itemId: number,
-  list: string,
-  options?: ItemCommentsOptions,
-  deps?: React.DependencyList,
-): ICommentInfo[] | undefined | null {
+export function useItemComments(itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  const [comments, setComments] = useState<ICommentInfo[] | undefined | null>();
+  /** @type{[import("@pnp/sp/comments").ICommentInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/comments").ICommentInfo[] | null |undefined>>]} **/
+  const [comments, setComments] = useState();
 
-  const invokableFactory = useCallback(
-    async (sp: SPFI) => {
+  const requestFactory = useCallback(
+    (/**@type{SPFI} **/ sp) => {
       assertID(itemId, "itemId value is not valid.");
-
-      const queryInst = resolveList(sp.web, list).items.getById(
-        itemId,
-      ).comments;
-
-      return overrideAction(queryInst);
+      return resolveList(sp.web, list).items.getById(itemId).comments;
     },
     [itemId, list],
   );
 
-  const _mergedDeps = mergeDependencies([itemId, list], deps);
-
-  const _options = useMemo(() => {
+  const mergedDeps = mergeDependencies([itemId, list], deps);
+  const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
-    opt.disabled = checkDisable(
-      opt?.disabled,
-      defaultCheckDisable,
-      itemId,
-      list,
-    );
+    opt.disabled = checkDisable(opt?.disabled, itemId, list);
 
     return opt;
   }, [itemId, list, options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setComments, _options, _mergedDeps);
+  useQueryEffect(requestFactory, setComments, internalOpts, mergedDeps);
 
   return comments;
 }
