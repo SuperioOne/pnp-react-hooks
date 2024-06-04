@@ -5,7 +5,6 @@ import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveFolder } from "../resolveFolder";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { SPFI } from "@pnp/sp";
 
 /**
  * Returns file collection from folder.
@@ -17,11 +16,14 @@ import { SPFI } from "@pnp/sp";
  */
 export function useFiles(folderId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/files").IFileInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/files").IFileInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/files").IFileInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/files").IFileInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [files, setFiles] = useState();
-
   const requestFactory = useCallback(
-    (/** @type{SPFI}**/ sp) => {
+    (/** @type{import('@pnp/sp').SPFI}**/ sp) => {
       const rootFolder = resolveFolder(sp.web, folderId);
       return rootFolder.files;
     },

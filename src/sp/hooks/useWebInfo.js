@@ -1,11 +1,10 @@
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useContext, useMemo } from "react";
 
-/** @param {SPFI} sp **/
+/** @param {import('@pnp/sp').SPFI} sp **/
 function webRequest(sp) {
   return sp.web;
 }
@@ -19,7 +18,11 @@ function webRequest(sp) {
  */
 export function useWebInfo(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/webs").IWebInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/webs").IWebInfo | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/webs").IWebInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/webs").IWebInfo | null |undefined>>
+   *  ]}
+   **/
   const [webInfo, setWebInfo] = useState();
   const InternalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

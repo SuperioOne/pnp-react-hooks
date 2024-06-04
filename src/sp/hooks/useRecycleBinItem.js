@@ -1,6 +1,5 @@
 import "@pnp/sp/recycle-bin";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { isUUID } from "../../utils/is";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -17,11 +16,14 @@ import { useQueryEffect } from "../useQueryEffect";
  */
 export function useRecycleBinItem(itemId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null |undefined>>
+   *  ]}
+   **/
   const [binItem, setBinItem] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       if (!isUUID(itemId))
         throw new TypeError("itemId is not a valid GUID string.");
 

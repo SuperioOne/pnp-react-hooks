@@ -1,5 +1,4 @@
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -31,13 +30,15 @@ import { useQueryEffect } from "../useQueryEffect";
  */
 export function useChanges(changeQuery, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[T[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<T[] | null |undefined>>]} **/
+  /** @type{[
+   *    T[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<T[] | null |undefined>>
+   *  ]}
+   **/
   const [changes, setChanges] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       const scope = resolveScope(sp.web, options?.list, undefined);
-
       /** @type{(this: import("@pnp/sp/lists").IList | import("@pnp/sp/webs").IWeb) => Promise<T>} **/
       const action = function () {
         return this.getChanges(changeQuery);

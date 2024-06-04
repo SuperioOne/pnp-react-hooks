@@ -1,6 +1,5 @@
 import "@pnp/sp/navigation";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
@@ -17,11 +16,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useNavigation(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/navigation").INavNodeInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/navigation").INavNodeInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/navigation").INavNodeInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/navigation").INavNodeInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [navNodes, setNavNodes] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       switch (options?.type) {
         case "quickLaunch":
           return sp.web.navigation.quicklaunch;

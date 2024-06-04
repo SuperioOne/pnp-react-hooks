@@ -1,54 +1,54 @@
 import "@pnp/sp/items";
-import "@pnp/sp/items/get-all";
-import { InjectAbortSignal } from "../../behaviors/internals";
+import {
+  AbortSignalSource,
+  InjectAbortSignal,
+} from "../../behaviors/internals";
 import { InternalContext } from "../../context";
-import { checkDisable} from "../checkDisable";
+import { checkDisable } from "../checkDisable";
 import { compareTuples } from "../../utils/compare";
 import { deepCompareOptions } from "../deepCompare";
 import { errorHandler } from "../errorHandler";
 import { insertODataQuery } from "../insertODataQuery";
-import { mergeOptions } from "../merge";
-import { parseODataJSON } from "@pnp/queryable";
+import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveList } from "../resolveList";
 import { resolveSP } from "../resolveSP";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
 
 /** @type{{Default: 0; All: 1; Paged:2}} **/
-export const ListOptions= {
+export const ItemRequestOptions = {
   /**
    * Fetch list items in single request. Request might fail due to threshold limit, if data is not indexed and filtered properly.
    * see https://docs.microsoft.com/en-us/microsoft-365/community/large-lists-large-libraries-in-sharepoint
    */
-  Default : 0,
+  Default: 0,
 
-  /** Fetches list items in multiple calls and merges the results on the client side. */
-  All : 1,
+  /**
+   * @deprecated Fetches all list items on multiple calls and merges the results on the client.
+   */
+  All: 1,
 
   /** Fetch list items with paging support. */
-  Paged : 2,
-}
-
-/** @typedef {(callback?: () => void) => void} nextPageDispatch **/
+  Paged: 2,
+};
 
 /**
- * Returns all item collection from specified list.
- *
  * @template T
- * @overload
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options").AllItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
- * @returns {T[] |null | undefined}
+ * @typedef {<T>(callback?: (data: T[]| undefined, error?:unknown | undefined) => void) => void} NextPageDispatch
  */
+
 /**
- *
+ * @template T
+ * @typedef {T[] | null | undefined | [T[] |null | undefined, NextPageDispatch<T>, boolean | undefined]} ListItemsReturnType
+ */
+
+/**
  * Returns item collection from specified list.
  *
  * @template T
  * @overload
  * @param {string} list - List GUID Id or title. Changing the value resends request.
  * @param {import("./options").ListItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
+ * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
  * @returns {T[] |null | undefined}
  */
 /**
@@ -58,204 +58,247 @@ export const ListOptions= {
  * @overload
  * @param {string} list - List GUID Id or title. Changing the value resends request.
  * @param {import("./options").PagedItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
- * @returns {[T[] |null | undefined, nextPageDispatch, boolean]}
+ * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
+ * @returns {[T[] |null | undefined, NextPageDispatch<T>, boolean]}
+ */
+/**
+ * Returns all item collection from specified list.
+ *
+ * @template T
+ * @overload
+ * @param {string} list - List GUID Id or title. Changing the value resends request.
+ * @param {import("./options").AllItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
+ * @returns {T[] |null | undefined}
+ * @deprecated
  */
 /**
  * @template T
  * @param {string} list - List GUID Id or title. Changing the value resends request.
  * @param {import("./options").BaseListItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] useListItems refreshes response data when one of the dependencies changes.
- * @returns {T[] | null | undefined | [T[] |null | undefined, nextPageDispatch, boolean]}
+ * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
+ * @returns {ListItemsReturnType<T>}
  */
-export function useListItems( list, options, deps) {
+export function useListItems(list, options, deps) {
+  /**
+   * Internal hook state definition
+   *
+   * @typedef _HookState
+   * @property {import("../types.private").InternalPnpHookOptions | null | undefined} options
+   * @property {import("react").DependencyList | null | undefined} externalDeps
+   * @property {string | undefined | null} list
+   */
+  /**
+   * Internal result state definition
+   *
+   * @typedef _ResultState
+   * @property {T[] | null | undefined} items
+   * @property {"paged" | "once" | "error" | undefined} type
+   * @property {boolean | undefined} done
+   */
+
   const globalOptions = useContext(InternalContext);
-  const [state, setState] = useState< | T[] | null | undefined | [T[] | null | undefined, nextPageDispatch, boolean | undefined] >();
-  const [next, setNext] = useState<NextPageCall>();
+  const [state, setState] = useState(
+    /** @type{_ResultState} **/ ({
+      type: undefined,
+      done: undefined,
+      items: undefined,
+    }),
+  );
 
-  const _innerState = useRef<_TrackedState>({
-    externalDeps: null,
-    list: null,
-    url: null,
-    options: null,
-  });
+  const innerState = useRef(
+    /** @type{_HookState} **/ ({
+      options: null,
+      list: null,
+      externalDeps: null,
+    }),
+  );
 
-  const _disabled = useRef<DisableOptionType | undefined>(options?.disabled);
-  const _abortController = useRef<AbortController | undefined>(new AbortController());
+  /** @type{import("react").MutableRefObject<AsyncIterator<T[]> | undefined>} **/
+  const pagedIterator = useRef();
 
-  const _cleanup = useCallback(() => {
-    _abortController.current?.abort();
-    _abortController.current = undefined;
-  }, []);
+  /** @type{import("react").MutableRefObject<AbortSignalSource>} **/
+  const abortController = useRef(new AbortSignalSource());
 
-  useEffect(() => _cleanup, [_cleanup]);
+  useEffect(() => abortController.current.abort(), []);
 
-  const nextDispatch: nextPageDispatch = useCallback(
-    (callback?: () => void) => {
-      if (_innerState.current.url && _disabled.current !== true) {
-        setNext({
-          url: _innerState.current.url,
-          callback: callback,
-        });
+  const nextPageDispatch = useCallback(
+    /** @type{NextPageDispatch<T>} **/ (callback) => {
+      if (
+        pagedIterator.current &&
+        innerState.current.options?.disabled !== true
+      ) {
+        abortController.current.abort();
+        abortController.current.reset();
+        const signalRef = abortController.current.signal;
+
+        pagedIterator.current
+          .next()
+          .then((result) => {
+            if (signalRef.aborted) {
+              return;
+            }
+
+            setState({
+              items: result.value,
+              done: result.done,
+              type: "paged",
+            });
+
+            if (callback) {
+              setTimeout(() => {
+                callback(result.value, undefined);
+              }, 0);
+            }
+          })
+          .catch((err) => {
+            if (err.name !== "AbortError") {
+              setState({
+                items: null,
+                done: undefined,
+                type: "error",
+              });
+
+              if (innerState.current.options) {
+                errorHandler(err, innerState.current.options);
+              } else {
+                console.error(err);
+              }
+
+              if (callback) {
+                setTimeout(() => {
+                  callback(undefined, err);
+                }, 0);
+              }
+            }
+          });
       }
     },
     [],
   );
 
   useEffect(() => {
-    const mergedOptions = mergeOptions(globalOptions, options);
-    _disabled.current = checkDisable(
-      mergedOptions?.disabled, list,
-    );
+    const opts = mergeOptions(globalOptions, options);
+    opts.disabled = checkDisable(opts.disabled, list);
 
-    if (_disabled.current !== true) {
+    if (opts.disabled !== true) {
+      const extDeps = mergeDependencies([list], deps);
       const shouldUpdate =
-        _innerState.current.list !== list ||
-        !deepCompareOptions(_innerState.current.options, mergedOptions) ||
-        !compareTuples(_innerState.current.externalDeps, deps);
+        !deepCompareOptions(innerState.current.options, opts) ||
+        !compareTuples(innerState.current.externalDeps, extDeps);
 
-      if (next || shouldUpdate) {
-        _cleanup();
-        _abortController.current = new AbortController();
+      if (shouldUpdate) {
+        pagedIterator.current = undefined;
+        abortController.current.abort();
+        abortController.current.reset();
 
         if (options?.keepPreviousState !== true) {
-          setState(undefined);
+          setState((prev) => ({ ...prev, items: undefined }));
         }
 
-        // clear next on render.
-        if (next) {
-          setNext(undefined);
-        }
-
-        const sp = resolveSP(mergedOptions, [
-          InjectAbortSignal(_abortController.current),
+        const sp = resolveSP(opts, [
+          InjectAbortSignal(abortController.current),
         ]);
 
-        let request: () => Promise<T[] | ItemsResponse>;
-        let nextCall: (value: any) => void;
-
         const spList = resolveList(sp.web, list);
+        const items = insertODataQuery(spList.items, opts.query);
 
-        if (next) {
-          request = Items([spList.items, next.url], "").using(
-            _customParserBehavior(),
-          );
-          nextCall = (value: ItemsResponse) => {
-            _innerState.current.url = value.url;
-            setState([value.data, nextDispatch, !!value.url]);
-            next.callback?.();
-          };
-        } else {
-          _innerState.current.url = undefined;
+        /** @type{() => Promise<T[] | IteratorResult<T[]>>} **/
+        let request;
+        /** @type{(arg0:any) => void} **/
+        let done;
 
-          const items = insertODataQuery(spList.items, mergedOptions.query);
+        switch (options?.mode) {
+          case ItemRequestOptions.Paged: {
+            const iterator = items[Symbol.asyncIterator]();
+            request = async () => {
+              const firstPage = await iterator.next();
+              return firstPage;
+            };
 
-          switch (options?.mode) {
-            case ListOptions.Paged: {
-              request = items.using(_customParserBehavior());
-              nextCall = (value: ItemsResponse) => {
-                _innerState.current.url = value.url;
-                setState([value.data, nextDispatch, !!value.url]);
-              };
-              break;
-            }
-            case ListOptions.All: {
-              request = () => items.getAll();
-              nextCall = (value: T[]) => setState(value);
-              break;
-            }
-            case ListOptions.Default:
-            default: {
-              request = items;
-              nextCall = (value: T[]) => setState(value);
-              break;
-            }
+            done = (/** @type{IteratorResult<T[]>}**/ results) => {
+              pagedIterator.current = iterator;
+              setState({
+                type: "paged",
+                items: results.value,
+                done: results.done,
+              });
+            };
+
+            break;
+          }
+          case ItemRequestOptions.All: {
+            request = async () => {
+              /** @type{T[]} **/
+              let pages = [];
+
+              for await (const page of items) {
+                pages = pages.concat(page);
+              }
+
+              return pages;
+            };
+            done = (/** @type{T[]} **/ result) =>
+              setState({
+                type: "once",
+                items: result,
+                done: true,
+              });
+
+            break;
+          }
+          case ItemRequestOptions.Default:
+          default: {
+            request = items;
+            done = (/** @type{T[]}**/ result) =>
+              setState({
+                type: "once",
+                items: result,
+                done: true,
+              });
+
+            break;
           }
         }
 
-        setTimeout(async () => {
-          try {
-            const response = await request();
-            nextCall(response);
-          } catch (err) {
-            if (err.name !== "AbortError") {
-              setState(null);
-              errorHandler(err, mergedOptions);
+        const signalRef = abortController.current.signal;
+
+        request()
+          .then((response) => {
+            if (!signalRef.aborted) {
+              done(response);
             }
-          }
-        });
+          })
+          .catch((err) => {
+            if (err.name !== "AbortError") {
+              setState({
+                items: null,
+                done: undefined,
+                type: "error",
+              });
+              errorHandler(err, opts);
+            }
+          });
       }
 
-      _innerState.current.externalDeps = deps;
-      _innerState.current.list = list;
-      _innerState.current.options = mergedOptions;
+      innerState.current.externalDeps = extDeps;
+      innerState.current.options = opts;
+      innerState.current.list = list;
     }
-  }, [next, list, options, deps, globalOptions, _cleanup, nextDispatch]);
+  }, [globalOptions, options, list, deps]);
 
-  if (options?.mode === ListOptions.Paged) {
-    switch (state) {
-      case undefined:
-        return [undefined, nextDispatch, undefined];
-      case null:
-        return [null, nextDispatch, undefined];
-      default:
-        return state;
+  switch (state.type) {
+    case "paged": {
+      return [state.items, nextPageDispatch, state.done];
     }
-  } else {
-    return state;
+    case "once": {
+      return state.items;
+    }
+    case "error": {
+      return null;
+    }
+    default: {
+      return undefined;
+    }
   }
-}
-
-interface ItemsResponse {
-  url?: string;
-  data: any;
-}
-
-interface NextPageCall {
-  url: string;
-  callback?: () => void;
-}
-
-// Based on PageItemParser
-function _customParserBehavior() {
-  return (instance: IItems) => {
-    instance.on.parse.clear();
-    instance.on.parse(
-      async (
-        url: URL,
-        response: Response,
-        result: ItemsResponse,
-      ): Promise<[URL, Response, any]> => {
-        if (!response.ok) {
-          throw new Error(
-            `Http request failed with ${response.status}: ${url.toString()}`,
-          );
-        }
-
-        if (typeof result === "undefined") {
-          const json = await response.json();
-          const nextUrl =
-            Reflect.has(json, "d") && Reflect.has(json.d, "__next")
-              ? json.d.__next
-              : json["odata.nextLink"];
-
-          result = {
-            data: parseODataJSON(json),
-            url: nextUrl,
-          };
-        }
-
-        return [url, response, result];
-      },
-    );
-
-    return instance;
-  };
-}
-
-interface _TrackedState {
-  url: string | null | undefined;
-  list: string | null | undefined;
-  options: _PnpHookOptions | null | undefined;
-  externalDeps: React.DependencyList | null | undefined;
 }

@@ -1,59 +1,37 @@
 import "@pnp/sp/search";
-import {
-  DisableOptionType,
-  DisableOptionValueType,
-  RenderOptions,
-  ErrorOptions,
-  ContextOptions,
-  BehaviourOptions,
-} from "../../types";
-import {
-  ISearchQuery,
-  ISearchResponse,
-  ISearchResult,
-  SearchQueryInit,
-  ISearchBuilder,
-} from "@pnp/sp/search/types";
-import { InjectAbortSignal } from "../../behaviors/internals";
-import { InternalContext } from "../../context";
-import { _PnpHookOptions } from "../types";
-import { SearchResults } from "@pnp/sp/search";
-import { assert, assertNumber } from "../../utils/assert";
-import { compareTuples, shallowEqual } from "../../utils/compare";
-import { defaultCheckDisable, checkDisable } from "../checkDisable";
+import { assert, assertNumber} from "../../utils/assert";
 import { errorHandler } from "../errorHandler";
-import { mergeOptions } from "../merge";
 import { resolveSP } from "../resolveSP";
-import { useCallback, useContext, useEffect, useReducer, useRef } from "react";
+import { InjectAbortSignal } from "../../behaviors/internals";
+import { compareTuples } from "../../utils/compare";
+import { shallowEqual } from "../../utils/shallowEqual";
+import { useCallback, useContext } from "react";
+import { InternalContext } from "../../context";
 
 const DEFAULT_PAGE_SIZE = 10;
 const INITIAL_PAGE_INDEX = 1;
 const INITIAL_STATE: SearchState = { currentPage: INITIAL_PAGE_INDEX };
 
-export function isSearchQueryBuilder(
-  query: SearchQueryInit,
-): query is ISearchBuilder {
-  const builder = <ISearchBuilder>query;
-  return typeof builder?.toSearchQuery === "function";
-}
+/** 
+ * @param {import("@pnp/sp/search").SearchQueryInit} query
+ * @returns {query is import("@pnp/sp/search").SearchQueryInit}
+ */
+function isSearchQueryBuilder(query){
+  /** @type {import("@pnp/sp/search").ISearchBuilder}**/
+  const builder = query;
 
-export interface SearchOptions
-  extends RenderOptions,
-    ErrorOptions,
-    BehaviourOptions,
-    ContextOptions {
-  disabled?:
-    | DisableOptionValueType
-    | { (searchOptions: ISearchQuery | string): boolean };
+  return typeof builder?.toSearchQuery === "function";
 }
 
 export type GetPageDispatch = (pageNo: number, callback?: () => void) => void;
 
 /**
  * Search
- * @param searchQuery {@link ISearchQuery} query or search text. Changing the value resends request.
- * @param options PnP hook options.
- * @param deps useSearch refreshes response data when one of the dependencies changes.
+ *
+ * @param {string | import("@pnp/sp/search").ISearchQuery} searchQuery - ISearchQuery query or search text. Changing the value resends request.
+ * @param {import("./options").SearchOptions} [options] - PnP hook options.
+ * @param {import("react").DependencyList} [deps] - useSearch refreshes response data when one of the dependencies changes.
+ * @returns {[]}
  */
 export function useSearch(
   searchQuery: ISearchQuery | string,
@@ -90,18 +68,17 @@ export function useSearch(
     [],
   );
 
-  const _cleanup = useCallback(() => {
+  const cleanup = useCallback(() => {
     _abortController.current?.abort();
     _abortController.current = undefined;
   }, []);
 
-  useEffect(() => _cleanup, [_cleanup]);
+  useEffect(() => cleanup, [cleanup]);
 
   useEffect(() => {
     const mergedOptions = mergeOptions(globalOptions, options);
     _disabled.current = checkDisable(
       mergedOptions?.disabled,
-      defaultCheckDisable,
       searchQuery,
     );
 
@@ -121,7 +98,7 @@ export function useSearch(
 
       if (searchOptChanged || pageChanged) {
         try {
-          _cleanup();
+          cleanup();
           _abortController.current = new AbortController();
 
           if (mergedOptions.keepPreviousState !== true) {
@@ -198,7 +175,7 @@ export function useSearch(
         options: mergedOptions,
       };
     }
-  }, [searchState, searchQuery, options, globalOptions, deps, _cleanup]);
+  }, [searchState, searchQuery, options, globalOptions, deps, cleanup]);
 
   return [searchState.userResult, _getPageDispatch];
 }

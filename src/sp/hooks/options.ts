@@ -18,6 +18,7 @@ import type { IClientPeoplePickerQueryParameters } from "@pnp/sp/profiles";
 import type { IRenderListDataParameters } from "@pnp/sp/lists";
 import type { PermissionKind } from "@pnp/sp/security";
 import type { RoleTypeKind } from "@pnp/sp/security/types";
+import type { ISearchQuery } from "@pnp/sp/search";
 
 export type AppCatalogScopes = "tenant" | "siteCollection";
 export type FileReturnTypes = "blob" | "buffer" | "text" | "info";
@@ -360,11 +361,11 @@ export interface ListTokenOptions
   disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
-export type ListOptionsType = 0 | 1 | 2;
+export type ItemRequestOptionTypes = 0 | 1 | 2;
 
 export interface BaseListItemsOptions
   extends PnpHookOptions<ODataQueryableCollection> {
-  mode?: ListOptionsType;
+  mode?: ItemRequestOptionTypes;
   disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
@@ -374,6 +375,9 @@ export interface ListItemsOptions
   disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
+/**
+ * @deprecated Last resort option. 99.99% times you should avoid this option.
+ */
 export interface AllItemsOptions
   extends PnpHookOptions<FilteredODataQueryable> {
   mode: 1;
@@ -386,7 +390,12 @@ export interface PagedItemsOptions
   disabled?: DisableOptionValueType | { (list: string): boolean };
 }
 
-export interface PagedItemsOptions
-  extends PnpHookOptions<ODataQueryableCollection> {
-  disabled?: DisableOptionValueType | { (list: string): boolean };
+export interface SearchOptions
+  extends RenderOptions,
+    ErrorOptions,
+    BehaviourOptions,
+    ContextOptions {
+  disabled?:
+    | DisableOptionValueType
+    | { (searchOptions: ISearchQuery | string): boolean };
 }

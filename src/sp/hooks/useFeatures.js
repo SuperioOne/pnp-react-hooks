@@ -1,7 +1,6 @@
 import "@pnp/sp/features/site";
 import "@pnp/sp/features/web";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
@@ -16,11 +15,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useFeatures(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/features/types").IFeatureInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/features/types").IFeatureInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/features/types").IFeatureInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/features/types").IFeatureInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [features, setFeatures] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       switch (options?.scope) {
         case "site": {
           return sp.site.features;

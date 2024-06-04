@@ -1,6 +1,5 @@
 import "@pnp/sp/appcatalog/web";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useCallback, useContext, useMemo, useState } from "react";
@@ -16,11 +15,14 @@ import { useQueryEffect } from "../useQueryEffect";
  */
 export function useApps(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[T[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<T[] | null |undefined>>]} **/
+  /** @type{[
+   *    T[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<T[] | null |undefined>>
+   *  ]}
+   **/
   const [apps, setApps] = useState();
-
   const requestFactory = useCallback(
-    (/** @type{SPFI} **/ sp) => {
+    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
       return options?.scope === "tenant"
         ? sp.tenantAppcatalog
         : sp.web.appcatalog;

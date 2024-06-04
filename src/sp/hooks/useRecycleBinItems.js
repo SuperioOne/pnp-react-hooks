@@ -1,6 +1,5 @@
 import "@pnp/sp/recycle-bin";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useCallback, useContext, useMemo, useState } from "react";
@@ -15,11 +14,14 @@ import { useQueryEffect } from "../useQueryEffect";
  */
 export function useRecycleBinItems(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject[] | null |undefined>>
+   *  ]}
+   **/
   const [binItems, setBinItems] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       switch (options?.scope) {
         case "site":
           return sp.site.recycleBin;

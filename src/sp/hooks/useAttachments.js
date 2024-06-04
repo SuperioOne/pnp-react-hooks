@@ -1,7 +1,6 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { assertID } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -20,11 +19,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useAttachments(itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/attachments").IAttachmentInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/attachments").IAttachmentInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/attachments").IAttachmentInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/attachments").IAttachmentInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [attachments, setAttachments] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       assertID(itemId, "itemId value is not valid.");
       return resolveList(sp.web, list).items.getById(itemId).attachmentFiles;
     },
@@ -32,7 +34,6 @@ export function useAttachments(itemId, list, options, deps) {
   );
 
   const mergedDeps = mergeDependencies([itemId, list], deps);
-
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled, itemId, list);

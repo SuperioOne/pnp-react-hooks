@@ -1,6 +1,5 @@
 import "@pnp/sp/content-types";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveScope } from "../resolveScope";
@@ -17,10 +16,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useContentTypes(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/content-types").IContentTypeInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/content-types").IContentTypeInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/content-types").IContentTypeInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/content-types").IContentTypeInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [contentTypes, setContentTypes] = useState();
-  const invokableFactory = useCallback(
-    (/**@type{SPFI} **/ sp) =>
+  const requestFactory = useCallback(
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) =>
       resolveScope(sp.web, options?.list, undefined).contentTypes,
     [options?.list],
   );
@@ -33,7 +36,7 @@ export function useContentTypes(options, deps) {
     return opt;
   }, [options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setContentTypes, internalOpts, mergedDeps);
+  useQueryEffect(requestFactory, setContentTypes, internalOpts, mergedDeps);
 
   return contentTypes;
 }

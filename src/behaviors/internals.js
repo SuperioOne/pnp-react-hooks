@@ -81,12 +81,34 @@ export class AbortError extends Error {
   }
 }
 
+export class AbortSignalSource {
+  /** @type{AbortController} **/
+  #abortController;
+
+  constructor() {
+    this.#abortController = new AbortController();
+  }
+
+  /** @returns {AbortSignal} **/
+  get signal() {
+    return this.#abortController.signal;
+  }
+
+  abort() {
+    this.#abortController.abort();
+  }
+
+  reset() {
+    this.#abortController = new AbortController();
+  }
+}
+
 /**
  * Aborts fetch request and pnpjs timeline at any point.
- * @param {AbortController} abortController
+ * @param {AbortSignalSource} abortSignalSource
  * @returns {(arg0:import('@pnp/queryable/queryable').Queryable<any>) => import('@pnp/queryable/queryable').Queryable<any>}
  */
-export function InjectAbortSignal(abortController) {
+export function InjectAbortSignal(abortSignalSource) {
   return (instance) => {
     let isAbortSupported = true;
 
@@ -100,7 +122,7 @@ export function InjectAbortSignal(abortController) {
 
     if (isAbortSupported) {
       instance.on.pre.prepend(async function (url, init, result) {
-        if (abortController.signal.aborted) {
+        if (abortSignalSource.signal.aborted) {
           instance.log(
             `Fetch: ${init.method} ${url.toString()} request aborted at 'pre' timeline.`,
             LogLevel.Verbose,
@@ -108,12 +130,12 @@ export function InjectAbortSignal(abortController) {
           throw new AbortError();
         }
 
-        init.signal = abortController.signal;
+        init.signal = abortSignalSource.signal;
         return [url, init, result];
       });
 
       instance.on.auth.prepend(async (url, init) => {
-        if (abortController.signal.aborted) {
+        if (abortSignalSource.signal.aborted) {
           instance.log(
             `Fetch: ${init.method} ${url.toString()} request aborted at 'auth' timeline.`,
             LogLevel.Verbose,
@@ -125,7 +147,7 @@ export function InjectAbortSignal(abortController) {
       });
 
       instance.on.data.prepend(async (response) => {
-        if (abortController.signal.aborted) {
+        if (abortSignalSource.signal.aborted) {
           instance.log(
             `Fetch: request aborted at 'data' timeline.`,
             LogLevel.Verbose,
@@ -134,6 +156,12 @@ export function InjectAbortSignal(abortController) {
         }
 
         return [response];
+      });
+
+      instance.on.dispose.prepend(async () => {
+        if (abortSignalSource.signal.aborted) {
+          abortSignalSource.reset();
+        }
       });
     }
 

@@ -1,6 +1,5 @@
 import "@pnp/sp/fields";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveScope } from "../resolveScope";
@@ -16,11 +15,15 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useFields(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/fields").IFieldInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/fields").IFieldInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/fields").IFieldInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/fields").IFieldInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [fields, setFields] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => resolveScope(sp.web, options?.list, undefined),
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) =>
+      resolveScope(sp.web, options?.list, undefined),
     [options?.list],
   );
 

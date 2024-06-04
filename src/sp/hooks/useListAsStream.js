@@ -1,5 +1,4 @@
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -43,10 +42,14 @@ function convertToMap(obj) {
  */
 export function useListAsStream(list, parameters, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/lists").IRenderListDataAsStreamResult | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/lists").IRenderListDataAsStreamResult | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/lists").IRenderListDataAsStreamResult | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/lists").IRenderListDataAsStreamResult | null |undefined>>
+   *  ]}
+   **/
   const [listData, setListData] = useState();
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       const spList = resolveList(sp.web, list);
 
       let overrideParams;

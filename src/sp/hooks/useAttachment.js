@@ -1,7 +1,6 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { overrideAction } from "../createInvokable";
 import { checkDisable } from "../checkDisable";
@@ -66,11 +65,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useAttachment(attachmentName, itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[AttachmentReturnTypes | null | undefined, import("react").Dispatch<import("react").SetStateAction<AttachmentReturnTypes | null |undefined>>]} **/
+  /** @type{[
+   *    AttachmentReturnTypes | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<AttachmentReturnTypes | null |undefined>>
+   *  ]}
+   **/
   const [attachment, setAttachment] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       assertID(itemId, "itemId value is not valid.");
       assertString(attachmentName, "attachmentName value is not valid.");
 

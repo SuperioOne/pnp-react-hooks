@@ -63,14 +63,14 @@
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-visualizer": "^5.9.0",
     "ts-jest": "^29.1.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {},
   "peerDependencies": {
-    "@pnp/sp": "^3.14.0",
-    "@pnp/queryable": "^3.14.0",
-    "@pnp/logging": "^3.14.0",
-    "@pnp/core": "^3.14.0",
+    "@pnp/sp": "^4.1.0",
+    "@pnp/queryable": "^4.1.0",
+    "@pnp/logging": "^4.1.0",
+    "@pnp/core": "^4.1.0",
     "react": ">=16.9.0 <18.0.0"
   }
 }

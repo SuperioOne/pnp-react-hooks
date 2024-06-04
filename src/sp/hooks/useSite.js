@@ -2,12 +2,11 @@ import "@pnp/sp/sites";
 import { InternalContext } from "../../context";
 import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
-import { SPFI } from "@pnp/sp";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useContext, useMemo } from "react";
 
 /**
- * @param {SPFI} sp
+ * @param {import('@pnp/sp').SPFI} sp
  * @returns  {import("@pnp/sp/sites").ISite}
  */
 function siteInfoRequest(sp) {
@@ -22,7 +21,11 @@ function siteInfoRequest(sp) {
  */
 export function useSite(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/sites/types").ISiteInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/sites/types").ISiteInfo | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/sites/types").ISiteInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/sites/types").ISiteInfo | null |undefined>>
+   *  ]}
+   **/
   const [siteInfo, setSiteInfo] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

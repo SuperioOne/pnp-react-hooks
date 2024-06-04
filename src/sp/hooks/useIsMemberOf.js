@@ -1,7 +1,6 @@
 import "@pnp/sp/site-groups";
 import "@pnp/sp/site-users";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
@@ -14,7 +13,8 @@ import { useState, useCallback, useContext, useMemo } from "react";
  * [null, null] |
  * [true, import("@pnp/sp/site-groups").ISiteGroupInfo] |
  * [false, undefined]
- * } MemberInfo **/
+ * } MemberInfo
+ **/
 
 /**
  * Returns true, if user is member of group. If not returns false.
@@ -28,11 +28,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
 export function useIsMemberOf(groupId, options, deps) {
   const globalOptions = useContext(InternalContext);
 
-  /** @type{[MemberInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<MemberInfo | null |undefined>>]} **/
+  /** @type{[
+   *    MemberInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<MemberInfo | null |undefined>>
+   *  ]}
+   **/
   const [isMember, setIsMember] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       /** @type{(this: import("@pnp/sp/webs").IWeb) => Promise<MemberInfo>} **/
       const action = async function () {
         const user = options?.userId

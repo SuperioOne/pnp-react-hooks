@@ -1,7 +1,6 @@
 import "@pnp/sp/appcatalog";
 import "@pnp/sp/appcatalog/web";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { assert } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
 import { isUUID } from "../../utils/is";
@@ -22,9 +21,8 @@ export function useApp(appId, options, deps) {
   const globalOptions = useContext(InternalContext);
   /** @type{[T | null | undefined, import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>]} **/
   const [apps, setApps] = useState();
-
   const requestFactory = useCallback(
-    (/** @type{SPFI} **/ sp) => {
+    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
       assert(isUUID(appId), "AppId is not a valid guid string.");
 
       if (options?.scope === "tenant") {

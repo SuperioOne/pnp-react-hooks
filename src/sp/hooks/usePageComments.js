@@ -1,20 +1,22 @@
 import "@pnp/sp/clientside-pages";
 import "@pnp/sp/comments";
 import "@pnp/sp/comments/clientside-page";
+import { DEFAULT_STATE } from "../useQueryEffect";
+import {
+  AbortSignalSource,
+  InjectAbortSignal,
+} from "../../behaviors/internals";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { assert } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
-import { isUrl, UrlType } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { DEFAULT_STATE } from "../useQueryEffect";
-import { useState, useCallback, useContext, useRef, useEffect } from "react";
 import { compareTuples } from "../../utils/compare";
 import { deepCompareOptions } from "../deepCompare";
-import { resolveSP } from "../resolveSP";
-import { InjectAbortSignal } from "../../behaviors/internals";
-import { insertODataQuery } from "../insertODataQuery";
 import { errorHandler } from "../errorHandler";
+import { insertODataQuery } from "../insertODataQuery";
+import { isUrl, UrlType } from "../../utils/is";
+import { mergeDependencies, mergeOptions } from "../merge";
+import { resolveSP } from "../resolveSP";
+import { useState, useContext, useRef, useEffect } from "react";
 
 /**
  * Returns comment collection from page.
@@ -27,65 +29,69 @@ import { errorHandler } from "../errorHandler";
 export function usePageComments(pageRelativePath, options, deps) {
   const globalOptions = useContext(InternalContext);
   const innerState = useRef(DEFAULT_STATE);
-  /** @type{[import("@pnp/sp/comments").ICommentInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/comments").ICommentInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/comments").ICommentInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/comments").ICommentInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [comments, setComments] = useState();
-  /** @type{import("react").MutableRefObject<AbortController | undefined>} **/
-  const abortController = useRef(undefined);
+  /** @type{import("react").MutableRefObject<AbortSignalSource>} **/
+  const abortSource = useRef(new AbortSignalSource());
 
-  const cleanup = useCallback(() => {
-    abortController.current?.abort();
-    abortController.current = undefined;
-  }, []);
-
-  // make sure callbacks cancelled when DOM unloads
-  useEffect(() => cleanup, [cleanup]);
+  useEffect(() => abortSource.current.abort(), []);
 
   useEffect(() => {
-    const opt = mergeOptions(globalOptions, options);
-    opt.disabled = checkDisable(opt?.disabled, pageRelativePath);
+    const opts = mergeOptions(globalOptions, options);
+    opts.disabled = checkDisable(opts?.disabled, pageRelativePath);
 
-    if (opt.disabled !== true) {
-      const internalDeps = mergeDependencies([pageRelativePath], deps);
+    if (opts.disabled !== true) {
+      const extDeps = mergeDependencies([pageRelativePath], deps);
       const shouldUpdate =
-        !compareTuples(innerState.current.externalDeps, internalDeps) ||
-        !deepCompareOptions(innerState.current.options, opt);
+        !compareTuples(innerState.current.externalDeps, extDeps) ||
+        !deepCompareOptions(innerState.current.options, opts);
 
       if (shouldUpdate) {
-        cleanup();
-        abortController.current = new AbortController();
+        abortSource.current.abort();
+        abortSource.current.reset();
 
-        if (opt?.keepPreviousState !== true) {
+        if (opts?.keepPreviousState !== true) {
           setComments(undefined);
         }
 
-        const request = async (/**@type{SPFI} **/ sp) => {
+        const request = async (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
           assert(
             isUrl(pageRelativePath, UrlType.Relative),
             "pageRelativePath value is not valid.",
           );
 
           const page = await sp.web.loadClientsidePage(pageRelativePath);
-          insertODataQuery(page, opt.query);
+          insertODataQuery(page, opts.query);
           return page.getComments();
         };
 
-        const sp = resolveSP(opt, [InjectAbortSignal(abortController.current)]);
+        const sp = resolveSP(opts, [InjectAbortSignal(abortSource.current)]);
+        let signalRef = abortSource.current.signal;
+
         request(sp)
-          .then(setComments)
+          .then((comments) => {
+            if (signalRef.aborted !== true) {
+              setComments(comments);
+            }
+          })
           .catch((err) => {
             if (err.name !== "AbortError") {
               setComments(null);
-              errorHandler(err, opt);
+              errorHandler(err, opts);
             }
           });
       }
 
       innerState.current = {
-        externalDeps: internalDeps,
-        options: opt,
+        externalDeps: extDeps,
+        options: opts,
       };
     }
-  });
+  }, [globalOptions, options, pageRelativePath, deps]);
 
   return comments;
 }

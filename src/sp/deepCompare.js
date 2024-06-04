@@ -1,9 +1,10 @@
-import { compareArray, shallowEqual } from "../utils/compare";
+import { compareArray } from "../utils/compare";
+import { shallowEqual } from "../utils/shallowEqual";
 
 /**
  * Deeply compares options.
- * @param {import('./types')._PnpHookOptions | undefined | null} left
- * @param {import('./types')._PnpHookOptions | undefined | null} right
+ * @param {import('./types.private').InternalPnpHookOptions | undefined | null} left
+ * @param {import('./types.private').InternalPnpHookOptions | undefined | null} right
  * @returns {boolean} Returns true if both options are equal, otherwise returns false.
  **/
 export function deepCompareOptions(left, right) {

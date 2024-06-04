@@ -1,5 +1,4 @@
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveGroup } from "../resolveGroup";
@@ -16,11 +15,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useGroup(groupId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/site-groups").ISiteGroupInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-groups").ISiteGroupInfo | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/site-groups").ISiteGroupInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-groups").ISiteGroupInfo | null |undefined>>
+   *  ]}
+   **/
   const [group, setGroup] = useState();
-
   const requestFactory = useCallback(
-    (/** @type{SPFI} **/ sp) => resolveGroup(sp.web, groupId),
+    (/** @type{import('@pnp/sp').SPFI} **/ sp) => resolveGroup(sp.web, groupId),
     [groupId],
   );
 

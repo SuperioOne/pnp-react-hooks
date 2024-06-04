@@ -1,6 +1,5 @@
 import "@pnp/sp/folders";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveFolder } from "../resolveFolder";
@@ -16,11 +15,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useFolders(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/folders").IFolderInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/folders").IFolderInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/folders").IFolderInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/folders").IFolderInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [folders, setFolders] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       if (options?.rootFolderId === undefined) {
         return sp.web.folders;
       } else {

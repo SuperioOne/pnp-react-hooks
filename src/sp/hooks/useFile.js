@@ -7,9 +7,6 @@ import { isUrl, isUUID, UrlType } from "../../utils/is";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { SPFI } from "@pnp/sp";
-
-/** @typedef {import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string} FileReturnTypes **/
 
 /**
  * @overload
@@ -47,15 +44,18 @@ import { SPFI } from "@pnp/sp";
  * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
  * @param {import("./options")._BaseFileOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
- * @returns {FileReturnTypes | undefined | null}
+ * @returns {import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string | null |undefined}
  */
 export function useFile(fileId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[FileReturnTypes | null | undefined, import("react").Dispatch<import("react").SetStateAction<FileReturnTypes | null | undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string | null | undefined>>
+   *  ]}
+   **/
   const [fileInfo, setFileInfo] = useState();
-
   const requestFactory = useCallback(
-    (/** @type{SPFI} **/ sp) => {
+    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
       assertString(fileId, "fileId is not valid string value.");
 
       const isUniqueId = isUUID(fileId);

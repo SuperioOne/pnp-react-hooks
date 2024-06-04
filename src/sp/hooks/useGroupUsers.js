@@ -1,5 +1,4 @@
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveGroup } from "../resolveGroup";
@@ -16,10 +15,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useGroupUsers(groupId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/site-users").ISiteUserInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-users").ISiteUserInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/site-users").ISiteUserInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-users").ISiteUserInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [groupUsers, setGroupUsers] = useState();
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       const group = resolveGroup(sp.web, groupId);
       return group.users;
     },

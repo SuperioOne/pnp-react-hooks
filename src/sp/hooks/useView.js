@@ -1,6 +1,5 @@
 import "@pnp/sp/views";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { isUUID } from "../../utils/is";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -10,6 +9,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Returns a list view.
+ *
  * @param {string} listId - List GUID id or title. Changing the value resends request.
  * @param {string} [viewId] - View title or view GUID id.
  * @param {import("./options").ViewOptions} [options] - PnP hook options.
@@ -18,11 +18,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useView(listId, viewId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/views").IViewInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/views").IViewInfo | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/views").IViewInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/views").IViewInfo | null |undefined>>
+   *  ]}
+   **/
   const [view, setView] = useState();
-
   const requestFactory = useCallback(
-    (/** @type{SPFI} **/ sp) => {
+    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
       const spList = resolveList(sp.web, listId);
 
       switch (typeof viewId) {

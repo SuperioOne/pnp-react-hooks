@@ -64,7 +64,7 @@ export function isUUID(value) {
 
 /**
  * @typedef {1 | 2 | 3} UrlTypes
- * **/
+ **/
 
 /**
  * @type {{Relative: 1; Absolute: 2; Any:3}}
@@ -94,13 +94,4 @@ export function isUrl(url, type = 3) {
       );
     }
   }
-}
-
-/**
- * @template T
- * @param {T | null | undefined} value
- * @returns {value is null | undefined}
- */
-export function isNull(value) {
-  return value === undefined || value === null;
 }

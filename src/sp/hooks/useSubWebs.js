@@ -1,12 +1,11 @@
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useContext, useMemo } from "react";
 
 /**
- *@param {SPFI} sp
+ *@param {import('@pnp/sp').SPFI} sp
  */
 function webInfoRequest(sp) {
   return sp.web.webinfos;
@@ -21,7 +20,11 @@ function webInfoRequest(sp) {
  */
 export function useSubWebs(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/webs").IWebInfosData[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/webs").IWebInfosData[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/webs").IWebInfosData[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/webs").IWebInfosData[] | null |undefined>>
+   *  ]}
+   **/
   const [subWebs, setSubWebs] = useState();
   const internalOptions = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

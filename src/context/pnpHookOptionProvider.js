@@ -1,5 +1,5 @@
 import { SPBrowser } from "@pnp/sp/behaviors/spbrowser";
-import { shallowEqual } from "../utils/compare";
+import { shallowEqual } from "../utils/shallowEqual";
 import { spfi } from "@pnp/sp";
 import { createContext, useRef, useMemo } from "react";
 

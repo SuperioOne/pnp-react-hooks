@@ -9,17 +9,17 @@ importers:
   .:
     dependencies:
       '@pnp/core':
-        specifier: ^3.14.0
-        version: 3.24.0
+        specifier: ^4.1.0
+        version: 4.1.0
       '@pnp/logging':
-        specifier: ^3.14.0
-        version: 3.24.0
+        specifier: ^4.1.0
+        version: 4.1.0
       '@pnp/queryable':
-        specifier: ^3.14.0
-        version: 3.24.0
+        specifier: ^4.1.0
+        version: 4.1.0
       '@pnp/sp':
-        specifier: ^3.14.0
-        version: 3.24.0
+        specifier: ^4.1.0
+        version: 4.1.0
       react:
         specifier: '>=16.9.0 <18.0.0'
         version: 17.0.2
@@ -121,7 +121,7 @@ importers:
         specifier: ^29.1.0
         version: 29.1.4(@babel/core@7.24.6)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.6))(jest@29.7.0(@types/node@20.12.13))(typescript@5.4.5)
       typescript:
-        specifier: ^5.0.4
+        specifier: ^5.4.5
         version: 5.4.5
 
 packages:
@@ -917,6 +917,10 @@ packages:
     resolution: {integrity: sha512-P8xVxxLrHzfl1l0qZP81p5XNVzhfSc7CVKBCJnc1UKKi24NIYeJXLcvP+m/aZFpjr2HprhznAGhQ6F4XJ/dNAw==}
     engines: {node: '>=14.15.1'}
 
+  '@pnp/core@4.1.0':
+    resolution: {integrity: sha512-YWBe5mEZ4jcNxpagz79gkHG2kODVM9x2buuwiDkl25Hwn32iUz8FU44HQz/EOEf5b2+RrMOxreF6GiuOH2URGQ==}
+    engines: {node: '>=18.12.0'}
+
   '@pnp/graph@3.24.0':
     resolution: {integrity: sha512-LQxn9wktQQibty7Fps5lhiQk9dBjvLlR3n+smRv59X+R7WV3hvL+c1Yx0xgLvSvQYQw21v/xD3pHSzJ2iYIh3A==}
     engines: {node: '>=14.15.1'}
@@ -924,6 +928,10 @@ packages:
   '@pnp/logging@3.24.0':
     resolution: {integrity: sha512-Fw9ej0WIkKxFmG2mQx6BD2TJBOPbmQHbx3y5dASFongg8mZSg/X/pbvxKwMi4CWhfVkSCgt1vw1eH6tEHuT8Bg==}
     engines: {node: '>=14.15.1'}
+
+  '@pnp/logging@4.1.0':
+    resolution: {integrity: sha512-DF/UAi9+U7vhbN4pB77JAbwzd8QKGcpcA5clmwQ0kBSLrDnvyVkunpxEQdT47GCAjQyqn+8tYn+/IOxOXI1M9w==}
+    engines: {node: '>=18.12.0'}
 
   '@pnp/nodejs@3.24.0':
     resolution: {integrity: sha512-QiOpfFc+3nz0itrNftHJTd3BoAQhnG+HGAw2vIfX9/UrvM35XPFUY8BS3aZp2l29mzb8BkLSGMPIQ8ct3KWMQw==}
@@ -933,9 +941,17 @@ packages:
     resolution: {integrity: sha512-X9COhnGSW8WljRKY8S3cHHjYTalkUJs2Ok2wIQzlx9OK1+QjMvnFr7IBItsJMiCVVqmXoRWg1c8+Et8dXyNB3Q==}
     engines: {node: '>=14.15.1'}
 
+  '@pnp/queryable@4.1.0':
+    resolution: {integrity: sha512-7wPyFbaO2mtkBeQUZxfBsxK3a73jT8zLHCk061eCxE2P36iLA/b2OMrQKmJKmDpgGlZza2ljQ5S3159mkXrOuw==}
+    engines: {node: '>=18.12.0'}
+
   '@pnp/sp@3.24.0':
     resolution: {integrity: sha512-/GcbF/5NNhw903gceaSaP2YDB0UboJnbTGDtjGXIFZer2bzPl8pt3yOEP/VCl3UhmbHoEut7+grSp/D2fWnkWQ==}
     engines: {node: '>=14.15.1'}
+
+  '@pnp/sp@4.1.0':
+    resolution: {integrity: sha512-l3kVsGweO8iXXpCP5WN2nqq+HRCFhlOXrknTGeQRJPriHkRKiZ1cBY5SqEZ+mkBUbf+caljik6+Ex6bQlDKX5g==}
+    engines: {node: '>=18.12.0'}
 
   '@rollup/plugin-commonjs@25.0.8':
     resolution: {integrity: sha512-ZEZWTK5n6Qde0to4vS9Mr5x/0UZoqCxPVR9KRUjU4kA2sO7GEUn1fop0DAwpO6z0Nw/kJON9bDmSxdWxO/TT1A==}
@@ -4103,6 +4119,10 @@ snapshots:
     dependencies:
       tslib: 2.4.1
 
+  '@pnp/core@4.1.0':
+    dependencies:
+      tslib: 2.6.2
+
   '@pnp/graph@3.24.0':
     dependencies:
       '@microsoft/microsoft-graph-types': 2.40.0
@@ -4113,6 +4133,10 @@ snapshots:
   '@pnp/logging@3.24.0':
     dependencies:
       tslib: 2.4.1
+
+  '@pnp/logging@4.1.0':
+    dependencies:
+      tslib: 2.6.2
 
   '@pnp/nodejs@3.24.0':
     dependencies:
@@ -4130,11 +4154,22 @@ snapshots:
       '@pnp/core': 3.24.0
       tslib: 2.4.1
 
+  '@pnp/queryable@4.1.0':
+    dependencies:
+      '@pnp/core': 4.1.0
+      tslib: 2.6.2
+
   '@pnp/sp@3.24.0':
     dependencies:
       '@pnp/core': 3.24.0
       '@pnp/queryable': 3.24.0
       tslib: 2.4.1
+
+  '@pnp/sp@4.1.0':
+    dependencies:
+      '@pnp/core': 4.1.0
+      '@pnp/queryable': 4.1.0
+      tslib: 2.6.2
 
   '@rollup/plugin-commonjs@25.0.8(rollup@3.29.4)':
     dependencies:

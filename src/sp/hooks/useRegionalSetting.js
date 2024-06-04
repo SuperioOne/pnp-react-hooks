@@ -1,12 +1,11 @@
 import "@pnp/sp/regional-settings";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useContext, useMemo } from "react";
 
-/** @param {SPFI} sp **/
+/** @param {import('@pnp/sp').SPFI} sp **/
 function regionalSettingsRequest(sp) {
   return sp.web.regionalSettings;
 }
@@ -20,7 +19,11 @@ function regionalSettingsRequest(sp) {
  */
 export function useRegionalSetting(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null |undefined>>
+   *  ]}
+   **/
   const [regionalSetting, setRegionalSetting] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

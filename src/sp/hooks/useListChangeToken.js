@@ -1,10 +1,9 @@
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { resolveList } from "../resolveList";
-import { shallowEqual } from "../../utils/compare";
+import { shallowEqual } from "../../utils/shallowEqual";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useCallback, useContext, useMemo } from "react";
 
@@ -27,7 +26,11 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useListChangeToken(list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[ChangeTokenInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<ChangeTokenInfo | null |undefined>>]} **/
+  /** @type{[
+   *    ChangeTokenInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<ChangeTokenInfo | null |undefined>>
+   *  ]}
+   **/
   const [token, setToken] = useState();
 
   // This func make sures token reference doesn't change if the new token properties are exactly same as the current one.
@@ -36,8 +39,8 @@ export function useListChangeToken(list, options, deps) {
     setToken((value) => (shallowEqual(newToken, value) ? value : newToken));
   }, []);
 
-  const invokableFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+  const requestFactory = useCallback(
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       const spList = resolveList(sp.web, list).select(
         "CurrentChangeToken",
         "ID",
@@ -72,7 +75,7 @@ export function useListChangeToken(list, options, deps) {
     return opt;
   }, [list, options, globalOptions]);
 
-  useQueryEffect(invokableFactory, setTokenProxy, internalOpts, mergedDeps);
+  useQueryEffect(requestFactory, setTokenProxy, internalOpts, mergedDeps);
 
   return token;
 }

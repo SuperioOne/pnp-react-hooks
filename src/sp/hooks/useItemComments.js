@@ -1,7 +1,6 @@
 import "@pnp/sp/comments";
 import "@pnp/sp/items";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { assertID } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -20,11 +19,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
  */
 export function useItemComments(itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/comments").ICommentInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/comments").ICommentInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/comments").ICommentInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/comments").ICommentInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [comments, setComments] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       assertID(itemId, "itemId value is not valid.");
       return resolveList(sp.web, list).items.getById(itemId).comments;
     },

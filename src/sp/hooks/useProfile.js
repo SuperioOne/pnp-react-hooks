@@ -1,6 +1,5 @@
 import "@pnp/sp/profiles";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { overrideAction } from "../createInvokable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -19,11 +18,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
 export function useProfile(loginName, options, deps) {
   const globalOptions = useContext(InternalContext);
 
-  /** @type{[T | null | undefined, import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>]} **/
+  /** @type{[
+   *    T | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>
+   *  ]}
+   **/
   const [userProfile, setUserProfile] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       /** @type {(this:import("@pnp/sp/profiles").IProfiles) => Promise<T>}**/
       const action = function () {
         return this.getPropertiesFor(loginName);

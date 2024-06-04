@@ -1,5 +1,4 @@
 import "@pnp/sp/site-groups";
-import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
 import { isEmail } from "../../utils/is";
@@ -11,17 +10,22 @@ import { InternalContext } from "../../context";
 /**
  * Returns group collection. Use {@link GroupsOptions.userId} property to get
  * groups for specific user.
+ *
  * @param {import("./options").GroupsOptions} [options] - Pnp hook options.
  * @param {import("react").DependencyList} [deps] - useGroups refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/site-groups").ISiteGroupInfo[] | null | undefined}
  */
 export function useGroups(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/site-groups").ISiteGroupInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-groups").ISiteGroupInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/site-groups").ISiteGroupInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-groups").ISiteGroupInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [groups, setGroups] = useState();
 
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       const userId = options?.userId;
 
       switch (typeof userId) {

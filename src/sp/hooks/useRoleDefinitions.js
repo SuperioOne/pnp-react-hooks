@@ -1,12 +1,11 @@
 import "@pnp/sp/security";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useContext, useMemo } from "react";
 
-/** @param {SPFI} sp **/
+/** @param {import('@pnp/sp').SPFI} sp **/
 function roleDefinitionRequest(sp) {
   return sp.web.roleDefinitions;
 }
@@ -20,7 +19,11 @@ function roleDefinitionRequest(sp) {
  */
 export function useRoleDefinitions(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/security").IRoleDefinitionInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/security").IRoleDefinitionInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/security").IRoleDefinitionInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/security").IRoleDefinitionInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [roleDefinitions, setRoleDefinitions] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

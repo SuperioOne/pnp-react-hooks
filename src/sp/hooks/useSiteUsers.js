@@ -1,13 +1,12 @@
 import "@pnp/sp/site-users";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { checkDisable } from "../checkDisable";
 import { mergeOptions } from "../merge";
 import { useQueryEffect } from "../useQueryEffect";
 import { useState, useContext, useMemo } from "react";
 
 /**
- *@param {SPFI} sp
+ *@param {import('@pnp/sp').SPFI} sp
  */
 function siteUsersRequest(sp) {
   return sp.web.siteUsers;
@@ -22,7 +21,11 @@ function siteUsersRequest(sp) {
  */
 export function useSiteUsers(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/site-users").ISiteUserInfo[] | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-users").ISiteUserInfo[] | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/site-users").ISiteUserInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-users").ISiteUserInfo[] | null |undefined>>
+   *  ]}
+   **/
   const [siteUser, setSiteUser] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

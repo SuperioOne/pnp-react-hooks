@@ -1,6 +1,5 @@
 import "@pnp/sp/security";
 import { InternalContext } from "../../context";
-import { SPFI } from "@pnp/sp";
 import { assertID, assertString } from "../../utils/assert";
 import { checkDisable } from "../checkDisable";
 import { mergeDependencies, mergeOptions } from "../merge";
@@ -17,11 +16,14 @@ import { useState, useCallback, useMemo, useContext } from "react";
  */
 export function useRoleDefinition(roleDefinitionId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[import("@pnp/sp/security").IRoleDefinitionInfo | null | undefined, import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/security").IRoleDefinitionInfo | null |undefined>>]} **/
+  /** @type{[
+   *    import("@pnp/sp/security").IRoleDefinitionInfo | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/security").IRoleDefinitionInfo | null |undefined>>
+   *  ]}
+   **/
   const [roleDefinition, setRoleDefinition] = useState();
-
   const requestFactory = useCallback(
-    (/**@type{SPFI} **/ sp) => {
+    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
       switch (typeof roleDefinitionId) {
         case "number": {
           assertID(
