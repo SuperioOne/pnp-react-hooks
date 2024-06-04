@@ -83,33 +83,32 @@ export class AbortError extends Error {
 
 export class AbortSignalSource {
   /**
-   * @private
    * @type{AbortController}
    */
-  abortController;
+  #abortController;
 
   constructor() {
-    this.abortController = new AbortController();
+    this.#abortController = new AbortController();
   }
 
   /** @returns {AbortSignal} **/
   get signal() {
-    return this.abortController.signal;
+    return this.#abortController.signal;
   }
 
   abort() {
-    this.abortController.abort();
+    this.#abortController.abort();
   }
 
   reset() {
-    this.abortController = new AbortController();
+    this.#abortController = new AbortController();
   }
 }
 
 /**
  * Aborts fetch request and pnpjs timeline at any point.
  * @param {AbortSignalSource} abortSignalSource
- * @returns {(arg0:import('@pnp/queryable/queryable').Queryable<any>) => import('@pnp/queryable/queryable').Queryable<any>}
+ * @returns {(arg0:import('@pnp/queryable/queryable.js').Queryable<any>) => import('@pnp/queryable/queryable.js').Queryable<any>}
  */
 export function InjectAbortSignal(abortSignalSource) {
   return (instance) => {

@@ -1,5 +1,5 @@
 import { LogLevel } from "@pnp/logging";
-import { ABORT_SUPPORT, browserFetchRetry } from "./internals";
+import { ABORT_SUPPORT, browserFetchRetry } from "./internals.js";
 
 /**
  * @typedef RetryOptions
@@ -12,7 +12,7 @@ import { ABORT_SUPPORT, browserFetchRetry } from "./internals";
  * Fetch abort support.
  *
  * @param {RetryOptions} [props] - Retry options.
- * @returns {(arg0:import('@pnp/queryable/queryable').Queryable<any>) => import('@pnp/queryable/queryable').Queryable<any>}
+ * @returns {(arg0:import('@pnp/queryable/queryable.js').Queryable<any>) => import('@pnp/queryable/queryable.js').Queryable<any>}
  */
 export function FetchWithAbort(props) {
   /**

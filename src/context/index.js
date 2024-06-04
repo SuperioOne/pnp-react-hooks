@@ -1,3 +1,2 @@
-export * from "./pnpHookOptionProvider";
-export * from "./createProviderElement";
-
+export * from "./pnpHookOptionProvider.js";
+export * from "./createProviderElement.js";

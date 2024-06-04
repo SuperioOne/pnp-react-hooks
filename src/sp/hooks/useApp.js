@@ -1,8 +1,8 @@
 import "@pnp/sp/appcatalog";
 import "@pnp/sp/appcatalog/web";
-import { InternalContext } from "../../context";
-import { assert } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assert } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
 import { isUUID } from "../../utils/is";
 import { mergeDependencies, mergeOptions } from "../merge";
 import { useContext, useState, useCallback, useMemo } from "react";

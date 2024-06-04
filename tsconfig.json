@@ -3,16 +3,16 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "module": "ESNext",
-        "target": "es2019",
-        "jsx": "react",
+        "target": "ESNext",
         "strictFunctionTypes": true,
         "declaration": true,
-        "moduleResolution": "Node",
+        "moduleResolution": "Node16",
         "strictNullChecks": true,
         "noEmitOnError": true,
         "allowJs": true,
         "checkJs": true,
-        "emitDeclarationOnly": true
+        "emitDeclarationOnly": true,
+        "outDir": "./types"
     },
     "include": [
         "src/**/*"
