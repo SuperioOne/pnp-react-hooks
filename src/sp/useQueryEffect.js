@@ -27,18 +27,18 @@ export const DEFAULT_STATE = {
  * @param {(value: TReturn | null | undefined) => void} stateAction - Callback function to update state
  * @param {import("./types.private").InternalPnpHookOptions} options - PnpHook options.
  * @param {import("react").DependencyList} [deps] - User and hook defined dependency list.
- * @internal
  */
 export function useQueryEffect(requestFactory, stateAction, options, deps) {
   /** @type{import("react").MutableRefObject<AbortSignalSource>} **/
   const abortSource = useRef(new AbortSignalSource());
   const innerState = useRef(DEFAULT_STATE);
 
-  // make sure callbacks cancelled when DOM unloads
   useEffect(() => abortSource.current.abort(), []);
 
   useEffect(() => {
-    if (options.disabled !== true) {
+    if (options.disabled === true) {
+      abortSource.current.abort();
+    } else {
       const shouldUpdate =
         !compareTuples(innerState.current.externalDeps, deps) ||
         !deepCompareOptions(innerState.current.options, options);
@@ -52,15 +52,15 @@ export function useQueryEffect(requestFactory, stateAction, options, deps) {
         }
 
         const sp = resolveSP(options, [InjectAbortSignal(abortSource.current)]);
+        const signalRef = abortSource.current.signal;
 
         /** @type{import("./types.private").SharepointQueryable<TReturn>} **/
         let request = requestFactory(sp);
         request = insertODataQuery(request, options.query);
-        const signalRef = abortSource.current.signal;
 
         request()
           .then((result) => {
-            if (signalRef.aborted !== true) {
+            if (!signalRef.aborted) {
               stateAction(result);
             }
           })

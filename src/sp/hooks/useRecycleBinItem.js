@@ -38,7 +38,7 @@ export function useRecycleBinItem(itemId, options, deps) {
     [itemId, options?.scope],
   );
 
-  const mergedDeps = mergeDependencies([itemId, options?.scope], deps);
+  const mergedDeps = mergeDependencies([itemId, options?.scope ?? "web"], deps);
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled, itemId);

@@ -42,9 +42,11 @@ export function usePageComments(pageRelativePath, options, deps) {
 
   useEffect(() => {
     const opts = mergeOptions(globalOptions, options);
-    opts.disabled = checkDisable(opts?.disabled, pageRelativePath);
+    const disabled = checkDisable(opts?.disabled, pageRelativePath);
 
-    if (opts.disabled !== true) {
+    if (disabled) {
+      abortSource.current.abort();
+    } else {
       const extDeps = mergeDependencies([pageRelativePath], deps);
       const shouldUpdate =
         !compareTuples(innerState.current.externalDeps, extDeps) ||

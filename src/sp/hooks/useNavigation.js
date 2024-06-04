@@ -35,7 +35,10 @@ export function useNavigation(options, deps) {
     [options?.type],
   );
 
-  const mergedDeps = mergeDependencies([options?.type], deps);
+  const mergedDeps = mergeDependencies(
+    [options?.type ?? "topNavigation"],
+    deps,
+  );
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled);

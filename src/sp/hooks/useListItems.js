@@ -1,5 +1,6 @@
 import "@pnp/sp/items";
 import {
+  AbortError,
   AbortSignalSource,
   InjectAbortSignal,
 } from "../../behaviors/internals";
@@ -87,6 +88,7 @@ export function useListItems(list, options, deps) {
    * @property {import("../types.private").InternalPnpHookOptions | null | undefined} options
    * @property {import("react").DependencyList | null | undefined} externalDeps
    * @property {string | undefined | null} list
+   * @property {boolean} disabled
    */
   /**
    * Internal result state definition
@@ -111,6 +113,7 @@ export function useListItems(list, options, deps) {
       options: null,
       list: null,
       externalDeps: null,
+      disabled: true,
     }),
   );
 
@@ -118,19 +121,17 @@ export function useListItems(list, options, deps) {
   const pagedIterator = useRef();
 
   /** @type{import("react").MutableRefObject<AbortSignalSource>} **/
-  const abortController = useRef(new AbortSignalSource());
+  const abortSource = useRef(new AbortSignalSource());
 
-  useEffect(() => abortController.current.abort(), []);
+  useEffect(() => abortSource.current.abort(), []);
 
   const nextPageDispatch = useCallback(
     /** @type{NextPageDispatch<T>} **/ (callback) => {
-      if (
-        pagedIterator.current &&
-        innerState.current.options?.disabled !== true
-      ) {
-        abortController.current.abort();
-        abortController.current.reset();
-        const signalRef = abortController.current.signal;
+      if (pagedIterator.current && !innerState.current.disabled) {
+        abortSource.current.abort();
+        abortSource.current.reset();
+
+        const signalRef = abortSource.current.signal;
 
         pagedIterator.current
           .next()
@@ -172,6 +173,10 @@ export function useListItems(list, options, deps) {
               }
             }
           });
+      } else {
+        console.warn(
+          "useListItems is currently disabled, next page dispatch is ignored.",
+        );
       }
     },
     [],
@@ -179,34 +184,37 @@ export function useListItems(list, options, deps) {
 
   useEffect(() => {
     const opts = mergeOptions(globalOptions, options);
-    opts.disabled = checkDisable(opts.disabled, list);
+    innerState.current.disabled = checkDisable(opts.disabled, list);
 
-    if (opts.disabled !== true) {
-      const extDeps = mergeDependencies([list], deps);
+    if (innerState.current.disabled) {
+      abortSource.current.abort();
+    } else {
+      const extDeps = mergeDependencies(
+        [list, options?.mode ?? ItemRequestOptions.Default],
+        deps,
+      );
       const shouldUpdate =
         !deepCompareOptions(innerState.current.options, opts) ||
         !compareTuples(innerState.current.externalDeps, extDeps);
 
       if (shouldUpdate) {
         pagedIterator.current = undefined;
-        abortController.current.abort();
-        abortController.current.reset();
+        abortSource.current.abort();
+        abortSource.current.reset();
 
         if (options?.keepPreviousState !== true) {
           setState((prev) => ({ ...prev, items: undefined }));
         }
 
-        const sp = resolveSP(opts, [
-          InjectAbortSignal(abortController.current),
-        ]);
-
+        const sp = resolveSP(opts, [InjectAbortSignal(abortSource.current)]);
         const spList = resolveList(sp.web, list);
         const items = insertODataQuery(spList.items, opts.query);
+        const signalRef = abortSource.current.signal;
 
         /** @type{() => Promise<T[] | IteratorResult<T[]>>} **/
         let request;
         /** @type{(arg0:any) => void} **/
-        let done;
+        let complete;
 
         switch (options?.mode) {
           case ItemRequestOptions.Paged: {
@@ -216,7 +224,7 @@ export function useListItems(list, options, deps) {
               return firstPage;
             };
 
-            done = (/** @type{IteratorResult<T[]>}**/ results) => {
+            complete = (/** @type{IteratorResult<T[]>}**/ results) => {
               pagedIterator.current = iterator;
               setState({
                 type: "paged",
@@ -234,11 +242,15 @@ export function useListItems(list, options, deps) {
 
               for await (const page of items) {
                 pages = pages.concat(page);
+
+                if (signalRef.aborted) {
+                  throw new AbortError();
+                }
               }
 
               return pages;
             };
-            done = (/** @type{T[]} **/ result) =>
+            complete = (/** @type{T[]} **/ result) =>
               setState({
                 type: "once",
                 items: result,
@@ -250,7 +262,7 @@ export function useListItems(list, options, deps) {
           case ItemRequestOptions.Default:
           default: {
             request = items;
-            done = (/** @type{T[]}**/ result) =>
+            complete = (/** @type{T[]}**/ result) =>
               setState({
                 type: "once",
                 items: result,
@@ -261,12 +273,10 @@ export function useListItems(list, options, deps) {
           }
         }
 
-        const signalRef = abortController.current.signal;
-
         request()
           .then((response) => {
             if (!signalRef.aborted) {
-              done(response);
+              complete(response);
             }
           })
           .catch((err) => {

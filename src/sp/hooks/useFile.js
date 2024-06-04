@@ -86,7 +86,7 @@ export function useFile(fileId, options, deps) {
     [fileId, options?.type],
   );
 
-  const mergedDeps = mergeDependencies([fileId, options?.type], deps);
+  const mergedDeps = mergeDependencies([fileId, options?.type ?? "info"], deps);
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled, fileId);

@@ -34,7 +34,10 @@ export function useApp(appId, options, deps) {
     [appId, options?.scope],
   );
 
-  const mergedDeps = mergeDependencies([appId, options?.scope], deps);
+  const mergedDeps = mergeDependencies(
+    [appId, options?.scope ?? "siteCollection"],
+    deps,
+  );
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);
     opt.disabled = checkDisable(opt?.disabled, appId);

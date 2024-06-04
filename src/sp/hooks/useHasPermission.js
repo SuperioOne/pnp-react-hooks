@@ -90,7 +90,7 @@ export function useHasPermission(permissionKinds, options, deps) {
 
       return overrideAction(sp.web, action);
     },
-    [options?.userId, permFlag, options?.scope?.list, options?.scope?.item],
+    [options?.scope?.item, options?.scope?.list, options?.userId, permFlag],
   );
 
   const mergedDeps = mergeDependencies(

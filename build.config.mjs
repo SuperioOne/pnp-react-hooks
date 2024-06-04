@@ -5,7 +5,6 @@ import del from "rollup-plugin-delete";
 import copy from "rollup-plugin-copy";
 
 const DIR_RELEASE = "./.temp/bin/release";
-const DIR_DEBUG = "./.temp/bin/debug";
 
 /**
  * @type {import('./scripts/buildOptionType'.BuildOption)}
@@ -16,7 +15,7 @@ const configs = {
       stageName: "ESM build",
       rollupConfig: {
         strictDeprecations: true,
-        input: ["src/index.ts", "src/behaviors/index.js"],
+        input: ["src/index.js", "src/behaviors/index.js"],
         external: [/node_modules/],
         plugins: [
           del({

@@ -95,7 +95,7 @@ export function useAttachment(attachmentName, itemId, list, options, deps) {
   );
 
   const mergedDeps = mergeDependencies(
-    [attachmentName, itemId, list, options?.type],
+    [attachmentName, itemId, list, options?.type ?? "info"],
     deps,
   );
 

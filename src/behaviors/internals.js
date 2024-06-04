@@ -82,24 +82,27 @@ export class AbortError extends Error {
 }
 
 export class AbortSignalSource {
-  /** @type{AbortController} **/
-  #abortController;
+  /**
+   * @private
+   * @type{AbortController}
+   */
+  abortController;
 
   constructor() {
-    this.#abortController = new AbortController();
+    this.abortController = new AbortController();
   }
 
   /** @returns {AbortSignal} **/
   get signal() {
-    return this.#abortController.signal;
+    return this.abortController.signal;
   }
 
   abort() {
-    this.#abortController.abort();
+    this.abortController.abort();
   }
 
   reset() {
-    this.#abortController = new AbortController();
+    this.abortController = new AbortController();
   }
 }
 
@@ -121,8 +124,10 @@ export function InjectAbortSignal(abortSignalSource) {
     }
 
     if (isAbortSupported) {
+      const signal = abortSignalSource.signal;
+
       instance.on.pre.prepend(async function (url, init, result) {
-        if (abortSignalSource.signal.aborted) {
+        if (signal.aborted) {
           instance.log(
             `Fetch: ${init.method} ${url.toString()} request aborted at 'pre' timeline.`,
             LogLevel.Verbose,
@@ -130,12 +135,12 @@ export function InjectAbortSignal(abortSignalSource) {
           throw new AbortError();
         }
 
-        init.signal = abortSignalSource.signal;
+        init.signal = signal;
         return [url, init, result];
       });
 
       instance.on.auth.prepend(async (url, init) => {
-        if (abortSignalSource.signal.aborted) {
+        if (signal.aborted) {
           instance.log(
             `Fetch: ${init.method} ${url.toString()} request aborted at 'auth' timeline.`,
             LogLevel.Verbose,
@@ -147,7 +152,7 @@ export function InjectAbortSignal(abortSignalSource) {
       });
 
       instance.on.data.prepend(async (response) => {
-        if (abortSignalSource.signal.aborted) {
+        if (signal.aborted) {
           instance.log(
             `Fetch: request aborted at 'data' timeline.`,
             LogLevel.Verbose,
