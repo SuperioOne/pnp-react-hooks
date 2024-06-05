@@ -1,5 +1,5 @@
 import "@pnp/sp/recycle-bin";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useCallback, useContext, useMemo, useState } from "react";

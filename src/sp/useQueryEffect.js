@@ -1,7 +1,5 @@
-import {
-  AbortSignalSource,
-  InjectAbortSignal,
-} from "../behaviors/internals.js";
+import { AbortSignalSource } from "../behaviors/abortSignalSource.js";
+import { InjectAbortSignal } from "../behaviors/injectAbortSignal.js";
 import { compareTuples } from "../utils/compare.js";
 import { deepCompareOptions } from "./deepCompare.js";
 import { errorHandler } from "./errorHandler.js";

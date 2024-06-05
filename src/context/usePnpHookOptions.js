@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { InternalContext } from "../context/pnpHookOptionProvider.js";
+import { InternalContext } from "./internalContext.js";
 
 /**
  * Returns nearest provider's context.

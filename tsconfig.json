@@ -4,6 +4,7 @@
         "alwaysStrict": true,
         "module": "ESNext",
         "target": "ESNext",
+        "jsx": "react",
         "strictFunctionTypes": true,
         "declaration": true,
         "moduleResolution": "Bundler",
@@ -12,8 +13,7 @@
         "allowJs": true,
         "checkJs": true,
         "emitDeclarationOnly": true,
-        "skipLibCheck": true,
-        "outDir": "./types"
+        "outDir": "./types",
     },
     "include": [
         "src/**/*"

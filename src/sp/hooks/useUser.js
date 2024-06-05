@@ -3,7 +3,7 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveUser } from "../resolveUser.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 
 /**

@@ -1,5 +1,5 @@
 import "@pnp/sp/regional-settings";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 import { mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";

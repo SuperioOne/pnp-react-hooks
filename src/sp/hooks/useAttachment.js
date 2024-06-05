@@ -1,6 +1,6 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { assertID, assertString } from "../../utils/assert.js";
 import { overrideAction } from "../createInvokable.js";
 import { checkDisable } from "../checkDisable.js";

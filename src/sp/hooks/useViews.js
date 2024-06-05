@@ -1,5 +1,5 @@
 import "@pnp/sp/views";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveList } from "../resolveList.js";

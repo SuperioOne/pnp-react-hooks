@@ -2,11 +2,9 @@ import "@pnp/sp/clientside-pages";
 import "@pnp/sp/comments";
 import "@pnp/sp/comments/clientside-page";
 import { DEFAULT_STATE } from "../useQueryEffect.js";
-import {
-  AbortSignalSource,
-  InjectAbortSignal,
-} from "../../behaviors/internals.js";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { AbortSignalSource } from "../../behaviors/abortSignalSource.js";
+import { InjectAbortSignal } from "../../behaviors/injectAbortSignal.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { assert } from "../../utils/assert.js";
 import { checkDisable } from "../checkDisable.js";
 import { compareTuples } from "../../utils/compare.js";

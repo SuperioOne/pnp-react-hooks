@@ -1,5 +1,5 @@
 import "@pnp/sp/security";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { assertID, assertString } from "../../utils/assert.js";
 import { checkDisable } from "../checkDisable.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";

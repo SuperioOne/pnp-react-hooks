@@ -1,4 +1,4 @@
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveGroup } from "../resolveGroup.js";

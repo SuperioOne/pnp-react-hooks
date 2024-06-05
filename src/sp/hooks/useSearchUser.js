@@ -1,5 +1,5 @@
 import "@pnp/sp/profiles";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { PrincipalType } from "@pnp/sp";
 import { overrideAction } from "../createInvokable.js";
 import { checkDisable } from "../checkDisable.js";

@@ -5,7 +5,7 @@ import { isEmail } from "../../utils/is.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 
 /**
  * Returns group collection. Use {@link GroupsOptions.userId} property to get

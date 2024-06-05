@@ -1,6 +1,6 @@
 import "@pnp/sp/appcatalog";
 import "@pnp/sp/appcatalog/web";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { assert } from "../../utils/assert.js";
 import { checkDisable } from "../checkDisable.js";
 import { isUUID } from "../../utils/is.js";

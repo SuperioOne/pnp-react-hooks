@@ -1,10 +1,8 @@
 import "@pnp/sp/items";
-import {
-  AbortError,
-  AbortSignalSource,
-  InjectAbortSignal,
-} from "../../behaviors/internals.js";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { AbortError } from "../../behaviors/abortError.js";
+import { AbortSignalSource } from "../../behaviors/abortSignalSource.js";
+import { InjectAbortSignal } from "../../behaviors/injectAbortSignal.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 import { compareTuples } from "../../utils/compare.js";
 import { deepCompareOptions } from "../deepCompare.js";

@@ -2,16 +2,9 @@ import { LogLevel } from "@pnp/logging";
 import { ABORT_SUPPORT, browserFetchRetry } from "./internals.js";
 
 /**
- * @typedef RetryOptions
- *
- * @prop {number} [retry] - Maximum retry count for failing requests. Default is 3.
- * @prop {number} [waitTime] - Wait time in ms for next retry call. Default is 200ms.
- */
-
-/**
  * Fetch abort support.
  *
- * @param {RetryOptions} [props] - Retry options.
+ * @param {import('./types.js').RetryOptions} [props] - Retry options.
  * @returns {(arg0:import('@pnp/queryable/queryable.js').Queryable<any>) => import('@pnp/queryable/queryable.js').Queryable<any>}
  */
 export function FetchWithAbort(props) {

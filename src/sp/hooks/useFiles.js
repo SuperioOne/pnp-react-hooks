@@ -1,5 +1,5 @@
 import "@pnp/sp/files";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveFolder } from "../resolveFolder.js";

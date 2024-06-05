@@ -1,5 +1,5 @@
 import "@pnp/sp/fields";
-import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { InternalContext } from "../../context/internalContext.js";
 import { assertString } from "../../utils/assert.js";
 import { checkDisable } from "../checkDisable.js";
 import { isUUID } from "../../utils/is.js";
