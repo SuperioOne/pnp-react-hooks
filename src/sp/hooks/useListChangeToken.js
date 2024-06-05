@@ -1,6 +1,6 @@
 import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
-import { overrideAction } from "../createInvokable.js";
+import { overrideAction } from "../overrideAction.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveList } from "../resolveList.js";
 import { shallowEqual } from "../../utils/shallowEqual.js";

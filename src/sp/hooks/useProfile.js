@@ -1,7 +1,7 @@
 import "@pnp/sp/profiles";
 import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
-import { overrideAction } from "../createInvokable.js";
+import { overrideAction } from "../overrideAction.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";

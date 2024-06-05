@@ -3,7 +3,7 @@ import "@pnp/sp/site-users";
 import { InternalContext } from "../../context/internalContext.js";
 import { assertID, assertString } from "../../utils/assert.js";
 import { checkDisable } from "../checkDisable.js";
-import { overrideAction } from "../createInvokable.js";
+import { overrideAction } from "../overrideAction.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveUser } from "../resolveUser.js";
 import { useQueryEffect } from "../useQueryEffect.js";

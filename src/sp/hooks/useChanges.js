@@ -1,6 +1,6 @@
 import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
-import { overrideAction } from "../createInvokable.js";
+import { overrideAction } from "../overrideAction.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveScope } from "../resolveScope.js";
 import { useCallback, useContext, useMemo, useState } from "react";

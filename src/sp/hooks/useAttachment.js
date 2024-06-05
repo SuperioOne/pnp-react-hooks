@@ -2,7 +2,7 @@ import "@pnp/sp/attachments";
 import "@pnp/sp/items";
 import { InternalContext } from "../../context/internalContext.js";
 import { assertID, assertString } from "../../utils/assert.js";
-import { overrideAction } from "../createInvokable.js";
+import { overrideAction } from "../overrideAction.js";
 import { checkDisable } from "../checkDisable.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveList } from "../resolveList.js";

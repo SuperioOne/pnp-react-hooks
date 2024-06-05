@@ -1,7 +1,7 @@
 import "@pnp/sp/files";
 import { InternalContext } from "../../context/internalContext.js";
 import { assertString } from "../../utils/assert.js";
-import { overrideAction } from "../createInvokable.js";
+import { overrideAction } from "../overrideAction.js";
 import { checkDisable } from "../checkDisable.js";
 import { isUrl, isUUID, UrlType } from "../../utils/is.js";
 import { mergeDependencies, mergeOptions } from "../merge.js";
