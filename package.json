@@ -15,7 +15,7 @@
     }
   },
   "scripts": {
-    "gen-types": "tsc --emitDeclarationOnly",
+    "gen-types": "node ./scripts/prepare-types.js && tsc --emitDeclarationOnly",
     "test": "jest"
   },
   "keywords": [

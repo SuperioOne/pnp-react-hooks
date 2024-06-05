@@ -4,6 +4,7 @@ msalSettings.example.ts
 node_modules/
 pnpm-lock.yaml
 .temp/
+scripts/
 tsconfig.json
 tests/
 test.config.ts
