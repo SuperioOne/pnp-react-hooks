@@ -1,12 +1,12 @@
-import { compareArray } from "../utils/compare";
-import { shallowEqual } from "../utils/shallowEqual";
+import { compareArray } from "../utils/compare.js";
+import { shallowEqual } from "../utils/shallowEqual.js";
 
 /**
  * Deeply compares options.
- * @param {import('./types.private').InternalPnpHookOptions | undefined | null} left
- * @param {import('./types.private').InternalPnpHookOptions | undefined | null} right
+ * @param {import('./types.private.js').InternalPnpHookOptions | undefined | null} left
+ * @param {import('./types.private.js').InternalPnpHookOptions | undefined | null} right
  * @returns {boolean} Returns true if both options are equal, otherwise returns false.
- **/
+ */
 export function deepCompareOptions(left, right) {
   return (
     left === right ||
@@ -17,7 +17,7 @@ export function deepCompareOptions(left, right) {
 
 /**
  * Deep compares same type of OData queryable objects.
- * @template {import('./types').ODataQueryableCollection | import('./types').ODataQueryable} T
+ * @template {import('./types.js').ODataQueryableCollection | import('./types.js').ODataQueryable} T
  * @param {T | null | undefined} left
  * @param {T | null | undefined} right
  * @returns {boolean} Returns true if both Queryables are equal, otherwise returns false.
@@ -30,7 +30,7 @@ export function deepCompareQuery(left, right) {
 }
 
 /**
- * @typedef {import('./types').ODataQueryable & import('./types').ODataQueryableCollection} _ODataQuery
+ * @typedef {import('./types.js').ODataQueryable & import('./types.js').ODataQueryableCollection} _ODataQuery
  */
 
 /**

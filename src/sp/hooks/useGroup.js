@@ -1,15 +1,15 @@
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveGroup } from "../resolveGroup";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveGroup } from "../resolveGroup.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Returns a group from group collection.
  *
  * @param {string | number} groupId - Group Id or name. Changing the value resends request.
- * @param {import("./options").GroupOptions} [options] - PnP hook options.
+ * @param {import("./options.js").GroupOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useGroup refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/site-groups").ISiteGroupInfo | null | undefined}
  */

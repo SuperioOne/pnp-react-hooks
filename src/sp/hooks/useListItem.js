@@ -1,10 +1,10 @@
 import "@pnp/sp/items";
-import { InternalContext } from "../../context";
-import { assertID } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveList } from "../resolveList";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assertID } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveList } from "../resolveList.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
@@ -13,7 +13,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
  * @template T
  * @param {number} itemId - Item Id. Changing the value resends request.
  * @param {string} list - List GUID id or title. Changing the value resends request.
- * @param {import("./options").ListItemOptions} [options] - PnP hook options.
+ * @param {import("./options.js").ListItemOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useListItem refreshes response data when one of the dependencies changes.
  * @returns {T | null |undefined}
  */

@@ -1,18 +1,18 @@
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveScope } from "../resolveScope";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { overrideAction } from "../createInvokable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveScope } from "../resolveScope.js";
 import { useCallback, useContext, useMemo, useState } from "react";
-import { useQueryEffect } from "../useQueryEffect";
+import { useQueryEffect } from "../useQueryEffect.js";
 
 /**
  * Returns web or list change collection. Use {@link ChangesOptions.list} property
  * to get list changes instead of web changes.
  *
  * @template T
- * @param {import("@pnp/sp/types").IChangeQuery} changeQuery - Change query.
- * @param {import("./options").ChangesOptions} [options] - PnP hook options
+ * @param {import("@pnp/sp/types.js").IChangeQuery} changeQuery - Change query.
+ * @param {import("./options.js").ChangesOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useChanges refreshes response data when one of the dependencies changes.
  * @returns {T[] | undefined | null} Changes info array.
  *

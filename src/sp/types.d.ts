@@ -3,7 +3,7 @@ import type {
   ContextOptions,
   ErrorOptions,
   RenderOptions,
-} from "../types";
+} from "../types.js";
 
 export interface ODataQueryable {
   expand?: string[];

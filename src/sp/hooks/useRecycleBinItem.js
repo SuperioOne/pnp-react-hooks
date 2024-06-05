@@ -1,10 +1,10 @@
 import "@pnp/sp/recycle-bin";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { isUUID } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { isUUID } from "../../utils/is.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useCallback, useContext, useMemo, useState } from "react";
-import { useQueryEffect } from "../useQueryEffect";
+import { useQueryEffect } from "../useQueryEffect.js";
 
 /**
  * Returns an item from recycle bin.

@@ -1,23 +1,23 @@
 import "@pnp/sp/features/site";
 import "@pnp/sp/features/web";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Returns site or web feature collection. Scope type can be defined in {@link FeaturesOptions.scope} property.
  *
- * @param {import("./options").FeaturesOptions} [options] - PnP hook options
+ * @param {import("./options.js").FeaturesOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useFeatures refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/features/types").IFeatureInfo[] | null |undefined}
+ * @returns {import("@pnp/sp/features/types.js").IFeatureInfo[] | null |undefined}
  */
 export function useFeatures(options, deps) {
   const globalOptions = useContext(InternalContext);
   /** @type{[
-   *    import("@pnp/sp/features/types").IFeatureInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/features/types").IFeatureInfo[] | null |undefined>>
+   *    import("@pnp/sp/features/types.js").IFeatureInfo[] | null | undefined,
+   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/features/types.js").IFeatureInfo[] | null |undefined>>
    *  ]}
    **/
   const [features, setFeatures] = useState();

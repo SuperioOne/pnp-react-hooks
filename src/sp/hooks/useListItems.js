@@ -3,16 +3,16 @@ import {
   AbortError,
   AbortSignalSource,
   InjectAbortSignal,
-} from "../../behaviors/internals";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { compareTuples } from "../../utils/compare";
-import { deepCompareOptions } from "../deepCompare";
-import { errorHandler } from "../errorHandler";
-import { insertODataQuery } from "../insertODataQuery";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveList } from "../resolveList";
-import { resolveSP } from "../resolveSP";
+} from "../../behaviors/internals.js";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { compareTuples } from "../../utils/compare.js";
+import { deepCompareOptions } from "../deepCompare.js";
+import { errorHandler } from "../errorHandler.js";
+import { insertODataQuery } from "../insertODataQuery.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveList } from "../resolveList.js";
+import { resolveSP } from "../resolveSP.js";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
 
 /** @type{{Default: 0; All: 1; Paged:2}} **/
@@ -48,7 +48,7 @@ export const ItemRequestOptions = {
  * @template T
  * @overload
  * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options").ListItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("./options.js").ListItemsOptions} [options] - PnP hook options for all items request.
  * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
  * @returns {T[] |null | undefined}
  */
@@ -58,7 +58,7 @@ export const ItemRequestOptions = {
  * @template T
  * @overload
  * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options").PagedItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("./options.js").PagedItemsOptions} [options] - PnP hook options for all items request.
  * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
  * @returns {[T[] |null | undefined, NextPageDispatch<T>, boolean]}
  */
@@ -68,7 +68,7 @@ export const ItemRequestOptions = {
  * @template T
  * @overload
  * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options").AllItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("./options.js").AllItemsOptions} [options] - PnP hook options for all items request.
  * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
  * @returns {T[] |null | undefined}
  * @deprecated
@@ -76,7 +76,7 @@ export const ItemRequestOptions = {
 /**
  * @template T
  * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options").BaseListItemsOptions} [options] - PnP hook options for all items request.
+ * @param {import("./options.js").BaseListItemsOptions} [options] - PnP hook options for all items request.
  * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
  * @returns {ListItemsReturnType<T>}
  */
@@ -85,7 +85,7 @@ export function useListItems(list, options, deps) {
    * Internal hook state definition
    *
    * @typedef _HookState
-   * @property {import("../types.private").InternalPnpHookOptions | null | undefined} options
+   * @property {import("../types.private.js").InternalPnpHookOptions | null | undefined} options
    * @property {import("react").DependencyList | null | undefined} externalDeps
    * @property {string | undefined | null} list
    * @property {boolean} disabled

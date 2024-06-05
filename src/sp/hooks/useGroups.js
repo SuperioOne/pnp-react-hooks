@@ -1,17 +1,17 @@
 import "@pnp/sp/site-groups";
-import { assertID, assertString } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { isEmail } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { useQueryEffect } from "../useQueryEffect";
+import { assertID, assertString } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { isEmail } from "../../utils/is.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { InternalContext } from "../../context";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
 
 /**
  * Returns group collection. Use {@link GroupsOptions.userId} property to get
  * groups for specific user.
  *
- * @param {import("./options").GroupsOptions} [options] - Pnp hook options.
+ * @param {import("./options.js").GroupsOptions} [options] - Pnp hook options.
  * @param {import("react").DependencyList} [deps] - useGroups refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/site-groups").ISiteGroupInfo[] | null | undefined}
  */

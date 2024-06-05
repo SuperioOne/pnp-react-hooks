@@ -1,16 +1,16 @@
 import "@pnp/sp/folders";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveFolder } from "../resolveFolder";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveFolder } from "../resolveFolder.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Return a folder.
  *
  * @param {string} folderId - Folder GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options").FolderOptions} [options] - PnP hook options.
+ * @param {import("./options.js").FolderOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useFolder refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/folders").IFolderInfo | null | undefined}
  */

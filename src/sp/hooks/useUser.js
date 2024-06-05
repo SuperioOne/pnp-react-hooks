@@ -1,16 +1,16 @@
 import "@pnp/sp/site-users";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveUser } from "../resolveUser";
-import { useQueryEffect } from "../useQueryEffect";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveUser } from "../resolveUser.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
 
 /**
  * Returns an user from site user collection.
  *
  * @param {number | string} userId - User Id, login name, email.
- * @param {import("./options").UserOptions} [options]
+ * @param {import("./options.js").UserOptions} [options]
  * @param {import("react").DependencyList} [deps]
  * @returns {import("@pnp/sp/site-users").ISiteUserInfo | undefined | null}
  */

@@ -1,4 +1,4 @@
-import { AssertError } from "../errors/AssertError";
+import { AssertError } from "../errors/AssertError.js";
 
 /**
  * @param {unknown} condition - Condition expression.

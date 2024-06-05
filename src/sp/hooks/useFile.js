@@ -1,18 +1,18 @@
 import "@pnp/sp/files";
-import { InternalContext } from "../../context";
-import { assertString } from "../../utils/assert";
-import { overrideAction } from "../createInvokable";
-import { checkDisable } from "../checkDisable";
-import { isUrl, isUUID, UrlType } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assertString } from "../../utils/assert.js";
+import { overrideAction } from "../createInvokable.js";
+import { checkDisable } from "../checkDisable.js";
+import { isUrl, isUUID, UrlType } from "../../utils/is.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * @overload
  * Returns a file from file collection.
  * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options").FileInfoOptions} [options] - PnP hook options
+ * @param {import("./options.js").FileInfoOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/files").IFileInfo | null | undefined}
  */
@@ -20,7 +20,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
  * @overload
  * Returns file content as {@link Blob}.
  * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options").FileBlobOptions} [options] - PnP hook options
+ * @param {import("./options.js").FileBlobOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
  * @returns {Blob | undefined | null}
  */
@@ -28,7 +28,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
  * @overload
  * Returns file content as {@link ArrayBuffer}.
  * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options").FileBufferOptions} [options] - PnP hook options
+ * @param {import("./options.js").FileBufferOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
  * @returns {ArrayBuffer | undefined | null}
  */
@@ -36,13 +36,13 @@ import { useState, useCallback, useContext, useMemo } from "react";
  * @overload
  * Returns file content as text.
  * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options").FileTextOptions} [options] - PnP hook options
+ * @param {import("./options.js").FileTextOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
  * @returns {string | undefined | null}
  */
 /**
  * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options")._BaseFileOptions} [options] - PnP hook options
+ * @param {import("./options.js")._BaseFileOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string | null |undefined}
  */

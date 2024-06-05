@@ -1,5 +1,5 @@
 /**
- * @param {Readonly<import('./types.private').SharepointQueryable>} instance
+ * @param {Readonly<import('./types.private.js').SharepointQueryable>} instance
  * @returns {instance is import('@pnp/sp')._SPCollection}
  */
 export function isQueryableCollection(instance) {
@@ -15,7 +15,7 @@ export function isQueryableCollection(instance) {
 }
 
 /**
- * @param {import('./types.private').SharepointQueryable} instance
+ * @param {import('./types.private.js').SharepointQueryable} instance
  * @returns {instance is {filter: (arg0:string) => unknown;}}
  */
 export function isFilterable(instance) {
@@ -23,9 +23,9 @@ export function isFilterable(instance) {
 }
 
 /**
- * @template {import('./types.private').SharepointQueryable} T
+ * @template {import('./types.private.js').SharepointQueryable} T
  * @param {T} instance
- * @param {null | undefined | import('./types').ODataQueryableCollection } query
+ * @param {null | undefined | import('./types.js').ODataQueryableCollection } query
  * @returns {T}
  */
 export function insertODataQuery(instance, query) {
@@ -61,4 +61,3 @@ export function insertODataQuery(instance, query) {
 
   return instance;
 }
-

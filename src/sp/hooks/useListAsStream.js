@@ -1,9 +1,9 @@
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveList } from "../resolveList";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { overrideAction } from "../createInvokable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveList } from "../resolveList.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
@@ -35,8 +35,8 @@ function convertToMap(obj) {
  * Returns data for the specified query view
  *
  * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options").RenderListParameters} parameters - Sharepoint RenderAsStream parameters.
- * @param {import("./options").ListAsStreamOptions} [options] - PnP hook options.
+ * @param {import("./options.js").RenderListParameters} parameters - Sharepoint RenderAsStream parameters.
+ * @param {import("./options.js").ListAsStreamOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useListAsStream refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/lists").IRenderListDataAsStreamResult | null | undefined}
  */

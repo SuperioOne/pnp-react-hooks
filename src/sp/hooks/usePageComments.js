@@ -1,28 +1,28 @@
 import "@pnp/sp/clientside-pages";
 import "@pnp/sp/comments";
 import "@pnp/sp/comments/clientside-page";
-import { DEFAULT_STATE } from "../useQueryEffect";
+import { DEFAULT_STATE } from "../useQueryEffect.js";
 import {
   AbortSignalSource,
   InjectAbortSignal,
-} from "../../behaviors/internals";
-import { InternalContext } from "../../context";
-import { assert } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { compareTuples } from "../../utils/compare";
-import { deepCompareOptions } from "../deepCompare";
-import { errorHandler } from "../errorHandler";
-import { insertODataQuery } from "../insertODataQuery";
-import { isUrl, UrlType } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveSP } from "../resolveSP";
+} from "../../behaviors/internals.js";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assert } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { compareTuples } from "../../utils/compare.js";
+import { deepCompareOptions } from "../deepCompare.js";
+import { errorHandler } from "../errorHandler.js";
+import { insertODataQuery } from "../insertODataQuery.js";
+import { isUrl, UrlType } from "../../utils/is.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveSP } from "../resolveSP.js";
 import { useState, useContext, useRef, useEffect } from "react";
 
 /**
  * Returns comment collection from page.
  *
  * @param {string} pageRelativePath - Page server relative path. Changing the value resends request.
- * @param {import("./options").PageCommentsOptions} [options] - PnP hook options.
+ * @param {import("./options.js").PageCommentsOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - usePageComments refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/comments").ICommentInfo[] | null | undefined }
  */

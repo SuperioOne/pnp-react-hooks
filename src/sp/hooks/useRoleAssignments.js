@@ -1,16 +1,16 @@
 import "@pnp/sp/security";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveScope } from "../resolveScope";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveScope } from "../resolveScope.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Returns role assignmets of selected scope. Use {@link RoleAssignmentsOptions.scope} property to change scope.
  * Default is current web.
  *
- * @param {import("./options").RoleAssignmentsOptions} [options] - PnP hook options
+ * @param {import("./options.js").RoleAssignmentsOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useRoleAssignments refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/security").IRoleAssignmentInfo[] | undefined | null }
  */

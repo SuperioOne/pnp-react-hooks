@@ -1,16 +1,16 @@
 import "@pnp/sp/security";
-import { InternalContext } from "../../context";
-import { assertID, assertString } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assertID, assertString } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useMemo, useContext } from "react";
 
 /**
  * Returns role definition with the specified identifier.
  *
- * @param {string | number | import("./options").RoleType} roleDefinitionId - Role definition name, Id or {@link RoleTypeKind}.
- * @param {import("./options").RoleDefinitionOptions} [options] - PnP hook options.
+ * @param {string | number | import("./options.js").RoleType} roleDefinitionId - Role definition name, Id or {@link RoleTypeKind}.
+ * @param {import("./options.js").RoleDefinitionOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useRoleDefinition refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/security").IRoleDefinitionInfo | null |undefined}
  */

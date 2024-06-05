@@ -1,11 +1,11 @@
 import "@pnp/sp/attachments";
 import "@pnp/sp/items";
-import { InternalContext } from "../../context";
-import { assertID } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveList } from "../resolveList";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assertID } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveList } from "../resolveList.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
@@ -13,7 +13,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
  *
  * @param {number} itemId - List item numeric Id. Changing the value resends request.
  * @param {string} list - List title or GUID Id string. Changing the value resends request.
- * @param {import("./options").ItemAttachmentsOptions} [options] - PnP hook options
+ * @param {import("./options.js").ItemAttachmentsOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useAttachments refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/attachments").IAttachmentInfo[] | null | undefined} array of {@link IAttachmentInfo}.
  */

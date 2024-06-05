@@ -1,7 +1,7 @@
-node_modules
-.bin
+node_modules/
+.bin/
 msalSettings.ts
-.temp
-.cache
-.obsidian
-.trash
+.temp/
+.cache/
+.trash/
+types/

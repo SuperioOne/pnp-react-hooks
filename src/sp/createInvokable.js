@@ -1,14 +1,11 @@
-// import { PnpActionFunction } from "../types/PnpActionFunction";
-// import { SharepointQueryable } from "../types/SharepointQueryable";
-
 /**
  * Overrides functions default behavior with custom function.
  *
  * @template TResult
- * @template {import("./types.private").SharepointQueryable} [TContext=import("./types.private").SharepointQueryable]
+ * @template {import("./types.private.js").SharepointQueryable} [TContext=import("./types.private.js").SharepointQueryable]
  * @param {TContext} instance
- * @param {import("./types.private").PnpActionFunction<TContext, TResult>} func
- * @returns {import("./types.private").SharepointQueryable<TResult>}
+ * @param {import("./types.private.js").PnpActionFunction<TContext, TResult>} func
+ * @returns {import("./types.private.js").SharepointQueryable<TResult>}
  */
 export function overrideAction(instance, func) {
   return new Proxy(instance, {

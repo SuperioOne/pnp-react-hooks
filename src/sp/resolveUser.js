@@ -1,12 +1,12 @@
-import { assertString, assertID } from "../utils/assert";
-import { isEmail } from "../utils/is";
+import { assertString, assertID } from "../utils/assert.js";
+import { isEmail } from "../utils/is.js";
 
 /**
  * Resolves SP user by email, user login name or user numeric Id.
- * @param {import('@pnp/sp/site-users/types').ISiteUsers} users -
+ * @param {import('@pnp/sp/site-users/types.js').ISiteUsers} users -
  * @param {string | number} userId
  * @throws {TypeError} Throws when userId format is not correct.
- * @returns {import('@pnp/sp/site-users/types').ISiteUser} SP user instance.
+ * @returns {import('@pnp/sp/site-users/types.js').ISiteUser} SP user instance.
  */
 export function resolveUser(users, userId) {
   switch (typeof userId) {

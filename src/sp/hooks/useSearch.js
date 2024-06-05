@@ -2,16 +2,16 @@ import "@pnp/sp/search";
 import {
   AbortSignalSource,
   InjectAbortSignal,
-} from "../../behaviors/internals";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { compareTuples } from "../../utils/compare";
-import { deepCompareOptions } from "../deepCompare";
-import { errorHandler } from "../errorHandler";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveSP } from "../resolveSP";
+} from "../../behaviors/internals.js";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { compareTuples } from "../../utils/compare.js";
+import { deepCompareOptions } from "../deepCompare.js";
+import { errorHandler } from "../errorHandler.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveSP } from "../resolveSP.js";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { assertMin } from "../../utils/assert";
+import { assertMin } from "../../utils/assert.js";
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -89,7 +89,7 @@ function searchQueryKey(query) {
  * Search
  *
  * @param {string | import("@pnp/sp/search").ISearchQuery} searchQuery - ISearchQuery query or search text. Changing the value resends request.
- * @param {import("./options").SearchOptions} [options] - PnP hook options.
+ * @param {import("./options.js").SearchOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useSearch refreshes response data when one of the dependencies changes.
  * @returns {[SpSearchResult | null | undefined, GetPageDispatch]}
  */
@@ -97,7 +97,7 @@ export function useSearch(searchQuery, options, deps) {
   /**
    * @typedef _HookState
    *
-   * @property {import("../types.private").InternalPnpHookOptions | null | undefined} options
+   * @property {import("../types.private.js").InternalPnpHookOptions | null | undefined} options
    * @property {import("react").DependencyList | null | undefined} externalDeps
    * @property {import("@pnp/sp/search").ISearchQuery | undefined | null} searchQuery
    * @property {boolean} disabled

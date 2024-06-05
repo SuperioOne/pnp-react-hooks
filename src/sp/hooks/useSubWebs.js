@@ -1,7 +1,7 @@
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeOptions } from "../merge";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeOptions } from "../merge.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
 /**
@@ -14,7 +14,7 @@ function webInfoRequest(sp) {
 /**
  * Returns web info collection of current web's subwebs.
  *
- * @param {import("./options").SubWebsOptions} [options] - PnP hook options.
+ * @param {import("./options.js").SubWebsOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] useSubWebInfos refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/webs").IWebInfosData[] | null | undefined}
  */

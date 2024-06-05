@@ -1,15 +1,15 @@
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveList } from "../resolveList";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveList } from "../resolveList.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Return a list from list collection.
  *
  * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options").ListOptions} [options] - PnP hook options.
+ * @param {import("./options.js").ListOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useList refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/lists").IListInfo | null | undefined}
  */

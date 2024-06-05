@@ -1,5 +1,5 @@
 import "@pnp/sp/folders";
-import { isUUID, isUrl, UrlType } from "../utils/is";
+import { isUUID, isUrl, UrlType } from "../utils/is.js";
 
 /**
  * Resolves SP folder by either relative path or folder Id.

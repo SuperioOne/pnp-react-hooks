@@ -1,15 +1,15 @@
 import "@pnp/sp/fields";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveScope } from "../resolveScope";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveScope } from "../resolveScope.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Returns field collection from web or list.
  *
- * @param {import("./options").FieldsOptions} [options] - PnP hook options.
+ * @param {import("./options.js").FieldsOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useFields refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/fields").IFieldInfo[] | undefined | null}
  */

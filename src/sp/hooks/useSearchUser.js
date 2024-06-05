@@ -1,11 +1,11 @@
 import "@pnp/sp/profiles";
-import { InternalContext } from "../../context";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
 import { PrincipalType } from "@pnp/sp";
-import { overrideAction } from "../createInvokable";
-import { checkDisable } from "../checkDisable";
-import { mergeDependencies, mergeOptions } from "../merge";
+import { overrideAction } from "../createInvokable.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useCallback, useContext, useMemo, useState } from "react";
-import { useQueryEffect } from "../useQueryEffect";
+import { useQueryEffect } from "../useQueryEffect.js";
 
 /** @type{import("@pnp/sp/profiles").IClientPeoplePickerQueryParameters} **/
 const DEFAULT_OPTIONS = {
@@ -28,7 +28,7 @@ function searchOptionsKey(options) {
  * Searches for users or groups with specified search options.
  *
  * @param {string | import("@pnp/sp/profiles").IClientPeoplePickerQueryParameters} searchOptions - Search text or search query parameters. Changing the value resends request.
- * @param {import("./options").SearchUserOptions} [options] - PnP hook options.
+ * @param {import("./options.js").SearchUserOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useSearchUser refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/profiles").IPeoplePickerEntity[] | undefined | null}
  */

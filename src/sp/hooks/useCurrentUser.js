@@ -1,8 +1,8 @@
 import "@pnp/sp/site-users";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { mergeOptions } from "../merge";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { mergeOptions } from "../merge.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
 /** @param {import('@pnp/sp').SPFI} sp **/
@@ -13,7 +13,7 @@ function currentUserRequest(sp) {
 /**
  * Returns current user information.
  *
- * @param {import("./options").CurrentUserInfoOptions} [options] - PnP hook options
+ * @param {import("./options.js").CurrentUserInfoOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useCurrentUser refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/site-users").ISiteUserInfo | null | undefined}
  */

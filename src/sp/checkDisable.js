@@ -23,7 +23,7 @@ function defaultCheck(...args) {
 }
 
 /**
- * @param {import('../types').DisableOptionType} [disabled]
+ * @param {import('../types.js').DisableOptionType} [disabled]
  * @param {...any} args
  * @returns {boolean}
  */

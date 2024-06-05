@@ -1,6 +1,9 @@
 import type { SPFI } from "@pnp/sp";
 import type { TimelinePipe } from "@pnp/core";
 
+export type * from "./sp/hooks/options.js";
+export type * from "./sp/types.js";
+
 /**
  * @inheritDoc
  */

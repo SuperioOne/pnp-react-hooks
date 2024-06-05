@@ -1,12 +1,12 @@
 import "@pnp/sp/site-groups";
 import "@pnp/sp/site-users";
-import { InternalContext } from "../../context";
-import { assertID, assertString } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveUser } from "../resolveUser";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assertID, assertString } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { overrideAction } from "../createInvokable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveUser } from "../resolveUser.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @typedef{[undefined, undefined] |
@@ -21,7 +21,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
  * Use {@link IsMemberOfOptions.userId} property for another user. Default is current user.
  *
  * @param {string | number} groupId - Group name or Id. Changing the value resends request.
- * @param {import("./options").IsMemberOfOptions} [options] - Pnp hook options.
+ * @param {import("./options.js").IsMemberOfOptions} [options] - Pnp hook options.
  * @param {import("react").DependencyList} [deps] - useIsMemberOf refreshes response data when one of the dependencies changes.
  * @returns {MemberInfo}
  */

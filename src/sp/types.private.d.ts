@@ -1,14 +1,14 @@
-import type { IItem } from "@pnp/sp/items/types";
-import type { IList } from "@pnp/sp/lists/types";
-import type { IWeb } from "@pnp/sp/webs/types";
+import type { IItem } from "@pnp/sp/items/types.js";
+import type { IList } from "@pnp/sp/lists/types.js";
+import type { IWeb } from "@pnp/sp/webs/types.js";
 import type { SPFI, _SPCollection, _SPQueryable } from "@pnp/sp";
-import type { ODataQueryable, ODataQueryableCollection } from "./types";
+import type { ODataQueryable, ODataQueryableCollection } from "./types.js";
 import type {
   BehaviourOptions,
   ContextOptions,
   ErrorOptions,
   RenderOptions,
-} from "../types";
+} from "../types.js";
 
 export type SharepointQueryable<T = any> = _SPCollection<T> | _SPQueryable<T>;
 export type ScopeReturnType<TList, TItem> = TList extends string

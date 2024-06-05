@@ -6,12 +6,13 @@
         "target": "ESNext",
         "strictFunctionTypes": true,
         "declaration": true,
-        "moduleResolution": "Node16",
+        "moduleResolution": "Bundler",
         "strictNullChecks": true,
         "noEmitOnError": true,
         "allowJs": true,
         "checkJs": true,
         "emitDeclarationOnly": true,
+        "skipLibCheck": true,
         "outDir": "./types"
     },
     "include": [

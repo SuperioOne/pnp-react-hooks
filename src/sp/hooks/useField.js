@@ -1,18 +1,18 @@
 import "@pnp/sp/fields";
-import { InternalContext } from "../../context";
-import { assertString } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { isUUID } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveScope } from "../resolveScope";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assertString } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { isUUID } from "../../utils/is.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveScope } from "../resolveScope.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
  * Returns a field from web or list.
  *
  * @param {string} fieldId - Field internal name or Id. Changing the value resends request.
- * @param {import("./options").FieldOptions} [options] - PnP hook options.
+ * @param {import("./options.js").FieldOptions} [options] - PnP hook options.
  * @param {import("react").DependencyList} [deps] - useField refreshes response data when one of the dependencies changes.
  * @returns {import("@pnp/sp/fields").IFieldInfo | null |undefined}
  */

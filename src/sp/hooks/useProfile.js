@@ -1,9 +1,9 @@
 import "@pnp/sp/profiles";
-import { InternalContext } from "../../context";
-import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { checkDisable } from "../checkDisable.js";
+import { overrideAction } from "../createInvokable.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /**
@@ -11,7 +11,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
  *
  * @template T
  * @param {string} loginName - User login name. Changing the value resends request.
- * @param {import("./options").ProfileOptions} [options] - Pnp hook options.
+ * @param {import("./options.js").ProfileOptions} [options] - Pnp hook options.
  * @param {import("react").DependencyList} [deps] useProfile refreshes response data when one of the dependencies changes.
  * @returns {T | null |undefined}
  */

@@ -8,9 +8,9 @@ export function mergeDependencies(deps, ...additionalDeps) {
 
 /**
  * @template TQuery
- * @param {import('../types').PnpHookGlobalOptions} globalOptions
- * @param {import('./types').PnpHookOptions<TQuery> | undefined} options
- * @returns {import('./types.private').InternalPnpHookOptions<TQuery>}
+ * @param {import('../types.js').PnpHookGlobalOptions} globalOptions
+ * @param {import('./types.js').PnpHookOptions<TQuery> | undefined} options
+ * @returns {import('./types.private.js').InternalPnpHookOptions<TQuery>}
  */
 export function mergeOptions(globalOptions, options) {
   return options ? { ...globalOptions, ...options } : { ...globalOptions };

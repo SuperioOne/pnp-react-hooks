@@ -1,13 +1,13 @@
 import "@pnp/sp/security";
 import "@pnp/sp/site-users";
-import { InternalContext } from "../../context";
-import { assertID, assertString } from "../../utils/assert";
-import { checkDisable } from "../checkDisable";
-import { overrideAction } from "../createInvokable";
-import { isEmail } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
-import { resolveScope } from "../resolveScope";
-import { useQueryEffect } from "../useQueryEffect";
+import { InternalContext } from "../../context/pnpHookOptionProvider.js";
+import { assertID, assertString } from "../../utils/assert.js";
+import { checkDisable } from "../checkDisable.js";
+import { overrideAction } from "../createInvokable.js";
+import { isEmail } from "../../utils/is.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
+import { resolveScope } from "../resolveScope.js";
+import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useMemo, useContext } from "react";
 import { PermissionKind } from "@pnp/sp/security";
 
@@ -17,7 +17,7 @@ import { PermissionKind } from "@pnp/sp/security";
  * Default is current user permission on current web scope.
  *
  * @param {PermissionKind[] | PermissionKind} permissionKinds - SP permission kind array or permission kind value. Changing the value resends request.
- * @param {import("./options").UserPermissionOptions} [options] - Pnp hook options.
+ * @param {import("./options.js").UserPermissionOptions} [options] - Pnp hook options.
  * @param {import("react").DependencyList} [deps] - useHasPermission refreshes response data when one of the dependencies changes.
  * @returns {boolean | null | undefined }
  */

@@ -1,11 +1,11 @@
-import type { IChangeQuery } from "@pnp/sp/types";
+import type { IChangeQuery } from "@pnp/sp/types.js";
 import type {
   BehaviourOptions,
   ContextOptions,
   DisableOptionValueType,
   ErrorOptions,
   RenderOptions,
-} from "../../types";
+} from "../../types.js";
 import type {
   FilteredODataQueryable,
   ODataQueryable,
@@ -13,11 +13,11 @@ import type {
   PnpHookOptions,
   RenderListDataOverrideParameters,
   Scope,
-} from "../types";
+} from "../types.js";
 import type { IClientPeoplePickerQueryParameters } from "@pnp/sp/profiles";
 import type { IRenderListDataParameters } from "@pnp/sp/lists";
 import type { PermissionKind } from "@pnp/sp/security";
-import type { RoleTypeKind } from "@pnp/sp/security/types";
+import type { RoleTypeKind } from "@pnp/sp/security/types.js";
 import type { ISearchQuery } from "@pnp/sp/search";
 
 export type AppCatalogScopes = "tenant" | "siteCollection";

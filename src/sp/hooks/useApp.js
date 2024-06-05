@@ -3,17 +3,17 @@ import "@pnp/sp/appcatalog/web";
 import { InternalContext } from "../../context/pnpHookOptionProvider.js";
 import { assert } from "../../utils/assert.js";
 import { checkDisable } from "../checkDisable.js";
-import { isUUID } from "../../utils/is";
-import { mergeDependencies, mergeOptions } from "../merge";
+import { isUUID } from "../../utils/is.js";
+import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useContext, useState, useCallback, useMemo } from "react";
-import { useQueryEffect } from "../useQueryEffect";
+import { useQueryEffect } from "../useQueryEffect.js";
 
 /**
  * Returns an app detail of the given Id from the app catalog.
  *
  * @template T
  * @param {string} appId - App GUID Id string. Changing the appId value resends request.
- * @param {import('./options').WebAppOptions} [options] - PnP hook options
+ * @param {import('./options.d.ts').WebAppOptions} [options] - PnP hook options
  * @param {import("react").DependencyList} [deps] - useApp refreshes response data when one of the dependencies changes.
  * @returns {T | null |undefined} App info object.
  */
