@@ -1,4 +1,5 @@
 import { compareURL } from "../../src/utils/compare";
+import { test, expect } from "vitest";
 
 test("A and B are same", () => {
   const a = "https://test.com/sites/subsite";

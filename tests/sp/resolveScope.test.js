@@ -3,6 +3,7 @@ import { _List } from "@pnp/sp/lists/types";
 import { Web } from "@pnp/sp/webs";
 import { _Web } from "@pnp/sp/webs/types";
 import { resolveScope } from "../../src/sp/resolveScope";
+import { test, expect } from "vitest";
 
 test("List scope", () => {
   const web = Web("https://test.com");
@@ -42,4 +43,3 @@ test("Item scope invalid item Id", () => {
 
   expect(() => resolveScope(web, "List Title", 0)).toThrowError();
 });
-

@@ -1,4 +1,5 @@
 import { compareTuples } from "../../src/utils/compare";
+import { test, expect } from "vitest";
 
 test("A and B is equal", () => {
   const a = [1, 2, "3", "5"];

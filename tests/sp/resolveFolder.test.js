@@ -1,5 +1,6 @@
 import { Web } from "@pnp/sp/webs";
 import { resolveFolder } from "../../src/sp/resolveFolder";
+import { test, expect } from "vitest";
 
 test("resolveFolder by GUID", () => {
   expect(() =>
@@ -31,4 +32,3 @@ test("resolveFolder full URL", () => {
     resolveFolder(Web("http://test.com"), "http://test.com/test/test.jpg"),
   ).toThrow();
 });
-

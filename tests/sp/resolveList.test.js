@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { Web } from "@pnp/sp/webs";
 import { resolveList } from "../../src/sp/resolveList";
 

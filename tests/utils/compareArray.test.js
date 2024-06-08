@@ -1,4 +1,5 @@
 import { compareArray } from "../../src/utils/compare";
+import { test, expect } from "vitest";
 
 test("Equal array comparison", () => {
   const a = [1, 2, 3, 4, 5, 6, 7];

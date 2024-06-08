@@ -69,7 +69,6 @@ export const ItemRequestOptions = {
  * @param {import("./options.js").AllItemsOptions} [options] - PnP hook options for all items request.
  * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
  * @returns {T[] |null | undefined}
- * @deprecated
  */
 /**
  * @template T

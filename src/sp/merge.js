@@ -3,7 +3,9 @@
  * @param {...(Readonly<unknown[]> | undefined)} additionalDeps
  */
 export function mergeDependencies(deps, ...additionalDeps) {
-  return additionalDeps.length > 0 ? deps.concat(...additionalDeps) : deps;
+  return additionalDeps.length > 0
+    ? deps.concat(...additionalDeps.filter((e) => !!e))
+    : deps;
 }
 
 /**

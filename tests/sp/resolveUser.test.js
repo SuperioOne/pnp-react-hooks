@@ -1,5 +1,6 @@
 import "@pnp/sp/site-users";
 import "@pnp/sp/webs";
+import { test, expect } from "vitest";
 import { Web } from "@pnp/sp/webs/types";
 import { resolveUser } from "../../src/sp/resolveUser";
 
@@ -40,9 +41,7 @@ test("resolveUser by whitespace only name", () => {
 });
 
 test("resolveUser by invalid type", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expect(() =>
-    resolveUser(Web("http://test.com").siteUsers, {} as any),
+    resolveUser(Web("http://test.com").siteUsers, /** @type{any} **/ ({})),
   ).toThrow();
 });
-

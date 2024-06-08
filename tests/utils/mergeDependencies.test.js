@@ -1,4 +1,5 @@
 import { mergeDependencies } from "../../src/sp/merge";
+import { test, expect } from "vitest";
 
 test("Merge Test", () => {
   expect(() => {
@@ -32,4 +33,3 @@ test("Merge Test", () => {
     }
   }).not.toThrowError();
 });
-

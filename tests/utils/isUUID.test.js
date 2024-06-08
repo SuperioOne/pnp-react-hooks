@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { isUUID } from "../../src/utils/is";
 
 test("Valid GUID", () => {

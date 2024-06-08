@@ -1,4 +1,5 @@
 import { isUrl, UrlType } from "../../src/utils/is";
+import { test, expect } from "vitest";
 
 test("Valid relative path", () => {
   expect(isUrl("/sub/path/test", UrlType.Relative)).toBe(true);

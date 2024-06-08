@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { isEmail } from "../../src/utils/is";
 
 test("Valid Email", () => {
@@ -26,18 +27,15 @@ test("Missing @ Symbol", () => {
 
 test("Email with allowed max character", () => {
   const email = `${"a".repeat(64)}@${"b".repeat(255)}`;
-
   expect(isEmail(email)).toBe(true);
 });
 
 test("Email with over allowed max character", () => {
   const email = `${"a".repeat(65)}@${"b".repeat(255)}`;
-
   expect(isEmail(email)).toBe(false);
 });
 
 test("Email with over allowed max unicode octet", () => {
   const email = `${"乇".repeat(64 / 3 + 1)}@${"b".repeat(255)}`;
-
   expect(isEmail(email)).toBe(false);
 });

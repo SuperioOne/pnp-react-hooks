@@ -1,5 +1,6 @@
 import { Web } from "@pnp/sp/webs/types";
 import { resolveGroup } from "../../src/sp/resolveGroup";
+import { test, expect } from "vitest";
 
 test("resolveGroup by numeric Id", () => {
   expect(() => resolveGroup(Web("http://test.com"), 123)).not.toThrow();
@@ -28,7 +29,7 @@ test("resolveGroup by whitespace only name", () => {
 });
 
 test("resolveGroup by invalid type", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  expect(() => resolveGroup(Web("http://test.com"), {} as any)).toThrow();
+  expect(() =>
+    resolveGroup(Web("http://test.com"), /** @type{any} **/ ({})),
+  ).toThrow();
 });
-

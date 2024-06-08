@@ -1,0 +1,24 @@
+{
+    "extends": "../tsconfig.json",
+    "$schema": "http://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "module": "ESNext",
+        "target": "ESNext",
+        "jsx": "react",
+        "strictFunctionTypes": true,
+        "moduleResolution": "Bundler",
+        "strictNullChecks": true,
+        "noEmitOnError": true,
+        "allowJs": true,
+        "checkJs": true,
+        "noEmit": true
+    },
+    "include": [
+        "./**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
+}
