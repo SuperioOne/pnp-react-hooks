@@ -9,6 +9,4 @@ const DEFAULT_OPTIONS = {
   sp: spfi().using(SPBrowser()),
 };
 
-
 export const InternalContext = createContext(DEFAULT_OPTIONS);
-

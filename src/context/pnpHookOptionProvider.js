@@ -1,4 +1,4 @@
-import * as React from "react";
+import { createElement, useMemo, useRef } from "react";
 import { shallowEqual } from "../utils/shallowEqual.js";
 import { InternalContext } from "./internalContext.js";
 
@@ -7,8 +7,8 @@ import { InternalContext } from "./internalContext.js";
  * @returns {React.JSX.Element}
  */
 export function PnpHookOptionProvider(props) {
-  const previousValue = React.useRef(props.value);
-  const value = React.useMemo(() => {
+  const previousValue = useRef(props.value);
+  const value = useMemo(() => {
     if (shallowEqual(props.value, previousValue.current)) {
       return previousValue.current;
     } else {
@@ -17,9 +17,8 @@ export function PnpHookOptionProvider(props) {
     }
   }, [props.value]);
 
-  return (
-    <InternalContext.Provider value={value}>
-      {...props.children}
-    </InternalContext.Provider>
-  )
+  return createElement(InternalContext.Provider, {
+    value,
+    children: props.children,
+  });
 }

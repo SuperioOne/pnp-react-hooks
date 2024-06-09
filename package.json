@@ -15,7 +15,7 @@
     }
   },
   "scripts": {
-    "gen-types": "node ./scripts/prepare-types.js && tsc --emitDeclarationOnly --outDir ./types",
+    "generate-types": "node ./scripts/generate-types.js",
     "check": "tsc --noEmit",
     "test": "vitest"
   },
@@ -39,6 +39,8 @@
   "license": "MIT",
   "devDependencies": {
     "@pnp/nodejs": "^4.1.1",
+    "@testing-library/dom": "^10.1.0",
+    "@testing-library/react": "^16.0.0",
     "@types/jsdom": "^21.1.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

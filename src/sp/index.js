@@ -44,5 +44,3 @@ export * from "./hooks/useView.js";
 export * from "./hooks/useViews.js";
 export * from "./hooks/useWebInfo.js";
 export * from "./hooks/useWebProperties.js";
-export * from "./types.js";
-export * from "./hooks/options.js";

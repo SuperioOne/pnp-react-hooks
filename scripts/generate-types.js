@@ -4,9 +4,11 @@ import {
   rmSync,
   existsSync,
   readdirSync,
+  appendFileSync,
 } from "node:fs";
 import { argv } from "node:process";
 import { join, parse } from "node:path";
+import { execSync } from "node:child_process";
 
 /**
  * Returns project root directory by checking first package.json on parent dirs.
@@ -74,8 +76,36 @@ function copy_extra_types(source_path, target_path) {
 }
 
 try {
-  delete_project_dir("./types");
-  copy_extra_types("./src", "./types");
+  const project_dir = get_root_dir();
+  const types_dir = join(project_dir, "./types");
+  const src_dir = join(project_dir, "./src");
+  const index_file = join(types_dir, "index.d.ts");
+
+  console.debug("=".repeat(50));
+  console.debug(`${"Project Dir".padEnd(15, " ")}: ${project_dir}`);
+  console.debug(`${"Types Dir".padEnd(15, " ")}: ${types_dir}`);
+  console.debug(`${"Src Dir".padEnd(15, " ")}: ${src_dir}`);
+  console.debug(`${"index.d.ts".padEnd(15, " ")}: ${index_file}`);
+  console.debug("=".repeat(50));
+
+  console.log("Clearing types directory...");
+  delete_project_dir(types_dir);
+
+  console.log("Cloning custom types...");
+  copy_extra_types(src_dir, types_dir);
+
+  console.log("Starting tsc...");
+  execSync(
+    "./node_modules/typescript/bin/tsc --emitDeclarationOnly --outDir ./types",
+    { cwd: project_dir },
+  );
+
+  console.log("Adding custom types to the index.d.ts");
+  appendFileSync(index_file, `\nexport * from "./types.js";`, {
+    encoding: "utf8",
+  });
+
+  console.log("Type generation completed.");
 } catch (err) {
   console.error(err);
   process.exit(1);

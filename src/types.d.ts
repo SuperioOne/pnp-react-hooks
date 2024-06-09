@@ -1,6 +1,10 @@
 import type { SPFI } from "@pnp/sp";
 import type { TimelinePipe } from "@pnp/core";
 
+export * from "./sp/types.js";
+export * from "./sp/hooks/options.js";
+export * from "./behaviors/types.js";
+
 /**
  * @inheritDoc
  */
@@ -23,12 +27,12 @@ export interface PnpHookGlobalOptions
   disabled?: boolean | "auto";
 }
 
+export type ErrorModeType = 0 | 1;
 export interface ErrorOptions {
   /**
-   * Error handling
-   * @default {@link ErrorMode.Default}
+   * Error handling, default value is 0.
    */
-  error?: ErrorFunc | ErrorMode;
+  error?: ErrorFunc | ErrorModeType;
 }
 
 /**
@@ -36,18 +40,6 @@ export interface ErrorOptions {
  * @param err Error object
  */
 export type ErrorFunc = (err: Error) => void;
-
-export enum ErrorMode {
-  /**
-   * Throws error to upper level without any handling
-   */
-  Default = 0,
-
-  /**
-   * Do not emit any error
-   */
-  Suppress = 1,
-}
 
 export interface RenderOptions {
   /**

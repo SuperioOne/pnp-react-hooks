@@ -4,7 +4,7 @@
  * @property {"ifExists" | "cacheOnly" | "disabled"} cacheMode
  * @property {string} cacheDir
  * @property {number} retries
- * @property {number} retyInterval
+ * @property {number} retryInterval
  */
 
 /** @type{TestConfig} **/
@@ -15,4 +15,3 @@ export default {
   retries: 3,
   retryInterval: 5000,
 };
-

@@ -20,10 +20,8 @@ export function InjectAbortSignal(abortSignalSource) {
     }
 
     if (isAbortSupported) {
-      const signal = abortSignalSource.signal;
-
       instance.on.pre.prepend(async function (url, init, result) {
-        if (signal.aborted) {
+        if (abortSignalSource.signal.aborted) {
           instance.log(
             `Fetch: ${init.method} ${url.toString()} request aborted at 'pre' timeline.`,
             LogLevel.Verbose,
@@ -31,12 +29,12 @@ export function InjectAbortSignal(abortSignalSource) {
           throw new AbortError();
         }
 
-        init.signal = signal;
+        init.signal = abortSignalSource.signal;
         return [url, init, result];
       });
 
       instance.on.auth.prepend(async (url, init) => {
-        if (signal.aborted) {
+        if (abortSignalSource.signal.aborted) {
           instance.log(
             `Fetch: ${init.method} ${url.toString()} request aborted at 'auth' timeline.`,
             LogLevel.Verbose,
@@ -48,7 +46,7 @@ export function InjectAbortSignal(abortSignalSource) {
       });
 
       instance.on.data.prepend(async (response) => {
-        if (signal.aborted) {
+        if (abortSignalSource.signal.aborted) {
           instance.log(
             `Fetch: request aborted at 'data' timeline.`,
             LogLevel.Verbose,
