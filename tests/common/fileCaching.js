@@ -49,23 +49,25 @@ class FileCacheStorage {
    * @param {any} result
    * @returns {Promise<void>}
    */
-  saveToCache(url, init, result) {
-    const path = this.getCachePath(url, init);
+  async saveToCache(url, init, result) {
+    const cacheFile = this.getCachePath(url, init);
+    const cacheDir = path.parse(cacheFile).dir;
+
+    if (!fs.existsSync(cacheDir)) {
+      await fsAsync.mkdir(cacheDir, { recursive: true });
+    }
+
     return fsAsync.writeFile(
-      path,
-      JSON.stringify(
-        {
-          url: url,
-          method: init.method,
-          headers: {
-            Accept: init.headers?.["Accept"] ?? "application/json",
-          },
-          requestBody: init.body,
-          body: result,
+      cacheFile,
+      JSON.stringify({
+        url: url,
+        method: init.method,
+        headers: {
+          Accept: init.headers?.["Accept"] ?? "application/json",
         },
-        undefined,
-        2,
-      ),
+        requestBody: init.body,
+        body: result,
+      }),
     );
   }
 

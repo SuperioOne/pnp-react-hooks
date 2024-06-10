@@ -9,9 +9,8 @@
 
 /** @type{TestConfig} **/
 export default {
-  logResponse: true,
   cacheMode: "ifExists",
-  cacheDir: "./.temp/requestCache",
+  cacheDir: "./node_modules/.prh_cache/requestCache",
   retries: 3,
-  retryInterval: 5000,
+  retryInterval: 2000,
 };

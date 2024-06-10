@@ -91,9 +91,13 @@ const RESET = "\x1b[0m";
 /**
  * Prints Pnp response to stdout with unique color and formatting
  * @param {string} name - Test name
- * @param {...any[]} data - The arguments are all passed to `util.format()`.
+ * @param {...any} data - The arguments are all passed to `util.format()`.
  */
-export function formatResponse(name, ...data) {
-  // cyan text color
-  return `${BOLD}${BG_COLOR}${RED} ${name} ${RESET}\n\n${FG_COLOR}${util.format(...data)}${RESET}`;
+export function logResponse(name, ...data) {
+  console.log(
+    `${BOLD}${BG_COLOR}${RED} ${name} ${RESET}\n\n${FG_COLOR}${util.format(...data)}${RESET}`,
+  );
 }
+
+/** @type{import("@testing-library/react").waitForOptions} **/
+export const DEFAULT_WAITFOR_OPTS = { timeout: 10000 };

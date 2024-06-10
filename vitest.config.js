@@ -4,5 +4,6 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     include: ["**/*.{test,spec}.js?(x)"],
+    testTimeout: 10000,
   },
 });
