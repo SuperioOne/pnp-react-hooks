@@ -1,0 +1,6 @@
+[book]
+authors = ["Timur Olur"]
+language = "en"
+multilingual = false
+src = "src"
+title = "PnP React Hooks"

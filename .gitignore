@@ -1,7 +1,8 @@
+.*
+!.gitignore
+!.npmignore
+
 node_modules/
-.bin/
-msalSettings.ts
-.temp/
-.cache/
-.trash/
-types/
+dist/
+
+msalSettings.js

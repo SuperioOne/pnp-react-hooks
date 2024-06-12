@@ -1,15 +1,14 @@
-.eslintrc.json
-msalSettings.ts
-msalSettings.example.ts
-node_modules/
-pnpm-lock.yaml
-.temp/
-scripts/
-tsconfig.json
-tests/
-test.config.ts
-jest.config.cjs
-.gitignore
 .git/
-src/**/*.d.ts
+docs/
+node_modules/
+scripts/
+src/
+tests/
 
+.gitignore
+msalSettings.example.js
+msalSettings.js
+pnpm-lock.yaml
+test.config.js
+tsconfig.json
+vitest.config.js

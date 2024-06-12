@@ -3,7 +3,7 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "module": "ESNext",
-        "target": "ESNext",
+        "target": "ES2019",
         "jsx": "react",
         "strictFunctionTypes": true,
         "declaration": true,
@@ -13,7 +13,6 @@
         "allowJs": true,
         "checkJs": true,
         "skipLibCheck": true,
-        "declarationMap": true
     },
     "include": [
         "src/**/*"

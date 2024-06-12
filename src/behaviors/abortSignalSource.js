@@ -1,23 +1,24 @@
 export class AbortSignalSource {
   /**
    * @type{AbortController}
+   * @private
    */
-  #abortController;
+  abortController;
 
   constructor() {
-    this.#abortController = new AbortController();
+    this.abortController = new AbortController();
   }
 
   /** @returns {AbortSignal} **/
   get signal() {
-    return this.#abortController.signal;
+    return this.abortController.signal;
   }
 
   abort() {
-    this.#abortController.abort();
+    this.abortController.abort();
   }
 
   reset() {
-    this.#abortController = new AbortController();
+    this.abortController = new AbortController();
   }
 }
