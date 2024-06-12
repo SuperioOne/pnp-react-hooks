@@ -23,7 +23,7 @@ export function useFields(options, deps) {
   const [fields, setFields] = useState();
   const requestFactory = useCallback(
     (/**@type{import('@pnp/sp').SPFI} **/ sp) =>
-      resolveScope(sp.web, options?.list, undefined),
+      resolveScope(sp.web, options?.list, undefined).fields,
     [options?.list],
   );
 

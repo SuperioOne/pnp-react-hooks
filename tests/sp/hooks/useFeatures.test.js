@@ -28,7 +28,7 @@ test("useFeatures, get site features", async () => {
     expect(hook.result.current).toBeTypeOf("object");
     expect(hook.result.current).toBeTruthy();
 
-    logResponse("Subwebs", hook.result.current);
+    logResponse("Site features", hook.result.current);
   }, DEFAULT_WAITFOR_OPTS);
 });
 
@@ -48,7 +48,6 @@ test("useFeatures, get web features", async () => {
     expect(hook.result.current).toBeTypeOf("object");
     expect(hook.result.current).toBeTruthy();
 
-    logResponse("Subwebs", hook.result.current);
+    logResponse("Web features", hook.result.current);
   }, DEFAULT_WAITFOR_OPTS);
 });
-

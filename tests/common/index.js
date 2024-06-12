@@ -101,3 +101,16 @@ export function logResponse(name, ...data) {
 
 /** @type{import("@testing-library/react").waitForOptions} **/
 export const DEFAULT_WAITFOR_OPTS = { timeout: 10000 };
+
+export class ErrorState {
+  /** @type{any} **/
+  #state = null;
+
+  get error() {
+    return this.#state;
+  }
+
+  setError = (/** @type{any} **/ err) => {
+    this.#state = err;
+  };
+}

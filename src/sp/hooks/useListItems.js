@@ -14,7 +14,7 @@ import { resolveSP } from "../resolveSP.js";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
 
 /** @type{{Default: 0; All: 1; Paged:2}} **/
-export const ItemRequestOptions = {
+export const useListItemsMode = {
   /**
    * Fetch list items in single request. Request might fail due to threshold limit, if data is not indexed and filtered properly.
    * see https://docs.microsoft.com/en-us/microsoft-365/community/large-lists-large-libraries-in-sharepoint
@@ -130,6 +130,10 @@ export function useListItems(list, options, deps) {
 
         const signalRef = abortSource.current.signal;
 
+        if (innerState.current.options?.keepPreviousState !== true) {
+          setState((prev) => ({ ...prev, items: undefined }));
+        }
+
         pagedIterator.current
           .next()
           .then((result) => {
@@ -187,7 +191,7 @@ export function useListItems(list, options, deps) {
       abortSource.current.abort();
     } else {
       const extDeps = mergeDependencies(
-        [list, options?.mode ?? ItemRequestOptions.Default],
+        [list, options?.mode ?? useListItemsMode.Default],
         deps,
       );
       const shouldUpdate =
@@ -214,7 +218,7 @@ export function useListItems(list, options, deps) {
         let complete;
 
         switch (options?.mode) {
-          case ItemRequestOptions.Paged: {
+          case useListItemsMode.Paged: {
             const iterator = items[Symbol.asyncIterator]();
             request = async () => {
               const firstPage = await iterator.next();
@@ -232,7 +236,7 @@ export function useListItems(list, options, deps) {
 
             break;
           }
-          case ItemRequestOptions.All: {
+          case useListItemsMode.All: {
             request = async () => {
               /** @type{T[]} **/
               let pages = [];
@@ -256,7 +260,7 @@ export function useListItems(list, options, deps) {
 
             break;
           }
-          case ItemRequestOptions.Default:
+          case useListItemsMode.Default:
           default: {
             request = items;
             complete = (/** @type{T[]}**/ result) =>

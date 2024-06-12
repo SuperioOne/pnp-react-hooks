@@ -1,6 +1,6 @@
 import { PermissionKind } from "@pnp/sp/security";
 import { AssertError, useHasPermission } from "../../../src";
-import { DEFAULT_WAITFOR_OPTS, InitPnpTest } from "../../common";
+import { DEFAULT_WAITFOR_OPTS, ErrorState, InitPnpTest } from "../../common";
 import { afterEach, beforeAll, expect, test } from "vitest";
 import { cleanup, renderHook, waitFor } from "@testing-library/react";
 
@@ -174,28 +174,13 @@ test(`useHasPermission, user 'PermissionKind.ViewListItems and PermissionKind.Vi
 });
 
 test(`useHasPermission, invalid user Id type`, async () => {
-  let errState = (() => {
-    let state = null;
-
-    return {
-      get error() {
-        return state;
-      },
-      set error(/** @type{any} **/ value) {
-        state = value;
-      },
-    };
-  })();
-
-  const errorHandler = (/** @type{any} **/ err) => {
-    errState.error = err;
-  };
+  const errState = new ErrorState();
 
   const hook = renderHook(() =>
     useHasPermission([PermissionKind.ViewListItems, PermissionKind.ViewPages], {
       sp: spTest,
       userId: /** @type{any} **/ ({}),
-      error: errorHandler,
+      error: errState.setError,
     }),
   );
 
@@ -204,4 +189,3 @@ test(`useHasPermission, invalid user Id type`, async () => {
     expect(hook.result.current).not.toBeTruthy();
   }, DEFAULT_WAITFOR_OPTS);
 });
-

@@ -52,25 +52,34 @@ export function useQueryEffect(requestFactory, stateAction, options, deps) {
           stateAction(undefined);
         }
 
-        const sp = resolveSP(options, [InjectAbortSignal(abortSource.current)]);
-        const signalRef = abortSource.current.signal;
+        try {
+          const sp = resolveSP(options, [
+            InjectAbortSignal(abortSource.current),
+          ]);
+          const signalRef = abortSource.current.signal;
 
-        /** @type{import("./types.private.js").SharepointQueryable<TReturn>} **/
-        let request = requestFactory(sp);
-        request = insertODataQuery(request, options.query);
+          /** @type{import("./types.private.js").SharepointQueryable<TReturn>} **/
+          let request = requestFactory(sp);
+          request = insertODataQuery(request, options.query);
 
-        request()
-          .then((result) => {
-            if (!signalRef.aborted) {
-              stateAction(result);
-            }
-          })
-          .catch((err) => {
-            if (err.name !== "AbortError") {
-              stateAction(null);
-              errorHandler(err, options);
-            }
-          });
+          request()
+            .then((result) => {
+              if (!signalRef.aborted) {
+                stateAction(result);
+              }
+            })
+            .catch((err) => {
+              if (err.name !== "AbortError") {
+                stateAction(null);
+                errorHandler(err, options);
+              }
+            });
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            stateAction(null);
+            errorHandler(err, options);
+          }
+        }
       }
 
       innerState.current = {

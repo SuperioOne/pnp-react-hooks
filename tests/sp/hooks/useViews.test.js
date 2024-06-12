@@ -1,7 +1,12 @@
 import { afterEach, beforeAll, expect, test } from "vitest";
 import { useView, useViews } from "../../../src";
 import { cleanup, renderHook, waitFor } from "@testing-library/react";
-import { DEFAULT_WAITFOR_OPTS, InitPnpTest, logResponse } from "../../common";
+import {
+  DEFAULT_WAITFOR_OPTS,
+  ErrorState,
+  InitPnpTest,
+  logResponse,
+} from "../../common";
 
 /** @type{import('@pnp/sp').SPFI} **/
 let spTest;
@@ -102,16 +107,19 @@ test("useView, get default view", async () => {
 });
 
 test("useView, view id with invalid type", async () => {
-  expect(() => {
-    renderHook(() =>
-      useView(listInfo.Id, /** @type{any} **/ ({}), {
-        sp: spTest,
-        query: {
-          select: ["*"],
-          expand: ["viewfields"],
-        },
-      }),
-    );
-  }).toThrowError();
-});
+  const errState = new ErrorState();
+  renderHook(() =>
+    useView(listInfo.Id, /** @type{any} **/ ({}), {
+      sp: spTest,
+      query: {
+        select: ["*"],
+        expand: ["viewfields"],
+      },
+      error: errState.setError,
+    }),
+  );
 
+  await waitFor(() => {
+    expect(errState.error).toBeInstanceOf(TypeError);
+  });
+});
