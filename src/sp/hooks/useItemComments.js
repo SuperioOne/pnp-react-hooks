@@ -8,25 +8,26 @@ import { resolveList } from "../resolveList.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {ItemCommentsOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {ICommentInfo} from "@pnp/sp/comments" **/
+
 /**
  * Returns comment collection of specific list item.
  *
- * @param {number} itemId - Item Id. Changing the value resends request.
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options.js").ItemCommentsOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useItemComments refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/comments").ICommentInfo[] | null | undefined}
+ * @param {number} itemId - Item Id. Value is automatically tracked for changes.
+ * @param {string} list - List GUID Id or title. Value is automatically tracked for changes.
+ * @param {ItemCommentsOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {ICommentInfo[] | null | undefined}
  */
 export function useItemComments(itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/comments").ICommentInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/comments").ICommentInfo[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ ICommentInfo[] | null | undefined, Dispatch<SetStateAction<ICommentInfo[] | null |undefined>> ]} **/
   const [comments, setComments] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       assertID(itemId, "itemId value is not valid.");
       return resolveList(sp.web, list).items.getById(itemId).comments;
     },

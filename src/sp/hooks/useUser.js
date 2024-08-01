@@ -6,25 +6,25 @@ import { useState, useCallback, useContext, useMemo } from "react";
 import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {UserOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {ISiteUserInfo} from "@pnp/sp/site-users" **/
+
 /**
  * Returns an user from site user collection.
  *
- * @param {number | string} userId - User Id, login name, email.
- * @param {import("./options.js").UserOptions} [options]
- * @param {import("react").DependencyList} [deps]
- * @returns {import("@pnp/sp/site-users").ISiteUserInfo | undefined | null}
+ * @param {number | string} userId - User Id, login name, email. Value is automatically tracked for changes.
+ * @param {UserOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {ISiteUserInfo | undefined | null}
  */
 export function useUser(userId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/site-users").ISiteUserInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-users").ISiteUserInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ ISiteUserInfo | null | undefined, Dispatch<SetStateAction<ISiteUserInfo | null |undefined>> ]} **/
   const [siteUser, setSiteUser] = useState();
   const requestFactory = useCallback(
-    (/** @type{import('@pnp/sp').SPFI}**/ sp) =>
-      resolveUser(sp.web.siteUsers, userId),
+    (/** @type{SPFI}**/ sp) => resolveUser(sp.web.siteUsers, userId),
     [userId],
   );
 

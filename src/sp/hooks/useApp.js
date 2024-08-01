@@ -8,21 +8,25 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useContext, useState, useCallback, useMemo } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {WebAppOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+
 /**
  * Returns an app detail of the given Id from the app catalog.
  *
  * @template T
  * @param {string} appId - App GUID Id string. Changing the appId value resends request.
- * @param {import('./options.d.ts').WebAppOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useApp refreshes response data when one of the dependencies changes.
+ * @param {WebAppOptions} [options] - PnP hook options
+ * @param {DependencyList} [deps] - useApp refreshes response data when one of the dependencies changes.
  * @returns {T | null |undefined} App info object.
  */
 export function useApp(appId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[T | null | undefined, import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>]} **/
+  /** @type{[T | null | undefined, Dispatch<SetStateAction<T | null |undefined>>]} **/
   const [apps, setApps] = useState();
   const requestFactory = useCallback(
-    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/** @type{SPFI} **/ sp) => {
       assert(isUUID(appId), "AppId is not a valid guid string.");
 
       if (options?.scope === "tenant") {

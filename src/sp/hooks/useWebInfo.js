@@ -4,7 +4,12 @@ import { mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
-/** @param {import('@pnp/sp').SPFI} sp **/
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {WebInfoOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IWebInfo} from "@pnp/sp/webs" **/
+
+/** @param {SPFI} sp **/
 function webRequest(sp) {
   return sp.web;
 }
@@ -12,17 +17,13 @@ function webRequest(sp) {
 /**
  * Returns current web.
  *
- * @param {import("./options.js").WebInfoOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useWebInfo refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/webs").IWebInfo | null | undefined}
+ * @param {WebInfoOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IWebInfo | null | undefined}
  */
 export function useWebInfo(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/webs").IWebInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/webs").IWebInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IWebInfo | null | undefined, Dispatch<SetStateAction<IWebInfo | null |undefined>> ]} **/
   const [webInfo, setWebInfo] = useState();
   const InternalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

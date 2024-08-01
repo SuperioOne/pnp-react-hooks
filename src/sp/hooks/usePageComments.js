@@ -16,24 +16,25 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { resolveSP } from "../resolveSP.js";
 import { useState, useContext, useRef, useEffect } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction, MutableRefObject} from "react" **/
+/** @import {PageCommentsOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {ICommentInfo} from "@pnp/sp/comments" **/
+
 /**
  * Returns comment collection from page.
  *
- * @param {string} pageRelativePath - Page server relative path. Changing the value resends request.
- * @param {import("./options.js").PageCommentsOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - usePageComments refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/comments").ICommentInfo[] | null | undefined }
+ * @param {string} pageRelativePath - Page server relative path. Value is automatically tracked for changes.
+ * @param {PageCommentsOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {ICommentInfo[] | null | undefined }
  */
 export function usePageComments(pageRelativePath, options, deps) {
   const globalOptions = useContext(InternalContext);
   const innerState = useRef(DEFAULT_STATE);
-  /** @type{[
-   *    import("@pnp/sp/comments").ICommentInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/comments").ICommentInfo[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ ICommentInfo[] | null | undefined, Dispatch<SetStateAction<ICommentInfo[] | null |undefined>> ]} **/
   const [comments, setComments] = useState();
-  /** @type{import("react").MutableRefObject<AbortSignalSource>} **/
+  /** @type{MutableRefObject<AbortSignalSource>} **/
   const abortSource = useRef(new AbortSignalSource());
 
   useEffect(() => abortSource.current.abort(), []);
@@ -58,7 +59,7 @@ export function usePageComments(pageRelativePath, options, deps) {
           setComments(undefined);
         }
 
-        const request = async (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+        const request = async (/**@type{SPFI} **/ sp) => {
           assert(
             isUrl(pageRelativePath, UrlType.Relative),
             "pageRelativePath value is not valid.",

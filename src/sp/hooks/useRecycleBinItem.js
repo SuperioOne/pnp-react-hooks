@@ -6,24 +6,25 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {RecycleBinItemOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IRecycleBinItemObject} from "@pnp/sp/recycle-bin/types.js" **/
+
 /**
  * Returns an item from recycle bin.
  *
- * @param {string} itemId - RecycleBin item guid ID. Changing the value resends request.
- * @param {import("./options").RecycleBinItemOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useRecycleBinItem refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null | undefined}
+ * @param {string} itemId - RecycleBin item guid ID. Value is automatically tracked for changes.
+ * @param {RecycleBinItemOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IRecycleBinItemObject | null | undefined}
  */
 export function useRecycleBinItem(itemId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/recycle-bin/types").IRecycleBinItemObject | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IRecycleBinItemObject | null | undefined, Dispatch<SetStateAction<IRecycleBinItemObject | null |undefined>> ]} **/
   const [binItem, setBinItem] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       if (!isUUID(itemId))
         throw new TypeError("itemId is not a valid GUID string.");
 

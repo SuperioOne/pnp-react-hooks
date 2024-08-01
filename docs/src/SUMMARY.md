@@ -8,7 +8,7 @@
 
 # API References
 - [Context Provider](./context-provider.md)
-- [Behaviors](./behaviors.md)
+- [Hook Options](./hook-options.md)
 - [SP Hooks](./hooks.md)
     - [useApp](./hooks/useApp.md)
     - [useApps](./hooks/useApps.md)
@@ -24,7 +24,6 @@
     - [useFiles](./hooks/useFiles.md)
     - [useFolder](./hooks/useFolder.md)
     - [useFolders](./hooks/useFolders.md)
-    - [useFolderTree](./hooks/useFolderTree.md)
     - [useGroup](./hooks/useGroup.md)
     - [useGroups](./hooks/useGroups.md)
     - [useGroupUser](./hooks/useGroupUser.md)

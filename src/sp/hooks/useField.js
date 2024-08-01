@@ -8,24 +8,26 @@ import { resolveScope } from "../resolveScope.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {IFieldInfo} from "@pnp/sp/fields" **/
+/** @import {PnpHookOptions, ODataQueryable} from "../types.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {FieldOptions} from "./options.d.ts" **/
+
 /**
  * Returns a field from web or list.
  *
- * @param {string} fieldId - Field internal name or Id. Changing the value resends request.
- * @param {import("./options.js").FieldOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useField refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/fields").IFieldInfo | null |undefined}
+ * @param {string} fieldId - Field internal name or UUID. Value is automatically tracked for changes.
+ * @param {FieldOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IFieldInfo | null |undefined}
  */
 export function useField(fieldId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/fields").IFieldInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/fields").IFieldInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IFieldInfo | null | undefined, Dispatch<SetStateAction<IFieldInfo | null |undefined>> ]} **/
   const [field, setField] = useState();
   const requestFactory = useCallback(
-    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/** @type{SPFI} **/ sp) => {
       assertString(fieldId, "fileId is not a valid string.");
 
       const scope = resolveScope(sp.web, options?.list, undefined);

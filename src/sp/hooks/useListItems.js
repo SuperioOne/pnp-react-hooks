@@ -13,6 +13,11 @@ import { resolveList } from "../resolveList.js";
 import { resolveSP } from "../resolveSP.js";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction,MutableRefObject} from "react" **/
+/** @import {BaseListItemsOptions, PagedItemsOptions, ListItemsOptions, AllItemsOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {InternalPnpHookOptions} from "../types.private.d.ts" **/
+
 /** @type{{Default: 0; All: 1; Paged:2}} **/
 export const useListItemsMode = {
   /**
@@ -45,9 +50,9 @@ export const useListItemsMode = {
  *
  * @template T
  * @overload
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options.js").ListItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
+ * @param {string} list - List GUID Id or title. Value is automatically tracked for changes.
+ * @param {ListItemsOptions} [options] - Hook options for all items request.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {T[] |null | undefined}
  */
 /**
@@ -55,9 +60,9 @@ export const useListItemsMode = {
  *
  * @template T
  * @overload
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options.js").PagedItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
+ * @param {string} list - List GUID Id or title. Value is automatically tracked for changes.
+ * @param {PagedItemsOptions} [options] - Hook options for all items request.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {[T[] |null | undefined, NextPageDispatch<T>, boolean]}
  */
 /**
@@ -65,16 +70,16 @@ export const useListItemsMode = {
  *
  * @template T
  * @overload
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options.js").AllItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
+ * @param {string} list - List GUID Id or title. Value is automatically tracked for changes.
+ * @param {AllItemsOptions} [options] - Hook options for all items request.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {T[] |null | undefined}
  */
 /**
  * @template T
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options.js").BaseListItemsOptions} [options] - PnP hook options for all items request.
- * @param {import("react").DependencyList} [deps] - useListItems refreshes response data when one of the dependencies changes.
+ * @param {string} list - List GUID Id or title. Value is automatically tracked for changes.
+ * @param {BaseListItemsOptions} [options] - Hook options for all items request.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {ListItemsReturnType<T>}
  */
 export function useListItems(list, options, deps) {
@@ -82,8 +87,8 @@ export function useListItems(list, options, deps) {
    * Internal hook state definition
    *
    * @typedef _HookState
-   * @property {import("../types.private.js").InternalPnpHookOptions | null | undefined} options
-   * @property {import("react").DependencyList | null | undefined} externalDeps
+   * @property {InternalPnpHookOptions | null | undefined} options
+   * @property {DependencyList | null | undefined} externalDeps
    * @property {string | undefined | null} list
    * @property {boolean} disabled
    */
@@ -114,10 +119,10 @@ export function useListItems(list, options, deps) {
     }),
   );
 
-  /** @type{import("react").MutableRefObject<AsyncIterator<T[]> | undefined>} **/
+  /** @type{MutableRefObject<AsyncIterator<T[]> | undefined>} **/
   const pagedIterator = useRef();
 
-  /** @type{import("react").MutableRefObject<AbortSignalSource>} **/
+  /** @type{MutableRefObject<AbortSignalSource>} **/
   const abortSource = useRef(new AbortSignalSource());
 
   useEffect(() => abortSource.current.abort(), []);

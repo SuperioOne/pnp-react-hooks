@@ -11,7 +11,7 @@ npm install pnp-react-hooks @pnp/sp
 2. Update module imports, `onInit()` and `render()` functions on `<YourWebpartName>.tsx` file.
 
 **PnpReactHookExamplesWebPart.ts**
-```typescript showLineNumbers
+```typescript
 // <Other Webpart imports>
 // Import pnp-react-hooks helper function and option type
 // highlight-next-line
@@ -72,22 +72,19 @@ export default class PnpReactHookExamplesWebPart extends BaseClientSideWebPart<I
 3. Start using hooks in your webpart components.
 
 **PnpReactHookExamples.tsx**
-```tsx
+```jsx
 import * as React from 'react';
 import { IPnpReactHookExamplesProps } from './IPnpReactHookExamplesProps';
 import { useCurrentUser } from "pnp-react-hooks";
 
-const PnpReactHookExamples = (props: IPnpReactHookExamplesProps) =>
-{
-	const me = useCurrentUser({
-		query: {
-			select: ["Title"]
-		}
-	});
+const PnpReactHookExamples = (props: IPnpReactHookExamplesProps) => {
+  const me = useCurrentUser({
+    query: {
+    select: ["Title"]
+  }
+});
 
-	return (
-		<div>{me?.Title}</div>
-	);
+return (<div>{me?.Title}</div>);
 };
 
 export default PnpReactHookExamples;

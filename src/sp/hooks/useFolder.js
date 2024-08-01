@@ -6,25 +6,25 @@ import { resolveFolder } from "../resolveFolder.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {FolderOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IFolderInfo} from "@pnp/sp/folders" **/
+
 /**
  * Return a folder.
  *
- * @param {string} folderId - Folder GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options.js").FolderOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useFolder refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/folders").IFolderInfo | null | undefined}
+ * @param {string} folderId - Folder GUID Id or server relative path. Value is automatically tracked for changes.
+ * @param {FolderOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IFolderInfo | null | undefined}
  */
 export function useFolder(folderId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/folders").IFolderInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/folders").IFolderInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IFolderInfo | null | undefined, Dispatch<SetStateAction<IFolderInfo | null |undefined>> ]} **/
   const [folder, setFolder] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) =>
-      resolveFolder(sp.web, folderId),
+    (/**@type{SPFI} **/ sp) => resolveFolder(sp.web, folderId),
     [folderId],
   );
 

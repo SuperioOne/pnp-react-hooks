@@ -6,27 +6,28 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {ProfileOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IProfiles} from "@pnp/sp/profiles" **/
+
 /**
  * Returns an user profile for specified login name.
  *
  * @template T
- * @param {string} loginName - User login name. Changing the value resends request.
- * @param {import("./options.js").ProfileOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] useProfile refreshes response data when one of the dependencies changes.
+ * @param {string} loginName - User login name. Value is automatically tracked for changes.
+ * @param {ProfileOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] Custom dependency list.
  * @returns {T | null |undefined}
  */
 export function useProfile(loginName, options, deps) {
   const globalOptions = useContext(InternalContext);
 
-  /** @type{[
-   *    T | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ T | null | undefined, Dispatch<SetStateAction<T | null |undefined>> ]} **/
   const [userProfile, setUserProfile] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
-      /** @type {(this:import("@pnp/sp/profiles").IProfiles) => Promise<T>}**/
+    (/**@type{SPFI} **/ sp) => {
+      /** @type {(this:IProfiles) => Promise<T>}**/
       const action = function () {
         return this.getPropertiesFor(loginName);
       };

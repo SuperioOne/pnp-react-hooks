@@ -7,6 +7,11 @@ import { shallowEqual } from "../../utils/shallowEqual.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {ListTokenOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IList} from "@pnp/sp/lists" **/
+
 /**
  * @typedef ChangeTokenInfo
  * @property {string} currentChangeToken
@@ -19,18 +24,14 @@ import { useState, useCallback, useContext, useMemo } from "react";
 /**
  * Returns list current change token and last modified dates.
  *
- * @param {string} list - List GUID id or title. Changing the value resends request.
- * @param {import("./options.js").ListTokenOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useListChangeToken refreshes response data when one of the dependencies changes.
+ * @param {string} list - List GUID id or title. Value is automatically tracked for changes.
+ * @param {ListTokenOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {ChangeTokenInfo | null | undefined}
  */
 export function useListChangeToken(list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    ChangeTokenInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<ChangeTokenInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ ChangeTokenInfo | null | undefined, Dispatch<SetStateAction<ChangeTokenInfo | null |undefined>> ]} **/
   const [token, setToken] = useState();
 
   // This func make sures token reference doesn't change if the new token properties are exactly same as the current one.
@@ -43,7 +44,7 @@ export function useListChangeToken(list, options, deps) {
   );
 
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       const spList = resolveList(sp.web, list).select(
         "CurrentChangeToken",
         "ID",
@@ -52,7 +53,7 @@ export function useListChangeToken(list, options, deps) {
         "LastItemUserModifiedDate",
       );
 
-      /** @type{(this:import("@pnp/sp/lists").IList) => Promise<ChangeTokenInfo>} **/
+      /** @type{(this:IList) => Promise<ChangeTokenInfo>} **/
       const action = async function () {
         const listInfo = await this();
 

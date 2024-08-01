@@ -4,7 +4,11 @@ import { mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
-/** @param {import('@pnp/sp').SPFI} sp **/
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {WebPropertiesOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+
+/** @param {SPFI} sp **/
 function webPropertiesRequest(sp) {
   return sp.web.allProperties;
 }
@@ -13,17 +17,13 @@ function webPropertiesRequest(sp) {
  * Returns web's properties.
  *
  * @template T
- * @param {import("./options.js").WebPropertiesOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useWebProperties refreshes response data when one of the dependencies changes.
+ * @param {WebPropertiesOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {T | null | undefined}
  */
 export function useWebProperties(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    T | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ T | null | undefined, Dispatch<SetStateAction<T | null |undefined>> ]} **/
   const [properties, setProperties] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

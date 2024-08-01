@@ -7,25 +7,26 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 import { InternalContext } from "../../context/internalContext.js";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {GroupsOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {ISiteGroupInfo} from "@pnp/sp/site-groups" **/
+
 /**
- * Returns group collection. Use {@link GroupsOptions.userId} property to get
+ * Returns group collection. Use `GroupsOptions.userId` property to get
  * groups for specific user.
  *
- * @param {import("./options.js").GroupsOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useGroups refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/site-groups").ISiteGroupInfo[] | null | undefined}
+ * @param {GroupsOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {ISiteGroupInfo[] | null | undefined}
  */
 export function useGroups(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/site-groups").ISiteGroupInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-groups").ISiteGroupInfo[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ ISiteGroupInfo[] | null | undefined, Dispatch<SetStateAction<ISiteGroupInfo[] | null |undefined>> ]} **/
   const [groups, setGroups] = useState();
 
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       const userId = options?.userId;
 
       switch (typeof userId) {

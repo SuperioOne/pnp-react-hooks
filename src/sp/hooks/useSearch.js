@@ -13,12 +13,18 @@ import { assertMin } from "../../utils/assert.js";
 
 const DEFAULT_PAGE_SIZE = 10;
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {SearchOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {InternalPnpHookOptions} from "../types.private.d.ts" **/
+/** @import {ISearchResult, ISearchResponse, ISearchBuilder, SearchResults, SearchQueryInit, ISearchQuery} from "@pnp/sp/search" **/
+
 /**
  * @typedef SpSearchResult
  * @property {number} currentPage
  * @property {number} elapsedTime
- * @property {import("@pnp/sp/search").ISearchResult[]} primarySearchResults
- * @property {import("@pnp/sp/search").ISearchResponse} rawSearchResults
+ * @property {ISearchResult[]} primarySearchResults
+ * @property {ISearchResponse} rawSearchResults
  * @property {number} rowCount
  * @property {number} totalRows
  * @property {number} totalRowsIncludingDuplicates
@@ -29,15 +35,14 @@ const DEFAULT_PAGE_SIZE = 10;
  */
 
 /**
- * @param {import("@pnp/sp/search").SearchQueryInit} query
- * @returns {query is import("@pnp/sp/search").ISearchBuilder}
+ * @param {SearchQueryInit} query
+ * @returns {query is ISearchBuilder}
  */
 function isSearchQueryBuilder(query) {
   if (typeof query === "string") {
     return false;
   } else {
-    /** @type {import("@pnp/sp/search").ISearchBuilder}**/
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    /** @type {ISearchBuilder}**/
     // @ts-ignore
     const builder = query;
     return typeof builder?.toSearchQuery === "function";
@@ -45,7 +50,7 @@ function isSearchQueryBuilder(query) {
 }
 
 /**
- * @param {import('@pnp/sp/search').SearchResults} sResult
+ * @param {SearchResults} sResult
  * @param {number} pageNo
  * @returns {SpSearchResult}
  */
@@ -62,8 +67,8 @@ function createSPSearchResult(sResult, pageNo) {
 }
 
 /**
- * @param {import("@pnp/sp/search").SearchQueryInit} query
- * @returns {import("@pnp/sp/search").ISearchQuery}
+ * @param {SearchQueryInit} query
+ * @returns ISearchQuery}
  */
 function parseQuery(query) {
   if (typeof query === "string") {
@@ -76,7 +81,7 @@ function parseQuery(query) {
 }
 
 /**
- * @param {string | import("@pnp/sp/search").ISearchQuery} query
+ * @param {string | ISearchQuery} query
  * @returns {string}
  */
 function searchQueryKey(query) {
@@ -86,18 +91,18 @@ function searchQueryKey(query) {
 /**
  * Search
  *
- * @param {string | import("@pnp/sp/search").ISearchQuery} searchQuery - ISearchQuery query or search text. Changing the value resends request.
- * @param {import("./options.js").SearchOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useSearch refreshes response data when one of the dependencies changes.
+ * @param {string | ISearchQuery} searchQuery - ISearchQuery query or search text. Value is automatically tracked for changes.
+ * @param {SearchOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {[SpSearchResult | null | undefined, GetPageDispatch]}
  */
 export function useSearch(searchQuery, options, deps) {
   /**
    * @typedef _HookState
    *
-   * @property {import("../types.private.js").InternalPnpHookOptions | null | undefined} options
-   * @property {import("react").DependencyList | null | undefined} externalDeps
-   * @property {import("@pnp/sp/search").ISearchQuery | undefined | null} searchQuery
+   * @property {InternalPnpHookOptions | null | undefined} options
+   * @property {DependencyList | null | undefined} externalDeps
+   * @property {ISearchQuery | undefined | null} searchQuery
    * @property {boolean} disabled
    * @property {number} activePageNo
    */
@@ -105,8 +110,8 @@ export function useSearch(searchQuery, options, deps) {
   const abortSource = useRef(new AbortSignalSource());
   const globalOptions = useContext(InternalContext);
   /** @type{[
-   *    import("@pnp/sp/search").SearchResults | null | undefined,
-   *    import("react").Dispatch<import("@pnp/sp/search").SearchResults | null | undefined>
+   *    SearchResults | null | undefined,
+   *    Dispatch<SearchResults | null | undefined>
    *  ]}
    */
   const [searchResult, setSearchResult] = useState();

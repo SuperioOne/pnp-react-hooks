@@ -5,7 +5,12 @@ import { mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
-/** @param {import('@pnp/sp').SPFI} sp **/
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {RoleDefinitionsOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IRoleDefinitionInfo} from "@pnp/sp/security" **/
+
+/** @param {SPFI} sp **/
 function roleDefinitionRequest(sp) {
   return sp.web.roleDefinitions;
 }
@@ -13,17 +18,13 @@ function roleDefinitionRequest(sp) {
 /**
  * Returns role definition collection.
  *
- * @param {import("./options.js").RoleDefinitionsOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useRoleDefinitions refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/security").IRoleDefinitionInfo[] | undefined | null}
+ * @param {RoleDefinitionsOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IRoleDefinitionInfo[] | undefined | null}
  */
 export function useRoleDefinitions(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/security").IRoleDefinitionInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/security").IRoleDefinitionInfo[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IRoleDefinitionInfo[] | null | undefined, Dispatch<SetStateAction<IRoleDefinitionInfo[] | null |undefined>> ]} **/
   const [roleDefinitions, setRoleDefinitions] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

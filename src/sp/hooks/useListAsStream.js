@@ -6,6 +6,11 @@ import { resolveList } from "../resolveList.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {ListAsStreamOptions, RenderListParameters} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IRenderListDataAsStreamResult,IList} from "@pnp/sp/lists" **/
+
 /**
  * Convert record to map object.
  * @template T
@@ -34,22 +39,18 @@ function convertToMap(obj) {
 /**
  * Returns data for the specified query view
  *
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options.js").RenderListParameters} parameters - Sharepoint RenderAsStream parameters.
- * @param {import("./options.js").ListAsStreamOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useListAsStream refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/lists").IRenderListDataAsStreamResult | null | undefined}
+ * @param {string} list - List GUID Id or title. Value is automatically tracked for changes.
+ * @param {RenderListParameters} parameters - Sharepoint RenderAsStream parameters.
+ * @param {ListAsStreamOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IRenderListDataAsStreamResult | null | undefined}
  */
 export function useListAsStream(list, parameters, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/lists").IRenderListDataAsStreamResult | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/lists").IRenderListDataAsStreamResult | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IRenderListDataAsStreamResult | null | undefined, Dispatch<SetStateAction<IRenderListDataAsStreamResult | null |undefined>> ]} **/
   const [listData, setListData] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       const spList = resolveList(sp.web, list);
 
       let overrideParams;
@@ -64,7 +65,7 @@ export function useListAsStream(list, parameters, options, deps) {
         }
       }
 
-      /** @type{(this:import("@pnp/sp/lists").IList) => Promise<import("@pnp/sp/lists").IRenderListDataAsStreamResult>} **/
+      /** @type{(this:IList) => Promise<IRenderListDataAsStreamResult>} **/
       const action = function () {
         return this.renderListDataAsStream(
           parameters.dataParameters,

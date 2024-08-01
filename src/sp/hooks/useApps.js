@@ -5,24 +5,24 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {WebAppsOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+
 /**
  * Returns app detail collection from the app catalog.
  *
  * @template T
- * @param {import("./options.js").WebAppsOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useApps refreshes response data when one of the dependencies changes.
+ * @param {WebAppsOptions} [options] - Hook options
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {T[] | null | undefined} App info array.
  */
 export function useApps(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    T[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<T[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ T[] | null | undefined, Dispatch<SetStateAction<T[] | null |undefined>> ]} **/
   const [apps, setApps] = useState();
   const requestFactory = useCallback(
-    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/** @type{SPFI} **/ sp) => {
       return options?.scope === "tenant"
         ? sp.tenantAppcatalog
         : sp.web.appcatalog;

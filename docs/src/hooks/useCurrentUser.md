@@ -1,31 +1,33 @@
+# useCurrentUser
 
-## Definition
-
-▸ **useCurrentUser**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
+```typescript
+useCurrentUser(
+	options?: CurrentUserInfoOptions, 
+	deps?: any[]): ISiteUserInfo | null | undefined;
+```
 
 Returns current user information.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`CurrentUserInfoOptions`](../Interfaces/CurrentUserInfoOptions.md) | PnP hook options |
-| `deps?` | `DependencyList` | useCurrentUser refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
-
 ## Examples
 
+Get basic user properties,
 ```typescript
-// basic usage
 const userAllProps = useCurrentUser();
+```
 
-// with query
+Get user properties with query,
+```typescript
 const user = useCurrentUser({
-	query: {
-		select: ["Title", "Id", "LoginName"]
-	}
+  query: {
+    select: ["Title", "Id", "LoginName"]
+  }
 });
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `CurrentUserInfoOptions` | useCurrentUser hook options. | Partially |
+| `deps?` | `DependencyList` | Hook dependency list | Yes |
+

@@ -5,25 +5,26 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {NavigationOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {INavNodeInfo} from "@pnp/sp/navigation" **/
+
 /**
  * Returns web navigation nodes.
  * Use {@link NavigationOptions.type} property to change navigation type.
  * Default is topNavigation.
  *
- * @param {import("./options.js").NavigationOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useNavigation refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/navigation").INavNodeInfo[] | null | undefined}
+ * @param {NavigationOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {INavNodeInfo[] | null | undefined}
  */
 export function useNavigation(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/navigation").INavNodeInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/navigation").INavNodeInfo[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ INavNodeInfo[] | null | undefined, Dispatch<SetStateAction<INavNodeInfo[] | null |undefined>> ]} **/
   const [navNodes, setNavNodes] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       switch (options?.type) {
         case "quickLaunch":
           return sp.web.navigation.quicklaunch;

@@ -6,14 +6,21 @@ import { resolveScope } from "../resolveScope.js";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {ChangesOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IChangeQuery} from "@pnp/sp/types.js" **/
+/** @import {IList} from "@pnp/sp/lists" **/
+/** @import {IWeb} from "@pnp/sp/webs" **/
+
 /**
- * Returns web or list change collection. Use {@link ChangesOptions.list} property
+ * Returns web or list change collection. Use `ChangesOptions.list` property
  * to get list changes instead of web changes.
  *
  * @template T
- * @param {import("@pnp/sp/types.js").IChangeQuery} changeQuery - Change query.
- * @param {import("./options.js").ChangesOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useChanges refreshes response data when one of the dependencies changes.
+ * @param {IChangeQuery} changeQuery - Change query.
+ * @param {ChangesOptions} [options] - Hook options
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {T[] | undefined | null} Changes info array.
  *
  * @example
@@ -30,16 +37,12 @@ import { useQueryEffect } from "../useQueryEffect.js";
  */
 export function useChanges(changeQuery, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    T[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<T[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ T[] | null | undefined, Dispatch<SetStateAction<T[] | null |undefined>> ]} **/
   const [changes, setChanges] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       const scope = resolveScope(sp.web, options?.list, undefined);
-      /** @type{(this: import("@pnp/sp/lists").IList | import("@pnp/sp/webs").IWeb) => Promise<T>} **/
+      /** @type{(this: IList | IWeb) => Promise<T>} **/
       const action = function () {
         return this.getChanges(changeQuery);
       };

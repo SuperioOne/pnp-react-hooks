@@ -9,9 +9,15 @@ import { resolveUser } from "../resolveUser.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {IsMemberOfOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IWeb} from "@pnp/sp/webs" **/
+/** @import {ISiteGroupInfo, ISiteGroups} from "@pnp/sp/site-groups" **/
+
 /** @typedef{[undefined, undefined] |
  * [null, null] |
- * [true, import("@pnp/sp/site-groups").ISiteGroupInfo] |
+ * [true, ISiteGroupInfo] |
  * [false, undefined]
  * } MemberInfo
  **/
@@ -20,29 +26,25 @@ import { useState, useCallback, useContext, useMemo } from "react";
  * Returns true, if user is member of group. If not returns false.
  * Use {@link IsMemberOfOptions.userId} property for another user. Default is current user.
  *
- * @param {string | number} groupId - Group name or Id. Changing the value resends request.
- * @param {import("./options.js").IsMemberOfOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useIsMemberOf refreshes response data when one of the dependencies changes.
+ * @param {string | number} groupId - Group name or Id. Value is automatically tracked for changes.
+ * @param {IsMemberOfOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {MemberInfo}
  */
 export function useIsMemberOf(groupId, options, deps) {
   const globalOptions = useContext(InternalContext);
 
-  /** @type{[
-   *    MemberInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<MemberInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ MemberInfo | null | undefined, Dispatch<SetStateAction<MemberInfo | null |undefined>> ]} **/
   const [isMember, setIsMember] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
-      /** @type{(this: import("@pnp/sp/webs").IWeb) => Promise<MemberInfo>} **/
+    (/**@type{SPFI} **/ sp) => {
+      /** @type{(this: IWeb) => Promise<MemberInfo>} **/
       const action = async function () {
         const user = options?.userId
           ? resolveUser(this.siteUsers, options.userId)
           : this.currentUser;
 
-        /** @type{import("@pnp/sp/site-groups").ISiteGroups} **/
+        /** @type{ISiteGroups} **/
         let groups;
 
         switch (typeof groupId) {

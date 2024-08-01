@@ -1,33 +1,24 @@
-import ToolTip from '@site/src/components/tooltip';
+# useAttachments 
 
-## Definition
-
-▸ **useAttachments**(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IAttachmentInfo`[]\>
+```typescript
+useAttachments(
+	itemId:number, 
+	list:string,
+	options?: ItemAttachmentsOptions,
+	deps: any[]): IAttachmentInfo[] | null | undefined;
+```
 
 Returns all attachments of the item.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `itemId` | `number` | List item numeric Id. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `list` | `string` | List title or GUID Id string. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`ItemAttachmentsOptions`](../Interfaces/ItemAttachmentsOptions.md) | PnP hook options |
-| `deps?` | `DependencyList` | useAttachments refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`IAttachmentInfo`[]\>
-
-array of `IAttachmentInfo`.
-
 ## Examples
 
+Get all attachments from an item,
 ```typescript
-// basic usage
 const attachments = useAttachments(10, "My List");
+```
 
-// with query
+Get attachments with query from an item,
+```typescript
 const filteredAttachments = useAttachments(10, "5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
 	query: {
 		select: ["Name", "Id"],
@@ -35,3 +26,12 @@ const filteredAttachments = useAttachments(10, "5ee53613-bc0f-4b2a-9904-b21afd84
 	}
 });
 ```
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `itemId` | `number` | List item ID | Yes |
+| `list` | `string` | Target list UUID or title | Yes |
+| `options?` | `ItemAttachmentsOptions` | useAttachment hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

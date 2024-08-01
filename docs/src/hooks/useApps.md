@@ -1,49 +1,43 @@
-## Definition
+# useApps
 
-▸ **useApps**<`T`\>(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`[]\>
+```typescript
+useApps<T>(options?:WebAppsOptions, deps?:any[]): T[] | null | undefined;
+```
 
 Returns app detail collection from the app catalog.
 
-## Type parameters
+## Examples
 
-| Name | Description |
-| :------ | :------ |
-| `T` | Return type |
+Get apps from site collection app catalog,
+```typescript
+const apps = useApps();
+```
+Get apps from tenant app catalog,
+```typescript
+const apps = useApps({
+  scope: "tenant"
+});
+```
+Set scope to site collection explicitly,
+```typescript
+const apps = useApps({
+  scope: "sitecollection"
+});
+```
+Get apps from site collection app catalog with query,
+```typescript
+const filteredApps = useApps({ 
+  query: { 
+    select: ["Title", "Id", "IsEnabled"],
+    filter: "IsEnabled eq true" 
+  }
+});
+```
 
 ## Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`WebAppsOptions`](../Interfaces/WebAppsOptions.md) | PnP hook options |
-| `deps?` | `DependencyList` | useApps refreshes response data when one of the dependencies changes. |
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `WebAppsOptions` | useApps hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
 
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`T`[]\>
-
-App info array.
-
-## Examples
-
-```typescript
-// Get apps from site collection app catalog
-const apps = useApps();
-
-// Get apps from tenant app catalog
-const apps = useApps({
-	scope: "tenant"
-});
-
-// Set scope to site collection explicitly
-const apps = useApps({
-	scope: "sitecollection"
-});
-
-// Get apps from site collection app catalog with query
-const filteredApps = useApps({
-	query: {
-		select: ["Title", "Id", "IsEnabled"],
-		filter: "IsEnabled eq true"
-	}
-});
-```

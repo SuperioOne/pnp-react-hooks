@@ -6,23 +6,24 @@ import { resolveFolder } from "../resolveFolder.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {FoldersOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IFolderInfo} from "@pnp/sp/folders" **/
+
 /**
- * Returns folders from root. Use {@link FoldersOptions.rootFolderId} property to change root.
+ * Returns folders from root. Use `FoldersOptions.rootFolderId` property to change root.
  *
- * @param {import("./options.js").FoldersOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useFolders refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/folders").IFolderInfo[] | null | undefined}
+ * @param {FoldersOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IFolderInfo[] | null | undefined}
  */
 export function useFolders(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/folders").IFolderInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/folders").IFolderInfo[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IFolderInfo[] | null | undefined, Dispatch<SetStateAction<IFolderInfo[] | null |undefined>> ]} **/
   const [folders, setFolders] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       if (options?.rootFolderId === undefined) {
         return sp.web.folders;
       } else {

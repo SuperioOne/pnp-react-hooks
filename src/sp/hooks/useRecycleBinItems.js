@@ -5,23 +5,24 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {RecycleBinItemsOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IRecycleBinItemObject} from "@pnp/sp/recycle-bin/types.js" **/
+
 /**
  * Returns all recycle bin items.
  *
- * @param {import("./options.js").RecycleBinItemsOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useRecycleBinItems refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/recycle-bin/types.js").IRecycleBinItemObject[] | null | undefined}
+ * @param {RecycleBinItemsOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IRecycleBinItemObject[] | null | undefined}
  */
 export function useRecycleBinItems(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/recycle-bin/types.js").IRecycleBinItemObject[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/recycle-bin/types.js").IRecycleBinItemObject[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IRecycleBinItemObject[] | null | undefined, Dispatch<SetStateAction<IRecycleBinItemObject[] | null |undefined>> ]} **/
   const [binItems, setBinItems] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       switch (options?.scope) {
         case "site":
           return sp.site.recycleBin;

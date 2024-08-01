@@ -2,6 +2,7 @@ import type { IChangeQuery } from "@pnp/sp/types.js";
 import type {
   BehaviourOptions,
   ContextOptions,
+  DisableOptionType,
   DisableOptionValueType,
   ErrorOptions,
   RenderOptions,
@@ -286,7 +287,7 @@ export interface PageCommentsOptions
   disabled?: DisableOptionValueType | { (pageRelativePath: string): boolean };
 }
 
-export interface ItemContentTypeOptions
+export interface ContentTypeOptions
   extends PnpHookOptions<ODataQueryableCollection> {
   /**
    * List GUID Id or title for getting list changes. Keep undefined for web changes.

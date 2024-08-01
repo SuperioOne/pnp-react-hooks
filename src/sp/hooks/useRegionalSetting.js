@@ -5,7 +5,12 @@ import { mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
-/** @param {import('@pnp/sp').SPFI} sp **/
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {RegionalSettingOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IRegionalSettingsInfo} from "@pnp/sp/regional-settings" **/
+
+/** @param {SPFI} sp **/
 function regionalSettingsRequest(sp) {
   return sp.web.regionalSettings;
 }
@@ -13,17 +18,13 @@ function regionalSettingsRequest(sp) {
 /**
  * Returns site regional settings.
  *
- * @param {import("./options.js").RegionalSettingOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useRegionalSetting refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null | undefined}
+ * @param {RegionalSettingOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IRegionalSettingsInfo | null | undefined}
  */
 export function useRegionalSetting(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/regional-settings").IRegionalSettingsInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IRegionalSettingsInfo | null | undefined, Dispatch<SetStateAction<IRegionalSettingsInfo | null |undefined>> ]} **/
   const [regionalSetting, setRegionalSetting] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

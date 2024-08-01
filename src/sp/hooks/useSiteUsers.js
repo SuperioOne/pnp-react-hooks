@@ -5,8 +5,13 @@ import { mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {SiteUsersOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {ISiteUserInfo} from "@pnp/sp/site-users" **/
+
 /**
- *@param {import('@pnp/sp').SPFI} sp
+ *@param {SPFI} sp
  */
 function siteUsersRequest(sp) {
   return sp.web.siteUsers;
@@ -15,17 +20,13 @@ function siteUsersRequest(sp) {
 /**
  * Returns site users.
  *
- * @param {import("./options.js").SiteUsersOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useSiteUsers refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/site-users").ISiteUserInfo[] | null | undefined}
+ * @param {SiteUsersOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {ISiteUserInfo[] | null | undefined}
  */
 export function useSiteUsers(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/site-users").ISiteUserInfo[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/site-users").ISiteUserInfo[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ ISiteUserInfo[] | null | undefined, Dispatch<SetStateAction<ISiteUserInfo[] | null |undefined>> ]} **/
   const [siteUser, setSiteUser] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

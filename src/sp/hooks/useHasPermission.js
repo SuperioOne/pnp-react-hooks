@@ -11,23 +11,24 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useMemo, useContext } from "react";
 import { PermissionKind } from "@pnp/sp/security";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {UserPermissionOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IWeb} from "@pnp/sp/webs" **/
+
 /**
  * Returns true if user has permission on scope. If not returns false.
- * Use {@link UserPermissionOptions.userId} for another user and {@link UserPermissionOptions.scope} for permission scope.
+ * Use `UserPermissionOptions.userId` for another user and `UserPermissionOptions.scope` for permission scope.
  * Default is current user permission on current web scope.
  *
- * @param {PermissionKind[] | PermissionKind} permissionKinds - SP permission kind array or permission kind value. Changing the value resends request.
- * @param {import("./options.js").UserPermissionOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useHasPermission refreshes response data when one of the dependencies changes.
+ * @param {PermissionKind[] | PermissionKind} permissionKinds - SP permission kind array or permission kind value. Value is automatically tracked for changes.
+ * @param {UserPermissionOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {boolean | null | undefined }
  */
 export function useHasPermission(permissionKinds, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    boolean | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<boolean | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ boolean | null | undefined, Dispatch<SetStateAction<boolean | null |undefined>> ]} **/
   const [hasPermission, setHasPermission] = useState();
   /** @type{PermissionKind} **/
   const permFlag = useMemo(
@@ -39,8 +40,8 @@ export function useHasPermission(permissionKinds, options, deps) {
   );
 
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
-      /** @type{(this:import("@pnp/sp/webs").IWeb) => Promise<boolean>} **/
+    (/**@type{SPFI} **/ sp) => {
+      /** @type{(this:IWeb) => Promise<boolean>} **/
       const action = async function () {
         /** @type{string | undefined} **/
         let userLoginName;

@@ -8,58 +8,59 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {FileInfoOptions, FileBlobOptions, FileTextOptions, FileBufferOptions,_BaseFileOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IFileInfo, IFile} from "@pnp/sp/files" **/
+
 /**
  * @overload
  * Returns a file from file collection.
- * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options.js").FileInfoOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/files").IFileInfo | null | undefined}
+ * @param {string} fileId - File GUID Id or server relative path. Value is automatically tracked for changes.
+ * @param {FileInfoOptions} [options] - PnP hook options
+ * @param {DependencyList} [deps] - Custom dependecy list.
+ * @returns {IFileInfo | null | undefined}
  */
 /**
  * @overload
  * Returns file content as {@link Blob}.
- * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options.js").FileBlobOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
+ * @param {string} fileId - File GUID Id or server relative path. Value is automatically tracked for changes.
+ * @param {FileBlobOptions} [options] - PnP hook options
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {Blob | undefined | null}
  */
 /**
  * @overload
  * Returns file content as {@link ArrayBuffer}.
- * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options.js").FileBufferOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
+ * @param {string} fileId - File GUID Id or server relative path. Value is automatically tracked for changes.
+ * @param {FileBufferOptions} [options] - PnP hook options
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {ArrayBuffer | undefined | null}
  */
 /**
  * @overload
  * Returns file content as text.
- * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options.js").FileTextOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
+ * @param {string} fileId - File GUID Id or server relative path. Value is automatically tracked for changes.
+ * @param {FileTextOptions} [options] - PnP hook options
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {string | undefined | null}
  */
 /**
- * @param {string} fileId - File GUID Id or server relative path. Changing the value resends request.
- * @param {import("./options.js")._BaseFileOptions} [options] - PnP hook options
- * @param {import("react").DependencyList} [deps] - useFile refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string | null |undefined}
+ * @param {string} fileId - File GUID Id or server relative path. Value is automatically tracked for changes.
+ * @param {_BaseFileOptions} [options] - Hook options
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IFileInfo | ArrayBuffer | Blob | string | null |undefined}
  */
 export function useFile(fileId, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/files").IFileInfo | ArrayBuffer | Blob | string | null | undefined>>
-   *  ]}
-   **/
+  /** @type{[ IFileInfo | ArrayBuffer | Blob | string | null | undefined, Dispatch<SetStateAction<IFileInfo | ArrayBuffer | Blob | string | null | undefined>> ]} **/
   const [fileInfo, setFileInfo] = useState();
   const requestFactory = useCallback(
-    (/** @type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/** @type{SPFI} **/ sp) => {
       assertString(fileId, "fileId is not valid string value.");
 
       const isUniqueId = isUUID(fileId);
-      /** @type{import("@pnp/sp/files").IFile} **/
+      /** @type{IFile} **/
       let queryInst;
 
       if (isUniqueId) {

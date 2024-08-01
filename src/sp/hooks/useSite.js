@@ -5,9 +5,15 @@ import { mergeOptions } from "../merge.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {SiteInfoOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {ISite} from "@pnp/sp/sites" **/
+/** @import {ISiteInfo} from "@pnp/sp/sites/types.js" **/
+
 /**
- * @param {import('@pnp/sp').SPFI} sp
- * @returns  {import("@pnp/sp/sites").ISite}
+ * @param {SPFI} sp
+ * @returns {ISite}
  */
 function siteInfoRequest(sp) {
   return sp.site;
@@ -15,17 +21,13 @@ function siteInfoRequest(sp) {
 
 /**
  * Returns current site info.
- * @param {import("./options.js").SiteInfoOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useSite refreshes response data when one of the dependencies changes.
- * @returns { import("@pnp/sp/sites/types.js").ISiteInfo | null | undefined}
+ * @param {SiteInfoOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {ISiteInfo | null | undefined}
  */
 export function useSite(options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/sites/types.js").ISiteInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/sites/types.js").ISiteInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ ISiteInfo | null | undefined, Dispatch<SetStateAction<ISiteInfo | null |undefined>> ]} **/
   const [siteInfo, setSiteInfo] = useState();
   const internalOpts = useMemo(() => {
     const opt = mergeOptions(globalOptions, options);

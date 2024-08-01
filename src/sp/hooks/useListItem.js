@@ -7,26 +7,26 @@ import { resolveList } from "../resolveList.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {ListItemOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+
 /**
  * Returns an item from specified list item collection.
  *
  * @template T
- * @param {number} itemId - Item Id. Changing the value resends request.
- * @param {string} list - List GUID id or title. Changing the value resends request.
- * @param {import("./options.js").ListItemOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useListItem refreshes response data when one of the dependencies changes.
+ * @param {number} itemId - Item Id. Value is automatically tracked for changes.
+ * @param {string} list - List GUID id or title. Value is automatically tracked for changes.
+ * @param {ListItemOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {T | null |undefined}
  */
 export function useListItem(itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    T | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<T | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ T | null | undefined, Dispatch<SetStateAction<T | null |undefined>> ]} **/
   const [itemData, setItemData] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       assertID(itemId, "itemId value is not valid.");
       return resolveList(sp.web, list).items.getById(itemId);
     },

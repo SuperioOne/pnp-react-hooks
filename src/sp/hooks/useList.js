@@ -5,24 +5,25 @@ import { resolveList } from "../resolveList.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {ListOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IListInfo} from "@pnp/sp/lists" **/
+
 /**
  * Return a list from list collection.
  *
- * @param {string} list - List GUID Id or title. Changing the value resends request.
- * @param {import("./options.js").ListOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useList refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/lists").IListInfo | null | undefined}
+ * @param {string} list - List GUID Id or title. Value is automatically tracked for changes.
+ * @param {ListOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IListInfo | null | undefined}
  */
 export function useList(list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/lists").IListInfo | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/lists").IListInfo | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IListInfo | null | undefined, Dispatch<SetStateAction<IListInfo | null |undefined>> ]} **/
   const [listInfo, setListInfo] = useState();
   const requestFactory = useCallback(
-    (/** @type{import('@pnp/sp').SPFI} **/ sp) => resolveList(sp.web, list),
+    (/** @type{SPFI} **/ sp) => resolveList(sp.web, list),
     [list],
   );
 

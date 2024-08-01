@@ -1,6 +1,8 @@
 # PnP React Hooks
 
-PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/), provides configurable React hooks for SharePoint Rest API.
+PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/), 
+provides configurable React hooks for SharePoint API to speed up 
+development for simple SPFX webparts and components.
 
 **Example usage:**
 
@@ -8,8 +10,7 @@ PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/), 
 import * as React from "react";
 import { useListItems, useCurrentUser } from "pnp-react-hooks";
 
-export const ExampleComponent = () =>
-{
+export const ExampleComponent = () => {
 	const currentUser = useCurrentUser();
 
 	const items = useListItems("My List", {
@@ -29,50 +30,25 @@ export const ExampleComponent = () =>
 
 ## Installation
 
-<Tabs>
-<TabItem value="npmv7" label="npm v7+" default>
-
-Peer dependencies are automatically installed by npm.
-
 ```shell
-npm install pnp-react-hooks
+npm install pnp-react-hooks @pnp/sp react
 ```
 
-</TabItem>
-<TabItem value="npmv3" label="npm v3-6">
+`@pnp/sp` and `react` packages are peer dependencies.
 
-
-
-```shell
-npm install pnp-react-hooks @pnp/sp react@17.0.2
-```
-
-</TabItem>
-<TabItem value="pnpm" label="pnpm">
-
-```shell
-pnpm install pnp-react-hooks @pnp/sp react@17.0.2
-```
-
-</TabItem>
-
-<TabItem value="yarn" label="yarn">
-
-```shell
-yarn add pnp-react-hooks @pnp/sp react@17.0.2
-```
-
-</TabItem>
-</Tabs>
+| Peer dependency  | Supported versions   |
+|------------------|----------------------|
+| `@pnp/sp`        | 4.1.0 or later       |
+| `react`          | 16.9.\* to 18.\*.\*  |
 
 ## Features
 
 - Build simple web parts quickly with less code.
-- Written in TypeScript, no additional type package required.
+- TypeScript support.
 - Automatically tracks parameter changes and refreshes data as needed.
-- Easy to treeshake unused code with modern JS bundlers.
+- Easy to tree-shake unused code with modern JS bundlers.
 - Can be configured for multiple sites with an option provider.
-- Supports [PnPjs V3 behaviors](https://pnp.github.io/pnpjs/core/behaviors/).
+- Supports [PnPjs behaviors](https://pnp.github.io/pnpjs/core/behaviors/).
 
 ## Questions and Suggestions
 

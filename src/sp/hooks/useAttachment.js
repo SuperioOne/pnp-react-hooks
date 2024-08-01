@@ -9,70 +9,71 @@ import { resolveList } from "../resolveList.js";
 import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
-/** @typedef {import('@pnp/sp/attachments').IAttachmentInfo | ArrayBuffer | Blob | string} AttachmentReturnTypes **/
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {BaseAttachmentOptions, AttachmentBlobOptions, AttachmentInfoOptions, AttachmentTextOptions, AttachmentBufferOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IAttachmentInfo} from "@pnp/sp/attachments" **/
+
+/** @typedef {IAttachmentInfo | ArrayBuffer | Blob | string} AttachmentReturnTypes **/
 
 /**
  * @overload
  * Returns an attachment info from item.
  *
- * @param {string} attachmentName - Attachment file name. Changing the value resends request.
- * @param {number} itemId - List item numeric Id. Changing the value resends request.
- * @param {string} list - List title or GUID Id string. Changing the value resends request.
- * @param {import("./options.js").AttachmentInfoOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useAttachment refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/attachments").IAttachmentInfo | null | undefined} Attachment info object.
+ * @param {string} attachmentName - Attachment file name. Value is automatically tracked for changes.
+ * @param {number} itemId - List item numeric Id. Value is automatically tracked for changes.
+ * @param {string} list - List title or GUID Id string. Value is automatically tracked for changes.
+ * @param {AttachmentInfoOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IAttachmentInfo | null | undefined} Attachment info object.
  */
 /**
  * @overload
- * Returns attachment content as {@link Blob}.
+ * Returns attachment content as `Blob`.
  *
- * @param {string} attachmentName - Attachment file name. Changing the value resends request.
- * @param {number} itemId - List item numeric Id. Changing the value resends request.
- * @param {string} list - List title or GUID Id string. Changing the value resends request.
- * @param {import("./options.js").AttachmentBlobOptions} options - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useAttachment refreshes response data when one of the dependencies changes.
+ * @param {string} attachmentName - Attachment file name. Value is automatically tracked for changes.
+ * @param {number} itemId - List item numeric Id. Value is automatically tracked for changes.
+ * @param {string} list - List title or GUID Id string. Value is automatically tracked for changes.
+ * @param {AttachmentBlobOptions} options - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {Blob | null | undefined} Attachment blob.
  */
 /**
  * @overload
- * Returns attachment content as {@link ArrayBuffer}.
+ * Returns attachment content as `ArrayBuffer`.
  *
- * @param {string} attachmentName - Attachment file name. Changing the value resends request.
- * @param {number} itemId - List item numeric Id. Changing the value resends request.
- * @param {string} list - List title or GUID Id string. Changing the value resends request.
- * @param {import("./options.js").AttachmentBufferOptions} options - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useAttachment refreshes response data when one of the dependencies changes.
+ * @param {string} attachmentName - Attachment file name. Value is automatically tracked for changes.
+ * @param {number} itemId - List item numeric Id. Value is automatically tracked for changes.
+ * @param {string} list - List title or GUID Id string. Value is automatically tracked for changes.
+ * @param {AttachmentBufferOptions} options - Pnp hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {ArrayBuffer | null | undefined} Attachment array buffer.
  */
 /**
  * @overload
  * Returns attachment content as string.
  *
- * @param {string} attachmentName - Attachment file name. Changing the value resends request.
- * @param {number} itemId - List item numeric Id. Changing the value resends request.
- * @param {string} list - List title or GUID Id string. Changing the value resends request.
- * @param {import("./options.js").AttachmentTextOptions} options - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useAttachment refreshes response data when one of the dependencies changes.
+ * @param {string} attachmentName - Attachment file name. Value is automatically tracked for changes.
+ * @param {number} itemId - List item numeric Id. Value is automatically tracked for changes.
+ * @param {string} list - List title or GUID Id string. Value is automatically tracked for changes.
+ * @param {AttachmentTextOptions} options - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {string | null | undefined} Attachment content as text.
  */
 /**
- * @param {string} attachmentName - Attachment file name. Changing the value resends request.
- * @param {number} itemId - List item numeric Id. Changing the value resends request.
- * @param {string} list - List title or GUID Id string. Changing the value resends request.
- * @param {import("./options.js").BaseAttachmentOptions} [options] - Pnp hook options.
- * @param {import("react").DependencyList} [deps] - useAttachment refreshes response data when one of the dependencies changes.
+ * @param {string} attachmentName - Attachment file name. Value is automatically tracked for changes.
+ * @param {number} itemId - List item numeric Id. Value is automatically tracked for changes.
+ * @param {string} list - List title or GUID Id string. Value is automatically tracked for changes.
+ * @param {BaseAttachmentOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
  * @returns {AttachmentReturnTypes | null | undefined}
  */
 export function useAttachment(attachmentName, itemId, list, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    AttachmentReturnTypes | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<AttachmentReturnTypes | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ AttachmentReturnTypes | null | undefined, Dispatch<SetStateAction<AttachmentReturnTypes | null |undefined>> ]} **/
   const [attachment, setAttachment] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       assertID(itemId, "itemId value is not valid.");
       assertString(attachmentName, "attachmentName value is not valid.");
 

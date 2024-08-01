@@ -7,7 +7,12 @@ import { mergeDependencies, mergeOptions } from "../merge.js";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
-/** @type{import("@pnp/sp/profiles").IClientPeoplePickerQueryParameters} **/
+/** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
+/** @import {SearchUserOptions} from "./options.d.ts" **/
+/** @import {SPFI} from "@pnp/sp" **/
+/** @import {IClientPeoplePickerQueryParameters, IPeoplePickerEntity, IProfiles} from "@pnp/sp/profiles" **/
+
+/** @type{IClientPeoplePickerQueryParameters} **/
 const DEFAULT_OPTIONS = {
   AllowEmailAddresses: true,
   AllowMultipleEntities: true,
@@ -17,7 +22,7 @@ const DEFAULT_OPTIONS = {
 };
 
 /**
- * @param {string | import("@pnp/sp/profiles").IClientPeoplePickerQueryParameters} options
+ * @param {string | IClientPeoplePickerQueryParameters} options
  * @returns { string }
  **/
 function searchOptionsKey(options) {
@@ -27,21 +32,17 @@ function searchOptionsKey(options) {
 /**
  * Searches for users or groups with specified search options.
  *
- * @param {string | import("@pnp/sp/profiles").IClientPeoplePickerQueryParameters} searchOptions - Search text or search query parameters. Changing the value resends request.
- * @param {import("./options.js").SearchUserOptions} [options] - PnP hook options.
- * @param {import("react").DependencyList} [deps] - useSearchUser refreshes response data when one of the dependencies changes.
- * @returns {import("@pnp/sp/profiles").IPeoplePickerEntity[] | undefined | null}
+ * @param {string | IClientPeoplePickerQueryParameters} searchOptions - Search text or search query parameters. Value is automatically tracked for changes.
+ * @param {SearchUserOptions} [options] - Hook options.
+ * @param {DependencyList} [deps] - Custom dependency list.
+ * @returns {IPeoplePickerEntity[] | undefined | null}
  */
 export function useSearchUser(searchOptions, options, deps) {
   const globalOptions = useContext(InternalContext);
-  /** @type{[
-   *    import("@pnp/sp/profiles").IPeoplePickerEntity[] | null | undefined,
-   *    import("react").Dispatch<import("react").SetStateAction<import("@pnp/sp/profiles").IPeoplePickerEntity[] | null |undefined>>
-   *  ]}
-   **/
+  /** @type{[ IPeoplePickerEntity[] | null | undefined, Dispatch<SetStateAction<IPeoplePickerEntity[] | null |undefined>> ]} **/
   const [people, setPeople] = useState();
   const requestFactory = useCallback(
-    (/**@type{import('@pnp/sp').SPFI} **/ sp) => {
+    (/**@type{SPFI} **/ sp) => {
       const searchQuery =
         typeof searchOptions === "string"
           ? {
@@ -50,7 +51,7 @@ export function useSearchUser(searchOptions, options, deps) {
             }
           : searchOptions;
 
-      /** @type{(this: import("@pnp/sp/profiles").IProfiles) => Promise<import("@pnp/sp/profiles").IPeoplePickerEntity[]>} **/
+      /** @type{(this: IProfiles) => Promise<IPeoplePickerEntity[]>} **/
       const action = function () {
         return this.clientPeoplePickerSearchUser(searchQuery);
       };
