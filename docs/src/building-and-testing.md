@@ -14,7 +14,7 @@ npm run build
 
 ## Testing
 
-Test system require a SharePoint site and [app registration on Microsoft identity platform](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=certificate) 
+Test system requires a SharePoint site and [app registration on Microsoft identity platform](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=certificate) 
 with SharePoint permissions.
 
 After the app registration, create a file named `msalSettings.js`. You can use `msalSettings.example.js` as a template or copy the following code snippet.

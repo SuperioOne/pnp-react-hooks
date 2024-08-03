@@ -4,3 +4,8 @@ language = "en"
 multilingual = false
 src = "src"
 title = "PnP React Hooks"
+
+[output.html]
+git-repository-url = "https://github.com/SuperioOne/pnp-react-hooks"
+git-repository-icon = "fa-github"
+cname = "prh.smdd.dev"

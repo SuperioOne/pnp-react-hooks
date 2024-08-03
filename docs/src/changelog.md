@@ -14,7 +14,7 @@
 - All dependencies have been updated to their latest versions.
 - `useSearch` and paged `useListItems` now provide data as argument on dispatch callbacks.
 - v1's [Docusaurus repo](https://github.com/SuperioOne/pnp-react-hooks-docs) has been archived, v2 docs are moved to the main repo.
-- `useListItems` paged mode, the `hasNext` value is inverted to match with the async iterators `done` property.
+- In `useListItems` paged mode, the `hasNext` value is inverted to match with the async iterators `done` property.
 
 ### Removed
 
