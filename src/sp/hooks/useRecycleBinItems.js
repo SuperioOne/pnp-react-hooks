@@ -6,7 +6,7 @@ import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {RecycleBinItemsOptions} from "./options.d.ts" **/
+/** @import {RecycleBinItemsOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IRecycleBinItemObject} from "@pnp/sp/recycle-bin/types.js" **/
 

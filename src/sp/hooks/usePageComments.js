@@ -17,7 +17,7 @@ import { resolveSP } from "../resolveSP.js";
 import { useState, useContext, useRef, useEffect } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction, MutableRefObject} from "react" **/
-/** @import {PageCommentsOptions} from "./options.d.ts" **/
+/** @import {PageCommentsOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {ICommentInfo} from "@pnp/sp/comments" **/
 

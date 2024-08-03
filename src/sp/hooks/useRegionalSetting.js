@@ -6,7 +6,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {RegionalSettingOptions} from "./options.d.ts" **/
+/** @import {RegionalSettingOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IRegionalSettingsInfo} from "@pnp/sp/regional-settings" **/
 

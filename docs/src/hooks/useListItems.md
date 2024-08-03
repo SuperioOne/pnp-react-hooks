@@ -37,12 +37,12 @@ const myItems = useListItems<MyItem>("5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
 
 Get list items with custom paging,
 ```typescript
-const [page, nextPage, hasNext] = useListItems("My List Title", {
+const [page, nextPage, done] = useListItems("My List Title", {
 	mode: ListItemsMode.Paged
 });
 
 // You can get next page with nextPageDispatch function.
-if(hasNext) {
+if(!done) {
 	nextPage();
 
 	// Optionally pass a callback function.

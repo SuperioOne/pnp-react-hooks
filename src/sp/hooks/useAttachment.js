@@ -10,7 +10,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {BaseAttachmentOptions, AttachmentBlobOptions, AttachmentInfoOptions, AttachmentTextOptions, AttachmentBufferOptions} from "./options.d.ts" **/
+/** @import {BaseAttachmentOptions, AttachmentBlobOptions, AttachmentInfoOptions, AttachmentTextOptions, AttachmentBufferOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IAttachmentInfo} from "@pnp/sp/attachments" **/
 

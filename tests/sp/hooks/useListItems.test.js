@@ -2,7 +2,6 @@ import { useListItem, useListItems, ListItemsMode } from "../../../src";
 import { DEFAULT_WAITFOR_OPTS, InitPnpTest, logResponse } from "../../common";
 import { cleanup, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeAll, expect, test } from "vitest";
-import { useRegionalSetting } from "../../../src";
 
 /** @type{import('@pnp/sp').SPFI} **/
 let spTest;
@@ -104,14 +103,14 @@ test("useListItem, get all list items by paging", async () => {
   );
 
   await waitFor(() => {
-    const [items, _next, _hasNext] = hook.result.current;
+    const [items, _next, _isDone] = hook.result.current;
 
     expect(items).toBeTypeOf("object");
     expect(items).toBeTruthy();
     expect(Array.isArray(items)).toBe(true);
 
     next = _next;
-    done = _hasNext;
+    done = _isDone;
     itemCount += items?.length ?? 0;
   }, DEFAULT_WAITFOR_OPTS);
 

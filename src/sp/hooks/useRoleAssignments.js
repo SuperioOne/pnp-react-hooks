@@ -7,7 +7,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {RoleAssignmentsOptions} from "./options.d.ts" **/
+/** @import {RoleAssignmentsOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IRoleAssignmentInfo} from "@pnp/sp/security" **/
 
@@ -25,7 +25,8 @@ export function useRoleAssignments(options, deps) {
   const [roleAssignments, setRoleAssignments] = useState();
   const requestFactory = useCallback(
     (/**@type{SPFI} **/ sp) =>
-      resolveScope(sp.web, options?.scope?.list, options?.scope?.item),
+      resolveScope(sp.web, options?.scope?.list, options?.scope?.item)
+        .roleAssignments,
     [options],
   );
 

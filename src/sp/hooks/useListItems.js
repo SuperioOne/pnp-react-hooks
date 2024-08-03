@@ -14,9 +14,9 @@ import { resolveSP } from "../resolveSP.js";
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction,MutableRefObject} from "react" **/
-/** @import {BaseListItemsOptions, PagedItemsOptions, ListItemsOptions, AllItemsOptions} from "./options.d.ts" **/
+/** @import {BaseListItemsOptions, PagedItemsOptions, ListItemsOptions, AllItemsOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
-/** @import {InternalPnpHookOptions} from "../types.private.d.ts" **/
+/** @import {InternalPnpHookOptions} from "../types.private.js" **/
 
 /** @type{{Default: 0; All: 1; Paged:2}} **/
 export const ListItemsMode = {
@@ -208,7 +208,7 @@ export function useListItems(list, options, deps) {
         abortSource.current.abort();
         abortSource.current.reset();
 
-        if (options?.keepPreviousState !== true) {
+        if (opts?.keepPreviousState !== true) {
           setState((prev) => ({ ...prev, items: undefined }));
         }
 
@@ -225,6 +225,7 @@ export function useListItems(list, options, deps) {
         switch (options?.mode) {
           case ListItemsMode.Paged: {
             const iterator = items[Symbol.asyncIterator]();
+
             request = async () => {
               const firstPage = await iterator.next();
               return firstPage;
@@ -314,7 +315,12 @@ export function useListItems(list, options, deps) {
       return null;
     }
     default: {
-      return undefined;
+      switch (options?.mode) {
+        case ListItemsMode.Paged:
+          return [undefined, nextPageDispatch, true];
+        default:
+          return undefined;
+      }
     }
   }
 }

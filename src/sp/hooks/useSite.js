@@ -6,7 +6,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {SiteInfoOptions} from "./options.d.ts" **/
+/** @import {SiteInfoOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {ISite} from "@pnp/sp/sites" **/
 /** @import {ISiteInfo} from "@pnp/sp/sites/types.js" **/

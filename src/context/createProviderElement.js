@@ -1,9 +1,11 @@
 import { createElement } from "react";
 import { PnpHookOptionProvider } from "./pnpHookOptionProvider.js";
 
+/** @import {ReactNode} from "react" **/
+
 /**
  * @param {import('../types.js').PnpHookGlobalOptions} contextOptions
- * @param {...Array<import("react").ReactNode>} children
+ * @param {...ReactNode} children
  * @returns { React.FunctionComponentElement<{
  *      value: import('../types.js').PnpHookGlobalOptions;
  *      children?: any; }>

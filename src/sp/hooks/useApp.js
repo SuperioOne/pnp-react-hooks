@@ -9,7 +9,7 @@ import { useContext, useState, useCallback, useMemo } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {WebAppOptions} from "./options.d.ts" **/
+/** @import {WebAppOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 
 /**

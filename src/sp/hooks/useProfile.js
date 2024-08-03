@@ -7,7 +7,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {ProfileOptions} from "./options.d.ts" **/
+/** @import {ProfileOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IProfiles} from "@pnp/sp/profiles" **/
 

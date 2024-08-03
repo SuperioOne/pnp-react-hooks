@@ -7,7 +7,7 @@ import { InternalContext } from "../../context/internalContext.js";
 import { checkDisable } from "../checkDisable.js";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {UserOptions} from "./options.d.ts" **/
+/** @import {UserOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {ISiteUserInfo} from "@pnp/sp/site-users" **/
 

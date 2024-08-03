@@ -8,7 +8,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {GroupUserOptions} from "./options.d.ts" **/
+/** @import {GroupUserOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {ISiteUserInfo} from "@pnp/sp/site-users" **/
 

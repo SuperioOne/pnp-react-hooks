@@ -8,7 +8,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {ListTokenOptions} from "./options.d.ts" **/
+/** @import {ListTokenOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IList} from "@pnp/sp/lists" **/
 

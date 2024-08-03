@@ -9,7 +9,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {FileInfoOptions, FileBlobOptions, FileTextOptions, FileBufferOptions,_BaseFileOptions} from "./options.d.ts" **/
+/** @import {FileInfoOptions, FileBlobOptions, FileTextOptions, FileBufferOptions,_BaseFileOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IFileInfo, IFile} from "@pnp/sp/files" **/
 

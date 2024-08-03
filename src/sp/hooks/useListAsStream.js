@@ -7,7 +7,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {ListAsStreamOptions, RenderListParameters} from "./options.d.ts" **/
+/** @import {ListAsStreamOptions, RenderListParameters} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IRenderListDataAsStreamResult,IList} from "@pnp/sp/lists" **/
 

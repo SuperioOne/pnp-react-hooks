@@ -8,7 +8,7 @@ import { useState, useCallback, useContext, useMemo } from "react";
 import { InternalContext } from "../../context/internalContext.js";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {GroupsOptions} from "./options.d.ts" **/
+/** @import {GroupsOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {ISiteGroupInfo} from "@pnp/sp/site-groups" **/
 

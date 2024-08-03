@@ -8,7 +8,7 @@ import { useCallback, useContext, useMemo, useState } from "react";
 import { useQueryEffect } from "../useQueryEffect.js";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {SearchUserOptions} from "./options.d.ts" **/
+/** @import {SearchUserOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IClientPeoplePickerQueryParameters, IPeoplePickerEntity, IProfiles} from "@pnp/sp/profiles" **/
 

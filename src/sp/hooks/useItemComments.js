@@ -9,7 +9,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {ItemCommentsOptions} from "./options.d.ts" **/
+/** @import {ItemCommentsOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {ICommentInfo} from "@pnp/sp/comments" **/
 

@@ -14,9 +14,9 @@ import { assertMin } from "../../utils/assert.js";
 const DEFAULT_PAGE_SIZE = 10;
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {SearchOptions} from "./options.d.ts" **/
+/** @import {SearchOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
-/** @import {InternalPnpHookOptions} from "../types.private.d.ts" **/
+/** @import {InternalPnpHookOptions} from "../types.private.js" **/
 /** @import {ISearchResult, ISearchResponse, ISearchBuilder, SearchResults, SearchQueryInit, ISearchQuery} from "@pnp/sp/search" **/
 
 /**

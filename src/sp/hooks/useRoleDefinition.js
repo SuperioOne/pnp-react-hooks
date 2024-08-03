@@ -7,7 +7,7 @@ import { useQueryEffect } from "../useQueryEffect.js";
 import { useState, useCallback, useMemo, useContext } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {RoleDefinitionOptions, RoleType} from "./options.d.ts" **/
+/** @import {RoleDefinitionOptions, RoleType} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IRoleDefinitionInfo} from "@pnp/sp/security" **/
 

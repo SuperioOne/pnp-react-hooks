@@ -10,9 +10,9 @@ import { useState, useCallback, useContext, useMemo } from "react";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
 /** @import {IFieldInfo} from "@pnp/sp/fields" **/
-/** @import {PnpHookOptions, ODataQueryable} from "../types.d.ts" **/
+/** @import {PnpHookOptions, ODataQueryable} from "../types.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
-/** @import {FieldOptions} from "./options.d.ts" **/
+/** @import {FieldOptions} from "./options.js" **/
 
 /**
  * Returns a field from web or list.

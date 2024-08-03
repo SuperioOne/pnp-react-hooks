@@ -2,23 +2,24 @@
 
 ## v2.0.0 - The Wheelwright
 -----------------------------------
-*Aug 03, 2024*
+*Aug 04, 2024*
 
 ### Changed
 
-- Minimum supported `@pnp/sp` peer dependency version bumped to `^4.1.0`.
+- Minimum supported `@pnp/sp` peer dependency versions has been bumped to `^4.1.0`.
 - The library now support React versions between `16.9.0` and `^18.0.0`.
-- `useSearch`, `useUserSearch`, `useChanges` object queries are no longer automatically tracked internally. Developers must use the custom dependency list for reactivity just like any other React hooks.
+- `useSearch`, `useUserSearch`, `useChanges` object queries are no longer automatically tracked internally. Instead, developers must use the custom dependency list for reactivity just like any other React hooks.
 - Migrated from TypeScript to JavaScript with JSDoc typings, but library still provides type definition files.
 - Migrated from jest to vitest.
 - All dependencies have been updated to their latest versions.
-- `useSearch` and paged `useListItems` now provides data as argument on dispatch callbacks.
-- v1's [Docusaurus repo](https://github.com/SuperioOne/pnp-react-hooks-docs) is archived, docs are moved to library repo.
+- `useSearch` and paged `useListItems` now provide data as argument on dispatch callbacks.
+- v1's [Docusaurus repo](https://github.com/SuperioOne/pnp-react-hooks-docs) has been archived, v2 docs are moved to the main repo.
+- `useListItems` paged mode, the `hasNext` value is inverted to match with the async iterators `done` property.
 
 ### Removed
 
 - `useFolderTree` hook.
-- RxJs and tslib dependencies are deleted.
+- RxJs and tslib dependencies have been deleted.
 
 ## v1.3.0
 -----------------------------------

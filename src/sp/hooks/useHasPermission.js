@@ -12,7 +12,7 @@ import { useState, useCallback, useMemo, useContext } from "react";
 import { PermissionKind } from "@pnp/sp/security";
 
 /** @import {DependencyList, Dispatch, SetStateAction} from "react" **/
-/** @import {UserPermissionOptions} from "./options.d.ts" **/
+/** @import {UserPermissionOptions} from "./options.js" **/
 /** @import {SPFI} from "@pnp/sp" **/
 /** @import {IWeb} from "@pnp/sp/webs" **/
 
