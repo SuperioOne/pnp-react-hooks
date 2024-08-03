@@ -14,10 +14,8 @@ npm install pnp-react-hooks @pnp/sp
 ```typescript
 // <Other Webpart imports>
 // Import pnp-react-hooks helper function and option type
-// highlight-next-line
 import { PnpHookGlobalOptions, createProviderElement } from 'pnp-react-hooks';
 // import PnPjs
-// highlight-next-line
 import { spfi, SPFx} from '@pnp/sp';
 
 export default class PnpReactHookExamplesWebPart extends BaseClientSideWebPart<IPnpReactHookExamplesWebPartProps>
@@ -25,7 +23,6 @@ export default class PnpReactHookExamplesWebPart extends BaseClientSideWebPart<I
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
   private _theme: IReadonlyTheme;
-  // highlight-next-line
   private _hookOptions: PnpHookGlobalOptions;
 
   // Create onInit function to initialize options.
@@ -34,17 +31,14 @@ export default class PnpReactHookExamplesWebPart extends BaseClientSideWebPart<I
     return this._getEnvironmentMessage().then(message =>
     {
       this._environmentMessage = message;
-	    // Initialize PnPjs sp context.
-      // highlight-next-line
+      // Initialize PnPjs sp context.
       const sp = spfi().using(SPFx(this.context));
 
       // Setup your default PnP React hooks options.
-      // highlight-start
       this._hookOptions = {
         sp: sp,
         disabled: "auto"
       };
-     // highlight-end
     });
   }
 
@@ -58,11 +52,9 @@ export default class PnpReactHookExamplesWebPart extends BaseClientSideWebPart<I
     );
 
     // Use helper function to create React elements.
-    // highlight-next-line
     const rootElement = createProviderElement(this._hookOptions, element);
 
     // Render root element.
-    // highlight-next-line
     ReactDom.render(rootElement, this.domElement);
   }
 

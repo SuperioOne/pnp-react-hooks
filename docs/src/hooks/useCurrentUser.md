@@ -2,8 +2,8 @@
 
 ```typescript
 useCurrentUser(
-	options?: CurrentUserInfoOptions, 
-	deps?: any[]): ISiteUserInfo | null | undefined;
+  options?: CurrentUserInfoOptions, 
+  deps?: any[]): ISiteUserInfo | null | undefined;
 ```
 
 Returns current user information.

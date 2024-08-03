@@ -13,14 +13,14 @@ Returns web or list change collection. Use `ChangesOptions.list` property to get
 
 Get web changes,
 ```typescript
-const [myQuery, setQuery] = useState({
+const changeQuery = {
     Add:true,
     Alert:true,
     ChangeTokenEnd: { StringValue: "some end token string" },
     ChangeTokenStart: { StringValue: "some start token string" }
-});
+};
 
-const webChanges = useChanges(myQuery, [
+const webChanges = useChanges(myQuery, undefined, [
     myQuery?.ChangeTokenStart?.StringValue,
     myQuery?.ChangeTokenEnd?.StringValue
 ]);
@@ -31,18 +31,30 @@ Get list changes by using list title and UUID,
 const listChangeQuery = {
     Add:true,
     Update:true,
-    Delete:true
+    Delete:true,
+    ChangeTokenEnd: { StringValue: "some end token string" },
+    ChangeTokenStart: { StringValue: "some start token string" }
 };
 
 // getting list changes by list title
-const listChanges = useChanges(listChangeQuery, {
-    list: "My List Title"
-});
+const listChanges = useChanges(
+	listChangeQuery,
+	{ list: "My List Title" },
+	[
+		myQuery?.ChangeTokenStart?.StringValue,
+		myQuery?.ChangeTokenEnd?.StringValue
+	]
+);
 
 // getting list changes by list Id
-const anotherListChanges = useChanges(listChangeQuery, {
-    list: "61ca5ff8-f553-4d51-a761-89225b069a4f"
-});
+const anotherListChanges = useChanges(
+	listChangeQuery,
+	{ list: "61ca5ff8-f553-4d51-a761-89225b069a4f" }, 
+	[
+	    myQuery?.ChangeTokenStart?.StringValue,
+	    myQuery?.ChangeTokenEnd?.StringValue
+	]
+);
 ```
 
 ## Parameters

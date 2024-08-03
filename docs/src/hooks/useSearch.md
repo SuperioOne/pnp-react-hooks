@@ -1,25 +1,18 @@
-## Definition
+# useSearch
 
-▸ **useSearch**(`searchQuery`, `options?`, `deps?`): [[`Nullable`](../Types/NullableT.md)<[`SpSearchResult`](../Interfaces/SpSearchResult.md)\>, [`GetPageDispatch`](../Types/GetPageDispatch.md)]
+```typescript
+useSearch(
+        searchQuery: string | ISearchQuery,
+        options?: SearchOptions,
+        deps?: any[]): [`SpSearchResult` | null | undefined, `GetPageDispatch`]
+```
 
 Conduct search on SharePoint.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `searchQuery` | `string` \| `ISearchQuery` | `ISearchQuery` query or search text. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`SearchOptions`](../Interfaces/SearchOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useSearch refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[[`Nullable`](../Types/NullableT.md)<[`SpSearchResult`](../Interfaces/SpSearchResult.md)\>, [`GetPageDispatch`](../Types/GetPageDispatch.md)]
-
 ## Examples
 
+Basic search,
 ```typescript
-// basic usage
 const [results, setPage] = useSearch("search text");
 
 // load next page
@@ -29,33 +22,24 @@ setPage(2);
 setPage(3, () => alert("Page Loaded!"));
 ```
 
-:::danger
-
-Be careful when using `ISearchQuery` query. Improper use can result in infinite render loop due to shallow equality check.
-
-:::
-
-**Correct usage**
-
+Advanced search,
 ```typescript
-const [query, setQuery] = React.useState<ISearchQuery>({
+const query = {
         Querytext: "*",
         RowLimit: 5,
         RowsPerPage: 5,
         SelectProperties: ["Title"]
-	});
+};
 
-const [results, setPage] = useSearch(query);
+// Using dependency list to react query property changes.
+const [results, setPage] = useSearch(query, undefined, [query?.Querytext]);
 ```
 
-**Incorrect usage**
+## Parameters
 
-```typescript
-// Causes infinite render loop because of the 'SelectProperties' reference always changes and shallowEquality check always fails.
-const [results, setPage] = useSearch({
-        Querytext: "*",
-        RowLimit: 5,
-        RowsPerPage: 5,
-        SelectProperties: ["Title"]
-	});
-```
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `searchQuery` | `string` \| `ISearchQuery` | Search query object or search text | Yes for `string`, No for `ISearchQuery` |
+| `options?` | `SearchOptions` | useSearch hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

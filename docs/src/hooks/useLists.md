@@ -1,27 +1,20 @@
-## Definition
+# useLists
 
-▸ **useLists**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IListInfo`[]\>
+```typescript
+useLists(options?: ListsOptions, deps?: any[]): IListInfo[] | null | undefined;
+```
 
 Returns list collection.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`ListsOptions`](../Interfaces/ListsOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useLists refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`IListInfo`[]\>
-
 ## Examples
 
+Get site lists,
 ```typescript
-// basic usage
 const listInfo = useLists();
+```
 
-// with query
+Query site lists,
+```typescript
 const emptyLists = useList({
 	query: {
 		select: ["Title", "Id"],
@@ -29,3 +22,10 @@ const emptyLists = useList({
 	}
 });
 ```
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `ListsOptions` | useLists hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

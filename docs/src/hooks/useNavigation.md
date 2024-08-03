@@ -1,34 +1,36 @@
+# useNavigation
 
-## Definition
+```typescript
+useNavigation(
+	options?: NavigationOptions,
+	deps?: any[]): INavNodeInfo[] | null | undefined;
+```
 
-▸ **useNavigation**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`INavNodeInfo`[]\>
-
-Returns web navigation nodes. Use [`NavigationOptions.type`](../Interfaces/NavigationOptions.md#type) property to change navigation type. Default is `"topNavigation"`.
-
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`NavigationOptions`](../Interfaces/NavigationOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useNavigation refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`INavNodeInfo`[]\>
+Returns web navigation nodes. Use `NavigationOptions.type` property to change navigation type. Default is `topNavigation`.
 
 ## Examples
 
+Get top navigation nodes,
 ```typescript
-// basic usage
 const topNav = useNavigation();
 
-// Same result as 'useNavigation()'
+// Explicit type
 const topNav = useNavigation({
 	type: "topNavigation"
 });
+```
 
-// get quick launch navigation nodes
+Get quick launch navigation nodes,
+```typescript
 const quickLaunch = useNavigation({
 	type: "quickLaunch"
 });
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `NavigationOptions` | useNavigation hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

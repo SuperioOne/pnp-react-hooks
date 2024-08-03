@@ -2,8 +2,8 @@
 
 ```typescript
 useContentTypes(
-	options?: ContentTypeOptions,
-	deps?: any[]): IContentTypeInfo[] | null | undefined;
+  options?: ContentTypeOptions,
+  deps?: any[]): IContentTypeInfo[] | null | undefined;
 ```
 
 Returns content types of web or list. Use `ContentTypeOptions.list` property to get list content types instead of web content types.

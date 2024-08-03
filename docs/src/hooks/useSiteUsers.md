@@ -1,28 +1,22 @@
+# useSiteUsers
 
-## Definition
-
-▸ **useSiteUsers**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`[]\>
+```typescript
+useSiteUsers(
+	options?: SiteUsersOptions,
+	deps?: any[]): ISiteUserInfo[] | null | undefined;
+```
 
 Returns site users.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`SiteUsersOptions`](../Interfaces/SiteUsersOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useSiteUsers refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`[]\>
-
 ## Examples
 
+Get all site users,
 ```typescript
-// basic usage
 const siteUsers = useSiteUsers();
+```
 
-// with query
+Query site users,
+```typescript
 const topFiveUser = useSiteUsers({
 	query: {
 		select: ["Title", "Id", "LoginName"],
@@ -30,3 +24,11 @@ const topFiveUser = useSiteUsers({
 	}
 });
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `SiteUsersOptions` | useSiteUsers hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

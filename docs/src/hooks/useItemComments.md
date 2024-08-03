@@ -1,30 +1,28 @@
-import ToolTip from '@site/src/components/tooltip';
+# useItemComments
 
-### Definition
+```typescript
+useItemComments(
+  itemId: number,
+  list: string,
+  options?: ItemCommentsOptions,
+  deps?: any[]): ICommentInfo[] | null | undefined;
+```
 
-▸ **useItemComments**(`itemId`, `list`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ICommentInfo`[]\>
-
-Returns comment collection of specific list item.
-
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `itemId` | `number` | Item Id. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `list` | `string` | List GUID Id or title. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`ItemCommentsOptions`](../Interfaces/ItemCommentsOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useItemComments refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`ICommentInfo`[]\>
+Returns comments for specific list item.
 
 ## Examples
 
+Get list items comments,
 ```typescript
-// get item comments by list title
 const comments = useItemComments(12, "My List Title");
-
-// get item comments by list Id
 const comments = useItemComments(12, "5ee53613-bc0f-4b2a-9904-b21afd8431a7");
 ```
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `itemId` | `number` | Item Id | Yes |
+| `list` | `string` | List UUID or title | Yes |
+| `options?` | `ItemCommentsOptions` | useItemComments hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

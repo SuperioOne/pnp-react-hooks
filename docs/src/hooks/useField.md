@@ -1,33 +1,32 @@
-<a name="useField"></a>
+# useField
 
-## useField(fieldId, [options], [deps]) ⇒ <code>IFieldInfo</code> \| <code>null</code> \| <code>undefined</code>
+```typescript
+useField(
+   fieldId: string, 
+   options?: FieldOptions, 
+   deps? any[]): IFieldInfo | null | undefined;
+```
 Returns a field from web or list.
 
-**Kind**: global function
+## Examples
 
-| Param | Type | Description |
-| --- | --- | --- |
-| fieldId | <code>string</code> | Field internal name or Id. Changing the value resends request. |
-| [options] | <code>FieldOptions</code> | PnP hook options. |
-| [deps] | <code>DependencyList</code> | useField refreshes response data when one of the dependencies changes. |
-
-**Example** *( Get web fields )*
+Get web field info,
 ```js
-const webFields = useFields();
+const webFields = useField("5ee53613-bc0f-4b2a-9904-b21afd8431a7");
 ```
-**Example** *( Get list fields )*
+
+Get list field info,
 ```js
-const listFields = useFields({
+const listFields = useField("MyCustomFieldInternalName", {
    list: "5ee53613-bc0f-4b2a-9904-b21afd8431a7"
 });
 ```
-**Example** *( Get list fields with query )*
-```js
-const listFields = useFields({
-   list: "My List Title",
-   query : {
-     select: ["InternalName", "Title", "Id"]
-   }
-});
-```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `fieldId` | `string` | Field internal name or Id | Yes |
+| `options?` | `FieldOptions` | useField hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
 

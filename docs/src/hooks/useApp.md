@@ -4,16 +4,16 @@
 useApp<T>(appId: string, options?:WebAppOptions, deps?: any[]) : T | null | undefined;
 ```
 
-Returns an app detail of the given Id from the app catalog.
+Returns an app details for the given Id.
 
 ## Examples
 
-Get app from site collection app catalog,
+Get app from site collections app catalog,
 ```typescript
 const app = useApp("5ee53613-bc0f-4b2a-9904-b21afd8431a7");
 ```
 
-Get app from site collection app catalog with query,
+Query app propeties,
 ```typescript
 const appWithQuery = useApp("5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
   query: {

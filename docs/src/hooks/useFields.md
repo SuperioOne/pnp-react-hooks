@@ -1,33 +1,29 @@
+# useFields
 
-## Definition
+```typescript
+useFields(
+	options?: FieldsOptions, 
+	deps?: any[]): IFieldInfo[] | null | undefined;
+```
 
-▸ **useFields**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IFieldInfo`[]\>
-
-Returns field collection from web or list. List option can be defined in [`FieldsOptions.list`](../Interfaces/FieldsOptions.md#list) property.
-
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`FieldsOptions`](../Interfaces/FieldsOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useFields refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`IFieldInfo`[]\>
+Returns field collection from web or list. Use `FieldsOptions.list` property to set target list.
 
 ## Examples
 
+Get web fields,
 ```typescript
-// get web fields
 const webFields = useFields();
+```
 
-// get list fields
+Get list fields,
+```typescript
 const listFields = useFields({
 	list: "5ee53613-bc0f-4b2a-9904-b21afd8431a7"
 });
+```
 
-// get list fields by list title with query
+Query fields,
+```typescript
 const listFields = useFields({
 	list: "My List Title",
 	query:{
@@ -35,3 +31,11 @@ const listFields = useFields({
 	}
 });
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `FieldsOptions` | useFields hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

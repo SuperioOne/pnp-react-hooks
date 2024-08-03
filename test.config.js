@@ -13,4 +13,5 @@ export default {
   cacheDir: "./node_modules/.prh_cache/requestCache",
   retries: 3,
   retryInterval: 2000,
+  logResponse: true,
 };

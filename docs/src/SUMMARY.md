@@ -2,13 +2,11 @@
 
  [Introduction](./introduction.md)
 
-# Configuration Guide
- - [Getting Started](./getting-started.md)
- - [Advanced](./advanced.md)
-
-# API References
-- [Context Provider](./context-provider.md)
+# PnP React Hooks
+- [Getting Started](./getting-started.md)
 - [Hook Options](./hook-options.md)
+- [Option Provider](./option-provider.md)
+- [Accessing Options](./accessing-options.md)
 - [SP Hooks](./hooks.md)
     - [useApp](./hooks/useApp.md)
     - [useApps](./hooks/useApps.md)

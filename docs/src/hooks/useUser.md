@@ -1,37 +1,43 @@
-## Definition
+# useUser
 
-▸ **useUser**(`userId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
+```typescript
+useUser(
+	userId: string | number,
+	options?: UserOptions,
+	deps?: any[]): ISiteUserInfo | null | undefined;
+```
 
 Returns an user from site user collection.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `userId` | `string` \| `number` | User Id, login name, email. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`UserOptions`](../Interfaces/UserOptions.md) | PnP hook options.  |
-| `deps?` | `DependencyList` | useUser refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`ISiteUserInfo`\>
-
 ## Examples
 
+Get site user by Id,
 ```typescript
-// get site user by Id
 const userById = useUser(27);
-
-// get site user by email
+```
+Get site user by email,
+```typescript
 const userByEmail = useUser("user@example.onmicrosoft.com");
+```
 
-// get site user by login name
+Get site user by login name,
+```typescript
 const userByLoginName = useUser("i:0#.f|membership|user@example.onmicrosoft.com");
+```
 
-// get site user with query
+Query site user properties,
+```typescript
 const userById = useUser(27, {
 	query: {
 		select: ["Id", "Title", "LoginName"]
 	}
 });
 ```
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `user` | `string` \| `number` | User Id, login name or email | Yes |
+| `options?` | `UserOptions` | useApps hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

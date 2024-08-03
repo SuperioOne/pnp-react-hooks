@@ -1,30 +1,22 @@
+# useWebProperties
 
-## Definition
+```typescript
+useWebProperties<T>(options?: WebPropertiesOptions, deps?: any[]): T | null | undefined;
+```
 
-▸ **useWebProperties**<`T`\>(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`\>
-
-Returns web's properties.
-
-## Type parameters
-
-| Name | Description |
-| :------ | :------ |
-| `T` | Return type |
-
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`WebPropertiesOptions`](../Interfaces/WebPropertiesOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useWebProperties refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`T`\>
+Returns webs properties.
 
 ## Examples
 
+Get web properties,
 ```typescript
-// basic usage
 const webPropertyBag = useWebProperties();
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `WebPropertiesOptions` | useWebProperties hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

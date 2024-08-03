@@ -1,35 +1,43 @@
-## Definition
+# useView
 
-▸ **useView**(`listId`,`viewId?`,`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IViewInfo`\>
+```typescript
+useView(
+	listId: string,
+	viewId?: string,
+	options?: ViewOptions, 
+	deps?: any[]): IViewInfo | null | undefined;
+```
 
 Returns a list view.
 
 ## Parameters
 
-| Name       | Type                                          | Description                                                                                |
-| :--------- | :-------------------------------------------- | :----------------------------------------------------------------------------------------- |
-| `listId`   | `string`                                      | List GUID id or title. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip>      |
-| `viewId?`  | `string`                                      | View title or view GUID id. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`ViewOptions`](../Interfaces/ViewOptions.md) | PnP hook options.                                                                          |
-| `deps?`    | `DependencyList`                              | useSite refreshes response data when one of the dependencies changes.                          |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`IViewInfo`\>
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `listId?` | `string` | List UUID or title | Yes |
+| `viewId?` | `string` | View UUID or title | Yes |
+| `options?` | `ViewOptions` | useView hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
 
 ## Examples
 
+Get default list view,
 ```typescript
-// get default view
 const defaultView = useView("My List Title");
+```
 
-// get view by title
+Get list view by name,
+```typescript
 const myView = useView("My List Title", "My View");
+```
 
-// get view by Id
+Get list view by UUID,
+```typescript
 const myView = useView("My List Title", "9db07c1f-7880-4601-99d0-1c39c43f6599");
+```
 
-// with query
+Query default list view properties,
+```typescript
 const defaultViewInfo = useView("My List", undefined, {
 	query: {
 		select: ["Id"]

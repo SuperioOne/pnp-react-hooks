@@ -1,14 +1,14 @@
-# useAttachments 
+# useAttachments
 
 ```typescript
 useAttachments(
-	itemId:number, 
-	list:string,
+	itemId: number,
+	list: string,
 	options?: ItemAttachmentsOptions,
 	deps: any[]): IAttachmentInfo[] | null | undefined;
 ```
 
-Returns all attachments of the item.
+Returns all attachments from an item.
 
 ## Examples
 
@@ -17,7 +17,7 @@ Get all attachments from an item,
 const attachments = useAttachments(10, "My List");
 ```
 
-Get attachments with query from an item,
+Query list items attachments,
 ```typescript
 const filteredAttachments = useAttachments(10, "5ee53613-bc0f-4b2a-9904-b21afd8431a7", {
 	query: {
@@ -32,6 +32,6 @@ const filteredAttachments = useAttachments(10, "5ee53613-bc0f-4b2a-9904-b21afd84
 | :------ | :------ | :------ | :--------|
 | `itemId` | `number` | List item ID | Yes |
 | `list` | `string` | Target list UUID or title | Yes |
-| `options?` | `ItemAttachmentsOptions` | useAttachment hook options | Partially |
+| `options?` | `ItemAttachmentsOptions` | useAttachments hook options | Partially |
 | `deps?` | `DependencyList` | Hook dependency list. | Yes |
 

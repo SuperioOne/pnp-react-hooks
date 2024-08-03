@@ -1,31 +1,30 @@
+# useSite
 
-## Definition
-
-▸ **useSite**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteInfo`\>
+```typescript
+useSite(options?: SiteInfoOptions, deps?: any[]): ISiteInfo | null | undefined;
+```
 
 Returns current site info.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`SiteInfoOptions`](../Interfaces/SiteInfoOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useSite refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`ISiteInfo`\>
-
 ## Examples
 
+Get site info details,
 ```typescript
-// basic usage
 const siteInfo = useSite();
+```
 
-// with query
+Query site info details,
+```typescript
 const site = useSite({
 	query: {
 		select: ["Title", "Id"]
 	}
 });
 ```
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `SiteInfoOptions` | useSite hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

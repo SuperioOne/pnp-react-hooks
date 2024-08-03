@@ -1,88 +1,70 @@
-import ToolTip from '@site/src/components/tooltip';
+# useHasPermission
 
-## Definition
+```typescript
+useHasPermission(
+	permissionKinds: PermissionKind | PermissionKind[],
+	options?: UserPermissionOptions,
+	deps?): boolean | null | undefined;
+```
 
-▸ **useHasPermission**(`permissionKinds`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`boolean`\>
-
-Returns `true` if user has permission on scope. If not returns `false`. Use [`UserPermissionOptions.userId`](../Interfaces/UserPermissionOptions.md#userid) for another user and [`UserPermissionOptions.scope`](../Interfaces/UserPermissionOptions.md#scope) for permission scope. Default is current user permission on current web scope.
-
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `permissionKinds` | `PermissionKind` \| `PermissionKind`[] | SP permission kind array or permission kind value. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`UserPermissionOptions`](../Interfaces/UserPermissionOptions.md) | Pnp hook options. |
-| `deps?` | `DependencyList` | useHasPermission refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`boolean`\>
+Returns `true` if user has permission on scope. If not returns `false`. Use 
+`UserPermissionOptions.userId` for another user and `UserPermissionOptions.scope`
+for permission scope. Default is current user permission on current web scope.
 
 ## Examples
 
-### Web Permission
-
+Check current users web permissions,
 ```typescript
 import { PermissionKind } from "@pnp/sp/security";
 import { useHasPermission } from "pnp-react-hooks";
 
 const permissions = PermissionKind.ViewListItems | PermissionKind.ViewPages
-
-// check current users permission on web
 const hasPermission = useHasPermission(permissions);
+```
 
-// check another user permission on web
+
+Check another users permission on web,
+```typescript
+import { PermissionKind } from "@pnp/sp/security";
+import { useHasPermission } from "pnp-react-hooks";
+
+const permissions = PermissionKind.ViewListItems | PermissionKind.ViewPages
 const userHasPermission = useHasPermission(permissions, {
 	userId: "user@example.onmicrosoft.com"
 });
 ```
 
-### List Permission
-
+Check list permissions,
 ```typescript
 import { PermissionKind } from "@pnp/sp/security";
 import { useHasPermission } from "pnp-react-hooks";
 
 const permissions = PermissionKind.ViewListItems | PermissionKind.ViewPages
-
-// check current user permission on list
 const hasPermission = useHasPermission(permissions, {
 	scope: {
 		list: "My List Title"
 	}
 });
-
-// check another user permission on list
-const userHasPermission = useHasPermission(permissions, {
-	userId: "user@example.onmicrosoft.com",
-	scope: {
-		list: "5ee53613-bc0f-4b2a-9904-b21afd8431a7"
-	}
-});
 ```
 
-### Item Permission
-
+Check item permissions,
 ```typescript
 import { PermissionKind } from "@pnp/sp/security";
 import { useHasPermission } from "pnp-react-hooks";
 
 const permissions = PermissionKind.ViewListItems | PermissionKind.ViewPages
-
-// check current user permission on item
 const hasPermission = useHasPermission(permissions, {
 	scope: {
 		list: "My List Title",
 		item: 12
 	}
 });
-
-// check another user permission on item
-const userHasPermission = useHasPermission(permissions, {
-	userId: 24,
-	scope: {
-		list: "5ee53613-bc0f-4b2a-9904-b21afd8431a7",
-		item: 12
-	}
-});
 ```
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `permissionKinds` | `PermissionKind` \| `PermissionKind[]` | SP permission kind array or value | Yes |
+| `options?` | `UserPermissionOptions` | useHasPermission hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

@@ -2,7 +2,7 @@
 
 PnP React Hooks is a wrapper library for [PnPjs](https://pnp.github.io/pnpjs/), 
 provides configurable React hooks for SharePoint API to speed up 
-development for simple SPFX webparts and components.
+development for simple SPFx webparts and components.
 
 **Example usage:**
 

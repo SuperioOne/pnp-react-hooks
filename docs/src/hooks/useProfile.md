@@ -1,33 +1,31 @@
-## Definition
+# useProfiles
 
-▸ **useProfile**<`T`\>(`loginName`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`T`\>
+```typescript
+useProfile<T>(
+  loginName: string,
+  options?: ProfileOptions,
+  deps?: any[]): T | null | undefined;
+```
 
-Returns an user profile for specified login name.
-
-## Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `loginName` | `string` | User login name. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`ProfileOptions`](../Interfaces/ProfileOptions.md) | Pnp hook options. |
-| `deps?` | `DependencyList` | useProfile refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`T`\>
+Returns an user profile for specified login name or email.
 
 ## Examples
 
+Get profile by user email,
 ```typescript
-// get profile by user email
 const profileByEmail = useProfile("user@example.onmicrosoft.com");
+```
 
-// get profile by user login name
+Get profile by user login name,
+```typescript
 const profile = useProfile("i:0#.f|membership|user@example.onmicrosoft.com");
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `loginName` | `string` | User login name or email | Yes |
+| `options?` | `ProfileOptions` | useProfile hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

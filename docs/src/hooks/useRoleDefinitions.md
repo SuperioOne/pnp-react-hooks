@@ -1,28 +1,22 @@
+# useRoleDefinitions
 
-### Definition
-
-▸ **useRoleDefinitions**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IRoleDefinitionInfo`[]\>
+```typescript
+useRoleDefinitions(
+	options?:RoleDefinitionsOptions,
+	deps?: any[]): IRoleDefinitionInfo[] | null | undefined;
+```
 
 Returns role definition collection.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`RoleDefinitionsOptions`](../Interfaces/RoleDefinitionsOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useRoleDefinitions refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`IRoleDefinitionInfo`[]\>
-
 ## Examples
 
+Get all role definitions,
 ```typescript
-// get all role definitions
 const roleDefByKind = useRoleDefinitions();
+```
 
-// get role definitions with query
+Query role definitions
+```typescript
 const filteredroleDef = useRoleDefinitions({
 	query: {
 		select: ["Id", "Name", "Description", "Order"],
@@ -30,3 +24,11 @@ const filteredroleDef = useRoleDefinitions({
 	}
 });
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `RoleDefinitionsOptions` | useRoleDefinitions hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

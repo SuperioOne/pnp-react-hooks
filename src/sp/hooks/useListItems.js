@@ -19,7 +19,7 @@ import { useState, useCallback, useContext, useEffect, useRef } from "react";
 /** @import {InternalPnpHookOptions} from "../types.private.d.ts" **/
 
 /** @type{{Default: 0; All: 1; Paged:2}} **/
-export const useListItemsMode = {
+export const ListItemsMode = {
   /**
    * Fetch list items in single request. Request might fail due to threshold limit, if data is not indexed and filtered properly.
    * see https://docs.microsoft.com/en-us/microsoft-365/community/large-lists-large-libraries-in-sharepoint
@@ -196,7 +196,7 @@ export function useListItems(list, options, deps) {
       abortSource.current.abort();
     } else {
       const extDeps = mergeDependencies(
-        [list, options?.mode ?? useListItemsMode.Default],
+        [list, options?.mode ?? ListItemsMode.Default],
         deps,
       );
       const shouldUpdate =
@@ -223,7 +223,7 @@ export function useListItems(list, options, deps) {
         let complete;
 
         switch (options?.mode) {
-          case useListItemsMode.Paged: {
+          case ListItemsMode.Paged: {
             const iterator = items[Symbol.asyncIterator]();
             request = async () => {
               const firstPage = await iterator.next();
@@ -241,7 +241,7 @@ export function useListItems(list, options, deps) {
 
             break;
           }
-          case useListItemsMode.All: {
+          case ListItemsMode.All: {
             request = async () => {
               /** @type{T[]} **/
               let pages = [];
@@ -265,7 +265,7 @@ export function useListItems(list, options, deps) {
 
             break;
           }
-          case useListItemsMode.Default:
+          case ListItemsMode.Default:
           default: {
             request = items;
             complete = (/** @type{T[]}**/ result) =>

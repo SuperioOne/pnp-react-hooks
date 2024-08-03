@@ -1,18 +1,18 @@
 # useApps
 
 ```typescript
-useApps<T>(options?:WebAppsOptions, deps?:any[]): T[] | null | undefined;
+useApps<T>(options?: WebAppsOptions, deps?: any[]): T[] | null | undefined;
 ```
 
-Returns app detail collection from the app catalog.
+Returns app collection from app catalog.
 
 ## Examples
 
-Get apps from site collection app catalog,
+Get apps from site collections app catalog,
 ```typescript
 const apps = useApps();
 ```
-Get apps from tenant app catalog,
+Get apps from tenants app catalog,
 ```typescript
 const apps = useApps({
   scope: "tenant"
@@ -24,7 +24,8 @@ const apps = useApps({
   scope: "sitecollection"
 });
 ```
-Get apps from site collection app catalog with query,
+
+Query apps from app catalog,
 ```typescript
 const filteredApps = useApps({ 
   query: { 

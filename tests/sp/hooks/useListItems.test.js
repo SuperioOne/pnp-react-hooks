@@ -1,4 +1,4 @@
-import { useListItem, useListItems, useListItemsMode } from "../../../src";
+import { useListItem, useListItems, ListItemsMode } from "../../../src";
 import { DEFAULT_WAITFOR_OPTS, InitPnpTest, logResponse } from "../../common";
 import { cleanup, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeAll, expect, test } from "vitest";
@@ -73,7 +73,7 @@ test("useListItem, get all list items", async () => {
         select: ["Id", "Title", "Author/Id"],
         expand: ["Author"],
       },
-      mode: useListItemsMode.All,
+      mode: ListItemsMode.All,
       sp: spTest,
     }),
   );
@@ -98,7 +98,7 @@ test("useListItem, get all list items by paging", async () => {
         select: ["Id", "Title"],
         top: 1000,
       },
-      mode: useListItemsMode.Paged,
+      mode: ListItemsMode.Paged,
       sp: spTest,
     }),
   );

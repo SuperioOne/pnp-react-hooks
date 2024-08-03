@@ -1,10 +1,7 @@
-# CHANGELOG
-
-## v2.0.0 - The Wheelwright
+# v2.0.0 - The Maintanence - Aug 03, 2024
 -----------------------------------
-*Aug 03, 2024*
 
-### Changed
+## Changed
 
 - Minimum supported `@pnp/sp` peer dependency version bumped to `^4.1.0`.
 - The library now support React versions between `16.9.0` and `^18.0.0`.
@@ -15,62 +12,58 @@
 - `useSearch` and paged `useListItems` now provides data as argument on dispatch callbacks.
 - v1's [Docusaurus repo](https://github.com/SuperioOne/pnp-react-hooks-docs) is archived, docs are moved to library repo.
 
-### Removed
+## Removed
 
 - `useFolderTree` hook.
 - RxJs and tslib dependencies are deleted.
 
-## v1.3.0
------------------------------------
-*Apr 22, 2023*
 
-### Added
+# v1.3.0 - April 22, 2023
+-----------------------------------
+
+## Added
 
 - Site collection and tenant scope option for `useApp` and `useApps` hooks.
 
-### Changed
+## Changed
 
 - Minimum supported `@pnp/sp` peer dependency version bumped to `^3.14.0`
 
-## v1.2.0
+# v1.2.0 - Dec 28, 2022
 -----------------------------------
-*Dec 28, 2022*
 
-### Added
+## Added
 
 - `useRecycleBinItem` and `useRecycleBinItems` hooks.
 - `createProviderElement` helper function for simplifiying SPFx initialization.
 
-### Fixed
+## Fixed
 
 - `useSearch` hook incorrectly overrides RowLimit when `getPageDispatch` is called.
 
-## v1.1.0 
+# v1.1.0 - May 18, 2022
 -----------------------------------
-*May 18, 2022*
 
-### Added
+## Added
 
 - `useListItems` paged request option.
 - `useView` and `useViews` hooks.
 - `useListAsStream` hook.
 - `FetchWithAbort` behavior for cancelling fetch requests.
 
-### Fixed
+## Fixed
 
 - `useSearch` initiates double query issue.
 
-## v1.0.1
+# v1.0.1 - March 11, 2022
 -----------------------------------
-*March 11, 2022*
 
-### Fixed
+## Fixed
 
 - `useSearch` throwing error when `getPageDispatch` called more than one.
 
-## v1.0.0
+# v1.0.0 - March 9, 2022
 -----------------------------------
-*March 09, 2022*
 
 Initial release
 

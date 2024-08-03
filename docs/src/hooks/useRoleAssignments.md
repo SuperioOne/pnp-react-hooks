@@ -1,41 +1,28 @@
+# useRoleAssignments
 
-## Definition
+```typescript
+useRoleAssignments(
+	options?: RoleAssignmentsOptions,
+	deps?: any[]): IRoleAssignmentInfo[] | null | undefined;
+```
 
-▸ **useRoleAssignments**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IRoleAssignmentInfo`[]\>
-
-Returns role assignmets of selected scope. Use [`RoleAssignmentsOptions.scope`](../Interfaces/RoleAssignmentsOptions.md#scope) property to change scope. Default is current web.
-
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`RoleAssignmentsOptions`](../Interfaces/RoleAssignmentsOptions.md) | PnP hook options |
-| `deps?` | `DependencyList` | useRoleAssignments refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`IRoleAssignmentInfo`[]\>
+Returns role assignmets of selected scope. Use `RoleAssignmentsOptions.scope` property to change scope. Default is current web.
 
 ## Examples
 
-### Web Role Assignments
-
+Get web role assignments,
 ```typescript
-// basic usage
 const webRolesAssignments = useRoleAssignments();
 ```
 
-### List Role Assignments
-
+Get list role assignments,
 ```typescript
-// get list role assignments by list title
-const listRoleAssignments = useRoleAssignments({
+const myListRoleAssignments = useRoleAssignments({
 	scope: {
 		list: "5ee53613-bc0f-4b2a-9904-b21afd8431a7"
 	}
 });
 
-// get list role assignments by list title
 const myListRoleAssignments = useRoleAssignments({
 	scope: {
 		list: "My List Title"
@@ -43,8 +30,7 @@ const myListRoleAssignments = useRoleAssignments({
 });
 ```
 
-### Item Role Assignments
-
+Get item role assignments,
 ```typescript
 // get list item roles by list title
 const listItemRoleAssignments = useRoleAssignments({
@@ -53,12 +39,12 @@ const listItemRoleAssignments = useRoleAssignments({
 		item: 12
 	}
 });
-
-// get list item role assignments by list title
-const myListItemRoleAssignments = useRoleAssignments({
-	scope: {
-		list: "My List Title",
-		item: 12
-	}
-});
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `RoleAssignmentsOptions` | useRoleAssignments hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

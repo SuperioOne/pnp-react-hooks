@@ -39,7 +39,7 @@ Get attachment info,
 const attachmentProps = useAttachment("my-attachment.txt", 12, "My List");
 ```
 
-Get attachment info with query,
+Query attachment info properties,
 ```typescript
 const attachmentProps = useAttachment("my-attachment.txt", 12, "My List"), {
 	query: {
@@ -75,6 +75,6 @@ const contentAsText = useAttachment("my-attachment.txt", 12, "My List", {
 | `attachmentName` | `string` | Attachment name | Yes |
 | `itemId` | `number` | List item ID | Yes |
 | `list` | `string` | Target list UUID or title | Yes |
-| `options?` | `WebAppOptions` | useAttachment hook options | Partially |
+| `options?` | `AttachmentInfoOptions` \| `AttachmentBlobOptions` \| `AttachmentTextOptions` \| `AttachmentBufferOptions` | useAttachment hook options | Partially |
 | `deps?` | `DependencyList` | Hook dependency list. | Yes |
 

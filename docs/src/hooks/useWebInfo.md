@@ -1,30 +1,33 @@
-## Definition
+# useWebInfo
 
-▸ **useWebInfo**(`options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`IWebInfo`\>
+```typescript
+useWebInfo(
+	options?: WebInfoOptions,
+	deps?: any[]): IWebInfo | null | undefined;
+```
 
 Returns current web.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `options?` | [`WebInfoOptions`](../Interfaces/WebInfoOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useWebInfo refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`IWebInfo`\>
-
 ## Examples
 
+Get current web info,
 ```typescript
-// basic usage
 const currentWeb = useWebInfo();
+```
 
-// query
+Query current web properties,
+```typescript
 const currentWeb = useWebInfo({
 	query:{
 		select: ["Title"]
 	}
 });
 ```
+
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `options?` | `WebInfoOptions` | useWebInfo hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+

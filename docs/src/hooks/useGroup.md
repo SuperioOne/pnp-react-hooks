@@ -1,34 +1,39 @@
-## Definition
+## useGroup
 
-▸ **useGroup**(`groupId`, `options?`, `deps?`): [`Nullable`](../Types/NullableT.md)<`ISiteGroupInfo`\>
+```typescript
+useGroup(
+	groupId: string | number,
+	options?: GroupOptions,
+	deps?: any[]): ISiteGroupInfo | null | undefined;
+```
 
 Returns a group from group collection.
 
-## Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `groupId` | `string` \| `number` | Group Id or name. <ToolTip text="Changing the value refreshes response data.">🚩</ToolTip> |
-| `options?` | [`GroupOptions`](../Interfaces/GroupOptions.md) | PnP hook options. |
-| `deps?` | `DependencyList` | useGroup refreshes response data when one of the dependencies changes. |
-
-## Returns
-
-[`Nullable`](../Types/NullableT.md)<`ISiteGroupInfo`\>
-
 ## Examples
 
+Get group info by Id,
 ```typescript
-// get group info by Id
 const group = useGroup(10);
+```
 
-// get group info by name
+Get group info by name
+```typescript
 const mySpGroup = useGroup("My SharePoint Group");
+```
 
-// get group with query
+Query group properties,
+```typescript
 const mySpGroup = useGroup("My SharePoint Group", {
 	query: {
 		select: ["Title", "Id"]
 	}
 });
 ```
+## Parameters
+
+| Name | Type | Description | Tracked for changes |
+| :------ | :------ | :------ | :--------|
+| `groupId` | `string` \| `number` | Group Id or name | Yes |
+| `options?` | `GroupOptions` | useApps hook options | Partially |
+| `deps?` | `DependencyList` | Hook dependency list. | Yes |
+
