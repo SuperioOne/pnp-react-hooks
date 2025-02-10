@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v2.0.1
+-----------------------------------
+*Oct 19, 2024*
+
+### Fixed
+- Correct export path in package.json, by @Sandeep-FED
+
 ## v2.0.0 - The Wheelwright
 -----------------------------------
 *Aug 04, 2024*
